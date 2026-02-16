@@ -1,20 +1,54 @@
 "use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function DashboardPage() {
+    const router = useRouter();
+
+    // Read values directly (no state needed)
+    const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+    const username =
+        typeof window !== "undefined"
+            ? localStorage.getItem("username") || "User"
+            : "User";
+
+    // 🔐 Route protection
+    useEffect(() => {
+        if (!token) {
+            router.replace("/Login");
+        }
+    }, [token, router]);
+
+    // Prevent rendering before auth check
+    if (!token) return null;
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        router.replace("/Login");
+    };
+
     return (
         <div className="min-h-screen bg-linear-to-br from-[#eef2ff] to-[#f8fafc] px-6 py-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+
                 {/* Sidebar */}
                 <aside className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+
                     {/* User Info */}
                     <div className="mb-8 text-center">
                         <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-linear-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
-                            U
+                            {username.charAt(0).toUpperCase()}
                         </div>
                         <h3 className="text-lg font-semibold text-gray-800">
-                            USER NAME
+                            {username}
                         </h3>
                         <p className="text-sm text-gray-500">Student</p>
                     </div>
+
                     {/* Navigation */}
                     <nav className="space-y-6 text-sm">
                         <div>
@@ -22,6 +56,7 @@ export default function DashboardPage() {
                                 Dashboard
                             </p>
                         </div>
+
                         <div>
                             <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
                                 Result
@@ -35,6 +70,7 @@ export default function DashboardPage() {
                                 </li>
                             </ul>
                         </div>
+
                         <div>
                             <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
                                 Study Material
@@ -48,6 +84,7 @@ export default function DashboardPage() {
                                 </li>
                             </ul>
                         </div>
+
                         <div>
                             <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
                                 Profile
@@ -59,19 +96,23 @@ export default function DashboardPage() {
                                 <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
                                     Update Password
                                 </li>
-                                <li className="px-3 py-2 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition">
+                                <li
+                                    onClick={handleLogout}
+                                    className="px-3 py-2 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition"
+                                >
                                     Logout
                                 </li>
                             </ul>
                         </div>
                     </nav>
                 </aside>
+
                 {/* Main Content */}
                 <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
                     <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
                         IMPORTANT DATES TO REMEMBER
                     </h2>
-                    {/* Table */}
+
                     <div className="overflow-x-auto rounded-xl border border-gray-200">
                         <table className="w-full text-sm text-gray-700">
                             <thead>
@@ -105,18 +146,6 @@ export default function DashboardPage() {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    {/* Pagination */}
-                    <div className="flex justify-center items-center gap-4 mt-8 text-sm">
-                        <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-                            « Previous
-                        </button>
-                        <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white shadow-md hover:bg-indigo-700 transition">
-                            1
-                        </button>
-                        <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-                            Next »
-                        </button>
                     </div>
                 </main>
             </div>
