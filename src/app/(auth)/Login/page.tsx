@@ -1,39 +1,30 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { loginUser } from "@/services/authService";
-
 export default function LoginPage() {
     const router = useRouter();
     const { request, loading, error } = useApi();
-
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [localError, setLocalError] = useState("");
-
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLocalError("");
-
         try {
             const data = await loginUser(request, username, password);
-
             // Store token if backend returns it
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("username", data.username || username);
             }
-
             router.push("/studentDashboard");
-
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             setLocalError("Invalid credentials or server error.");
         }
     };
-
     return (
         <div className="min-h-screen bg-[#f4f6fb]">
             {/* Header */}
@@ -43,20 +34,17 @@ export default function LoginPage() {
                     Home <span className="mx-2 text-gray-400">›</span> Login
                 </p>
             </div>
-
             {/* Login Card */}
             <div className="flex justify-center py-12 px-4">
                 <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-10">
                     <h2 className="text-2xl font-semibold text-[#1f2a44] mb-6">
                         Welcome Back
                     </h2>
-
                     {(error || localError) && (
                         <p className="text-red-500 text-sm mb-4">
                             {error || localError}
                         </p>
                     )}
-
                     <form onSubmit={handleLogin} className="space-y-6">
                         {/* Username */}
                         <div>
@@ -71,7 +59,6 @@ export default function LoginPage() {
                                 required
                             />
                         </div>
-
                         {/* Password */}
                         <div>
                             <label className="block text-gray-600 mb-2">
@@ -85,7 +72,6 @@ export default function LoginPage() {
                                 required
                             />
                         </div>
-
                         {/* Button */}
                         <button
                             type="submit"
