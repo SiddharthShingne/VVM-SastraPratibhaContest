@@ -642,11 +642,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const Footer = ()=>{
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(10);
-    if ($[0] !== "a86321f7d0a25c7c6ff51b6f44530312655a6723c419ff9742e923f058e21610") {
+    if ($[0] !== "2692af9eb1ffc5463bcf38109e4c8b8d44ec050efd75d537a97a58426ff675d2") {
         for(let $i = 0; $i < 10; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "a86321f7d0a25c7c6ff51b6f44530312655a6723c419ff9742e923f058e21610";
+        $[0] = "2692af9eb1ffc5463bcf38109e4c8b8d44ec050efd75d537a97a58426ff675d2";
     }
     let t0;
     if ($[1] === Symbol.for("react.memo_cache_sentinel")) {
@@ -894,7 +894,7 @@ const Footer = ()=>{
         t8 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
             className: "bg-[#111d35] text-white py-12 px-4 md:px-8 lg:px-16 font-sans",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "max-w-[1600px] mx-auto flex flex-col lg:flex-row justify-between gap-10",
+                className: "max-w-400 mx-auto flex flex-col lg:flex-row justify-between gap-10",
                 children: [
                     t1,
                     t4,
@@ -915,20 +915,20 @@ const Footer = ()=>{
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                         fileName: "[project]/src/components/Footer.tsx",
                                                         lineNumber: 69,
-                                                        columnNumber: 340
+                                                        columnNumber: 335
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     "D-12, South Extension-I, New Delhi - 110049"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Footer.tsx",
                                                 lineNumber: 69,
-                                                columnNumber: 291
+                                                columnNumber: 286
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Footer.tsx",
                                         lineNumber: 69,
-                                        columnNumber: 282
+                                        columnNumber: 277
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: [
@@ -938,14 +938,14 @@ const Footer = ()=>{
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Footer.tsx",
                                                 lineNumber: 69,
-                                                columnNumber: 402
+                                                columnNumber: 397
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             " office@vvm.org.in"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Footer.tsx",
                                         lineNumber: 69,
-                                        columnNumber: 399
+                                        columnNumber: 394
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: [
@@ -955,26 +955,26 @@ const Footer = ()=>{
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Footer.tsx",
                                                 lineNumber: 69,
-                                                columnNumber: 474
+                                                columnNumber: 469
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             " 10:00AM to 5:00PM"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Footer.tsx",
                                         lineNumber: 69,
-                                        columnNumber: 471
+                                        columnNumber: 466
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Footer.tsx",
                                 lineNumber: 69,
-                                columnNumber: 217
+                                columnNumber: 212
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Footer.tsx",
                         lineNumber: 69,
-                        columnNumber: 189
+                        columnNumber: 184
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {

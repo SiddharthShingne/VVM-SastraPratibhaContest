@@ -1,43 +1,33 @@
 "use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 export default function DashboardPage() {
     const router = useRouter();
-
     // Read values directly (no state needed)
     const token =
         typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
     const username =
         typeof window !== "undefined"
             ? localStorage.getItem("username") || "User"
             : "User";
-
     // 🔐 Route protection
     useEffect(() => {
         if (!token) {
             router.replace("/Login");
         }
     }, [token, router]);
-
     // Prevent rendering before auth check
     if (!token) return null;
-
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         router.replace("/Login");
     };
-
     return (
         <div className="min-h-screen bg-linear-to-br from-[#eef2ff] to-[#f8fafc] px-6 py-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-
                 {/* Sidebar */}
                 <aside className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-
                     {/* User Info */}
                     <div className="mb-8 text-center">
                         <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-linear-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
@@ -48,7 +38,6 @@ export default function DashboardPage() {
                         </h3>
                         <p className="text-sm text-gray-500">Student</p>
                     </div>
-
                     {/* Navigation */}
                     <nav className="space-y-6 text-sm">
                         <div>
