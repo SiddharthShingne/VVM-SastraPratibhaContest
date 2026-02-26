@@ -144,6 +144,11 @@ export default function StudentDashboardLayout({
     typeof window !== "undefined"
       ? localStorage.getItem("username") || "Student"
       : "Student";
+     
+      const studentname =
+    typeof window !== "undefined"
+      ? localStorage.getItem("studentname") || "Student"
+      : "Student";
 
   useEffect(() => {
     if (!token) {
@@ -169,147 +174,179 @@ export default function StudentDashboardLayout({
     }`;
 
   return (
-    <div className="min-h-screen bg-[#f6f7fb] py-12">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-        
-        {/* SIDEBAR */}
-        <aside className="bg-white border-2 border-[#7c6cff] rounded-lg p-6 shadow-sm">
+ <div className="min-h-screen bg-gradient-to-br from-[#f0f2fa] to-[#e9ecf7] py-12">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    
+    {/* SIDEBAR */}
+    <aside className="bg-white rounded-2xl shadow-xl border-2 border-[#7F7BDA] p-6 sticky top-6 h-fit">
+      {/* DECORATIVE HEADER */}
+      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#7F7BDA] to-[#E0B0DA] rounded-t-2xl"></div>
+      
+      {/* USER INFO */}
+      <div className="mb-8 mt-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs font-semibold text-[#7F7BDA] uppercase tracking-wider">
+            Welcome Back
+          </p>
+          <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></div>
+        </div>
 
-          {/* USER INFO */}
-          <div className="mb-8">
-            <p className="text-xs text-gray-400 uppercase tracking-wide">
-              Welcome
-            </p>
-
-            <div className="mt-3 text-sm text-gray-700 font-medium uppercase">
-              {username}
+        <div className="flex items-center gap-3">
+          {/* <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D0A0CA] to-[#E0B0DA] flex items-center justify-center text-white font-bold text-lg shadow-md">
+            {username?.charAt(0) || 'U'}
+          </div> */}
+          <div>
+            <div className="text-sm font-semibold text-gray-800 uppercase tracking-wide">
+              {username || 'Student Name'}
+              {studentname || 'Student ID'}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* DASHBOARD */}
-          <div className="mb-6">
-            <Link href="/studentDashboard" className={linkClass("/studentDashboard")}>
-              <FaHome className="text-xs" />
-              Dashboard
-             {/* <DashboardHome /> */}
+      {/* NAVIGATION SECTIONS */}
+      <nav className="space-y-8">
+        {/* DASHBOARD */}
+        <div>
+        
+          <Link 
+            href="/studentDashboard" 
+            className={`${linkClass("/studentDashboard")} group relative overflow-hidden`}
+          >
+            <span className="absolute left-0 w-1 h-0 bg-[#D0A0CA] group-hover:h-full transition-all duration-300"></span>
+            <FaHome className="text-sm text-gray-400 group-hover:text-[#D0A0CA] transition-colors" />
+            <span className="relative">Dashboard</span>
+          </Link>
+        </div>
+
+        {/* RESULT SECTION */}
+        <div>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span className="w-8 h-[2px] bg-[#D0A0CA] rounded-full"></span>
+            Results
+          </p>
+          <div className="space-y-1.5">
+            <Link
+              href="/studentDashboard/level1-result"
+              className={`${linkClass("/studentDashboard/level1-result")} group`}
+            >
+              <FaTrophy className="text-sm text-amber-400" />
+              Level 1 Result
+            </Link>
+
+            <Link
+              href="/studentDashboard/level2-result"
+              className={`${linkClass("/studentDashboard/level2-result")} group`}
+            >
+              <FaTrophy className="text-sm text-purple-400" />
+              Level 2 Result
+            </Link>
+
+            <div className="border-t border-dashed border-gray-200 my-3" />
+
+            <Link
+              href="/studentDashboard/download-apps"
+              className={`${linkClass("/studentDashboard/download-apps")} group`}
+            >
+              <FaDownload className="text-sm text-blue-400" />
+              Download Apps
+            </Link>
+
+            <Link
+              href="/studentDashboard/level2-exam-sif"
+              className={`${linkClass("/studentDashboard/level2-exam-sif")} group`}
+            >
+              <FaFileAlt className="text-sm text-emerald-400" />
+              Level 2 Exam SIF
             </Link>
           </div>
+        </div>
 
-          {/* RESULT SECTION */}
-          <div className="mb-6">
-            <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-2">
-              Result
-            </p>
-
-            <div className="space-y-2">
-              <Link
-                href="/studentDashboard/level1-result"
-                className={linkClass("/studentDashboard/level1-result")}
-              >
-                <FaTrophy className="text-xs" />
-                Level 1 Result
-              </Link>
-
-              <div className="border-t my-2" />
-
-              <Link
-                href="/studentDashboard/level2-result"
-                className={linkClass("/studentDashboard/level2-result")}
-              >
-                <FaTrophy className="text-xs" />
-                Level 2 Result
-              </Link>
-
-              <Link
-                href="/studentDashboard/download-apps"
-                className={linkClass("/studentDashboard/download-apps")}
-              >
-                <FaDownload className="text-xs" />
-                Download Apps
-              </Link>
-
-              <div className="border-t my-2" />
-
-              <Link
-                href="/studentDashboard/level2-exam-sif"
-                className={linkClass("/studentDashboard/level2-exam-sif")}
-              >
-                <FaFileAlt className="text-xs" />
-                Level 2 Exam SIF
-              </Link>
-            </div>
-          </div>
-
-          {/* STUDY MATERIAL */}
-          <div className="mb-6">
-            <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-2">
+        {/* STUDY MATERIAL */}
+        <div>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span className="w-8 h-[2px] bg-[#D0A0CA] rounded-full"></span>
+            Resources
+          </p>
+          <div className="space-y-1.5">
+            <Link
+              href="/studentDashboard/study-material"
+              className={`${linkClass("/studentDashboard/study-material")} group`}
+            >
+              <FaBook className="text-sm text-indigo-400" />
               Study Material
-            </p>
+            </Link>
 
-            <div className="space-y-2">
-              <Link
-                href="/studentDashboard/study-material"
-                className={linkClass("/studentDashboard/study-material")}
-              >
-                <FaBook className="text-xs" />
-                Study Material
-              </Link>
+            <div className="border-t border-dashed border-gray-200 my-3" />
 
-              <div className="border-t my-2" />
-
-              <Link
-                href="/studentDashboard/contact"
-                className={linkClass("/studentDashboard/contact")}
-              >
-                <FaInfoCircle className="text-xs" />
-                Contact Information
-              </Link>
-            </div>
+            <Link
+              href="/studentDashboard/contact"
+              className={`${linkClass("/studentDashboard/contact")} group`}
+            >
+              <FaInfoCircle className="text-sm text-sky-400" />
+              Contact Information
+            </Link>
           </div>
+        </div>
 
-          {/* PROFILE */}
-          <div>
-            <p className="text-[11px] text-gray-400 uppercase tracking-wider mb-2">
-              Profile
-            </p>
+        {/* PROFILE */}
+        <div>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <span className="w-8 h-[2px] bg-[#D0A0CA] rounded-full"></span>
+            Account
+          </p>
+          <div className="space-y-1.5">
+            <Link
+              href="/studentDashboard/edit-profile"
+              className={`${linkClass("/studentDashboard/edit-profile")} group`}
+            >
+              <FaUserCog className="text-sm text-violet-400" />
+              Edit Profile
+            </Link>
 
-            <div className="space-y-2">
-              <Link
-                href="/studentDashboard/edit-profile"
-                className={linkClass("/studentDashboard/edit-profile")}
-              >
-                <FaUserCog className="text-xs" />
-                Edit Profile
-              </Link>
+            <Link
+              href="/studentDashboard/update-password"
+              className={`${linkClass("/studentDashboard/update-password")} group`}
+            >
+              <FaKey className="text-sm text-amber-400" />
+              Update Password
+            </Link>
 
-              <div className="border-t my-2" />
+            <div className="border-t border-dashed border-gray-200 my-3" />
 
-              <Link
-                href="/studentDashboard/update-password"
-                className={linkClass("/studentDashboard/update-password")}
-              >
-                <FaKey className="text-xs" />
-                Update Student Password
-              </Link>
-
-              <div className="border-t my-2" />
-
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 text-sm text-gray-500 hover:text-red-600 transition"
-              >
-                <FaSignOutAlt className="text-xs" />
-                Logout
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 rounded-xl transition-all duration-300 group"
+            >
+              <FaSignOutAlt className="text-sm group-hover:rotate-180 transition-transform duration-500" />
+              Logout
+            </button>
           </div>
-        </aside>
+        </div>
+      </nav>
 
-        {/* MAIN CONTENT */}
-        <main className="md:col-span-3 bg-white rounded-lg shadow-sm p-8">
-          {children}
-        </main>
+      {/* FOOTER NOTE */}
+      <div className="mt-8 pt-6 border-t border-gray-100">
+        <p className="text-[10px] text-gray-400 text-center">
+          © 2026 Student Portal v2.0
+        </p>
       </div>
-    </div>
+    </aside>
+
+    {/* MAIN CONTENT */}
+    <main className="md:col-span-3">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 min-h-[600px] relative overflow-hidden">
+        {/* DECORATIVE ELEMENTS */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#D0A0CA]/5 to-transparent rounded-bl-full"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#D0A0CA]/5 to-transparent rounded-tr-full"></div>
+        
+        {/* CONTENT */}
+        <div className="relative z-10">
+          {children}
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
   );
 }
