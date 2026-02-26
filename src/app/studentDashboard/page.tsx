@@ -1,6 +1,13 @@
 "use client";
-export default function DashboardPage() {
+
+// import DownloadApp from "./download-apps/page";
+// import { useState } from "react";
+export default function DashboardPage({ children }: { children: React.ReactNode }) {
+// {activeTab === "Download Apps" && <DownloadApp />}
+// {activeTab === "Profile" && <Profile />}
+// {activeTab === "Result" && <Result />}
     return (
+
         <div className="min-h-screen bg-linear-to-br from-[#eef2ff] to-[#f8fafc] px-6 py-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
                 {/* Sidebar */}
@@ -35,6 +42,17 @@ export default function DashboardPage() {
                                 </li>
                             </ul>
                         </div>
+
+                        <div>
+                            <a href="/studentDashboard/download-apps" >
+                                <ul className="space-y-2">
+                                    <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
+                                        Download Apps
+                                    </li>
+                                </ul>
+                            </a>
+                        </div>
+
                         <div>
                             <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
                                 Study Material
@@ -53,9 +71,11 @@ export default function DashboardPage() {
                                 Profile
                             </p>
                             <ul className="space-y-2">
+                                <a href="/studentDashboard/Edit-profile" >
                                 <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
                                     Edit Profile
                                 </li>
+                                </a>
                                 <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
                                     Update Password
                                 </li>
@@ -67,12 +87,12 @@ export default function DashboardPage() {
                     </nav>
                 </aside>
                 {/* Main Content */}
-                <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-                    <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
+                {/* <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8"> */}
+                {/* <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
                         IMPORTANT DATES TO REMEMBER
-                    </h2>
-                    {/* Table */}
-                    <div className="overflow-x-auto rounded-xl border border-gray-200">
+                    </h2> */}
+                {/* Table */}
+                {/* <div className="overflow-x-auto rounded-xl border border-gray-200"  onClick={() => DashboardPage()}>
                         <table className="w-full text-sm text-gray-700">
                             <thead>
                                 <tr className="bg-indigo-50 text-gray-800 text-left">
@@ -105,9 +125,9 @@ export default function DashboardPage() {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    {/* Pagination */}
-                    <div className="flex justify-center items-center gap-4 mt-8 text-sm">
+                    </div> */}
+                {/* Pagination */}
+                {/* <div className="flex justify-center items-center gap-4 mt-8 text-sm">
                         <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
                             « Previous
                         </button>
@@ -117,9 +137,26 @@ export default function DashboardPage() {
                         <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
                             Next »
                         </button>
-                    </div>
+                    </div> */}
+                {/* {activeTab === "Download Apps" && <DownloadApp />} */}
+                {/* <DownloadApp /> */}
+
+
+                {/* </main> */}
+                {/* Main Content */}
+                <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                    {children}
+                  
                 </main>
+{/* 
+                USECASE  <div>
+    <button onClick={() => setPage("login")}>Login</button>
+    <button onClick={() => setPage("signup")}>Signup</button>
+
+    {page === "edit-profile" ? <EditProfile /> : <Signup />} */}
+  {/* </div> */}
             </div>
         </div>
+
     );
 }

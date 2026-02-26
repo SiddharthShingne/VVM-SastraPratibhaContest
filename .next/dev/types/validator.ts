@@ -54,6 +54,51 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/studentDashboard/Edit-profile/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/Edit-profile">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/Edit-profile/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/download-apps/Ios-app-instrction/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/download-apps/Ios-app-instrction">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/download-apps/Ios-app-instrction/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/download-apps/Mobile-app-instruction/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/download-apps/Mobile-app-instruction">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/download-apps/Mobile-app-instruction/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/download-apps/destop-app-instruction/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/download-apps/destop-app-instruction">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/download-apps/destop-app-instruction/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/download-apps/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/download-apps">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/download-apps/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/studentDashboard/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/studentDashboard">> = Specific
