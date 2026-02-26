@@ -54,6 +54,42 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/studentDashboard/download-apps/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/download-apps">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/download-apps/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/exam-details/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/exam-details">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/exam-details/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/level1-result/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/level1-result">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/level1-result/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/level2-result/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/studentDashboard/level2-result">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/level2-result/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/studentDashboard/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/studentDashboard">> = Specific
@@ -73,6 +109,15 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
 {
   type __IsExpected<Specific extends LayoutConfig<"/">> = Specific
   const handler = {} as typeof import("../../../src/app/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/studentDashboard/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/studentDashboard">> = Specific
+  const handler = {} as typeof import("../../../src/app/studentDashboard/layout.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
