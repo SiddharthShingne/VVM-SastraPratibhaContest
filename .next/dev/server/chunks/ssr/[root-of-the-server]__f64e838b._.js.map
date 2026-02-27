@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/lenovo/Desktop/frontend-next/vvm-frontend-next/src/app/about/page.jsx"],"sourcesContent":["import React from \"react\";\r\n// import WhyVVM from \"../../components/AboutPage/whyVvm\";\r\n// import WhatIsVvm from \"@/components/AboutPage/whatisVvm\";\r\nexport default function About() {\r\n    return (\r\n        <div>\r\n            <h1>About Us</h1>\r\n            <p>\r\n                This is a simple React JSX file.\r\n            </p>\r\n            {/* <WhyVVM /> */}\r\n            {/* <WhatIsVvm /> */}\r\n        </div>\r\n    );\r\n}\r\n"],"names":[],"mappings":";;;;;AAAA;;;AAGe,SAAS;IACpB,qBACI,8OAAC;;0BACG,8OAAC;0BAAG;;;;;;0BACJ,8OAAC;0BAAE;;;;;;;;;;;;AAOf"}}]
-}
