@@ -1,5 +1,6 @@
 "use client";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect, ChangeEvent, KeyboardEvent, WheelEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
