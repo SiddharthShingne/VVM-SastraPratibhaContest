@@ -245,8 +245,8 @@ export default function StudentDashboardLayout({
             <div className="border-t border-dashed border-gray-200 my-3" />
 
             <Link
-              href="/studentDashboard/download-apps"
-              className={`${linkClass("/studentDashboard/download-apps")} group`}
+              href="/studentDashboard/download-app"
+              className={`${linkClass("/studentDashboard/download-app")} group`}
             >
               <FaDownload className="text-sm text-blue-400" />
               Download Apps

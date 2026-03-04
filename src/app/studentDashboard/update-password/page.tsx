@@ -2,13 +2,12 @@
 import { use,useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import DashboardPage from "../page";
-export default function EditProfile() {
+export default function UpdateProfile() {
       const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
     return (
         <>
-   
             <div className="bg-gray-50 min-h-screen p-6">
       <div className="max-w-5xl mx-auto bg-white rounded-xl border border-gray-200 shadow-sm p-8">
 
