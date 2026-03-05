@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import InputField from "@/components/ui/InputField";
-
+import Image from "next/image";
 /* ===================== TYPES ===================== */
 
 interface RegistrationForm {
@@ -38,7 +38,7 @@ const boards = ["CBSE", "ICSE", "IB", "IGCSE"];
 const grades = [ "6", "7", "8", "9", "10", "11"];
 
 /* ===================== COMPONENT ===================== */
-
+// C: \Users\lenovo\Desktop\frontend - next\vvm - frontend - next\public\gcc\uae.webp
 export default function UAEForm() {
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
@@ -129,9 +129,23 @@ export default function UAEForm() {
   return (
     <div className="min-h-screen py-12">
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-[#2f5f8f]">
-          Student Registration – UAE
-        </h1>
+        <div className="max-w-6xl mx-auto mb-10 px-6">
+          <div className="flex items-center justify-between">
+
+            <h1 className="text-4xl font-bold text-[#2f5f8f]">
+              Student Registration – UAE
+            </h1>
+
+            <Image
+              src="/gcc/uae.webp"
+              alt="UAE"
+              width={120}
+              height={80}
+              className="object-contain"
+            />
+
+          </div>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-10 px-6">
