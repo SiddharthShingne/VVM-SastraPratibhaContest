@@ -100,7 +100,7 @@ export default function UAEForm() {
   };
 
   return (
-    <div className="min-h-screen  py-12">
+    <div className="min-h-screen  py-12 width: 100%">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-[#2f5f8f]">
           Student Registration – <span className="font-extrabold">UAE</span>
@@ -193,7 +193,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden ">
       <div className="flex justify-between items-center px-6 py-4 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
         <h2 className="font-semibold">{title}</h2>
         <button
@@ -205,7 +205,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         </button>
       </div>
       {open && (
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-">
           {children}
         </div>
       )}

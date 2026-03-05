@@ -42,7 +42,7 @@ export default function RegisterPage() {
 
             {/* LOGO */}
             <img
-              src="/images/icons/vvm_logo.jpeg"
+              src="/nav-logo.png"
               alt="VVM Logo"
               className="mx-auto mb-6 h-20"
             />
@@ -53,7 +53,7 @@ export default function RegisterPage() {
             </h2>
 
             {/* COUNTRY SELECT CARD */}
-            <div className="bg-gray-100 rounded-md p-6">
+            <div className="bg-gray-100 rounded-md p-6 w-80 mx-auto">
               <label className="block text-sm font-medium mb-2">
                 Select Country
               </label>

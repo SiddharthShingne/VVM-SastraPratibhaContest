@@ -6,7 +6,7 @@ import Level1AppPage from "./level-1-app/page";
 import { useState } from "react";
 
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-// import DashboardPage from "../page";
+import DashboardPage from "../page";
 type TabItem = {
   id: string;
   label: string;
@@ -37,6 +37,7 @@ export default function DownloadApp() {
   
   return (
     <>
+      <DashboardPage/>
      
 
         <div className="flex w-full flex-col">
