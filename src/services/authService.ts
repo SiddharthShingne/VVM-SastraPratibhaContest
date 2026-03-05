@@ -78,3 +78,57 @@ export const logoutUser = (): void => {
     localStorage.removeItem("username");
   }
 };
+
+/* ==================== REGISTRATION ==================== */
+
+// shape should mirror the form used in UAEForm component
+export interface RegistrationForm {
+  fullName: string;
+  dob: string;
+  emiratesId: string;
+  gender: string;
+  studentMobile: string;
+  studentEmail: string;
+  grade: string;
+
+  password: string;
+  confirmPassword: string;
+
+  schoolName: string;
+  board: string;
+  country: string;
+  city: string;
+  pincode: string;
+  schoolAddress: string;
+
+  parentName: string;
+  parentMobile: string;
+  parentEmail: string;
+  emailOtp: string;
+}
+
+// backend doesn't really care about `confirmPassword` or `emailOtp` maybe,
+// but we send whatever the form produces and let the server validate.
+
+interface RawRegisterApiResponse {
+  status: boolean;
+  message: string;
+  data?: any;
+}
+
+export const registerUser = async (
+  request: (
+    endpoint: string,
+    method?: "GET" | "POST" | "PUT" | "DELETE",
+    body?: unknown,
+  ) => Promise<RawRegisterApiResponse>,
+  payload: RegistrationForm,
+): Promise<RawRegisterApiResponse> => {
+  const response = await request("/register", "POST", payload);
+
+  if (!response.status) {
+    throw new Error(response.message || "Registration failed");
+  }
+
+  return response;
+};
