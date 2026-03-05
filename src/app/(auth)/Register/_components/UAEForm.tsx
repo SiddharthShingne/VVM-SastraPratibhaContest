@@ -4,6 +4,10 @@ import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import InputField from "@/components/ui/InputField";
 import Image from "next/image";
+
+// api
+// import { useApi } from "@/hooks/useApi";
+// import { registerUser, RegistrationForm } from "@/services/authService";
 /* ===================== TYPES ===================== */
 
 interface RegistrationForm {
@@ -33,9 +37,9 @@ interface RegistrationForm {
 
 /* ===================== CONSTANTS ===================== */
 
-const genders = ["Male", "Female","Others"];
+const genders = ["Male", "Female", "Others"];
 const boards = ["CBSE", "ICSE", "IB", "IGCSE"];
-const grades = [ "6", "7", "8", "9", "10", "11"];
+const grades = ["6", "7", "8", "9", "10", "11"];
 
 /* ===================== COMPONENT ===================== */
 // C: \Users\lenovo\Desktop\frontend - next\vvm - frontend - next\public\gcc\uae.webp
@@ -131,11 +135,9 @@ export default function UAEForm() {
       <div className="text-center mb-10">
         <div className="max-w-6xl mx-auto mb-10 px-6">
           <div className="flex items-center justify-between">
-
             <h1 className="text-4xl font-bold text-[#2f5f8f]">
               Student Registration – UAE
             </h1>
-
             <Image
               src="/gcc/uae.webp"
               alt="UAE"
@@ -143,15 +145,11 @@ export default function UAEForm() {
               height={80}
               className="object-contain"
             />
-
           </div>
         </div>
       </div>
-
       <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-10 px-6">
-
         <Section title="Primary Details">
-
           <InputField
             label="Student Full Name"
             name="fullName"
@@ -160,7 +158,6 @@ export default function UAEForm() {
             required
             submitAttempted={submitAttempted}
           />
-
           <InputField
             type="date"
             label="Date of Birth"
@@ -170,7 +167,6 @@ export default function UAEForm() {
             required
             submitAttempted={submitAttempted}
           />
-
           <InputField
             label="Emirates ID"
             name="emiratesId"
@@ -181,7 +177,6 @@ export default function UAEForm() {
             maxLength={15}
             submitAttempted={submitAttempted}
           />
-
           <SelectField
             label="Gender"
             name="gender"
@@ -190,19 +185,17 @@ export default function UAEForm() {
             onChange={handleChange}
             required
           />
-
           <InputField
             label="Student Mobile (Optional)"
             name="studentMobile"
             value={form.studentMobile}
             onChange={handleChange}
             /* pattern must be a string when passing through the extended
-               React.InputHTMLAttributes because the intersection makes
+              React.InputHTMLAttributes because the intersection makes
                the type "RegExp & string".  Use the string version instead. */
             pattern="^[0-9]{10}$"
             submitAttempted={submitAttempted}
           />
-
           <InputField
             type="email"
             label="Student Email (Optional)"
@@ -211,7 +204,6 @@ export default function UAEForm() {
             onChange={handleChange}
             submitAttempted={submitAttempted}
           />
-
           <SelectField
             label="Class / Grade"
             name="grade"
@@ -221,7 +213,6 @@ export default function UAEForm() {
             required
           />
         </Section>
-
         <Section title="Login Details">
           <InputField
             type="password"
@@ -340,12 +331,10 @@ export default function UAEForm() {
               submitAttempted={submitAttempted}
             />
           )}
-
           <div className="flex gap-4">
             <button type="button" onClick={sendOtp} className="btn-blue">
               Send OTP
             </button>
-
             {otpSent && (
               <button type="button" onClick={verifyOtp} className="btn-green">
                 Verify OTP
@@ -353,7 +342,6 @@ export default function UAEForm() {
             )}
           </div>
         </Section>
-
         <div className="text-center pt-6">
           <button type="submit" className="btn-submit">
             Submit Registration
