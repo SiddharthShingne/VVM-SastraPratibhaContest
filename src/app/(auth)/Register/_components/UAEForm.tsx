@@ -33,14 +33,13 @@ interface RegistrationForm {
 
 /* ===================== CONSTANTS ===================== */
 
-const genders = ["Male", "Female"];
-const boards = ["CBSE", "ICSE", "IB", "IGCSE", "STATE"];
-const grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+const genders = ["Male", "Female","Others"];
+const boards = ["CBSE", "ICSE", "IB", "IGCSE"];
+const grades = [ "6", "7", "8", "9", "10", "11"];
 
 /* ===================== COMPONENT ===================== */
 
 export default function UAEForm() {
-
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const [form, setForm] = useState<RegistrationForm>({
@@ -51,17 +50,14 @@ export default function UAEForm() {
     studentMobile: "",
     studentEmail: "",
     grade: "",
-
     password: "",
     confirmPassword: "",
-
     schoolName: "",
     board: "",
     country: "UAE",
     city: "",
     pincode: "",
     schoolAddress: "",
-
     parentName: "",
     parentMobile: "",
     parentEmail: "",
@@ -74,10 +70,12 @@ export default function UAEForm() {
 
   /* ===================== HANDLERS ===================== */
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setForm(prev => ({
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -118,17 +116,7 @@ export default function UAEForm() {
 
     try {
       const payload = { ...form };
-
       console.log("Submitting to backend:", payload);
-
-      /*
-      await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      */
-
       alert("Registration Successful");
     } catch (err) {
       console.error(err);
@@ -148,7 +136,6 @@ export default function UAEForm() {
 
       <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-10 px-6">
 
-        {/* ================= PRIMARY DETAILS ================= */}
         <Section title="Primary Details">
 
           <InputField
@@ -181,7 +168,6 @@ export default function UAEForm() {
             submitAttempted={submitAttempted}
           />
 
-          {/* Gender */}
           <SelectField
             label="Gender"
             name="gender"
@@ -196,7 +182,10 @@ export default function UAEForm() {
             name="studentMobile"
             value={form.studentMobile}
             onChange={handleChange}
-            pattern={/^[0-9]{10}$/}
+            /* pattern must be a string when passing through the extended
+               React.InputHTMLAttributes because the intersection makes
+               the type "RegExp & string".  Use the string version instead. */
+            pattern="^[0-9]{10}$"
             submitAttempted={submitAttempted}
           />
 
@@ -219,9 +208,7 @@ export default function UAEForm() {
           />
         </Section>
 
-        {/* ================= LOGIN DETAILS ================= */}
         <Section title="Login Details">
-
           <InputField
             type="password"
             label="Password"
@@ -240,17 +227,17 @@ export default function UAEForm() {
             value={form.confirmPassword}
             onChange={handleChange}
             required
-            validator={(val) =>
-              val !== form.password ? "Passwords do not match" : ""
+            /* validator signature must match InputFieldProps: the value can be
+               string | number | undefined.  We'll coerce to string when
+               comparing. */
+            validator={(val: string | number | undefined) =>
+              String(val) !== form.password ? "Passwords do not match" : ""
             }
             submitAttempted={submitAttempted}
           />
-
         </Section>
 
-        {/* ================= SCHOOL DETAILS ================= */}
         <Section title="School Details">
-
           <InputField
             label="School Name"
             name="schoolName"
@@ -270,12 +257,7 @@ export default function UAEForm() {
             required
           />
 
-          <InputField
-            label="Country"
-            name="country"
-            value={form.country}
-            disabled
-          />
+          <InputField label="Country" name="country" value={form.country} disabled />
 
           <InputField
             label="City"
@@ -302,12 +284,9 @@ export default function UAEForm() {
             onChange={handleChange}
             required
           />
-
         </Section>
 
-        {/* ================= PARENT DETAILS ================= */}
         <Section title="Parent Details">
-
           <InputField
             label="Parent Name"
             name="parentName"
@@ -323,7 +302,7 @@ export default function UAEForm() {
             value={form.parentMobile}
             onChange={handleChange}
             required
-            pattern={/^[0-9]{10}$/}
+            pattern="^[0-9]{10}$"
             submitAttempted={submitAttempted}
           />
 
@@ -359,10 +338,8 @@ export default function UAEForm() {
               </button>
             )}
           </div>
-
         </Section>
 
-        {/* ================= SUBMIT ================= */}
         <div className="text-center pt-6">
           <button type="submit" className="btn-submit">
             Submit Registration
@@ -381,7 +358,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-      <div className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
+      <div className="flex justify-between items-center px-6 py-4 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
         <h2 className="font-semibold">{title}</h2>
         <button type="button" onClick={() => setOpen(!open)}>
           {open ? <Minus size={16} /> : <Plus size={16} />}
@@ -398,14 +375,23 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 /* ===================== SELECT FIELD ===================== */
 
+interface SelectFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  options: string[];
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  required?: boolean;
+}
+
 function SelectField({
   label,
   name,
   value,
   options,
   onChange,
-  required
-}: any) {
+  required,
+}: SelectFieldProps) {
   return (
     <div>
       <label className="block mb-1 text-sm font-medium">
@@ -418,7 +404,7 @@ function SelectField({
         className="w-full px-3 py-2 border rounded-lg"
       >
         <option value="">Select</option>
-        {options.map((opt: string) => (
+        {options.map((opt) => (
           <option key={opt} value={opt}>{opt}</option>
         ))}
       </select>
@@ -428,7 +414,12 @@ function SelectField({
 
 /* ===================== TEXTAREA FIELD ===================== */
 
-function TextAreaField({ label, ...props }: any) {
+interface TextAreaFieldProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label: string;
+}
+
+function TextAreaField({ label, ...props }: TextAreaFieldProps) {
   return (
     <div className="md:col-span-3">
       <label className="block mb-1 text-sm font-medium">

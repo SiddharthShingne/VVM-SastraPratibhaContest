@@ -1,5 +1,4 @@
 "use client";
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState, useEffect, ChangeEvent, KeyboardEvent, WheelEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -19,7 +18,13 @@ interface InputFieldProps {
   validator?: (value: string | number | undefined) => string;
   minLength?: number;
   maxLength?: number;
-  pattern?: RegExp;
+  /**
+   * A regex or string pattern used for validation.  We intentionally
+   * allow both because we extend React.InputHTMLAttributes which defines
+   * `pattern?: string` and the intersection would otherwise produce
+   * `RegExp & string` which is unusable.
+   */
+  pattern?: string | RegExp;
   submitAttempted?: boolean;
 }
 
@@ -91,8 +96,11 @@ export default function InputField({
       return `Maximum ${maxLength} characters allowed`;
     }
 
-    if (pattern && value && !pattern.test(String(value))) {
-      return `Invalid ${label}`;
+    if (pattern && value) {
+      const regex = typeof pattern === "string" ? new RegExp(pattern) : pattern;
+      if (!regex.test(String(value))) {
+        return `Invalid ${label}`;
+      }
     }
 
     if (validator) {
