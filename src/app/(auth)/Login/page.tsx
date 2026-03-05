@@ -1,58 +1,38 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useApi } from "@/hooks/useApi";
 import { loginUser } from "@/services/authService";
 import HeaderTag from "@/components/ui/Header-tag";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
     const router = useRouter();
-    const { request, loading, error } = useApi();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
     const [localError, setLocalError] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const [showPassword, setShowPassword] = useState(false);
-
-    // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     setLocalError("");
-
-    //     try {
-    //         const data = await loginUser(request, username, password);
-
-    //         if (data?.token) {
-    //             localStorage.setItem("token", data.token);
-    //             localStorage.setItem("username", data.username || username);
-
-    //             router.replace("/studentDashboard"); // important
-    //         } else {
-    //             setLocalError("Invalid credentials.");
-    //         }
-    //     } catch {
-    //         setLocalError("Invalid credentials or server error.");
-    //     }
-    // };
-
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLocalError("");
+        setLoading(true);
 
         try {
-            const data = await loginUser(request, username, password);
+            const data = await loginUser(username, password);
 
-            // ✅ Store token + username
             localStorage.setItem("token", data.token);
             localStorage.setItem("username", data.username);
 
-            // ✅ Redirect after success
             router.replace("/studentDashboard");
         } catch (err) {
-            setLocalError(
-                err instanceof Error ? err.message : "Login failed"
-            );
+            setLocalError(err instanceof Error ? err.message : "Login failed");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -66,10 +46,8 @@ export default function LoginPage() {
                         Log In
                     </h2>
 
-                    {(error || localError) && (
-                        <p className="text-red-500 text-sm mb-4 text-center">
-                            {error || localError}
-                        </p>
+                    {localError && (
+                        <p className="text-red-500 text-sm mb-4 text-center">{localError}</p>
                     )}
 
                     <form onSubmit={handleLogin} className="space-y-5">
@@ -81,7 +59,7 @@ export default function LoginPage() {
                             <input
                                 type="text"
                                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm
-                focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -96,15 +74,16 @@ export default function LoginPage() {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 className="w-full border border-gray-300 rounded-md px-3 py-2 pr-10 text-sm
-                focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setShowPassword((v) => !v)}
                                 className="absolute right-3 top-9 text-gray-500"
+                                aria-label={showPassword ? "Hide password" : "Show password"}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -114,8 +93,8 @@ export default function LoginPage() {
                             type="submit"
                             disabled={loading}
                             className="w-full py-2.5 rounded-lg text-white text-sm font-medium
-              bg-linear-to-r from-blue-600 to-purple-600
-              hover:opacity-90 transition disabled:opacity-60"
+                bg-linear-to-r from-blue-600 to-purple-600
+                hover:opacity-90 transition disabled:opacity-60"
                         >
                             {loading ? "Logging In..." : "Log In"}
                         </button>
