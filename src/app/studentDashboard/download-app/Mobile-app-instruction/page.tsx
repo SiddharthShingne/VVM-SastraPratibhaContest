@@ -1,3 +1,5 @@
+import { Apple , Smartphone, LaptopMinimal } from 'lucide-react';
+
 export default function MobileAppInstruction() {
     return (
                 <div className="w-full max-w-6xl mx-auto p-6">
@@ -6,17 +8,17 @@ export default function MobileAppInstruction() {
       <div className="flex flex-wrap gap-4 mb-6">
 
         <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md hover:scale-105 transition">
-          <span>☁️</span>
+          <span><Smartphone /></span>
           Download APK file
         </button>
 
         <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-purple-500 shadow-md hover:scale-105 transition">
-          <span>🍎</span>
+          <span><Apple /></span>
           Download iOS App
         </button>
 
         <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-500 shadow-md hover:scale-105 transition">
-          <span>🧩</span>
+          <span><LaptopMinimal  /></span>
           Download Apple File
         </button>
 
