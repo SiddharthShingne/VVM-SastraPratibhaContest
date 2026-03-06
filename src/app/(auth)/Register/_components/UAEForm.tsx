@@ -35,7 +35,7 @@ interface RegistrationForm {
 export default function UAEForm() {
   const genders = ["Male", "Female"];
   const boards = ["CBSE", "ICSE", "IB", "IGCSE", "STATE"];
-  const grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  const grades = ["6", "7", "8", "9", "10", "11"];
 
   const [form, setForm] = useState<RegistrationForm>({
     fullName: "",
@@ -100,14 +100,14 @@ export default function UAEForm() {
   };
 
   return (
-    <div className="min-h-screen  py-12 width: 100%">
+    <div className="min-h-screen  py-12 w-full">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-[#2f5f8f]">
           Student Registration – <span className="font-extrabold">UAE</span>
         </h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-10 px-6">
+      <form onSubmit={handleSubmit} className="max-w-[1500px] mx-auto space-y-10 px-6">
 
         <Section title="Primary Details">
           <Input label="Full Name" name="fullName" value={form.fullName} onChange={handleChange} />
@@ -194,7 +194,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden ">
-      <div className="flex justify-between items-center px-6 py-4 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
+      <div className="flex justify-between items-center px-6 py-4 bg-linear-to-r from-[#17b9f0] to-[#4a7ba7] text-white">
         <h2 className="font-semibold">{title}</h2>
         <button
           type="button"
@@ -205,7 +205,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         </button>
       </div>
       {open && (
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-">
+        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {children}
         </div>
       )}

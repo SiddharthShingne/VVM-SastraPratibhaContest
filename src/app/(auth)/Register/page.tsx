@@ -34,7 +34,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-full">
 
         {/* INTRO SECTION */}
         {!selectedCountry && (
@@ -76,12 +76,12 @@ export default function RegisterPage() {
 
         {/* 🔵 COUNTRY COMPONENT SECTION */}
         {selectedCountry && (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white w-full rounded-lg shadow-md p-6">
 
             {/* Back Button */}
             <button
               onClick={() => setSelectedCountry("")}
-              className="mb-4 text-sm text-indigo-600 hover:underline"
+              className="mb-4 text-sm text-indigo-600 hover:underline "
             >
               ← Change Country
             </button>

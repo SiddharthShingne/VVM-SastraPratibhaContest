@@ -1,5 +1,4 @@
 "use client";
-import InputField from "@/components/ui/InputField";
 
 export default function DashboardHome() {
     return (
@@ -8,16 +7,7 @@ export default function DashboardHome() {
                 IMPORTANT DATES TO REMEMBER
             </h2>
 
-            <InputField
-                label="Email"
-                name="email"
-                type="text"
-                // value={formData.email}
-                // onChange={handleChange}
-                // required
-                // pattern={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
-                // submitAttempted={submitAttempted}
-            />
+        
 
             <div className="border border-gray-300 rounded-md overflow-hidden">
                 <table className="w-full text-[13px]">
