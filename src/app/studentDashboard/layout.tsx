@@ -270,8 +270,8 @@ export default function StudentDashboardLayout({
           </p>
           <div className="space-y-1.5">
             <Link
-              href="/studentDashboard/study-material"
-              className={`${linkClass("/studentDashboard/study-material")} group`}
+              href="/studentDashboard/Study-Material"
+              className={`${linkClass("/studentDashboard/Study-Material")} group`}
             >
               <FaBook className="text-sm text-indigo-400" />
               Study Material
@@ -280,8 +280,8 @@ export default function StudentDashboardLayout({
             <div className="border-t border-dashed border-gray-200 my-3" />
 
             <Link
-              href="/studentDashboard/contact"
-              className={`${linkClass("/studentDashboard/contact")} group`}
+              href="/studentDashboard/Contact-Information"
+              className={`${linkClass("/studentDashboard/Contact-Information")} group`}
             >
               <FaInfoCircle className="text-sm text-sky-400" />
               Contact Information
