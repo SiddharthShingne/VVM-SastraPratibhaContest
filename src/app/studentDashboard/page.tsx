@@ -1,59 +1,66 @@
 "use client";
-import InputField from "@/components/ui/InputField";
+
+import { useEffect, useState } from "react";
+import { getImportantDates } from "@/services/authService";
+
+interface DateItem {
+    id: number;
+    name: string;
+    detail: string;
+}
 
 export default function DashboardHome() {
+    const [dates, setDates] = useState<DateItem[]>([]);
+
+    useEffect(() => {
+        const loadDates = async () => {
+            try {
+                const data = await getImportantDates(1);
+
+                // adjust if API response is wrapped
+                setDates(data.data || data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        loadDates();
+    }, []);
+
     return (
-        <div className="bg-white border border-gray-300 rounded-lg shadow-sm p-8">
-            <h2 className="text-center text-[17px] font-semibold tracking-wide text-gray-800 mb-6">
+        <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5">
+
+            <h2 className="text-center text-[14px] font-semibold tracking-wide text-gray-800 mb-4">
                 IMPORTANT DATES TO REMEMBER
             </h2>
 
-            <InputField
-                label="Email"
-                name="email"
-                type="text"
-                // value={formData.email}
-                // onChange={handleChange}
-                // required
-                // pattern={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
-                // submitAttempted={submitAttempted}
-            />
+            <div className="border border-gray-300 rounded-md overflow-hidden mt-3">
+                <table className="w-full text-[11px]">
 
-            <div className="border border-gray-300 rounded-md overflow-hidden">
-                <table className="w-full text-[13px]">
                     <thead className="bg-[#d8dced] text-gray-800">
                         <tr>
-                            <th className="p-3 text-left border-r">Sr. No.</th>
-                            <th className="p-3 text-left border-r">Name</th>
-                            <th className="p-3 text-left">Detail</th>
+                            <th className="p-2 text-left border-r">Sr. No.</th>
+                            <th className="p-2 text-left border-r">Name</th>
+                            <th className="p-2 text-left">Detail</th>
                         </tr>
                     </thead>
+
                     <tbody className="text-gray-700">
-                        <tr className="border-t">
-                            <td className="p-3 border-r">1</td>
-                            <td className="p-3 border-r font-medium">Level 1 Exam</td>
-                            <td className="p-3">
-                                GCC - November 8 for all GCC countries for all classes.
-                            </td>
-                        </tr>
-                        <tr className="border-t bg-[#f7f8fc]">
-                            <td className="p-3 border-r">2</td>
-                            <td className="p-3 border-r font-medium">Level 2 Exam</td>
-                            <td className="p-3">
-                                For International students contact Science India/International forum.
-                            </td>
-                        </tr>
-                        <tr className="border-t">
-                            <td className="p-3 border-r">3</td>
-                            <td className="p-3 border-r font-medium">State Camp</td>
-                            <td className="p-3">
-                                Contact respective international forum for more details.
-                            </td>
-                        </tr>
+                        {dates.map((item, index) => (
+                            <tr
+                                key={item.id}
+                                className={`border-t ${index % 2 === 1 ? "bg-[#f7f8fc]" : ""
+                                    }`}
+                            >
+                                <td className="p-2 border-r">{index + 1}</td>
+                                <td className="p-2 border-r font-medium">{item.name}</td>
+                                <td className="p-2">{item.detail}</td>
+                            </tr>
+                        ))}
                     </tbody>
+
                 </table>
             </div>
         </div>
     );
 }
-

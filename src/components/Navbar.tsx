@@ -133,38 +133,46 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white px-10 py-2 shadow-sm sticky top-0 z-50 font-sans">
-            <div className="max-w-screen-2xl mx-auto flex items-center justify-between flex-wrap">
+        <nav className="bg-white px-5 py-1 shadow-sm sticky top-0 z-50 font-sans">
+            <div className="max-w-screen-xl mx-auto flex items-center justify-between flex-wrap">
+
+                {/* LOGO */}
                 <div className="flex items-center gap-2 shrink-0">
-                    <Image src="/nav-logo.png" alt="Logo" width={250} height={70} />
+                    <Image src="/nav-logo.png" alt="Logo" width={160} height={45} />
                 </div>
 
+                {/* MOBILE MENU BUTTON */}
                 <div className="block lg:hidden">
-                    <button className="text-3xl focus:outline-none" onClick={toggleMenu}>
+                    <button
+                        className="text-2xl focus:outline-none"
+                        onClick={toggleMenu}
+                    >
                         {menuOpen ? "✕" : "☰"}
                     </button>
                 </div>
 
+                {/* NAV ITEMS */}
                 <ul
-                    className={`w-full lg:w-auto lg:flex lg:items-center transition-all duration-300 ease-in-out ${menuOpen ? "block mt-4" : "hidden lg:flex"
+                    className={`w-full lg:w-auto lg:flex lg:items-center transition-all duration-300 ${menuOpen ? "block mt-3" : "hidden lg:flex"
                         }`}
                 >
                     {navItems.map(({ label, href, subLinks }) => {
                         const isActive =
                             pathname === href ||
                             (subLinks && subLinks.some((sub) => pathname === sub.href));
+
                         const hasDropdown = !!subLinks;
 
                         return (
                             <li
                                 key={label}
-                                className="relative group px-2 py-1 text-[13px] font-semibold text-[#111d35] transition-all whitespace-nowrap"
+                                className="relative group px-1.5 py-1 text-[11px] font-semibold text-[#111d35] whitespace-nowrap"
                                 onMouseEnter={() => handleMouseEnter(label)}
                                 onMouseLeave={handleMouseLeave}
                             >
                                 {hasDropdown ? (
                                     <span
-                                        className={`cursor-pointer border-b-2 ${isActive
+                                        className={`cursor-pointer border-b ${isActive
                                                 ? "border-blue-700 text-blue-700"
                                                 : "border-transparent hover:border-blue-600"
                                             }`}
@@ -174,7 +182,7 @@ const Navbar = () => {
                                 ) : (
                                     <Link
                                         href={href}
-                                        className={`border-b-2 ${isActive
+                                        className={`border-b ${isActive
                                                 ? "border-blue-700 text-blue-700"
                                                 : "border-transparent hover:border-blue-600"
                                             }`}
@@ -183,20 +191,23 @@ const Navbar = () => {
                                     </Link>
                                 )}
 
+                                {/* DROPDOWN */}
                                 {hasDropdown && (
                                     <ul
-                                        className={`absolute left-0 z-40 mt-2 w-64 bg-white border border-gray-200 rounded shadow-lg transition-all duration-300 ${dropdownOpen === label ? "block" : "hidden"
+                                        className={`absolute left-0 z-40 mt-1 w-52 bg-white border border-gray-200 rounded-md shadow-md transition-all duration-200 ${dropdownOpen === label ? "block" : "hidden"
                                             }`}
                                     >
                                         {subLinks.map((sublink, i) => (
                                             <li key={i}>
                                                 <Link
                                                     href={sublink.href}
-                                                    className={`block px-4 py-2 text-xs whitespace-normal hover:bg-gray-100 ${pathname === sublink.href
+                                                    className={`block px-3 py-1.5 text-[10px] hover:bg-gray-100 ${pathname === sublink.href
                                                             ? "text-blue-700 font-medium"
                                                             : "text-gray-700"
                                                         }`}
-                                                    {...(sublink.download ? { download: true, target: "_blank" } : {})}
+                                                    {...(sublink.download
+                                                        ? { download: true, target: "_blank" }
+                                                        : {})}
                                                 >
                                                     {sublink.label}
                                                 </Link>
