@@ -36,7 +36,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "next.config.js"
-, "src/components/ui/InputField.tsx"  ],
+, "src/components/ui/InputField.tsx", "src/app/studentDashboard/edit-profile/page.tsx"  ],
   "exclude": [
     "node_modules"
   ]
