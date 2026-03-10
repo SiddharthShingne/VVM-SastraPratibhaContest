@@ -33,35 +33,35 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-full">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3">
+      <div className="w-full max-w-lg">
 
         {/* INTRO SECTION */}
         {!selectedCountry && (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
+          <div className="bg-white rounded-lg shadow-md p-4 text-center">
 
             {/* LOGO */}
             <img
               src="/nav-logo.png"
               alt="VVM Logo"
-              className="mx-auto mb-6 h-20"
+              className="mx-auto mb-3 h-12"
             />
 
             {/* TITLE */}
-            <h2 className="text-2xl font-semibold mb-6">
+            <h2 className="text-lg font-semibold mb-3">
               Student Registration
             </h2>
 
             {/* COUNTRY SELECT CARD */}
-            <div className="bg-gray-100 rounded-md p-6 w-80 mx-auto">
-              <label className="block text-sm font-medium mb-2">
+            <div className="bg-gray-100 rounded-md p-3">
+              <label className="block text-xs font-medium mb-0.5">
                 Select Country
               </label>
 
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-300 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">-- Select --</option>
                 {countries.map((country) => (
@@ -76,12 +76,12 @@ export default function RegisterPage() {
 
         {/* 🔵 COUNTRY COMPONENT SECTION */}
         {selectedCountry && (
-          <div className="bg-white w-full rounded-lg shadow-md p-6">
+          <div className="bg-white rounded-lg shadow-md p-3">
 
             {/* Back Button */}
             <button
               onClick={() => setSelectedCountry("")}
-              className="mb-4 text-sm text-indigo-600 hover:underline "
+              className="mb-1 text-xs text-indigo-600 hover:underline"
             >
               ← Change Country
             </button>
