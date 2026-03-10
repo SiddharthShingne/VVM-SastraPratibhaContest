@@ -1,6 +1,9 @@
-import { API_BASE_URL } from "@/lib/config";
+import axios from "@/lib/axios";
 import { useApi } from "@/hooks/useApi";
-/* ================= LOGIN  API ================= */
+import { AxiosError } from "axios";
+
+/* ================= LOGIN API ================= */
+
 interface RawLoginApiResponse {
   status: boolean;
   message: string;
@@ -23,27 +26,26 @@ export const loginUser = async (
   username: string,
   password: string,
 ): Promise<LoginResponse> => {
-  const response = await fetch(`${API_BASE_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  try {
+    const response = await axios.post<RawLoginApiResponse>("/login", {
       username,
       password,
-    }),
-  });
+    });
 
-  const data: RawLoginApiResponse = await response.json();
+    const data = response.data;
 
-  if (!response.ok || !data?.status || !data?.data?.token) {
-    throw new Error(data?.message || "Login failed");
+    if (!data?.status || !data?.data?.token) {
+      throw new Error(data?.message || "Login failed");
+    }
+
+    return {
+      token: data.data.token,
+      username: data.data.user.username,
+    };
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    throw new Error(axiosError?.response?.data?.message || "Login API error");
   }
-
-  return {
-    token: data.data.token,
-    username: data.data.user.username,
-  };
 };
 
 /* ================= AUTH STORAGE ================= */
@@ -69,7 +71,7 @@ export const logoutUser = (): void => {
   }
 };
 
-/* ================= REGISTRATION SIF API ================= */
+/* ================= REGISTRATION API ================= */
 
 export interface RegistrationForm {
   fullName: string;
@@ -90,41 +92,51 @@ export interface RegistrationForm {
   parentMobile: string;
   parentEmail: string;
 }
+
 interface RawRegisterApiResponse {
   status: boolean;
   message: string;
   data?: unknown;
 }
+
 export const registerUser = async (
   payload: RegistrationForm,
 ): Promise<RawRegisterApiResponse> => {
-  const response = await fetch(`${API_BASE_URL}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const response = await axios.post<RawRegisterApiResponse>(
+      "/register",
+      payload,
+    );
 
-  const data: RawRegisterApiResponse = await response.json();
+    const data = response.data;
 
-  if (!response.ok || !data?.status) {
-    throw new Error(data?.message || "Registration failed");
+    if (!data?.status) {
+      throw new Error(data?.message || "Registration failed");
+    }
+
+    return data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    throw new Error(
+      axiosError?.response?.data?.message || "Registration API error",
+    );
   }
-
-  return data;
 };
 
 /* ================= LOGOUT API ================= */
+
 export function useAuthService() {
   const { request, loading, error } = useApi();
 
   const logout = async () => {
-    const payload = {}; // blank object
+    const payload = {};
 
     const response = await request("/logout", "POST", payload);
 
-    localStorage.removeItem("token");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+    }
 
     return response;
   };
@@ -136,23 +148,40 @@ export function useAuthService() {
   };
 }
 
-/* ================= GET IMPORTANT DATES ================= */
-export async function getImportantDates(page = 1) {
-  try {
-    const res = await fetch(`/important-dates?page=${page}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+/* ================= IMPORTANT DATES API ================= */
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch important dates");
+export interface ImportantDate {
+  id: number;
+  name: string;
+  detail: string;
+}
+
+interface ImportantDatesResponse {
+  status: boolean;
+  message: string;
+  data: ImportantDate[];
+}
+
+export const getImportantDates = async (page = 1): Promise<ImportantDate[]> => {
+  try {
+    const response = await axios.get<ImportantDatesResponse>(
+      `/important-dates?page=${page}`,
+    );
+
+    const data = response.data;
+
+    if (!data?.status) {
+      throw new Error(data?.message || "Failed to fetch important dates");
     }
 
-    return await res.json();
-  } catch (error) {
+    return data.data;
+  } catch (error: unknown) {
     console.error("Important Dates API Error:", error);
-    throw error;
+
+    const axiosError = error as AxiosError<{ message?: string }>;
+
+    throw new Error(
+      axiosError?.response?.data?.message || "Important Dates API error",
+    );
   }
-}
+};
