@@ -1,9 +1,9 @@
-// src/services/authService.ts
+import axios from "@/lib/axios";
+import { useApi } from "@/hooks/useApi";
+import { AxiosError } from "axios";
 
-// 🔹 Backend API base URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://core.vvmstage.cloud/api";
+/* ================= LOGIN API ================= */
 
-// 🔹 Raw response from backend
 interface RawLoginApiResponse {
   status: boolean;
   message: string;
@@ -17,43 +17,39 @@ interface RawLoginApiResponse {
   };
 }
 
-// 🔹 Clean response used by frontend
 export interface LoginResponse {
   token: string;
   username: string;
 }
 
-// 🔹 Login API
 export const loginUser = async (
   username: string,
-  password: string
+  password: string,
 ): Promise<LoginResponse> => {
-  const response = await fetch(`${API_BASE_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  try {
+    const response = await axios.post<RawLoginApiResponse>("/login", {
       username,
       password,
-    }),
-  });
+    });
 
-  const data: RawLoginApiResponse = await response.json();
+    const data = response.data;
 
-  // 🔐 Validate API response
-  if (!response.ok || !data?.status || !data?.data?.token) {
-    throw new Error(data?.message || "Login failed");
+    if (!data?.status || !data?.data?.token) {
+      throw new Error(data?.message || "Login failed");
+    }
+
+    return {
+      token: data.data.token,
+      username: data.data.user.username,
+    };
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    throw new Error(axiosError?.response?.data?.message || "Login API error");
   }
-
-  return {
-    token: data.data.token,
-    username: data.data.user.username,
-  };
 };
 
+/* ================= AUTH STORAGE ================= */
 
-// 🔹 Save login data
 export const saveAuth = (token: string, username: string): void => {
   if (typeof window !== "undefined") {
     localStorage.setItem("token", token);
@@ -61,8 +57,6 @@ export const saveAuth = (token: string, username: string): void => {
   }
 };
 
-
-// 🔹 Get stored token
 export const getToken = (): string | null => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("token");
@@ -70,11 +64,124 @@ export const getToken = (): string | null => {
   return null;
 };
 
-
-// 🔹 Logout
 export const logoutUser = (): void => {
   if (typeof window !== "undefined") {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+  }
+};
+
+/* ================= REGISTRATION API ================= */
+
+export interface RegistrationForm {
+  fullName: string;
+  dob: string;
+  emiratesId: string;
+  gender: string;
+  studentMobile: string;
+  studentEmail: string;
+  grade: string;
+  password: string;
+  schoolName: string;
+  board: string;
+  country: string;
+  city: string;
+  pincode: string;
+  schoolAddress: string;
+  parentName: string;
+  parentMobile: string;
+  parentEmail: string;
+}
+
+interface RawRegisterApiResponse {
+  status: boolean;
+  message: string;
+  data?: unknown;
+}
+
+export const registerUser = async (
+  payload: RegistrationForm,
+): Promise<RawRegisterApiResponse> => {
+  try {
+    const response = await axios.post<RawRegisterApiResponse>(
+      "/register",
+      payload,
+    );
+
+    const data = response.data;
+
+    if (!data?.status) {
+      throw new Error(data?.message || "Registration failed");
+    }
+
+    return data;
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError<{ message?: string }>;
+    throw new Error(
+      axiosError?.response?.data?.message || "Registration API error",
+    );
+  }
+};
+
+/* ================= LOGOUT API ================= */
+
+export function useAuthService() {
+  const { request, loading, error } = useApi();
+
+  const logout = async () => {
+    const payload = {};
+
+    const response = await request("/logout", "POST", payload);
+
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+    }
+
+    return response;
+  };
+
+  return {
+    logout,
+    loading,
+    error,
+  };
+}
+
+/* ================= IMPORTANT DATES API ================= */
+
+export interface ImportantDate {
+  id: number;
+  name: string;
+  detail: string;
+}
+
+interface ImportantDatesResponse {
+  status: boolean;
+  message: string;
+  data: ImportantDate[];
+}
+
+export const getImportantDates = async (page = 1): Promise<ImportantDate[]> => {
+  try {
+    const response = await axios.get<ImportantDatesResponse>(
+      `/important-dates?page=${page}`,
+    );
+
+    const data = response.data;
+
+    if (!data?.status) {
+      throw new Error(data?.message || "Failed to fetch important dates");
+    }
+
+    return data.data;
+  } catch (error: unknown) {
+    console.error("Important Dates API Error:", error);
+
+    const axiosError = error as AxiosError<{ message?: string }>;
+
+    throw new Error(
+      axiosError?.response?.data?.message || "Important Dates API error",
+    );
   }
 };

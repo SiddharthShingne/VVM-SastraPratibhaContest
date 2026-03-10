@@ -1,10 +1,9 @@
 "use client";
-
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
-
-/* ===================== TYPES ===================== */
-
+import InputField from "@/components/ui/InputField";
+import Image from "next/image";
+import { registerUser } from "@/services/authService";
 interface RegistrationForm {
   fullName: string;
   dob: string;
@@ -13,30 +12,24 @@ interface RegistrationForm {
   studentMobile: string;
   studentEmail: string;
   grade: string;
-
   password: string;
   confirmPassword: string;
-
   schoolName: string;
   board: string;
   country: string;
   city: string;
   pincode: string;
   schoolAddress: string;
-
   parentName: string;
   parentMobile: string;
   parentEmail: string;
   emailOtp: string;
 }
-
-/* ===================== COMPONENT ===================== */
-
+const genders = ["Male", "Female", "Others"];
+const boards = ["CBSE", "ICSE", "IB", "IGCSE"];
+const grades = ["6", "7", "8", "9", "10", "11"];
 export default function UAEForm() {
-  const genders = ["Male", "Female"];
-  const boards = ["CBSE", "ICSE", "IB", "IGCSE", "STATE"];
-  const grades = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [form, setForm] = useState<RegistrationForm>({
     fullName: "",
     dob: "",
@@ -58,29 +51,27 @@ export default function UAEForm() {
     parentEmail: "",
     emailOtp: "",
   });
-
   const [generatedOtp, setGeneratedOtp] = useState<string | null>(null);
-  const [otpVerified, setOtpVerified] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-
+  const [otpVerified, setOtpVerified] = useState(false);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
-
   const sendOtp = () => {
     if (!form.parentEmail) return alert("Enter parent email first");
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(otp);
     setOtpSent(true);
     setOtpVerified(false);
-    console.log("OTP:", otp);
+    console.log("Generated OTP:", otp);
     alert("OTP sent (check console for demo)");
   };
-
   const verifyOtp = () => {
-    if (!generatedOtp) return alert("Send OTP first");
     if (form.emailOtp === generatedOtp) {
       setOtpVerified(true);
       alert("OTP Verified");
@@ -88,161 +79,320 @@ export default function UAEForm() {
       alert("Invalid OTP");
     }
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otpVerified) return alert("Verify OTP first");
-    if (form.password !== form.confirmPassword)
-      return alert("Passwords do not match");
-
-    console.log("Final Data:", form);
-    alert("Registration Successful");
+    setSubmitAttempted(true);
+    if (!otpVerified) {
+      alert("Verify OTP before submitting");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    try {
+      const payload = { ...form };
+      await registerUser(payload);
+      alert("Registration Successful");
+    } catch (err) {
+      console.error(err);
+      alert("Registration failed");
+    }
   };
-
   return (
-    <div className="min-h-screen  py-12 width: 100%">
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-[#2f5f8f]">
-          Student Registration – <span className="font-extrabold">UAE</span>
-        </h1>
-      </div>
-
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-10 px-6">
-
-        <Section title="Primary Details">
-          <Input label="Full Name" name="fullName" value={form.fullName} onChange={handleChange} />
-          <Input type="date" label="Date of Birth" name="dob" value={form.dob} onChange={handleChange} />
-          <Input label="Emirates ID" name="emiratesId" value={form.emiratesId} onChange={handleChange} />
-          <Select label="Gender" name="gender" value={form.gender} onChange={handleChange} options={genders} />
-          <Input label="Student Mobile" name="studentMobile" value={form.studentMobile} onChange={handleChange} />
-          <Input label="Student Email" name="studentEmail" value={form.studentEmail} onChange={handleChange} />
-          <Select label="Class / Grade" name="grade" value={form.grade} onChange={handleChange} options={grades} />
-        </Section>
-
-        <Section title="Login Details">
-          <Input type="password" label="Password" name="password" value={form.password} onChange={handleChange} />
-          <Input type="password" label="Confirm Password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} />
-        </Section>
-
-        <Section title="School Details">
-          <Input label="School Name" name="schoolName" value={form.schoolName} onChange={handleChange} />
-          <Select label="Board" name="board" value={form.board} onChange={handleChange} options={boards} />
-          <Input label="Country" name="country" value={form.country} disabled />
-          <Input label="City" name="city" value={form.city} onChange={handleChange} />
-          <Input label="Pincode" name="pincode" value={form.pincode} onChange={handleChange} />
-          <TextArea label="School Address" name="schoolAddress" value={form.schoolAddress} onChange={handleChange} />
-        </Section>
-
-        <Section title="Parent Details">
-          <Input label="Parent Name" name="parentName" value={form.parentName} onChange={handleChange} />
-          <Input label="Parent Mobile" name="parentMobile" value={form.parentMobile} onChange={handleChange} />
-
-          <div className="md:col-span-3">
-            <label className="input-label">Parent Email</label>
-            <div className="flex gap-3">
-              <input
-                type="email"
-                name="parentEmail"
-                value={form.parentEmail}
+    <div className="min-h-screen  py-8 md:py-10">
+      <div className="max-w-2xl mx-auto px-4 sm:px-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#2f5f8f] tracking-tight">
+            Student Registration – UAE
+          </h1>
+          <Image
+            src="/gcc/uae.webp"
+            alt="UAE"
+            width={70}
+            height={70}
+            className="object-contain w-12 sm:w-14 md:w-16"
+          />
+        </div>
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10">
+          <Section title="Primary Details">
+            <InputField
+              label="Student Full Name"
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              type="date"
+              label="Date of Birth"
+              name="dob"
+              value={form.dob}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              label="Emirates ID"
+              name="emiratesId"
+              value={form.emiratesId}
+              onChange={handleChange}
+              required
+              minLength={15}
+              maxLength={15}
+              submitAttempted={submitAttempted}
+            />
+            <SelectField
+              label="Gender"
+              name="gender"
+              value={form.gender}
+              options={genders}
+              onChange={handleChange}
+              required
+            />
+            <InputField
+              label="Student Mobile (Optional)"
+              name="studentMobile"
+              value={form.studentMobile}
+              onChange={handleChange}
+              pattern="^[0-9]{10}$"
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              type="email"
+              label="Student Email (Optional)"
+              name="studentEmail"
+              value={form.studentEmail}
+              onChange={handleChange}
+              submitAttempted={submitAttempted}
+            />
+            <SelectField
+              label="Class / Grade"
+              name="grade"
+              value={form.grade}
+              options={grades}
+              onChange={handleChange}
+              required
+            />
+          </Section>
+          <Section title="Login Details">
+            <InputField
+              type="password"
+              label="Password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              type="password"
+              label="Confirm Password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+              validator={(val: string | number | undefined) =>
+                String(val) !== form.password ? "Passwords do not match" : ""
+              }
+              submitAttempted={submitAttempted}
+            />
+          </Section>
+          <Section title="School Details">
+            <InputField
+              label="School Name"
+              name="schoolName"
+              value={form.schoolName}
+              onChange={handleChange}
+              required
+              placeholder="Search school"
+              submitAttempted={submitAttempted}
+            />
+            <SelectField
+              label="Board"
+              name="board"
+              value={form.board}
+              options={boards}
+              onChange={handleChange}
+              required
+            />
+            <InputField
+              label="Country"
+              name="country"
+              value={form.country}
+              disabled
+            />
+            <InputField
+              label="City"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              label="Pincode"
+              name="pincode"
+              value={form.pincode}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            <TextAreaField
+              label="School Address"
+              name="schoolAddress"
+              value={form.schoolAddress}
+              onChange={handleChange}
+              required
+              className="col-span-full"
+            />
+          </Section>
+          <Section title="Parent Details">
+            <InputField
+              label="Parent Name"
+              name="parentName"
+              value={form.parentName}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              label="Parent Mobile"
+              name="parentMobile"
+              value={form.parentMobile}
+              onChange={handleChange}
+              required
+              pattern="^[0-9]{10}$"
+              submitAttempted={submitAttempted}
+            />
+            <InputField
+              type="email"
+              label="Parent Email"
+              name="parentEmail"
+              value={form.parentEmail}
+              onChange={handleChange}
+              required
+              submitAttempted={submitAttempted}
+            />
+            {otpSent && (
+              <InputField
+                label="Email OTP"
+                name="emailOtp"
+                value={form.emailOtp}
                 onChange={handleChange}
-                className="input-field flex-1"
+                required
+                submitAttempted={submitAttempted}
               />
-              <button type="button" onClick={sendOtp} className="btn-blue">
+            )}
+            <div className="flex flex-col sm:flex-row gap-2 pt-2 col-span-full">
+              <button
+                type="button"
+                onClick={sendOtp}
+                className="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition text-sm"
+              >
                 Send OTP
               </button>
-            </div>
-          </div>
-
-          {otpSent && (
-            <div className="md:col-span-3">
-              <label className="input-label">Enter OTP</label>
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  name="emailOtp"
-                  value={form.emailOtp}
-                  onChange={handleChange}
-                  className="input-field flex-1"
-                />
-                <button type="button" onClick={verifyOtp} className="btn-green">
+              {otpSent && (
+                <button
+                  type="button"
+                  onClick={verifyOtp}
+                  className="px-5 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition text-sm"
+                >
                   Verify OTP
                 </button>
-              </div>
-              {otpVerified && (
-                <p className="text-green-600 text-sm mt-2 font-medium">
-                  ✓ OTP Verified
-                </p>
               )}
             </div>
-          )}
-        </Section>
-
-        <div className="text-center pt-6">
-          <button type="submit" className="btn-submit">
-            Submit Registration
-          </button>
-        </div>
-      </form>
+          </Section>
+          <div className="text-center pt-4">
+            <button
+              type="submit"
+              className="px-8 py-3 rounded-lg bg-[#2f5f8f] text-white font-semibold text-sm hover:bg-[#244d73] transition shadow-md"
+            >
+              Submit Registration
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
-
-/* ===================== SECTION CARD ===================== */
-
+/* SECTION */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
-
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden ">
-      <div className="flex justify-between items-center px-6 py-4 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
-        <h2 className="font-semibold">{title}</h2>
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          className="bg-white text-[#2f5f8f] rounded-md p-1"
-        >
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+      <div className="flex justify-between items-center px-4 py-3 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
+        <h2 className="font-semibold text-sm sm:text-base tracking-wide">{title}</h2>
+        <button type="button" onClick={() => setOpen(!open)}>
           {open ? <Minus size={16} /> : <Plus size={16} />}
         </button>
       </div>
       {open && (
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-">
+        <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
           {children}
         </div>
       )}
     </div>
   );
 }
-
-/* ===================== INPUTS ===================== */
-
-function Input({ label, ...props }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <div>
-      <label className="input-label">{label}</label>
-      <input {...props} className="input-field" />
-    </div>
-  );
+/* SELECT */
+interface SelectFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  options: string[];
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  required?: boolean;
 }
-
-function Select({ label, options, ...props }: { label: string; options: string[] } & React.SelectHTMLAttributes<HTMLSelectElement>) {
+function SelectField({
+  label,
+  name,
+  value,
+  options,
+  onChange,
+  required,
+}: SelectFieldProps) {
   return (
-    <div>
-      <label className="input-label">{label}</label>
-      <select {...props} className="input-field bg-white">
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-medium text-gray-700">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <select
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+      >
         <option value="">Select</option>
-        {options.map((opt: string) => (
-          <option key={opt} value={opt}>{opt}</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
         ))}
       </select>
     </div>
   );
 }
-
-function TextArea({ label, ...props }: { label: string } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+/* TEXTAREA */
+interface TextAreaFieldProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label: string;
+}
+function TextAreaField({ label, className = "", ...props }: TextAreaFieldProps) {
   return (
-    <div className="md:col-span-3">
-      <label className="input-label">{label}</label>
-      <textarea {...props} rows={3} className="input-field" />
+    <div className={className}>
+      <label className="block mb-1 text-xs font-medium text-gray-700">
+        {label}
+      </label>
+      <textarea
+        rows={3}
+        {...props}
+        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y"
+      />
     </div>
   );
 }
