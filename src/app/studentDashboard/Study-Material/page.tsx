@@ -179,10 +179,10 @@ export default function StudyMaterial() {
     }
 
     if (value === "soon") {
-      return <span className="text-red-500 text-sm">Uploading Soon</span>;
+      return <span className="inline-flex items-center bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold">Uploading Soon</span>;
     }
 
-    return <span className="text-red-500 text-sm">N/A</span>;
+    return <span className="inline-flex items-center bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold">N/A</span>;
   };
 
   const columns: DataTableColumn<MaterialRow>[] = useMemo(

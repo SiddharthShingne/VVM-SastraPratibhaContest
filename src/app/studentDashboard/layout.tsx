@@ -230,7 +230,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/level1-result"
               className={`${linkClass("/studentDashboard/level1-result")} group`}
             >
-              <FaTrophy className="text-sm text-amber-400" />
+              <FaTrophy className="text-sm text-gray-400" />
               Level 1 Result
             </Link>
 
@@ -238,7 +238,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/level2-result"
               className={`${linkClass("/studentDashboard/level2-result")} group`}
             >
-              <FaTrophy className="text-sm text-purple-400" />
+              <FaTrophy className="text-sm text-gray-400" />
               Level 2 Result
             </Link>
 
@@ -248,7 +248,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/download-app"
               className={`${linkClass("/studentDashboard/download-app")} group`}
             >
-              <FaDownload className="text-sm text-blue-400" />
+              <FaDownload className="text-sm text-gray-400" />
               Download Apps
             </Link>
 
@@ -256,7 +256,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/level2-exam-sif"
               className={`${linkClass("/studentDashboard/level2-exam-sif")} group`}
             >
-              <FaFileAlt className="text-sm text-emerald-400" />
+              <FaFileAlt className="text-sm text-gray-400" />
               Level 2 Exam SIF
             </Link>
           </div>
@@ -273,7 +273,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/Study-Material"
               className={`${linkClass("/studentDashboard/Study-Material")} group`}
             >
-              <FaBook className="text-sm text-indigo-400" />
+              <FaBook className="text-sm text-gray-400"/>
               Study Material
             </Link>
 
@@ -283,7 +283,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/Contact-Information"
               className={`${linkClass("/studentDashboard/Contact-Information")} group`}
             >
-              <FaInfoCircle className="text-sm text-sky-400" />
+              <FaInfoCircle className="text-sm text-gray-400" />
               Contact Information
             </Link>
           </div>
@@ -300,7 +300,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/edit-profile"
               className={`${linkClass("/studentDashboard/edit-profile")} group`}
             >
-              <FaUserCog className="text-sm text-violet-400" />
+              <FaUserCog className="text-sm text-gray-400" />
               Edit Profile
             </Link>
 
@@ -308,7 +308,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/update-password"
               className={`${linkClass("/studentDashboard/update-password")} group`}
             >
-              <FaKey className="text-sm text-amber-400" />
+              <FaKey className="text-sm text-gray-400" />
               Update Password
             </Link>
 
@@ -316,7 +316,7 @@ export default function StudentDashboardLayout({
 
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 rounded-xl transition-all duration-300 group"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 rounded-xl "
             >
               <FaSignOutAlt className="text-sm group-hover:rotate-180 transition-transform duration-500" />
               Logout
