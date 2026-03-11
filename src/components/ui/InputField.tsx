@@ -1,141 +1,57 @@
 "use client";
-import { useState, ChangeEvent, KeyboardEvent, WheelEvent } from "react";
-import { Eye, EyeOff } from "lucide-react";
 
-interface InputFieldProps {
-  label?: string;
-  name?: string;
-  type?: string;
-  value?: string | number;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
-  className?: string;
-  inputClassName?: string;
-  error?: string;
-  validator?: (value: string | number | undefined) => string;
-  minLength?: number;
-  maxLength?: number;
-  pattern?: string | RegExp;
-  submitAttempted?: boolean;
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
+
+interface InputFieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  error?: FieldError;
+  registration: UseFormRegisterReturn;
 }
 
 export default function InputField({
   label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  placeholder = "",
-  required = false,
-  disabled = false,
-  className = "",
-  inputClassName = "",
   error,
-  validator,
-  minLength,
-  maxLength,
-  pattern,
-  submitAttempted,
+  registration,
+  type = "text",
+  required,
   ...props
-}: InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>) {
-  const [touched, setTouched] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
+}: InputFieldProps) {
+  const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
 
-  const internalError = (() => {
-    if (!touched && !submitAttempted) return "";
-
-    if (required && !value) {
-      return `${label} is required`;
-    }
-
-    if (minLength && String(value)?.length < minLength) {
-      return `Minimum ${minLength} characters required`;
-    }
-
-    if (maxLength && String(value)?.length > maxLength) {
-      return `Maximum ${maxLength} characters allowed`;
-    }
-
-    if (pattern && value) {
-      const regex = typeof pattern === "string" ? new RegExp(pattern) : pattern;
-      if (!regex.test(String(value))) {
-        return `Invalid ${label}`;
-      }
-    }
-
-    if (validator) {
-      return validator(value);
-    }
-
-    return "";
-  })();
-
-  const showError = (touched || submitAttempted) && (internalError || error);
-
   return (
-    <div className={`w-full ${className}`}>
-      {label && (
-        <label className="block mb-1 text-xs font-medium text-gray-700">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
-      )}
+    <div className="w-full">
+      <label className="block mb-1 text-sm font-medium text-gray-700">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
 
       <div className="relative">
         <input
-          type={isPassword && showPassword ? "text" : type}
-          name={name}
-          value={value}
-          min={type === "number" ? 0 : undefined}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setTouched(true);
-            onChange?.(e);
-          }}
-          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-            if (type !== "number") return;
-            const blocked = ["ArrowUp", "ArrowDown", "e", "E", "+", "-"];
-            if (blocked.includes(e.key)) {
-              e.preventDefault();
-            }
-          }}
-          onWheel={(e: WheelEvent<HTMLInputElement>) => {
-            if (type !== "number") return;
-            e.preventDefault();
-            e.currentTarget.blur();
-          }}
-          onBlur={() => setTouched(true)}
-          placeholder={placeholder}
-          disabled={disabled}
-          className={`
-            w-full px-3 py-2.5 text-sm border rounded-lg outline-none transition
-            pr-9
-            ${showError
-              ? "border-red-500 focus:ring-2 focus:ring-red-400"
-              : "border-gray-300 focus:ring-2 focus:ring-blue-400"
-            }
-            ${inputClassName}
-          `}
+          {...registration}
           {...props}
+          type={isPassword && showPassword ? "text" : type}
+          className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition ${error
+              ? "border-red-500 focus:ring-2 focus:ring-red-300"
+              : "border-gray-300 focus:ring-2 focus:ring-blue-300"
+            } ${isPassword ? "pr-10" : ""}`}
         />
 
         {isPassword && (
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
           >
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         )}
       </div>
 
-      {showError && (
-        <p className="text-red-500 text-xs mt-1">{internalError || error}</p>
-      )}
+      {error && <p className="mt-1 text-xs text-red-500">{error.message}</p>}
     </div>
   );
 }
