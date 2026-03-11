@@ -58,7 +58,7 @@
 //   return (
 //     <div className="min-h-screen bg-white py-10">
 //       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-        
+
 //         {/* SIDEBAR */}
 //         <aside className="bg-white border border-[#c9b6f2] rounded-lg shadow-sm p-6">
 
