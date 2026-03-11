@@ -24,17 +24,17 @@ export type RegistrationFormPayload = {
 
 export const uaeApi = {
   async sendOtp(email: string) {
-    const res = await axiosInstance.post("/send-otp", { email });
+    const res = await axiosInstance.post("/uae/send-otp", { email });
     return res.data;
   },
 
   async verifyOtp(email: string, otp: string) {
-    const res = await axiosInstance.post("/verify-otp", { email, otp });
+    const res = await axiosInstance.post("/uae/verify-otp", { email, otp });
     return res.data;
   },
 
   async register(payload: RegistrationFormPayload) {
-    const res = await axiosInstance.post("/register", payload);
+    const res = await axiosInstance.post("/uae/register", payload);
     return res.data;
   },
 };
