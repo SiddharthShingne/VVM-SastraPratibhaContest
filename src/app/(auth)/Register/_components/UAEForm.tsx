@@ -31,6 +31,7 @@ const boards = ["CBSE", "ICSE", "IB", "IGCSE"];
 const grades = ["6", "7", "8", "9", "10", "11"];
 export default function UAEForm() {
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [form, setForm] = useState<RegistrationForm>({
     fullName: "",
     dob: "",
@@ -367,6 +368,8 @@ interface SelectFieldProps {
   options: string[];
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
   required?: boolean;
+    error?: string | null;
+
 }
 function SelectField({
   label,
@@ -375,6 +378,7 @@ function SelectField({
   options,
   onChange,
   required,
+  error,
 }: SelectFieldProps) {
   return (
     <div className="flex flex-col gap-1">
