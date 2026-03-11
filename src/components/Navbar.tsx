@@ -11,12 +11,12 @@ const navItems = [
         label: "About Us",
         href: "/about",
         subLinks: [
-            { label: "What is VVM", href: "/about/whatisvvm" },
-            { label: "Śāstra Pratibhā Contest", href: "/about/sastrapratibhacontest" },
-            { label: "Why VVM", href: "/about/whyvvm" },
-            { label: "About Organizers", href: "/about/aboutorganizers" },
-            { label: "Objectives Of VVM", href: "/about/objectivesofvvm" },
-            { label: "Structure Of VVM", href: "/about/structureofvvm" },
+            { label: "What is VVM", href: "/about/what-is-vvm" },
+            { label: "Śāstra Pratibhā Contest", href: "/about/sastra-pratibha-contest" },
+            { label: "Why VVM", href: "/about/why-vvm" },
+            { label: "About Organizers", href: "/about/about-organizers" },
+            { label: "Objectives Of VVM", href: "/about/objectives-of-vvm" },
+            { label: "Structure Of VVM", href: "/about/structure-of-vvm" },
         ],
     },
     {
@@ -35,26 +35,26 @@ const navItems = [
         label: "Registration",
         href: "/registration",
         subLinks: [
-            { label: "Individual Student Registration", href: "/registration/individualstudentregistration" },
-            { label: "School Registration", href: "/registration/schoolregistration" },
-            { label: "Registration Process", href: "/registration/registrationprocess" },
-            { label: "Fee Structure", href: "/registration/feestructure" },
+            { label: "Individual Student Registration", href: "/registration/individual-student-registration" },
+            { label: "School Registration", href: "/registration/school-registration" },
+            { label: "Registration Process", href: "/registration/registration-process" },
+            { label: "Fee Structure", href: "/registration/fee-structure" },
         ],
     },
     {
         label: "Exam Details",
-        href: "/examdetails",
+        href: "/exam-details",
         subLinks: [
-            { label: "Syllabus", href: "/examdetails/syllabus" },
-            { label: "School Level Exam 1", href: "/examdetails/schoolLevelExam1" },
-            { label: "School Level Exam 2", href: "/examdetails/schoolLevelExam2" },
-            { label: "State Level Camp", href: "/examdetails/statelevelcamp" },
-            { label: "National Camp", href: "/examdetails/nationalcamp" },
-            { label: "Student Awards", href: "/examdetails/studentawards" },
-            { label: "Exam Requirements", href: "/examdetails/examrequirements" },
-            { label: "Important Dates", href: "/examdetails/importantdates" },
-            { label: "Unfair Means", href: "/examdetails/unfairmeans" },
-            { label: "Disputes", href: "/examdetails/disputes" },
+            { label: "Syllabus", href: "/exam-details/syllabus" },
+            { label: "School Level Exam 1", href: "/exam-details/school-level-exam1" },
+            { label: "School Level Exam 2", href: "/exam-details/school-level-exam2" },
+            { label: "State Level Camp", href: "/exam-details/state-level-camp" },
+            { label: "National Camp", href: "/exam-details/national-camp" },
+            { label: "Student Awards", href: "/exam-details/student-awards" },
+            { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
+            { label: "Important Dates", href: "/exam-details/important-dates" },
+            { label: "Unfair Means", href: "/exam-details/unfair-means" },
+            { label: "Disputes", href: "/exam-details/disputes" },
         ],
     },
     {
@@ -134,7 +134,7 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white px-5 py-1 shadow-sm sticky top-0 z-50 font-sans">
-            <div className="max-w-screen-xl mx-auto flex items-center justify-between flex-wrap">
+            <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
 
                 {/* LOGO */}
                 <div className="flex items-center gap-2 shrink-0">
