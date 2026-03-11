@@ -1,36 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/InputField";
 import SelectField from "@/components/ui/SelectField";
 import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
-import { registerUser } from "@/services/authService";
 import Button from "@/components/ui/Button";
+import { useUAERegistration } from "@/hooks/useUAERegistration";
+import { RegistrationFormPayload } from "@/services/uaeApi";
 
-type RegistrationForm = {
-  fullName: string;
-  dob: string;
-  emiratesId: string;
-  gender: string;
-  studentMobile: string;
-  studentEmail: string;
-  grade: string;
-  password: string;
-  confirmPassword: string;
-  schoolName: string;
-  board: string;
-  country: string;
-  city: string;
-  pincode: string;
-  schoolAddress: string;
-  parentName: string;
-  parentMobile: string;
-  parentEmail: string;
-  emailOtp: string;
-};
+type RegistrationForm = RegistrationFormPayload;
 
 const genders = [
   { label: "Male", value: "Male" },
@@ -55,17 +35,22 @@ const grades = [
 ];
 
 export default function UAEForm() {
-  const [generatedOtp, setGeneratedOtp] = useState<string | null>(null);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const {
+    otpSent,
+    otpVerified,
+    otpLoading,
+    verifyLoading,
+    loading,
+    sendOtp,
+    verifyOtp,
+    submitRegistration,
+  } = useUAERegistration();
 
   const {
     register,
     handleSubmit,
     watch,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm<RegistrationForm>({
     defaultValues: {
@@ -94,35 +79,33 @@ export default function UAEForm() {
 
   const parentEmail = watch("parentEmail");
 
-  const sendOtp = () => {
+  const handleSendOtp = async () => {
     if (!parentEmail) {
       alert("Enter parent email first");
       return;
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(otp);
-    setOtpSent(true);
-    setOtpVerified(false);
-
-    console.log("Demo OTP:", otp);
-    alert("OTP sent. Check console for demo.");
+    try {
+      const res = await sendOtp(parentEmail);
+      alert(res.message || "OTP sent successfully");
+    } catch (error: any) {
+      alert(error.message || "Failed to send OTP");
+    }
   };
 
-  const verifyOtp = () => {
-    const enteredOtp = getValues("emailOtp");
+  const handleVerifyOtp = async () => {
+    const otp = getValues("emailOtp");
 
-    if (!enteredOtp) {
+    if (!otp) {
       alert("Enter OTP first");
       return;
     }
 
-    if (enteredOtp === generatedOtp) {
-      setOtpVerified(true);
-      alert("OTP verified successfully");
-    } else {
-      setOtpVerified(false);
-      alert("Invalid OTP");
+    try {
+      const res = await verifyOtp(parentEmail, otp);
+      alert(res.message || "OTP verified");
+    } catch (error: any) {
+      alert(error.message || "Failed to verify OTP");
     }
   };
 
@@ -133,20 +116,14 @@ export default function UAEForm() {
     }
 
     try {
-      setLoading(true);
-
-      const payload = {
+      const res = await submitRegistration({
         ...data,
         country: "UAE",
-      };
+      });
 
-      await registerUser(payload);
-      alert("Registration successful");
-    } catch (error) {
-      console.error(error);
-      alert("Registration failed");
-    } finally {
-      setLoading(false);
+      alert(res.message || "Registration successful");
+    } catch (error: any) {
+      alert(error.message || "Registration failed");
     }
   };
 
@@ -223,8 +200,8 @@ export default function UAEForm() {
               placeholder="Enter mobile"
               registration={register("studentMobile", {
                 pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Student Mobile must be 10 digits",
+                  value: /^[0-9]{9,10}$/,
+                  message: "Student Mobile must be 9 or 10 digits",
                 },
               })}
               error={errors.studentMobile}
@@ -364,8 +341,8 @@ export default function UAEForm() {
               registration={register("parentMobile", {
                 required: "Parent Mobile is required",
                 pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Parent Mobile must be 10 digits",
+                  value: /^[0-9]{9,10}$/,
+                  message: "Parent Mobile must be 9 or 10 digits",
                 },
               })}
               error={errors.parentMobile}
@@ -399,12 +376,24 @@ export default function UAEForm() {
             )}
 
             <div className="flex flex-col gap-2 pt-2 md:col-span-2 sm:flex-row">
-              <Button type="button" variant="primary" onClick={sendOtp}>
+              <Button
+                type="button"
+                variant="primary"
+                onClick={handleSendOtp}
+                loading={otpLoading}
+                loadingText="Sending OTP..."
+              >
                 Send OTP
               </Button>
 
               {otpSent && (
-                <Button type="button" variant="success" onClick={verifyOtp}>
+                <Button
+                  type="button"
+                  variant="success"
+                  onClick={handleVerifyOtp}
+                  loading={verifyLoading}
+                  loadingText="Verifying..."
+                >
                   Verify OTP
                 </Button>
               )}
