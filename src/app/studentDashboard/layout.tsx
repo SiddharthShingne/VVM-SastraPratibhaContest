@@ -183,7 +183,7 @@ export default function StudentDashboardLayout({
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#f0f2fa] to-[#e9ecf7] py-6">
-      <div className="max-w-4xl mx-auto px-2 sm:px-3 lg:px-4 grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4 grid grid-cols-1 md:grid-cols-4 gap-5">
 
         {/* SIDEBAR */}
         <aside className="bg-white rounded-lg shadow-md border border-[#7F7BDA] p-3 sticky top-5 h-fit">
