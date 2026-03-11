@@ -33,10 +33,9 @@ export default function RegisterPage() {
   };
 
 
-   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-
-      <div className="w-[92%] lg:w-[80%] mx-auto">
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3">
+      <div className="w-full">
 
         {!selectedCountry && (
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
