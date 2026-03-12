@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/InputField";
 import SelectField from "@/components/ui/SelectField";
 import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
-import { useUAERegistration } from "@/hooks/useUAERegistration";
-import { RegistrationFormPayload } from "@/services/uaeApi";
+import {
+  registerUaeStudent,
+  sendUaeOtp,
+  verifyUaeOtp,
+  RegistrationFormPayload,
+} from "@/services/uaeService";
 
 type RegistrationForm = RegistrationFormPayload;
 
@@ -35,16 +40,12 @@ const grades = [
 ];
 
 export default function UAEForm() {
-  const {
-    otpSent,
-    otpVerified,
-    otpLoading,
-    verifyLoading,
-    loading,
-    sendOtp,
-    verifyOtp,
-    submitRegistration,
-  } = useUAERegistration();
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -86,10 +87,19 @@ export default function UAEForm() {
     }
 
     try {
-      const res = await sendOtp(parentEmail);
+      setOtpLoading(true);
+      const res = await sendUaeOtp(parentEmail);
+
+      if (res.success || res.status) {
+        setOtpSent(true);
+        setOtpVerified(false);
+      }
+
       alert(res.message || "OTP sent successfully");
     } catch (error: any) {
       alert(error.message || "Failed to send OTP");
+    } finally {
+      setOtpLoading(false);
     }
   };
 
@@ -102,10 +112,21 @@ export default function UAEForm() {
     }
 
     try {
-      const res = await verifyOtp(parentEmail, otp);
+      setVerifyLoading(true);
+      const res = await verifyUaeOtp(parentEmail, otp);
+
+      if (res.success || res.status) {
+        setOtpVerified(true);
+      } else {
+        setOtpVerified(false);
+      }
+
       alert(res.message || "OTP verified");
     } catch (error: any) {
+      setOtpVerified(false);
       alert(error.message || "Failed to verify OTP");
+    } finally {
+      setVerifyLoading(false);
     }
   };
 
@@ -116,7 +137,9 @@ export default function UAEForm() {
     }
 
     try {
-      const res = await submitRegistration({
+      setLoading(true);
+
+      const res = await registerUaeStudent({
         ...data,
         country: "UAE",
       });
@@ -124,6 +147,8 @@ export default function UAEForm() {
       alert(res.message || "Registration successful");
     } catch (error: any) {
       alert(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
