@@ -13,7 +13,7 @@ export default function DashboardHome() {
     const [dates, setDates] = useState<DateItem[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(() => {   
         const loadDates = async () => {
             try {
                 const data = await getImportantDates(1);

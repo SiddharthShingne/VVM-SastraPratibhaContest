@@ -1,25 +1,18 @@
-import axios from "@/lib/axios";
+import axios, { AxiosError } from "axios"; // ← import from "axios" directly, not your instance
+import api from "@/lib/axios";
 import { useApi } from "@/hooks/useApi";
-import { AxiosError } from "axios";
-
 /* ================= LOGIN API ================= */
-
-interface RawLoginApiResponse {
-  status: boolean;
-  message: string;
-  data: {
-    token: string;
-    user: {
-      id: number;
-      username: string;
-      [key: string]: unknown;
-    };
-  };
-}
 
 export interface LoginResponse {
   token: string;
   username: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  token?: string;
+  username?: string;
+  message?: string;
 }
 
 export const loginUser = async (
@@ -27,26 +20,75 @@ export const loginUser = async (
   password: string,
 ): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<RawLoginApiResponse>("/login", {
+    const response = await api.post<ApiResponse>("/login", {
       username,
       password,
     });
 
     const data = response.data;
 
-    if (!data?.status || !data?.data?.token) {
-      throw new Error(data?.message || "Login failed");
+    if (!data.success || !data.token) {
+      throw new Error(data.message || "Login failed");
     }
 
     return {
-      token: data.data.token,
-      username: data.data.user.username,
+      token: data.token,
+      username: data.username || "",
     };
   } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message?: string }>;
-    throw new Error(axiosError?.response?.data?.message || "Login API error");
+    if (axios.isAxiosError(error)) {
+      // ✅ now works — axios library, not instance
+      const axiosError = error as AxiosError<ApiResponse>;
+      throw new Error(axiosError.response?.data?.message || "Login API error");
+    }
+
+    throw new Error("Login failed");
   }
 };
+
+// interface RawLoginApiResponse {
+//   status: boolean;
+//   message: string;
+//   data: {
+//     token: string;
+//     user: {
+//       id: number;
+//       username: string;
+//       [key: string]: unknown;
+//     };
+//   };
+// }
+
+// export interface LoginResponse {
+//   token: string;
+//   username: string;
+// }
+
+// export const loginUser = async (
+//   username: string,
+//   password: string,
+// ): Promise<LoginResponse> => {
+//   try {
+//     const response = await axios.post<RawLoginApiResponse>("/login", {
+//       username,
+//       password,
+//     });
+
+//     const data = response.data;
+
+//     if (!data?.status || !data?.data?.token) {
+//       throw new Error(data?.message || "Login failed");
+//     }
+
+//     return {
+//       token: data.data.token,
+//       username: data.data.user.username,
+//     };
+//   } catch (error: unknown) {
+//     const axiosError = error as AxiosError<{ message?: string }>;
+//     throw new Error(axiosError?.response?.data?.message || "Login API error");
+//   }
+// };
 
 /* ================= AUTH STORAGE ================= */
 

@@ -180,36 +180,36 @@ export default function StudentDashboardLayout({
       ? "text-[#4c48c9] font-medium"
       : "text-gray-500 hover:text-[#4c48c9]"
     }`;
-
-  return (
-    <div className="min-h-screen bg-linear-to-br from-[#f0f2fa] to-[#e9ecf7] py-6">
-      <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4 grid grid-cols-1 md:grid-cols-4 gap-5">
+    return (
+    <div className="min-h-screen bg-linear-to-br from-[#f0f2fa] to-[#e9ecf7] py-8">
+      <div className="max-w-full mx-auto px-3 sm:px-4 lg:px-6 grid grid-cols-1 md:grid-cols-4 gap-7">
 
         {/* SIDEBAR */}
-        <aside className="bg-white rounded-lg shadow-md border border-[#7F7BDA] p-3 sticky top-5 h-fit">
+        <aside className="bg-white rounded-lg shadow-md border border-[#7F7BDA] p-4 sticky top-6 h-fit">
 
           {/* USER INFO */}
-          <div className="mb-5 mt-1">
-            <p className="text-[9px] font-semibold text-[#7F7BDA] uppercase tracking-wider">
+          <div className="mb-6 mt-1">
+            <p className="text-[12px] font-semibold text-[#7F7BDA] uppercase tracking-wider">
               Welcome Back
             </p>
 
-            <div className="mt-1 text-[11px] font-semibold text-gray-800 uppercase tracking-wide">
+            <div className="mt-2 text-[15px] font-semibold text-gray-800 uppercase tracking-wide">
               {username || "Student"}
             </div>
 
-            <div className="text-[9px] text-gray-500">
+            <div className="text-[12px] text-gray-500">
               {studentname || "Student ID"}
             </div>
           </div>
 
           {/* NAVIGATION */}
-          <nav className="space-y-3">
+          <nav className="space-y-4">
+
             <Link
               href="/studentDashboard"
               className={linkClass("/studentDashboard")}
             >
-              <FaHome className="text-[11px]" />
+              <FaHome className="text-[15px]" />
               Dashboard
             </Link>
 
@@ -217,7 +217,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/level1-result"
               className={linkClass("/studentDashboard/level1-result")}
             >
-              <FaTrophy className="text-[11px]" />
+              <FaTrophy className="text-[15px]" />
               Level 1 Result
             </Link>
 
@@ -225,7 +225,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/level2-result"
               className={linkClass("/studentDashboard/level2-result")}
             >
-              <FaTrophy className="text-[11px]" />
+              <FaTrophy className="text-[15px]" />
               Level 2 Result
             </Link>
 
@@ -233,7 +233,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/download-app"
               className={linkClass("/studentDashboard/download-app")}
             >
-              <FaDownload className="text-[11px]" />
+              <FaDownload className="text-[15px]" />
               Download Apps
             </Link>
 
@@ -241,7 +241,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/study-material"
               className={linkClass("/studentDashboard/study-material")}
             >
-              <FaBook className="text-[11px]" />
+              <FaBook className="text-[15px]" />
               Study Material
             </Link>
 
@@ -249,7 +249,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/contact"
               className={linkClass("/studentDashboard/contact")}
             >
-              <FaInfoCircle className="text-[11px]" />
+              <FaInfoCircle className="text-[15px]" />
               Contact Information
             </Link>
 
@@ -257,7 +257,7 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/edit-profile"
               className={linkClass("/studentDashboard/edit-profile")}
             >
-              <FaUserCog className="text-[11px]" />
+              <FaUserCog className="text-[15px]" />
               Edit Profile
             </Link>
 
@@ -265,21 +265,22 @@ export default function StudentDashboardLayout({
               href="/studentDashboard/update-password"
               className={linkClass("/studentDashboard/update-password")}
             >
-              <FaKey className="text-[11px]" />
+              <FaKey className="text-[15px]" />
               Update Password
             </Link>
 
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-1.5 px-2 py-1 text-[11px] text-gray-500 hover:text-white hover:bg-red-500 rounded-md transition-all"
+              className="w-full flex items-center gap-2 px-3 py-2 text-[15px] text-gray-500 hover:text-white hover:bg-red-500 rounded-md transition-all"
             >
-              <FaSignOutAlt className="text-[11px]" />
+              <FaSignOutAlt className="text-[15px]" />
               Logout
             </button>
+
           </nav>
 
-          <div className="mt-5 pt-3 border-t border-gray-100">
-            <p className="text-[8px] text-gray-400 text-center">
+          <div className="mt-6 pt-4 border-t border-gray-100">
+            <p className="text-[11px] text-gray-400 text-center">
               © 2026 Student Portal
             </p>
           </div>
@@ -287,12 +288,12 @@ export default function StudentDashboardLayout({
 
         {/* MAIN CONTENT */}
         <main className="md:col-span-3">
-          <div className="bg-white rounded-lg shadow-md p-4 border border-gray-100 min-h-80">
+          <div className="bg-white rounded-lg shadow-md p-6 border border-gray-100 min-h-105">
             {children}
           </div>
         </main>
-
       </div>
     </div>
+  
   );
 }
