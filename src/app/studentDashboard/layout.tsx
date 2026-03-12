@@ -1,117 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// "use client";
-
-// import { useEffect } from "react";
-// import { useRouter, usePathname } from "next/navigation";
-// import Link from "next/link";
-// import {
-//   FaUserCircle,
-//   FaBook,
-//   FaSignOutAlt,
-//   FaRegEdit,
-//   FaKey,
-//   FaFileAlt,
-// } from "react-icons/fa";
-
-// export default function StudentDashboardLayout({
-//   children,
-// }: {
-//   children: React.ReactNode;
-// }) {
-//   const router = useRouter();
-//   const pathname = usePathname();
-
-//   const token =
-//     typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-//   const username =
-//     typeof window !== "undefined"
-//       ? localStorage.getItem("username") || "Student"
-//       : "Student";
-
-//   useEffect(() => {
-//     if (!token) {
-//       router.replace("/login");
-//     }
-//   }, [token, router]);
-
-//   if (!token) return null;
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("username");
-//     router.replace("/login");
-//   };
-
-//   const navItems = [
-//     { href: "/studentDashboard", label: "Dashboard" },
-//     { href: "/studentDashboard/level1-result", label: "Level 1 Result" },
-//     { href: "/studentDashboard/level2-result", label: "Level 2 Result" },
-//     { href: "/studentDashboard/download-apps", label: "Download Apps" },
-//     { href: "/studentDashboard/level2-exam-sif", label: "Level 2 Exam SIF" },
-//     { href: "/studentDashboard/study-material", label: "Study Material" },
-//     { href: "/studentDashboard/contact", label: "Contact Information" },
-//     { href: "/studentDashboard/edit-profile", label: "Edit Profile" },
-//     { href: "/studentDashboard/update-password", label: "Update Password" },
-//   ];
-
-//   return (
-//     <div className="min-h-screen bg-white py-10">
-//       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-
-//         {/* SIDEBAR */}
-//         <aside className="bg-white border border-[#c9b6f2] rounded-lg shadow-sm p-6">
-
-//           <div className="mb-6">
-//             <p className="text-xs text-gray-400 uppercase tracking-wide">
-//               Welcome
-//             </p>
-
-//             <div className="flex items-center gap-3 mt-3">
-//               <div className="w-9 h-9 rounded-full bg-[#5b4dd6] flex items-center justify-center text-white text-sm font-semibold">
-//                 {username.charAt(0).toUpperCase()}
-//               </div>
-//               <div>
-//                 <div className="text-sm font-medium">{username}</div>
-//                 <div className="text-xs text-gray-500">
-//                   Student Dashboard
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-
-//           <nav className="space-y-2 text-sm">
-//             {navItems.map((item, index) => (
-//               <Link
-//                 key={index}
-//                 href={item.href}
-//                 className={`flex items-center gap-2 px-3 py-2 rounded-md transition ${
-//                   pathname === item.href
-//                     ? "bg-[#e6e9ff] text-[#4c48c9] font-medium"
-//                     : "text-gray-600 hover:bg-[#f1f2ff] hover:text-[#4c48c9]"
-//                 }`}
-//               >
-//                 <FaFileAlt className="text-xs" />
-//                 {item.label}
-//               </Link>
-//             ))}
-
-//             <button
-//               onClick={handleLogout}
-//               className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-gray-600 hover:bg-red-50 hover:text-red-600"
-//             >
-//               <FaSignOutAlt className="text-xs" />
-//               Logout
-//             </button>
-//           </nav>
-//         </aside>
-
-//         {/* MAIN CONTENT */}
-//         <main className="md:col-span-3">{children}</main>
-//       </div>
-//     </div>
-//   );
-// }
 "use client";
 
 import { useEffect } from "react";
@@ -121,7 +7,6 @@ import {
   FaHome,
   FaTrophy,
   FaDownload,
-  FaFileAlt,
   FaBook,
   FaInfoCircle,
   FaUserCog,
@@ -129,7 +14,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-import { useAuthService } from "@/services/authService";
+import { logoutUser } from "@/services/authService";
 
 export default function StudentDashboardLayout({
   children,
@@ -138,7 +23,6 @@ export default function StudentDashboardLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { logout } = useAuthService();
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
@@ -163,7 +47,7 @@ export default function StudentDashboardLayout({
 
   const handleLogout = async () => {
     try {
-      await logout(); // call API
+      await logoutUser();
 
       localStorage.removeItem("token");
       localStorage.removeItem("username");
@@ -173,21 +57,21 @@ export default function StudentDashboardLayout({
     } catch (error) {
       console.error("Logout failed", error);
     }
-  }; const isActive = (href: string) => pathname === href;
+  };
+
+  const isActive = (href: string) => pathname === href;
 
   const linkClass = (href: string) =>
-    `flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition ${isActive(href)
-      ? "text-[#4c48c9] font-medium"
-      : "text-gray-500 hover:text-[#4c48c9]"
+    `flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition ${
+      isActive(href)
+        ? "text-[#4c48c9] font-medium"
+        : "text-gray-500 hover:text-[#4c48c9]"
     }`;
-    return (
+
+  return (
     <div className="min-h-screen bg-linear-to-br from-[#f0f2fa] to-[#e9ecf7] py-8">
       <div className="max-w-full mx-auto px-3 sm:px-4 lg:px-6 grid grid-cols-1 md:grid-cols-4 gap-7">
-
-        {/* SIDEBAR */}
         <aside className="bg-white rounded-lg shadow-md border border-[#7F7BDA] p-4 sticky top-6 h-fit">
-
-          {/* USER INFO */}
           <div className="mb-6 mt-1">
             <p className="text-[12px] font-semibold text-[#7F7BDA] uppercase tracking-wider">
               Welcome Back
@@ -202,9 +86,7 @@ export default function StudentDashboardLayout({
             </div>
           </div>
 
-          {/* NAVIGATION */}
           <nav className="space-y-4">
-
             <Link
               href="/studentDashboard"
               className={linkClass("/studentDashboard")}
@@ -276,7 +158,6 @@ export default function StudentDashboardLayout({
               <FaSignOutAlt className="text-[15px]" />
               Logout
             </button>
-
           </nav>
 
           <div className="mt-6 pt-4 border-t border-gray-100">
@@ -286,7 +167,6 @@ export default function StudentDashboardLayout({
           </div>
         </aside>
 
-        {/* MAIN CONTENT */}
         <main className="md:col-span-3">
           <div className="bg-white rounded-lg shadow-md p-6 border border-gray-100 min-h-105">
             {children}
@@ -294,6 +174,5 @@ export default function StudentDashboardLayout({
         </main>
       </div>
     </div>
-  
   );
 }
