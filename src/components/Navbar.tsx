@@ -11,12 +11,12 @@ const navItems = [
         label: "About Us",
         href: "/about",
         subLinks: [
-            { label: "What is VVM", href: "/about/whatisvvm" },
-            { label: "Śāstra Pratibhā Contest", href: "/about/sastrapratibhacontest" },
-            { label: "Why VVM", href: "/about/whyvvm" },
-            { label: "About Organizers", href: "/about/aboutorganizers" },
-            { label: "Objectives Of VVM", href: "/about/objectivesofvvm" },
-            { label: "Structure Of VVM", href: "/about/structureofvvm" },
+            { label: "What is VVM", href: "/about/what-is-vvm" },
+            { label: "Śāstra Pratibhā Contest", href: "/about/sastra-pratibha-contest" },
+            { label: "Why VVM", href: "/about/why-vvm" },
+            { label: "About Organizers", href: "/about/about-organizers" },
+            { label: "Objectives Of VVM", href: "/about/objectives-of-vvm" },
+            { label: "Structure Of VVM", href: "/about/structure-of-vvm" },
         ],
     },
     {
@@ -35,26 +35,26 @@ const navItems = [
         label: "Registration",
         href: "/registration",
         subLinks: [
-            { label: "Individual Student Registration", href: "/registration/individualstudentregistration" },
-            { label: "School Registration", href: "/registration/schoolregistration" },
-            { label: "Registration Process", href: "/registration/registrationprocess" },
-            { label: "Fee Structure", href: "/registration/feestructure" },
+            { label: "Individual Student Registration", href: "/registration/individual-student-registration" },
+            { label: "School Registration", href: "/registration/school-registration" },
+            { label: "Registration Process", href: "/registration/registration-process" },
+            { label: "Fee Structure", href: "/registration/fee-structure" },
         ],
     },
     {
         label: "Exam Details",
-        href: "/examdetails",
+        href: "/exam-details",
         subLinks: [
-            { label: "Syllabus", href: "/examdetails/syllabus" },
-            { label: "School Level Exam 1", href: "/examdetails/schoolLevelExam1" },
-            { label: "School Level Exam 2", href: "/examdetails/schoolLevelExam2" },
-            { label: "State Level Camp", href: "/examdetails/statelevelcamp" },
-            { label: "National Camp", href: "/examdetails/nationalcamp" },
-            { label: "Student Awards", href: "/examdetails/studentawards" },
-            { label: "Exam Requirements", href: "/examdetails/examrequirements" },
-            { label: "Important Dates", href: "/examdetails/importantdates" },
-            { label: "Unfair Means", href: "/examdetails/unfairmeans" },
-            { label: "Disputes", href: "/examdetails/disputes" },
+            { label: "Syllabus", href: "/exam-details/syllabus" },
+            { label: "School Level Exam 1", href: "/exam-details/school-level-exam1" },
+            { label: "School Level Exam 2", href: "/exam-details/school-level-exam2" },
+            { label: "State Level Camp", href: "/exam-details/state-level-camp" },
+            { label: "National Camp", href: "/exam-details/national-camp" },
+            { label: "Student Awards", href: "/exam-details/student-awards" },
+            { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
+            { label: "Important Dates", href: "/exam-details/important-dates" },
+            { label: "Unfair Means", href: "/exam-details/unfair-means" },
+            { label: "Disputes", href: "/exam-details/disputes" },
         ],
     },
     {
@@ -131,20 +131,19 @@ const Navbar = () => {
             setDropdownOpen(null);
         }, 500);
     };
-
     return (
-        <nav className="bg-white px-5 py-1 shadow-sm sticky top-0 z-50 font-sans">
-            <div className="max-w-screen-xl mx-auto flex items-center justify-between flex-wrap">
+        <nav className="bg-white px-6 py-2 shadow-sm sticky top-0 z-50 font-sans">
+            <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
 
                 {/* LOGO */}
-                <div className="flex items-center gap-2 shrink-0">
-                    <Image src="/nav-logo.png" alt="Logo" width={160} height={45} />
+                <div className="flex items-center gap-3 shrink-0">
+                    <Image src="/nav-logo.png" alt="Logo" width={200} height={55} />
                 </div>
 
                 {/* MOBILE MENU BUTTON */}
                 <div className="block lg:hidden">
                     <button
-                        className="text-2xl focus:outline-none"
+                        className="text-[28px] focus:outline-none"
                         onClick={toggleMenu}
                     >
                         {menuOpen ? "✕" : "☰"}
@@ -153,7 +152,7 @@ const Navbar = () => {
 
                 {/* NAV ITEMS */}
                 <ul
-                    className={`w-full lg:w-auto lg:flex lg:items-center transition-all duration-300 ${menuOpen ? "block mt-3" : "hidden lg:flex"
+                    className={`w-full lg:w-auto lg:flex lg:items-center transition-all duration-300 ${menuOpen ? "block mt-4" : "hidden lg:flex"
                         }`}
                 >
                     {navItems.map(({ label, href, subLinks }) => {
@@ -166,7 +165,7 @@ const Navbar = () => {
                         return (
                             <li
                                 key={label}
-                                className="relative group px-1.5 py-1 text-[11px] font-semibold text-[#111d35] whitespace-nowrap"
+                                className="relative group px-2 py-1.5 text-[14px] font-semibold text-[#111d35] whitespace-nowrap"
                                 onMouseEnter={() => handleMouseEnter(label)}
                                 onMouseLeave={handleMouseLeave}
                             >
@@ -194,14 +193,14 @@ const Navbar = () => {
                                 {/* DROPDOWN */}
                                 {hasDropdown && (
                                     <ul
-                                        className={`absolute left-0 z-40 mt-1 w-52 bg-white border border-gray-200 rounded-md shadow-md transition-all duration-200 ${dropdownOpen === label ? "block" : "hidden"
+                                        className={`absolute left-0 z-40 mt-2 w-60 bg-white border border-gray-200 rounded-md shadow-md transition-all duration-200 ${dropdownOpen === label ? "block" : "hidden"
                                             }`}
                                     >
                                         {subLinks.map((sublink, i) => (
                                             <li key={i}>
                                                 <Link
                                                     href={sublink.href}
-                                                    className={`block px-3 py-1.5 text-[10px] hover:bg-gray-100 ${pathname === sublink.href
+                                                    className={`block px-4 py-2 text-[13px] hover:bg-gray-100 ${pathname === sublink.href
                                                             ? "text-blue-700 font-medium"
                                                             : "text-gray-700"
                                                         }`}

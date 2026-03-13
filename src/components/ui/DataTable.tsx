@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -841,7 +840,7 @@ useEffect(() => {
               <button
                 type="button"
                 onClick={() => exportToCSV(exportFileName, filteredData, columns)}
-                className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:from-indigo-700 hover:to-violet-700"
+                className="inline-flex h-11 items-center gap-2 rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:from-indigo-700 hover:to-violet-700"
               >
                 <Download className="h-4 w-4" />
                 Export

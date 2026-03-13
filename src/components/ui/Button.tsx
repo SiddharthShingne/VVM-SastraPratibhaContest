@@ -1,48 +1,50 @@
-
 "use client";
 
 import React from "react";
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "outline";
-  onClick?: () => void;
-  disabled?: boolean;
+  variant?: "primary" | "secondary" | "outline" | "success" | "danger";
   loading?: boolean;
-  className?: string;
+  loadingText?: string;
+  fullWidth?: boolean;
 }
 
 export default function Button({
   children,
   type = "button",
   variant = "primary",
-  onClick,
   disabled = false,
   loading = false,
+  loadingText = "Loading...",
+  fullWidth = false,
   className = "",
+  ...props
 }: ButtonProps) {
-  
   const baseStyle =
-    "px-6 py-2 rounded-lg font-medium transition duration-200 focus:outline-none";
+    "inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-medium transition duration-200 focus:outline-none";
 
   const variants = {
     primary: "bg-blue-600 text-white hover:bg-blue-700",
     secondary: "bg-gray-600 text-white hover:bg-gray-700",
-    outline:
-      "border border-blue-600 text-blue-600 hover:bg-blue-50",
+    outline: "border border-blue-600 text-blue-600 hover:bg-blue-50",
+    success: "bg-green-600 text-white hover:bg-green-700",
+    danger: "bg-red-600 text-white hover:bg-red-700",
   };
+
+  const disabledStyle =
+    disabled || loading ? "opacity-50 cursor-not-allowed" : "";
+
+  const widthStyle = fullWidth ? "w-full" : "";
 
   return (
     <button
       type={type}
-      onClick={onClick}
       disabled={disabled || loading}
-      className={`${baseStyle} ${variants[variant]} ${
-        disabled ? "opacity-50 cursor-not-allowed" : ""
-      } ${className}`}
+      className={`${baseStyle} ${variants[variant]} ${disabledStyle} ${widthStyle} ${className}`}
+      {...props}
     >
-      {loading ? "Loading..." : children}
+      {loading ? loadingText : children}
     </button>
   );
 }

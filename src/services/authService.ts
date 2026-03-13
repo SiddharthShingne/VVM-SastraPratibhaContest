@@ -1,13 +1,12 @@
-import axios from "@/lib/axios";
-import { useApi } from "@/hooks/useApi";
-import { AxiosError } from "axios";
+import axios from "axios";
+import api from "./axiosInstance";
 
-/* ================= LOGIN API ================= */
+/* ================= LOGIN ================= */
 
 interface RawLoginApiResponse {
   status: boolean;
   message: string;
-  data: {
+  data?: {
     token: string;
     user: {
       id: number;
@@ -24,12 +23,17 @@ export interface LoginResponse {
 
 export const loginUser = async (
   username: string,
-  password: string,
+  password: string
 ): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<RawLoginApiResponse>("/login", {
-      username,
-      password,
+    const body = new URLSearchParams();
+    body.append("username", username);
+    body.append("password", password);
+
+    const response = await api.post<RawLoginApiResponse>("/login", body, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     const data = response.data;
@@ -43,145 +47,34 @@ export const loginUser = async (
       username: data.data.user.username,
     };
   } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message?: string }>;
-    throw new Error(axiosError?.response?.data?.message || "Login API error");
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Login API error");
+    }
+    throw new Error("Login failed");
   }
 };
 
-/* ================= AUTH STORAGE ================= */
+/* ================= LOGOUT ================= */
 
-export const saveAuth = (token: string, username: string): void => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("token", token);
-    localStorage.setItem("username", username);
-  }
-};
-
-export const getToken = (): string | null => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("token");
-  }
-  return null;
-};
-
-export const logoutUser = (): void => {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-  }
-};
-
-/* ================= REGISTRATION API ================= */
-
-export interface RegistrationForm {
-  fullName: string;
-  dob: string;
-  emiratesId: string;
-  gender: string;
-  studentMobile: string;
-  studentEmail: string;
-  grade: string;
-  password: string;
-  schoolName: string;
-  board: string;
-  country: string;
-  city: string;
-  pincode: string;
-  schoolAddress: string;
-  parentName: string;
-  parentMobile: string;
-  parentEmail: string;
-}
-
-interface RawRegisterApiResponse {
+interface LogoutApiResponse {
   status: boolean;
   message: string;
-  data?: unknown;
 }
 
-export const registerUser = async (
-  payload: RegistrationForm,
-): Promise<RawRegisterApiResponse> => {
+export const logoutUser = async (): Promise<LogoutApiResponse> => {
   try {
-    const response = await axios.post<RawRegisterApiResponse>(
-      "/register",
-      payload,
-    );
-
-    const data = response.data;
-
-    if (!data?.status) {
-      throw new Error(data?.message || "Registration failed");
-    }
-
-    return data;
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message?: string }>;
-    throw new Error(
-      axiosError?.response?.data?.message || "Registration API error",
-    );
-  }
-};
-
-/* ================= LOGOUT API ================= */
-
-export function useAuthService() {
-  const { request, loading, error } = useApi();
-
-  const logout = async () => {
-    const payload = {};
-
-    const response = await request("/logout", "POST", payload);
+    const response = await api.post<LogoutApiResponse>("/logout", {});
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("username");
     }
 
-    return response;
-  };
-
-  return {
-    logout,
-    loading,
-    error,
-  };
-}
-
-/* ================= IMPORTANT DATES API ================= */
-
-export interface ImportantDate {
-  id: number;
-  name: string;
-  detail: string;
-}
-
-interface ImportantDatesResponse {
-  status: boolean;
-  message: string;
-  data: ImportantDate[];
-}
-
-export const getImportantDates = async (page = 1): Promise<ImportantDate[]> => {
-  try {
-    const response = await axios.get<ImportantDatesResponse>(
-      `/important-dates?page=${page}`,
-    );
-
-    const data = response.data;
-
-    if (!data?.status) {
-      throw new Error(data?.message || "Failed to fetch important dates");
-    }
-
-    return data.data;
+    return response.data;
   } catch (error: unknown) {
-    console.error("Important Dates API Error:", error);
-
-    const axiosError = error as AxiosError<{ message?: string }>;
-
-    throw new Error(
-      axiosError?.response?.data?.message || "Important Dates API error",
-    );
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Logout API error");
+    }
+    throw new Error("Logout failed");
   }
 };
