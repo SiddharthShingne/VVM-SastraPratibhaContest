@@ -34,8 +34,7 @@ export default function DownloadApp() {
   
   return (
     <>
-      {/* <DashboardPage/> */}
-    
+     
 
         <div className="flex w-full flex-col">
 
