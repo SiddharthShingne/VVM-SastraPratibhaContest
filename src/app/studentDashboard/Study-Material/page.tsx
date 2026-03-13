@@ -185,43 +185,77 @@ export default function StudyMaterial() {
     return <span className="inline-flex items-center bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold">N/A</span>;
   };
 
+  // const columns: DataTableColumn<MaterialRow>[] = useMemo(
+  //   () => [
+  //     {
+  //       key: "id",
+  //       label: "ID",
+  //     },
+  //     {
+  //       key: "language",
+  //       label: "Language",
+  //     },
+  //     {
+  //       key: "bose",
+  //       label: "Life Story of Dr. Satyendra Nath Bose",
+  //       sortable: false,
+  //       searchable: false,
+  //       render: (value) => renderButton(value),
+  //     },
+  //     {
+  //       key: "ics",
+  //       label: "ICS - Indian Contributions to Science",
+  //       sortable: false,
+  //       searchable: false,
+  //       render: (value) => renderButton(value),
+  //     },
+  //     {
+  //       key: "iks",
+  //       label: "IKS - Supplementary Book",
+  //       sortable: false,
+  //       searchable: false,
+  //       render: (value) => renderButton(value),
+  //     },
+  //   ],
+  //   []
+  // );
   const columns: DataTableColumn<MaterialRow>[] = useMemo(
-    () => [
-      {
-        key: "id",
-        label: "ID",
-      },
-      {
-        key: "language",
-        label: "Language",
-      },
-      {
-        key: "bose",
-        label: "Life Story of Dr. Satyendra Nath Bose",
-        sortable: false,
-        searchable: false,
-        render: (value) => renderButton(value),
-      },
-      {
-        key: "ics",
-        label: "ICS - Indian Contributions to Science",
-        sortable: false,
-        searchable: false,
-        render: (value) => renderButton(value),
-      },
-      {
-        key: "iks",
-        label: "IKS - Supplementary Book",
-        sortable: false,
-        searchable: false,
-        render: (value) => renderButton(value),
-      },
-    ],
-    []
-  );
+  () => [
+    {
+      key: "id",
+      label: "ID",
+    },
+    {
+      key: "language",
+      label: "Language",
+    },
+    {
+      key: "bose",
+      label: "Life Story of Dr. Satyendra Nath Bose",
+      sortable: false,
+      searchable: false,
+      render: (value, row, index) => renderButton(value as string),
+    },
+    {
+      key: "ics",
+      label: "ICS - Indian Contributions to Science",
+      sortable: false,
+      searchable: false,
+      render: (value, row, index) => renderButton(value as string),
+    },
+    {
+      key: "iks",
+      label: "IKS - Supplementary Book",
+      sortable: false,
+      searchable: false,
+      render: (value, row, index) => renderButton(value as string),
+    },
+  ],
+  []
+);
 
   return (
-    <div className="p-4 md:p-6">
+<div className="w-full overflow-x-auto">
       <DataTable<MaterialRow>
         title="Study Material"
         columns={columns}

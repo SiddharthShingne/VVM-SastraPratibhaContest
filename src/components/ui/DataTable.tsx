@@ -1,3 +1,10 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
+
+
 // "use client";
 
 // import React, { useEffect, useMemo, useState } from "react";
@@ -62,7 +69,7 @@
 //   });
 // }
 
-// function getNestedValue(obj: any, path: string) {
+// function getNestedValue(obj: Record<string, string>, path: string) {
 //   if (!obj || !path) return undefined;
 //   return path.split(".").reduce((acc, key) => acc?.[key], obj);
 // }
@@ -101,7 +108,7 @@
 //   URL.revokeObjectURL(url);
 // }
 
-// export default function DataTable<T extends Record<string, any>>({
+// export default function DataTable<T extends Record<string, string>>({
 //   columns,
 //   data,
 //   allData,
@@ -478,9 +485,9 @@
 //   );
 // }
 
-"use client";
+// "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+// import React, { useEffect, useMemo, useState } from "react";
 import {
   Search,
   ArrowUpDown,
@@ -502,7 +509,7 @@ export type DataTableColumn<T> = {
   isDate?: boolean;
   className?: string;
   headerClassName?: string;
-  render?: (value: any, row: T, index: number) => React.ReactNode;
+  render?: (value: string, row: T, index: number) => React.ReactNode;
 };
 
 type DataTableProps<T> = {
@@ -522,20 +529,20 @@ type DataTableProps<T> = {
   showTotalRecords?: boolean;
 };
 
-function formatCellValue(value: any) {
+  function formatCellValue(value: string) {
   if (value === null || value === undefined || value === "") {
     return "Not available";
   }
   return String(value);
 }
 
-function isValidDate(value: any) {
+function isValidDate(value: string) {
   if (!value) return false;
   const d = new Date(value);
   return !isNaN(d.getTime());
 }
 
-function formatDate(value: any) {
+function formatDate(value: string) {
   if (!isValidDate(value)) return "Not available";
   const d = new Date(value);
   return d.toLocaleDateString("en-IN", {
@@ -545,9 +552,16 @@ function formatDate(value: any) {
   });
 }
 
-function getNestedValue(obj: any, path: string) {
-  if (!obj || !path) return undefined;
-  return path.split(".").reduce((acc, key) => acc?.[key], obj);
+function getNestedValue(obj: Record<string, string>, path: string) {
+  // if (!obj || !path) return undefined;
+  // return path.split(".").reduce((acc, key) => acc[key], obj);
+
+    return path.split(".").reduce((acc, key) => {
+    if (typeof acc === "object" && acc !== null && key in acc) {
+      return (acc as Record<string, string>)[key];
+    }
+    return undefined; // agar path invalid hai
+  }, obj as Record<string, string>);
 }
 
 function exportToCSV<T>(
@@ -564,10 +578,13 @@ function exportToCSV<T>(
           typeof col.key === "string"
             ? getNestedValue(row, col.key)
             : row[col.key as keyof T];
+            
 
-        const cellValue = col.isDate
-          ? formatDate(rawValue)
-          : formatCellValue(rawValue);
+ 
+  const cellValue = col.isDate
+  ? formatDate(String(rawValue ?? ""))
+  : formatCellValue(String(rawValue ?? ""));
+
 
         return `"${String(cellValue).replace(/"/g, '""')}"`;
       })
@@ -587,7 +604,7 @@ function exportToCSV<T>(
   URL.revokeObjectURL(url);
 }
 
-export default function DataTable<T extends Record<string, any>>({
+export default function DataTable<T extends Record<string, string>>({
   columns,
   data,
   allData,
@@ -612,9 +629,11 @@ export default function DataTable<T extends Record<string, any>>({
   const [currentPage, setCurrentPage] = useState(1);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+  if (currentPage !== 1) {
     setCurrentPage(1);
-  }, [searchTerm, selectedDateValue, selectedDateColumn, data]);
+  }
+}, [searchTerm, selectedDateValue, selectedDateColumn, data]);
 
   const searchableColumns = useMemo(() => {
     return columns.filter((col) => col.searchable !== false);
