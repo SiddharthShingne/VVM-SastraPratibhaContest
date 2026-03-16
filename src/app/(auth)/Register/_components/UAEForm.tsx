@@ -1,6 +1,6 @@
 
 "use client";
-
+import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,8 +41,20 @@ const grades = [
 ];
 
 export default function UAEForm() {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setError,
+    formState: { errors },
+  } = useForm<RegistrationForm>();
+
   const [submitAttempted, setSubmitAttempted] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string | null>>({});
+  const [loading, setLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  // const [errors, setErrors] = useState<Record<string, string | null>>({});
+
   const [form, setForm] = useState<RegistrationForm>({
     fullName: "",
     dob: "",
@@ -63,6 +75,8 @@ export default function UAEForm() {
     parentMobile: "",
     parentEmail: "",
     emailOtp: "",
+
+
   });
   const [generatedOtp, setGeneratedOtp] = useState<string | null>(null);
   const [otpSent, setOtpSent] = useState(false);
@@ -76,11 +90,11 @@ export default function UAEForm() {
     }));
   };
   const sendOtp = () => {
-    if (!form.parentEmail) {
-      setErrors((prev: Record<string, string | null>) => ({
-        ...prev,
-        parentEmail: "Enter parent email first",
-      }));
+    if (!getValues("parentEmail")) {
+      setError("parentEmail", {
+        type: "manual",
+        message: "Enter parent email first",
+      });
       return;
     }
 
@@ -96,10 +110,10 @@ export default function UAEForm() {
     if (form.emailOtp === generatedOtp) {
       setOtpVerified(true);
     } else {
-      setErrors((prev: Record<string, string | null>) => ({
-        ...prev,
-        emailOtp: "Invalid OTP",
-      }));
+      setError("emailOtp", {
+        type: "manual",
+        message: "Invalid OTP",
+      });
     }
   };
 
@@ -118,8 +132,12 @@ export default function UAEForm() {
       });
 
       alert(res.message || "Registration successful");
-    } catch (error: any) {
-      alert(error.message || "Registration failed");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("Registration failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -285,6 +303,7 @@ export default function UAEForm() {
               disabled
               registration={register("country")}
               error={errors.country}
+              value={"UAE"}
             />
 
             <InputField
@@ -344,6 +363,7 @@ export default function UAEForm() {
                 },
               })}
               error={errors.parentMobile}
+
             />
 
             <InputField
@@ -377,7 +397,7 @@ export default function UAEForm() {
               <Button
                 type="button"
                 variant="primary"
-                onClick={handleSendOtp}
+                onClick={sendOtp}
                 loading={otpLoading}
                 loadingText="Sending OTP..."
               >
@@ -388,12 +408,12 @@ export default function UAEForm() {
                 <Button
                   type="button"
                   variant="success"
-                  onClick={handleVerifyOtp}
+                  onClick={verifyOtp}
                   loading={verifyLoading}
                   loadingText="Verifying..."
                 >
                   Verify OTP
-                </button>
+                </Button>
               )}
 
             </div>
@@ -414,95 +434,5 @@ export default function UAEForm() {
       </div>
     </div>
 
-  );
-}
-/* SECTION */
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-      <div className="flex justify-between items-center px-4 py-3 bg-linear-to-r from-[#2f5f8f] to-[#4a7ba7] text-white">
-        <h2 className="font-semibold text-sm sm:text-base tracking-wide">{title}</h2>
-        <button type="button" onClick={() => setOpen(!open)}>
-          {open ? <Minus size={16} /> : <Plus size={16} />}
-
-        </button>
-
-      </div>
-
-      {open && (
-        <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {children}
-
-        </div>
-
-      )}
-
-    </div>
-
-  );
-}
-/* SELECT */
-interface SelectFieldProps {
-  label: string;
-  name: string;
-  value: string;
-  options: string[];
-  onChange: React.ChangeEventHandler<HTMLSelectElement>;
-  required?: boolean;
-    error?: string | null;
-
-}
-function SelectField({
-  label,
-  name,
-  value,
-  options,
-  onChange,
-  required,
-  error,
-}: SelectFieldProps) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-xs font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-      >
-        <option value="">Select</option>
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
-
-      </select>
-      {error && (
-        <p className="text-red-500 text-sm mt-1">{error}</p>
-      )}
-    </div>
-  );
-}
-/* TEXTAREA */
-interface TextAreaFieldProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label: string;
-}
-function TextAreaField({ label, className = "", ...props }: TextAreaFieldProps) {
-  return (
-    <div className={className}>
-      <label className="block mb-1 text-xs font-medium text-gray-700">
-        {label}
-      </label>
-      <textarea
-        rows={3}
-        {...props}
-        className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y"
-      />
-    </div>
   );
 }
