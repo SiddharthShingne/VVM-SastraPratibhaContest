@@ -9,6 +9,7 @@ import SelectField from "@/components/ui/SelectField";
 import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
+
 import {
   registerUaeStudent,
   sendUaeOtp,
@@ -39,8 +40,23 @@ const grades = [
   { label: "10", value: "10" },
   { label: "11", value: "11" },
 ];
+// contry code type
+// type CountryType = {
+//   value: string;
+//   label: string;
+//   code: number;
+// };
+type Props = {
+  countries: {
+    value: string;
+    label: string;
+    code: string;
+  }[];
+};
 
-export default function UAEForm() {
+export default function UAEForm({ countries }: Props) {
+
+// export default function UAEForm({ country }: { country: CountryType | undefined }) {
   const {
     register,
     handleSubmit,
@@ -67,7 +83,7 @@ export default function UAEForm() {
     confirmPassword: "",
     schoolName: "",
     board: "",
-    country: "UAE",
+  country: countries.find(c => c.value === "uae")?.code || "", // default to 3 (UAE) or you can set it to the actual country code if available 
     city: "",
     pincode: "",
     schoolAddress: "",
@@ -78,6 +94,19 @@ export default function UAEForm() {
 
 
   });
+
+
+
+  // popup code
+  const [showPopup, setShowPopup] = useState(false);
+  const [userData, setUserData] = useState({
+    email: "",
+    username: "",
+  });
+  // 
+
+
+  // const country_code = country?.code || 3; // default to 3 (UAE) if country is undefined
   const [generatedOtp, setGeneratedOtp] = useState<string | null>(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
@@ -90,6 +119,13 @@ export default function UAEForm() {
     }));
   };
   const sendOtp = () => {
+
+    // ✅ ADD THIS HERE (TOP pe)
+    if (otpSent && !otpVerified) {
+      alert("OTP already sent. Please verify it first.");
+      return;
+    }
+
     if (!getValues("parentEmail")) {
       setError("parentEmail", {
         type: "manual",
@@ -107,8 +143,11 @@ export default function UAEForm() {
     alert("OTP sent (check console for demo)");
   };
   const verifyOtp = () => {
-    if (form.emailOtp === generatedOtp) {
+    const otpValue = getValues("emailOtp")?.trim();
+
+    if (otpValue === generatedOtp) {
       setOtpVerified(true);
+      alert("OTP Verified ✅"); // 👈 ADD THIS
     } else {
       setError("emailOtp", {
         type: "manual",
@@ -119,6 +158,9 @@ export default function UAEForm() {
 
   const onSubmit = async (data: RegistrationForm) => {
     if (!otpVerified) {
+      await registerUaeStudent({ ...data });
+
+      // await submitFormData(data); // 👈 ADD THIS
       alert("Please verify OTP before submitting");
       return;
     }
@@ -126,10 +168,21 @@ export default function UAEForm() {
     try {
       setLoading(true);
 
-      const res = await registerUaeStudent({
-        ...data,
-        country: "UAE",
-      });
+      // 👇 selected country find karo
+    const country_code = countries.find(
+      (c) => c.value === "uae"   // ya dynamic use karo agar needed
+    )?.code || "3"; // default to "3" for UAE if not found
+
+      const payload = {
+      ...data,
+      country_code: String(country_code), // 👈 IMPORTANT FIX
+    };
+
+    console.log("Payload:", payload);
+
+      const res = await registerUaeStudent( payload);
+
+      await submitFormData(data); // 👈 yaha hona chahiye
 
       alert(res.message || "Registration successful");
     } catch (error: unknown) {
@@ -140,6 +193,28 @@ export default function UAEForm() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+  //  Popup tsx
+  const submitFormData = async (formData: any) => {
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setUserData({
+          email: formData.studentEmail,   // from form
+          username: data.username,        // from API
+        });
+
+        setShowPopup(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -298,12 +373,14 @@ export default function UAEForm() {
               error={errors.board}
             />
 
+
+
             <InputField
               label="Country"
               disabled
               registration={register("country")}
               error={errors.country}
-              value={"UAE"}
+              value={countries.find(c => c.value === "uae")?.code || ""}
             />
 
             <InputField
@@ -432,7 +509,64 @@ export default function UAEForm() {
           </div>
         </form>
       </div>
+
+
+      {/* // Popup UI */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-8 rounded-xl shadow-lg text-center w-[400px]">
+
+            {/* ✅ Tick Icon */}
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 rounded-full border-4 border-green-400 flex items-center justify-center">
+                <span className="text-green-500 text-3xl">✔</span>
+              </div>
+            </div>
+
+            {/* ✅ Title */}
+            <h2 className="text-lg font-semibold mb-2">
+              You  Registered! 🎉
+            </h2>
+
+            {/* ✅ Message */}
+            <p className="text-sm text-gray-600 mb-3">
+              Registration for VVM 2026-27 Completed Successfully
+            </p>
+
+            {/* ✅ Dynamic Email */}
+            <p className="text-sm text-gray-600 mb-1">
+              Login credentials are emailed to{" "}
+              <span className="font-semibold">{userData.email}</span>.
+            </p>
+
+            {/* ✅ Dynamic Username */}
+            <p className="text-sm font-medium mb-3">
+              Username: {userData.username}
+            </p>
+
+            {/* ✅ Note */}
+            <p className="text-xs text-gray-500 mb-4">
+              If the credentials email is not in the INBOX, please check your Spam folder.
+            </p>
+
+            {/* ✅ Button */}
+            <button
+              onClick={() => setShowPopup(false)}
+              className="bg-purple-500 text-white px-6 py-2 rounded-md"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
+
+
     </div>
+
+
+
+
 
   );
 }

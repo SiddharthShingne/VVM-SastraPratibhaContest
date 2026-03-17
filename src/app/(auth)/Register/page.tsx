@@ -11,27 +11,32 @@ import QatarForm from "./_components/QatarForm";
 import OmanForm from "./_components/OmanForm";
 
 export default function RegisterPage() {
+
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
-  const countries = [
-    { value: "bahrain", label: "Bahrain" },
-    { value: "kuwait", label: "Kuwait" },
-    { value: "uae", label: "UAE" },
-    { value: "saudi", label: "Saudi Arabia" },
-    { value: "qatar", label: "Qatar" },
-    { value: "oman", label: "Oman" },
-  ];
+const countries = [
+  { value: "bahrain", label: "Bahrain", code: 1 },
+  { value: "kuwait", label: "Kuwait", code: 2 },
+  { value: "uae", label: "UAE", code: 3 },
+  { value: "saudi", label: "Saudi Arabia", code: 4 },
+  { value: "qatar", label: "Qatar", code: 5 },
+  { value: "oman", label: "Oman", code: 6 },
+];
+
+  const selectedCountryData = countries.find(
+  (c) => c.value === selectedCountry
+);
+
 
   // ✅ Cleaner than switch-case
-  const countryComponentMap: Record<string, React.ReactNode> = {
-    bahrain: <BahrainForm />,
-    kuwait: <KuwaitForm />,
-    uae: <UAEForm />,
-    saudi: <SaudiForm />,
-    qatar: <QatarForm />,
-    oman: <OmanForm />,
-  };
-
+const countryComponentMap: Record<string, React.ReactNode> = {
+  bahrain: <BahrainForm country={selectedCountryData} />,
+  kuwait: <KuwaitForm country={selectedCountryData} />,
+  uae: <UAEForm countries={countries} />,
+  saudi: <SaudiForm country={selectedCountryData} />,
+  qatar: <QatarForm country={selectedCountryData} />,
+  oman: <OmanForm country={selectedCountryData} />,
+};
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3">
@@ -62,7 +67,7 @@ export default function RegisterPage() {
               >
                 <option value="">-- Select --</option>
                 {countries.map((country) => (
-                  <option key={country.value} value={country.value}>
+                  <option key={country.code} value={country.value}>
                     {country.label}
                   </option>
                 ))}
