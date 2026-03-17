@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
@@ -15,6 +14,7 @@ import {
 } from "react-icons/fa";
 
 import { logoutUser } from "@/services/authService";
+import axiosInstance from "@/services/axiosInstance";
 
 export default function StudentDashboardLayout({
   children,
@@ -48,17 +48,22 @@ export default function StudentDashboardLayout({
   const handleLogout = async () => {
     try {
       await logoutUser();
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("studentname");
-
-      router.replace("/login");
     } catch (error) {
-      console.error("Logout failed", error);
+      console.error("Logout API failed, forcing logout", error);
+    } finally {
+      // 🔥 ALWAYS clear everything (even if API fails)
+
+      localStorage.clear(); // best approach
+
+      // Optional: clear sessionStorage too
+      sessionStorage.clear();
+
+      // Optional: remove axios default header (extra safety)
+      delete axiosInstance.defaults.headers.common["Authorization"];
+
+      router.replace("/Login");
     }
   };
-
   const isActive = (href: string) => pathname === href;
 
   const linkClass = (href: string) =>
@@ -110,7 +115,6 @@ export default function StudentDashboardLayout({
               <FaTrophy className="text-[15px]" />
               Level 2 Result
             </Link>
-
             <Link
               href="/studentDashboard/download-app"
               className={linkClass("/studentDashboard/download-app")}
@@ -118,7 +122,6 @@ export default function StudentDashboardLayout({
               <FaDownload className="text-[15px]" />
               Download Apps
             </Link>
-
             <Link
               href="/studentDashboard/study-material"
               className={linkClass("/studentDashboard/study-material")}
@@ -126,7 +129,6 @@ export default function StudentDashboardLayout({
               <FaBook className="text-[15px]" />
               Study Material
             </Link>
-
             <Link
               href="/studentDashboard/contact"
               className={linkClass("/studentDashboard/contact")}
