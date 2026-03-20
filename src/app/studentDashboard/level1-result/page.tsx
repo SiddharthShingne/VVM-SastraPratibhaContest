@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -24,71 +25,99 @@ export default function Level1Result() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg p-8">
+    <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg border border-gray-200 p-6 sm:p-8 max-w-2xl mx-auto">
+
+      {/* HEADER */}
+      <h2 className="text-center text-lg sm:text-xl font-semibold text-gray-700 mb-6 tracking-wide">
+        Level 1 Result
+      </h2>
 
       {/* LOADING */}
       {loading && (
-        <p className="text-center text-gray-500">Loading result...</p>
+        <p className="text-center text-gray-400 animate-pulse">
+          Loading result...
+        </p>
       )}
 
       {/* ERROR */}
       {error && (
-        <p className="text-center text-red-500">{error}</p>
+        <div className="text-center bg-red-50 text-red-500 px-4 py-2 rounded-xl border border-red-200">
+          {error}
+        </div>
       )}
 
       {/* DATA */}
       {!loading && !error && data && (
-        <div className="space-y-4 text-sm text-gray-700">
-
-          <div className="flex justify-between">
-            <span>User ID:</span>
-            <span className="font-medium">{data.user_id}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span>Student ID:</span>
-            <span className="font-medium">{data.student_id}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span>Payment Status:</span>
-            <span className="font-medium capitalize">
-              {data.payment_status.replace("_", " ")}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span>Level 3 Qualified:</span>
-            <span className="font-medium">
-              {data.level3_qualified ? "Yes" : "No"}
-            </span>
-          </div>
+        <div className="space-y-6">
 
           {/* RESULT STATUS */}
-          <div className="mt-6 text-center">
-            {data.is_qualified ? (
-              <div className="text-green-600 font-semibold text-lg">
-                ✅ Qualified for Next Level
-              </div>
-            ) : (
-              <div className="text-red-500 font-semibold text-lg">
-                ❌ Not Qualified
-              </div>
-            )}
+          <div
+            className={`rounded-2xl p-5 text-center font-semibold text-base sm:text-lg shadow-sm transition-all ${data.is_qualified
+                ? "bg-linear-to-r from-green-100 to-green-50 text-green-700 border border-green-200"
+                : "bg-linear-to-r from-red-100 to-red-50 text-red-600 border border-red-200"
+              }`}
+          >
+            
+            {data.is_qualified
+              ? "Qualified for Next Level"
+              : "Not Qualified"}
           </div>
 
-          {/* PAYMENT LINK (if exists) */}
+          {/* INFO GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            {/* CARD */}
+            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition">
+              <p className="text-gray-400 text-xs mb-1">User ID</p>
+              <p className="font-semibold text-gray-800 text-sm">
+                {data.user_id || "-"}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition">
+              <p className="text-gray-400 text-xs mb-1">Student ID</p>
+              <p className="font-semibold text-gray-800 text-sm">
+                {data.student_id || "-"}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition">
+              <p className="text-gray-400 text-xs mb-1">Payment Status</p>
+              <p className="font-semibold text-gray-800 text-sm capitalize">
+                {data.payment_status
+                  ? data.payment_status.replace("_", " ")
+                  : "N/A"}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition">
+              <p className="text-gray-400 text-xs mb-1">Level 3 Qualified</p>
+              <p
+                className={`font-semibold text-sm ${data.level3_qualified
+                    ? "text-green-600"
+                    : "text-red-500"
+                  }`}
+              >
+                {data.level3_qualified ? "Yes" : "No"}
+              </p>
+            </div>
+
+          </div>
+
+          {/* PAYMENT BUTTON */}
           {data.payment_link && (
-            <div className="text-center mt-4">
+            <div className="text-center pt-2">
               <a
                 href={data.payment_link}
                 target="_blank"
-                className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 rounded-xl text-white text-sm font-medium bg-linear-to-r from-indigo-600 to-purple-600 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
-                Complete Payment
+                Complete Payment →
               </a>
             </div>
           )}
+
         </div>
       )}
     </div>

@@ -116,6 +116,13 @@ export default function StudentDashboardLayout({
               Level 2 Result
             </Link>
             <Link
+              href="/studentDashboard/level2-exam-sif"
+              className={linkClass("/studentDashboard/level2-exam-sif")}
+            >
+              <FaTrophy className="text-[15px]" />
+              Level 2 Exam SIF
+            </Link>
+            <Link
               href="/studentDashboard/download-app"
               className={linkClass("/studentDashboard/download-app")}
             >
