@@ -36,7 +36,7 @@ export default function DownloadApp() {
     <>
      
 
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col relative z-10 h-full overflow-y-auto p-6">
 
           <Tabs aria-label="Dynamic tabs" items={tabs}   selectedKey={activeTab}
   onSelectionChange={(key) => setActiveTab(key as string)}

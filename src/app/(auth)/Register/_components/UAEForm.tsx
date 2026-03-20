@@ -211,7 +211,7 @@ export default function UAEForm({ countries }: Props) {
           username: data.username,        // from API
         });
 
-        setShowPopup(true);
+        setShowPopup(true);j
       }
     } catch (error) {
       console.log(error);
