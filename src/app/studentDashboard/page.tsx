@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
 import { useEffect, useState } from "react";
 import { getImportantDates } from "@/services/importantDatesService";
 import { getInstractionDocument } from "@/services/importantDatesService";
@@ -19,7 +19,6 @@ export default function DashboardHome() {
     const loadDates = async () => {
       try {
         const res = await getImportantDates(1);
-
         const apiDates = res?.data?.data || [];
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,7 +67,7 @@ export default function DashboardHome() {
   }
 
   return (
-    <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5">
+    <div className="bg-white  rounded-md p-5">
       <h2 className="text-center text-[14px] font-semibold tracking-wide text-gray-800 mb-4">
         IMPORTANT DATES TO REMEMBER
       </h2>
