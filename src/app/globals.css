@@ -4,6 +4,7 @@
 * {
   scroll-behavior: smooth;
 }
+/* ::-webkit-scrollbar { width: 8px; } */
 
 .input-label {
   @apply block text-sm font-medium text-gray-700 mb-1;

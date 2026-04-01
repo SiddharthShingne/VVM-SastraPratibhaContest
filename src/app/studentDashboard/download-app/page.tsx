@@ -36,12 +36,13 @@ export default function DownloadApp() {
     <>
      
 
-        <div className="flex w-full flex-col relative z-10 h-full overflow-y-auto p-6">
+        {/* <div className="flex w-full flex-col relative z-10 h-full overflow-y-auto p-6 borderradius-lg bg-white shadow-sm  "> */}
 
           <Tabs aria-label="Dynamic tabs" items={tabs}   selectedKey={activeTab}
   onSelectionChange={(key) => setActiveTab(key as string)}
   classNames={{
-    tabList: "border-b border-gray-200 bg-gray-100 px-6",
+    // tabList: "border-b border-gray-200 bg-gray-100 px-6 border radius-md",
+     tabList: "border-b border-gray-200 bg-gray-100 px-6 rounded-full ml-9 mt-5",
     tab: "px-6 py-3 text-sm font-medium transition-all",
     cursor: "bg-transparent border-b-2 border-blue-600",
     tabContent: "group-data-[selected=true]:text-blue-600",
@@ -54,7 +55,7 @@ export default function DownloadApp() {
               </Tab>
             )}
           </Tabs>
-        </div>
+        {/* </div> */}
 
       {/* </DashboardPage > */}
 

@@ -39,16 +39,16 @@ export default function DashboardHome() {
     );
   }
 
-  return (
-    <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5">
+  return (<>
+    {/* <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5 mb-10px"> */}
              <img
         src="/gcc/vvm-bg-image.png"
         alt="Background"
-        fill
+        fullWidth
         className="object-cover"
         priority
       />
-      <h2 className="text-center text-[14px] font-semibold tracking-wide text-gray-800 mb-4">
+      <h2 className="text-center text-[14px] font-semibold tracking-wide text-gray-800 mt-10 mb-4">
         IMPORTANT DATES TO REMEMBER
       </h2>
 
@@ -81,6 +81,7 @@ export default function DashboardHome() {
           </div>
         )}
       </div>
-    </div>
+    {/* </div> */}
+    </>
   );
 }
