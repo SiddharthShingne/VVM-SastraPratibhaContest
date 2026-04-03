@@ -1,5 +1,6 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+
+import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/InputField";
 import Dropdown from "@/components/ui/Dropdown";
 
@@ -19,170 +20,136 @@ interface FormData {
 }
 
 export default function EditProfile() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    schoolName: "",
-    studentMobile: "",
-    studentEmail: "",
-    dob: "",
-    parentName: "",
-    parentMobile: "",
-    parentEmail: "",
-    address: "",
-    grade: "",
-    gender: "",
-    howDidYouGetToKnowAboutVVM: "",
-  });
+  const { register, handleSubmit, setValue } = useForm<FormData>();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const onSubmit = (data: FormData) => {
+    console.log("FORM DATA:", data);
   };
 
   return (
-    
-      <div className="max-w-6xl mx-auto bg-white">
+    <div className="max-w-6xl mx-auto bg-white p-8 rounded-2xl shadow-md">
 
-        <h1 className="text-xl font-semibold text-gray-800 border-b pb-4 mb-8 tracking-wide">
-          EDIT STUDENT PROFILE
-        </h1>
+      <h1 className="text-xl font-semibold text-gray-800 border-b pb-4 mb-8 tracking-wide">
+        EDIT STUDENT PROFILE
+      </h1>
 
-        {/* 2 Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          <InputField
-            required
-            label="Full Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="Full Name"
+          registration={register("name", { required: true })}
+        />
 
-          <InputField
-            required
-            label="School Name"
-            name="schoolName"
-            value={formData.schoolName}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="School Name"
+          registration={register("schoolName", { required: true })}
+        />
 
-          <InputField
-            label="Student Mobile Number"
-            name="studentMobile"
-            type="tel"
-            value={formData.studentMobile}
-            onChange={handleChange}
-          />
+        <InputField
+          label="Student Mobile Number"
+          type="tel"
+          registration={register("studentMobile")}
+        />
 
-          <InputField
-            label="Student Email"
-            name="studentEmail"
-            type="email"
-            value={formData.studentEmail}
-            onChange={handleChange}
-          />
+        <InputField
+          label="Student Email"
+          type="email"
+          registration={register("studentEmail")}
+        />
 
-          <InputField
-            required
-            label="Date Of Birth "
-            name="dob"
-            type="date"
-            value={formData.dob}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="Date Of Birth"
+          type="date"
+          registration={register("dob", { required: true })}
+        />
 
-          <InputField
-            label="Parent/Guardian Full Name"
-            name="parentName"
-            value={formData.parentName}
-            onChange={handleChange}
-          />
+        <InputField
+          label="Parent/Guardian Full Name"
+          registration={register("parentName")}
+        />
 
-          <InputField
-            required
-            label="Parent/Guardian Phone/Mobile Number"
-            name="parentMobile"
-            type="tel"
-            value={formData.parentMobile}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="Parent Mobile Number"
+          type="tel"
+          registration={register("parentMobile", { required: true })}
+        />
 
-          <InputField
-            required
-            label="Parent/Guardian Email-Id "
-            name="parentEmail"
-            type="email"
-            value={formData.parentEmail}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="Parent Email"
+          type="email"
+          registration={register("parentEmail", { required: true })}
+        />
 
-          <InputField
-            required
-            label="Address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
+        <InputField
+          required
+          label="Address"
+          registration={register("address", { required: true })}
+        />
 
-          {/* Grade Select */}
-          <Dropdown
-            label="Grade"
-            name="grade"
-            options={[6, 7, 8, 9, 10, 11, 12].map((g) => ({ label: `${g}`, value: String(g) }))}
-            value={formData.grade}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, grade: e.target.value }))
-            }
-          />
+        {/* Dropdowns */}
+        <Dropdown
+          name="grade"
+          label="Grade"
+          options={[6, 7, 8, 9, 10, 11, 12].map(g => ({
+            label: `${g}`,
+            value: String(g)
+          }))}
+          onChange={(e) => setValue("grade", e.target.value)}
+        />
 
-          {/* Gender Select */}
-          <Dropdown
-            label="Gender"
-            name="gender"
-            options={[
-              { label: "Male", value: "male" },
-              { label: "Female", value: "female" },
-              { label: "Other", value: "other" }
-            ]}
-            value={formData.gender}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, gender: e.target.value }))
-            }
-          />
-          {/* VVM Info Select */}
-          <Dropdown
-            label="How did you get to know about VVM?"
-            name="howDidYouGetToKnowAboutVVM"
-            options={[
-              { label: "Website", value: "website" },
-              { label: "School Circular/Teacher", value: "School Circular/Teacher" },
-              { label: "State Coordinator", value: "state-coordinator" },
-              { label: "News / Print Media", value: "news-print-media" },
-              { label: "National Council of Science Museums", value: "ncsm" },
-              { label: "Social Media (Facebook, Instagram, Twitter, YouTube)", value: "social-media" },
-              { label: " Friend-Family", value: "friend-family" },
+        <Dropdown
+          name="gender"
+          label="Gender"
+          options={[
+            { label: "Male", value: "male" },
+            { label: "Female", value: "female" },
+            { label: "Other", value: "other" }
+          ]}
+          onChange={(e) => setValue("gender", e.target.value)}
+        />
 
-            ]
-            }
-            value={formData.howDidYouGetToKnowAboutVVM}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, howDidYouGetToKnowAboutVVM: e.target.value }))
-            }
-          />
+        <Dropdown
+          name="howDidYouGetToKnowAboutVVM"
+          label="How did you get to know about VVM?"
+          options={[
+            { label: "Website", value: "website" },
+            { label: "School Circular/Teacher", value: "school" },
+            { label: "State Coordinator", value: "state" },
+            { label: "News / Print Media", value: "news" },
+            { label: "NCSM", value: "ncsm" },
+            { label: "Social Media", value: "social" },
+            { label: "Friend/Family", value: "family" }
+          ]}
+          onChange={(e) =>
+            setValue("howDidYouGetToKnowAboutVVM", e.target.value)
+          }
+        />
 
-        </div>
-
-        {/* Submit Button */}
-        <div className="mt-10">
-          <button className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 shadow-sm">
-            Submit
-          </button>
-        </div>
       </div>
-    // </div>
 
-  );
-}
+      {/* BUTTON */}
+      <div className="mt-10">
+        <button
+          onClick={handleSubmit(onSubmit)}
+          className="
+            px-8 py-3
+            bg-[#17395c]
+            text-white
+            rounded-xl
+            hover:bg-[#0f2742]
+            transition
+            shadow-md hover:shadow-lg
+          "
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+   )
+  }
