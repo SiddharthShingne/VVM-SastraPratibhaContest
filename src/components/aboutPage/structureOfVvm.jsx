@@ -1,66 +1,146 @@
+
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+
 const methods = [
     {
-        title: "Objective Type Multiple Choice Questions",
-        image: "about_first.png",
+        title: "Objective type Multiple Choice Questions",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <rect x="10" y="12" width="44" height="40" rx="6" />
+                <path d="M18 22h20M18 30h20M18 38h12" />
+                <circle cx="42" cy="38" r="4" />
+            </svg>
+        ),
     },
-    { title: "Comprehensive Writing", image: "about_second.png" },
-    { title: "Presentation and Group Discussion", image: "about_third.png" },
-    { title: "Role Play", image: "about_fourth.png" },
-    { title: "Practical Examination", image: "about_fifth.png" },
-    { title: "Methods Of Science", image: "about_sixth.png" },];
+    {
+        title: "Comprehensive writing",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <path d="M16 44l4-12 20-20 8 8-20 20-12 4z" />
+                <path d="M36 16l8 8" />
+            </svg>
+        ),
+    },
+    {
+        title: "Presentation and Group discussion",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <circle cx="22" cy="26" r="6" />
+                <circle cx="42" cy="26" r="6" />
+                <path d="M12 44c2-6 8-8 10-8s8 2 10 8" />
+                <path d="M32 44c2-6 8-8 10-8s8 2 10 8" />
+            </svg>
+        ),
+    },
+    {
+        title: "Role Play",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <path d="M20 20c6-6 18-6 24 0v16c-6 6-18 6-24 0z" />
+                <path d="M24 28h4M36 28h4M26 36c4 2 8 2 12 0" />
+            </svg>
+        ),
+    },
+    {
+        title: "Practical Examination",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <path d="M26 10v14l-10 18a6 6 0 006 8h20a6 6 0 006-8l-10-18V10" />
+                <path d="M22 30h20" />
+            </svg>
+        ),
+    },
+    {
+        title: "Methods of Science",
+        icon: (
+            <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
+                <circle cx="16" cy="32" r="4" />
+                <circle cx="32" cy="16" r="4" />
+                <circle cx="48" cy="32" r="4" />
+                <circle cx="32" cy="48" r="4" />
+                <path d="M20 32h24M32 20v24" />
+            </svg>
+        ),
+    },
+];
+
 const WhatIsVVM = () => {
     return (
-        <div className="font-open">
-            {/* Hero Header */}
-            <div className="bg-linear-to-b from-[#f9faff] to-[#eef0ff] py-26 text-center">
-                <h1 className="text-5xl md:text-5xl font-extrabold text-[#111d35] mb-4">
-                    Structure Of VVM
-                </h1>
-                <div className="flex justify-center items-center space-x-1 text-lg md:text-sm font-medium text-gray-500">
-                    <Link href="/" className="hover:text-[#7f00ff] transition-colors">
-                        Home
-                    </Link>
-                    <ChevronRight className="w-3 h-3" />
-                    <span>About</span>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className="text-[#111d35]">Structure Of VVM</span>
-                </div>
-            </div>
-            {/* Learning Methods Section */}
-            <div className="bg-gray-100 py-8">
-                <div className="container mx-auto px-2 max-w-6xl">
-                    <h1 className="text-3xl md:text-3xl text-center font-extrabold text-[#111d35] mb-4">STRUCTURE OF VIDYARTHI VIGYAN MANTHAN</h1>
-                    <p className=" text-gray-800  py-7 px-4 mt-4 mb-2  text-sm sm:text-base leading-relaxed font-medium text-center ">Students participating in VVM shall undergo the following multi-level testing procedures:</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                        {methods.map((method, index) => (
-                            <div
-                                key={index}
-                                className="col-span-1 animate-slide-up duration-700 delay-100"
-                            >
-                                <div className="text-center p-4 sm:p-5 rounded-lg bg-white hover:shadow-[-4px_0_8px_-2px_gray] transition-shadow duration-300 max-w-70 mx-auto">
-                                    <div className="mb-2 flex justify-center">
-                                        <Image
-                                            src={`/${method.image}`}
-                                            alt={method.title}
-                                            width={140}
-                                            height={80}
-                                            className="object-contain mx-auto"
-                                        />
+        <div>
+
+
+            {/* Section */}
+            <div className="bg-gray-100 py-10">
+                <div className="max-w-6xl mx-auto px-4">
+
+                    <h2 className="text-[30px] font-extrabold uppercase tracking-[1.5px] text-[#1a1a2e] text-center mb-4">
+                        Structure Of Vidyarthi Vigyan Manthan
+                    </h2>
+
+                    <p className="text-center text-[#064882] text-lg font-semibold max-w-2xl mx-auto mb-10">
+                        Students participating in VVM shall undergo the following multi-level testing procedures:
+                    </p>
+
+                    {/* Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                        {methods.map((item, index) => (
+                            <div key={index} className="flex">
+
+                                <div className="
+                                    relative w-full text-center p-6 rounded-2xl
+                                    bg-white/75 backdrop-blur-xl border border-white/60
+                                    shadow-[0_20px_45px_rgba(23,57,92,0.12),inset_0_1px_0_rgba(255,255,255,0.7)]
+                                    transition-all duration-300
+                                    hover:-translate-y-2
+                                    hover:shadow-[0_25px_55px_rgba(23,57,92,0.18)]
+                                ">
+
+                                    {/* Gradient Top Border */}
+                                    <div className="absolute top-0 left-0 w-full h-[4px] 
+                                        bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+
+                                    {/* ICON BOX */}
+                                    <div className="
+                                        w-[70px] h-[70px] mx-auto mb-4 rounded-[18px]
+                                        bg-gradient-to-br from-[#17395c] to-[#244d79]
+                                        flex items-center justify-center
+                                        shadow-[0_10px_25px_rgba(23,57,92,0.25)]
+                                    ">
+                                        <div className="w-[40px] h-[40px]">
+                                            {item.icon}
+                                        </div>
                                     </div>
-                                    <h5 className="text-sm font-medium leading-snug">
-                                        {method.title}
+
+                                    {/* TITLE */}
+                                    <h5 className="text-[16px] font-extrabold text-[#17395c] leading-relaxed">
+                                        {item.title}
                                     </h5>
+
                                 </div>
+
                             </div>
                         ))}
                     </div>
+
+                    {/* Bottom Text */}
+                    <div className="text-center mt-10 space-y-4">
+                        <p className="text-[16px] text-[#555] max-w-4xl mx-auto leading-relaxed font-medium">
+                            For the winners of VVM, the program also includes visits to National Science Laboratories,
+                            centres of repute and interaction with renowned scientists of the nation.
+                        </p>
+
+                        <p className="text-[16px] text-[#555] max-w-4xl mx-auto leading-relaxed font-medium">
+                            Each student will be evaluated vis-à-vis his/her class peers at all stages.
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
     );
 };
+
 export default WhatIsVVM;

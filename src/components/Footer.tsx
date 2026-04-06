@@ -5,34 +5,34 @@ import Link from "next/link";
 
 const Footer = () => {
     return (
-        <footer className="bg-[#111d35] text-white py-12 px-4 md:px-8 lg:px-16 font-sans">
-            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row justify-between gap-10">
+        <footer className="bg-[#111d35] text-white py-6 px-3 md:px-6 lg:px-10 font-sans">
+            <div className="max-w-400 mx-auto flex flex-col lg:flex-row justify-between gap-6">
                 {/* Section 1: Logo and Contact */}
                 <div className="flex-[1.5]">
                     <Image
                         src="/nav-logo.png"
                         alt="VVM Logo"
-                        width={360}
-                        height={100}
-                        className="mb-5"
+                        width={216}
+                        height={60}
+                        className="mb-3"
                     />
-                    <p className="text-sm md:text-base text-gray-300 mb-5 leading-relaxed">
+                    <p className="text-xs md:text-sm text-gray-300 mb-3 leading-relaxed">
                         India&rsquo;s Largest Online Science Talent <br /> Search
                         Examination
                     </p>
 
-                    <button className="border-2 border-[#d1adf5] bg-[#000b27] text-white px-4 py-2 rounded-3xl text-sm md:text-base font-semibold hover:bg-[#7f00ff] transition duration-300">
+                    <button className="border-2 border-[#d1adf5] bg-[#000b27] text-white px-3 py-1.5 rounded-3xl text-xs md:text-sm font-semibold hover:bg-[#7f00ff] transition duration-300">
                         Contact With Us
                     </button>
                 </div>
 
                 {/* Section 2: Useful Links */}
                 <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-semibold mb-5 border-b-2 border-[#7f00ff] pb-2">
+                    <h3 className="text-sm md:text-base font-semibold mb-3 border-b-2 border-[#7f00ff] pb-2">
                         Useful Links
                     </h3>
-                    <div className="flex flex-col sm:flex-row gap-6">
-                        <div className="flex flex-col gap-2 text-sm text-gray-300">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex flex-col gap-1 text-xs text-gray-300">
                             <Link href="/" className="hover:text-[#7f00ff] transition">
                                 Home
                             </Link>
@@ -55,7 +55,7 @@ const Footer = () => {
                                 FAQ
                             </Link>
                         </div>
-                        <div className="flex flex-col gap-2 text-sm text-gray-300">
+                        <div className="flex flex-col gap-1 text-xs text-gray-300">
                             <Link href="/contact" className="hover:text-[#7f00ff] transition">
                                 Contact Us
                             </Link>
@@ -77,16 +77,16 @@ const Footer = () => {
 
                 {/* Section 3: Company Info */}
                 <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-semibold mb-5 border-b-2 border-[#7f00ff] pb-2">
+                    <h3 className="text-sm md:text-base font-semibold mb-3 border-b-2 border-[#7f00ff] pb-2">
                         Our Company
                     </h3>
-                    <div className="text-sm text-gray-300 leading-relaxed space-y-3">
+                    <div className="text-xs text-gray-300 leading-relaxed space-y-2">
                         <div>
-                            <h4 className="text-[#7f00ff] text-sm font-semibold mb-1">
+                            <h4 className="text-[#7f00ff] text-xs font-semibold mb-1">
                                 Get Contact
                             </h4>
                             <p>
-                                <strong className="text-white">Add:</strong> VVN Secretariat,
+                                <strong className="text-white">Add:</strong> VVM Secretariat,
                                 Vijnana Bharati (VIBHA),
                                 <br />
                                 D-12, South Extension-I, New Delhi - 110049
@@ -103,7 +103,7 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
-    );
+    )
 };
 
 export default Footer;

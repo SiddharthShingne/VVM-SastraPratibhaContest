@@ -1,5 +1,51 @@
 @import "tailwindcss";
 
+
+* {
+  scroll-behavior: smooth;
+}
+/* ::-webkit-scrollbar { width: 8px; } */
+
+.input-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a5a5a5;
+}
+
+
+/* .input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#2f5f8f] focus:border-[#2f5f8f] transition;
+} */
+
+.btn-blue {
+  @apply bg-[#2f5f8f] hover:bg-[#244e76] text-white px-4 rounded-lg transition;
+}
+
+.btn-green {
+  @apply bg-green-600 hover:bg-green-700 text-white px-4 rounded-lg transition;
+}
+
+.btn-submit {
+  @apply bg-[#2f5f8f] hover:bg-[#244e76] text-white font-semibold py-3 px-14 rounded-lg shadow-md transition;
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +69,49 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+/* .input-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+} */
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#2f5f8f] focus:border-transparent transition;
+}
+/* 
+.btn-blue {
+  @apply bg-[#2f5f8f] hover:bg-[#244e76] text-white px-4 rounded-lg transition;
+} */
+
+/* .btn-green {
+  @apply bg-green-600 hover:bg-green-700 text-white px-4 rounded-lg transition;
+} */
+
+/* .btn-submit {
+  @apply bg-[#2f5f8f] hover:bg-[#244e76] text-white font-semibold py-3 px-14 rounded-lg shadow-md transition;
+} */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Modern input styling (if not already in InputField component) */
+.input-modern {
+  @apply w-full px-4 py-3 border border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-[#2f5f8f] focus:border-transparent transition-all duration-200 outline-none hover:border-[#4a7ba7];
+}
+
+.btn-primary {
+  @apply px-6 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-submit {
+  @apply px-10 py-4 bg-gradient-to-r from-[#2f5f8f] to-[#4a7ba7] text-white font-semibold rounded-2xl hover:from-[#1e4a6f] hover:to-[#3a6890] hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl text-lg;
 }

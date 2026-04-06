@@ -1,162 +1,87 @@
 "use client";
 
-// import DownloadApp from "./download-apps/page";
-// import { useState } from "react";
-export default function DashboardPage({ children }: { children: React.ReactNode }) {
-// {activeTab === "Download Apps" && <DownloadApp />}
-// {activeTab === "Profile" && <Profile />}
-// {activeTab === "Result" && <Result />}
+import { useEffect, useState } from "react";
+import { getImportantDates } from "@/services/importantDatesService";
+
+interface DateItem {
+  id: number;
+  name: string;
+  detail: string;
+}
+
+export default function DashboardHome() {
+  const [dates, setDates] = useState<DateItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDates = async () => {
+      try {
+        const res = await getImportantDates(1);
+
+        // if API returns { data: [...] }
+        setDates(Array.isArray(res?.data) ? res.data : []);
+      } catch (error) {
+        console.error("Error fetching important dates:", error);
+        setDates([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDates();
+  }, []);
+
+  if (loading) {
     return (
-
-        <div className="min-h-screen bg-linear-to-br from-[#eef2ff] to-[#f8fafc] px-6 py-10">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-                {/* Sidebar */}
-                <aside className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                    {/* User Info */}
-                    <div className="mb-8 text-center">
-                        <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-linear-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
-                            U
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-800">
-                            USER NAME
-                        </h3>
-                        <p className="text-sm text-gray-500">Student</p>
-                    </div>
-                    {/* Navigation */}
-                    <nav className="space-y-6 text-sm">
-                        <div>
-                            <p className="font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-                                Dashboard
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                                Result
-                            </p>
-                            <ul className="space-y-2">
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Level 1 Result
-                                </li>
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Level 2 Result
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <a href="/studentDashboard/download-apps" >
-                                <ul className="space-y-2">
-                                    <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                        Download Apps
-                                    </li>
-                                </ul>
-                            </a>
-                        </div>
-
-                        <div>
-                            <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                                Study Material
-                            </p>
-                            <ul className="space-y-2">
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Study Material
-                                </li>
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Contact Information
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <p className="text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
-                                Profile
-                            </p>
-                            <ul className="space-y-2">
-                                <a href="/studentDashboard/Edit-profile" >
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Edit Profile
-                                </li>
-                                </a>
-                                <li className="px-3 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer transition">
-                                    Update Password
-                                </li>
-                                <li className="px-3 py-2 rounded-lg hover:bg-red-50 hover:text-red-500 cursor-pointer transition">
-                                    Logout
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </aside>
-                {/* Main Content */}
-                {/* <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8"> */}
-                {/* <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">
-                        IMPORTANT DATES TO REMEMBER
-                    </h2> */}
-                {/* Table */}
-                {/* <div className="overflow-x-auto rounded-xl border border-gray-200"  onClick={() => DashboardPage()}>
-                        <table className="w-full text-sm text-gray-700">
-                            <thead>
-                                <tr className="bg-indigo-50 text-gray-800 text-left">
-                                    <th className="p-4 font-semibold">Sr. No.</th>
-                                    <th className="p-4 font-semibold">Name</th>
-                                    <th className="p-4 font-semibold">Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="border-t hover:bg-gray-50 transition">
-                                    <td className="p-4">1</td>
-                                    <td className="p-4 font-medium">Level 1 Exam</td>
-                                    <td className="p-4">
-                                        GCC - November 8 for all GCC countries for all classes.
-                                    </td>
-                                </tr>
-                                <tr className="border-t hover:bg-gray-50 transition">
-                                    <td className="p-4">2</td>
-                                    <td className="p-4 font-medium">Level 2 Exam</td>
-                                    <td className="p-4">
-                                        International students contact Science India forum.
-                                    </td>
-                                </tr>
-                                <tr className="border-t hover:bg-gray-50 transition">
-                                    <td className="p-4">3</td>
-                                    <td className="p-4 font-medium">State Camp</td>
-                                    <td className="p-4">
-                                        Contact respective international forum for details.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> */}
-                {/* Pagination */}
-                {/* <div className="flex justify-center items-center gap-4 mt-8 text-sm">
-                        <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-                            « Previous
-                        </button>
-                        <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white shadow-md hover:bg-indigo-700 transition">
-                            1
-                        </button>
-                        <button className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-                            Next »
-                        </button>
-                    </div> */}
-                {/* {activeTab === "Download Apps" && <DownloadApp />} */}
-                {/* <DownloadApp /> */}
-
-
-                {/* </main> */}
-                {/* Main Content */}
-                <main className="md:col-span-3 bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-                    {children}
-                  
-                </main>
-{/* 
-                USECASE  <div>
-    <button onClick={() => setPage("login")}>Login</button>
-    <button onClick={() => setPage("signup")}>Signup</button>
-
-    {page === "edit-profile" ? <EditProfile /> : <Signup />} */}
-  {/* </div> */}
-            </div>
-        </div>
-
+      <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5 text-center text-gray-500">
+        Loading important dates...
+      </div>
     );
+  }
+
+  return (<>
+    {/* <div className="bg-white border border-gray-300 rounded-md shadow-sm p-5 mb-10px"> */}
+             <img
+        src="/gcc/vvm-bg-image.png"
+        alt="Background"
+        fullWidth
+        className="object-cover"
+        priority
+      />
+      <h2 className="text-center text-[14px] font-semibold tracking-wide text-gray-800 mt-10 mb-4">
+        IMPORTANT DATES TO REMEMBER
+      </h2>
+
+      <div className="border border-gray-300 rounded-md overflow-hidden mt-3">
+        <table className="w-full text-[11px]">
+          <thead className="bg-[#d8dced] text-gray-800">
+            <tr>
+              <th className="p-2 text-left border-r">Sr. No.</th>
+              <th className="p-2 text-left border-r">Name</th>
+              <th className="p-2 text-left">Detail</th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-700">
+            {dates.map((item, index) => (
+              <tr
+                key={item.id}
+                className={`border-t ${index % 2 === 1 ? "bg-[#f7f8fc]" : ""}`}
+              >
+                <td className="p-2 border-r">{index + 1}</td>
+                <td className="p-2 border-r font-medium">{item.name}</td>
+                <td className="p-2">{item.detail}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {dates.length === 0 && (
+          <div className="text-center p-4 text-gray-500">
+            No important dates available.
+          </div>
+        )}
+      </div>
+    {/* </div> */}
+    </>
+  );
 }
