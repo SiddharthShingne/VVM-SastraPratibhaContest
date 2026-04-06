@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import api from "./axiosInstance";
 
@@ -18,7 +19,7 @@ interface RawLoginApiResponse {
 
 export interface LoginResponse {
   token: string;
-  username: string;
+  user: any;
 }
 
 export const loginUser = async (
@@ -44,7 +45,7 @@ export const loginUser = async (
 
     return {
       token: data.data.token,
-      username: data.data.user.username,
+      user: data.data.user,
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -78,3 +79,33 @@ export const logoutUser = async (): Promise<LogoutApiResponse> => {
     throw new Error("Logout failed");
   }
 };
+
+// ========== FETCH STATES=============//
+export const fetchStates = async () => {
+  try {
+    const res = await api.get("/get-state");
+
+    console.log("RAW RESPONSE:", res);        // 👈 add this
+    console.log("RESPONSE DATA:", res.data);  // 👈 add this
+
+    return res.data?.data || [];
+  } catch (error) {
+    console.error("fetchStates error:", error);
+    return [];
+  }
+};
+
+
+//===============FETCH DISTRICTS============//
+export const fetchDistricts = async (state_id: string) => {
+  try {
+    const res = await api.post("/fetchDistrict", {
+      state_id,
+    });
+    return res.data?.data || [];
+  } catch (error) {
+    console.error("fetchDistricts error:", error);
+    return [];
+  }
+};
+

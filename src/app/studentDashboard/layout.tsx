@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
   FaHome,
-  FaLink,
-  FaTrophy,
   FaDownload,
   FaPhone,
   FaUserCog,
@@ -18,6 +15,22 @@ import {
 import { logoutUser } from "@/services/authService";
 import axiosInstance from "@/services/axiosInstance";
 
+// ─── Helper: clean & correct ─────────────────
+function extractNameFromStorage(): string {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return "Student";
+
+    const user = JSON.parse(raw);
+
+    return user?.user_detail?.name || "Student";
+  } catch (err) {
+    console.error("extractNameFromStorage error:", err);
+    return "Student";
+  }
+}
+
+// ─── UI Helpers ─────────────────
 function SectionTitle({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-1.5 ml-0.5">
@@ -44,46 +57,7 @@ function NavDivider() {
   );
 }
 
-// ─── Helper: extract name from any known shape ─────────────────
-function extractNameFromStorage(): string {
-  try {
-    const raw = localStorage.getItem("user");
-    if (!raw) return "Student";
-
-    const parsed = JSON.parse(raw);
-
-    // Debug — remove after confirming
-    console.log("🔍 localStorage user:", parsed);
-
-    // Shape 1: { user_detail: { name } }  ← most likely your case
-    if (parsed?.user_detail?.name) return parsed.user_detail.name;
-
-    // Shape 2: { user: { user_detail: { name } } }  ← wrapped once
-    if (parsed?.user?.user_detail?.name) return parsed.user.user_detail.name;
-
-    // Shape 3: { data: { user_detail: { name } } }
-    if (parsed?.data?.user_detail?.name) return parsed.data.user_detail.name;
-
-    // Shape 4: { data: { user: { user_detail: { name } } } }
-    if (parsed?.data?.user?.user_detail?.name)
-      return parsed.data.user.user_detail.name;
-
-    // Shape 5: profile fallback
-    if (parsed?.profile?.name) return parsed.profile.name;
-    if (parsed?.user?.profile?.name) return parsed.user.profile.name;
-
-    // Shape 6: username fallback
-    if (parsed?.user_detail?.username) return parsed.user_detail.username;
-    if (parsed?.username) return parsed.username;
-    if (parsed?.user?.username) return parsed.user.username;
-
-    return "Student";
-  } catch (err) {
-    console.error("extractNameFromStorage error:", err);
-    return "Student";
-  }
-}
-
+// ─── MAIN LAYOUT ─────────────────
 export default function StudentDashboardLayout({
   children,
 }: {
@@ -92,21 +66,35 @@ export default function StudentDashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  // ✅ FIX: initialize properly (no flicker)
+  const [studentName, setStudentName] = useState(() => {
+    if (typeof window !== "undefined") {
+      return extractNameFromStorage();
+    }
+    return "Student";
+  });
 
-  const [studentName, setStudentName] = useState("Student");
+  const [token, setToken] = useState<string | null>(null);
 
+  // ✅ Load token safely
   useEffect(() => {
-    const name = extractNameFromStorage();
-    setStudentName(name);
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
   }, []);
 
+  // ✅ Protect route
   useEffect(() => {
-    if (!token) router.replace("/login");
+    if (token === null) return; // wait until loaded
+
+    if (!token) {
+      router.replace("/login");
+    }
   }, [token, router]);
 
-  if (!token) return null;
+  // ✅ Optional debug (remove later)
+  useEffect(() => {
+    console.log("Sidebar User:", localStorage.getItem("user"));
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -141,181 +129,81 @@ export default function StudentDashboardLayout({
         : "text-[#7a8fa6] group-hover:text-[#b88d00] group-hover:scale-110 group-hover:-rotate-3",
     ].join(" ");
 
+  // ⛔ prevent render until token check completes
+  if (token === null) return null;
+  if (!token) return null;
+
   return (
     <div className="min-h-screen m-10">
       <div className="container mx-auto mt-12 px-4">
         <div className="flex gap-6 items-start">
           {/* ── SIDEBAR ── */}
-          <aside
-            className={[
-              "sticky top-25 h-[calc(100vh-120px)]",
-              "w-75 xl:w-[320px] shrink-0",
-              "overflow-y-auto overflow-x-hidden",
-              "rounded-3xl relative",
-              "bg-white/85 backdrop-blur-sm",
-              "border-[1.5px] border-white/40",
-              "ring-4 ring-[rgba(23,57,92,0.04)]",
-              "shadow-[0_8px_32px_rgba(23,57,92,0.08),0_2px_8px_rgba(23,57,92,0.04),inset_0_1px_0_rgba(255,255,255,0.8)]",
-              "hover:shadow-[0_16px_48px_rgba(23,57,92,0.12),0_4px_12px_rgba(23,57,92,0.06)]",
-              "transition-all duration-300",
-              "[&::-webkit-scrollbar]:w-1.25",
-              "[&::-webkit-scrollbar-track]:bg-[rgba(23,57,92,0.02)] [&::-webkit-scrollbar-track]:my-2",
-              "[&::-webkit-scrollbar-thumb]:rounded-[10px]",
-              "[&::-webkit-scrollbar-thumb]:bg-[rgba(23,57,92,0.12)]",
-              "[&::-webkit-scrollbar-thumb:hover]:bg-[#f4df17]",
-            ].join(" ")}
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(23,57,92,0.12) transparent",
-            }}
-          >
-            {/* Top stripe */}
-            <div
-              className="absolute top-0 left-0 w-full h-1 rounded-t-3xl z-10 shrink-0"
-              style={{
-                background:
-                  "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
-              }}
-            />
+          <aside className="sticky top-25 h-[calc(100vh-120px)] w-75 xl:w-[320px] shrink-0 overflow-y-auto rounded-3xl bg-white/85 backdrop-blur-sm border border-white/40 shadow-lg">
 
             <div className="px-4.5 pb-6 pt-7.5">
-              {/* ── USER HEADER ── */}
-              <div className="text-center pb-5 mb-3 relative">
-                <div
-                  className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[16px] shadow-[0_4px_14px_rgba(23,57,92,0.2)]"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #17395c 0%, #1f4e7a 100%)",
-                  }}
-                >
+
+              {/* USER HEADER */}
+              <div className="text-center pb-5 mb-3">
+                <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[16px] bg-[#17395c]">
                   {studentName.charAt(0).toUpperCase()}
                 </div>
 
-                <p className="text-[10px] text-[#8fa2b8] uppercase tracking-[1.2px] font-bold mb-1">
+                <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1">
                   Welcome back
                 </p>
 
-                <h6
-                  className="text-[16px] font-black tracking-[-0.2px] leading-[1.3] mb-1"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #17395c 0%, #1f6fa3 60%, #b88d00 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
+                <h6 className="text-[16px] font-black text-[#17395c]">
                   {studentName}
                 </h6>
-
-                <div className="mt-4 h-px bg-[#e8eef4] relative">
-                  <div
-                    className="absolute left-1/2 -translate-x-1/2 -top-px w-10 h-0.5 rounded-full"
-                    style={{
-                      background: "linear-gradient(90deg, #17395c, #f4df17)",
-                    }}
-                  />
-                </div>
               </div>
 
-              {/* ── MAIN NAV ── */}
-              <nav className="space-y-0.75 mt-1">
-                <Link
-                  href="/studentDashboard"
-                  className={linkClass("/studentDashboard")}
-                >
+              {/* NAV */}
+              <nav className="space-y-1">
+                <Link href="/studentDashboard" className={linkClass("/studentDashboard")}>
                   <FaHome className={iconClass("/studentDashboard")} />
-                  <span className="flex-1 leading-[1.3]">Dashboard</span>
+                  Dashboard
                 </Link>
 
-                <Link
-                  href="/studentDashboard/download-app"
-                  className={linkClass("/studentDashboard/download-app")}
-                >
-                  <FaDownload
-                    className={iconClass("/studentDashboard/download-app")}
-                  />
-                  <span className="flex-1 leading-[1.3]">Download Apps</span>
+                <Link href="/studentDashboard/download-app" className={linkClass("/studentDashboard/download-app")}>
+                  <FaDownload className={iconClass("/studentDashboard/download-app")} />
+                  Download Apps
                 </Link>
               </nav>
 
               <NavDivider />
 
               <SectionTitle label="Contact" />
-              <nav className="space-y-0.75">
-                <Link
-                  href="/studentDashboard/contact"
-                  className={linkClass("/studentDashboard/contact")}
-                >
-                  <FaPhone className={iconClass("/studentDashboard/contact")} />
-                  <span className="flex-1 leading-[1.3]">
-                    Contact Information
-                  </span>
-                </Link>
-              </nav>
+              <Link href="/studentDashboard/contact" className={linkClass("/studentDashboard/contact")}>
+                <FaPhone className={iconClass("/studentDashboard/contact")} />
+                Contact Information
+              </Link>
 
               <NavDivider />
 
               <SectionTitle label="Profile" />
-              <nav className="space-y-0.75">
-                <Link
-                  href="/studentDashboard/edit-profile"
-                  className={linkClass("/studentDashboard/edit-profile")}
-                >
-                  <FaUserCog
-                    className={iconClass("/studentDashboard/edit-profile")}
-                  />
-                  <span className="flex-1 leading-[1.3]">Edit Profile</span>
+              <nav className="space-y-1">
+                <Link href="/studentDashboard/edit-profile" className={linkClass("/studentDashboard/edit-profile")}>
+                  <FaUserCog className={iconClass("/studentDashboard/edit-profile")} />
+                  Edit Profile
                 </Link>
 
-                <Link
-                  href="/studentDashboard/update-password"
-                  className={linkClass("/studentDashboard/update-password")}
-                >
-                  <FaKey
-                    className={iconClass("/studentDashboard/update-password")}
-                  />
-                  <span className="flex-1 leading-[1.3]">Update Password</span>
+                <Link href="/studentDashboard/update-password" className={linkClass("/studentDashboard/update-password")}>
+                  <FaKey className={iconClass("/studentDashboard/update-password")} />
+                  Update Password
                 </Link>
 
-                <button
-                  onClick={handleLogout}
-                  className={[
-                    "group w-full flex items-center gap-3 min-h-11.5 px-3.5 rounded-xl",
-                    "text-[13.5px] font-semibold cursor-pointer",
-                    "text-[#4a6278] border border-transparent",
-                    "transition-all duration-220",
-                    "hover:bg-linear-to-br hover:from-[#b83232] hover:to-[#e04040]",
-                    "hover:text-white hover:border-white/20",
-                    "hover:shadow-[0_6px_20px_rgba(184,50,50,0.28)]",
-                  ].join(" ")}
-                >
-                  <FaSignOutAlt className="text-[17px] w-5 shrink-0 text-[#7a8fa6] group-hover:text-white group-hover:scale-110 transition-all duration-220" />
-                  <span className="flex-1 leading-[1.3] text-left">
-                    Logout
-                  </span>
+                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-red-500 hover:text-white transition">
+                  <FaSignOutAlt />
+                  Logout
                 </button>
               </nav>
+
             </div>
           </aside>
 
-          {/* ── MAIN CONTENT ── */}
-          <main className="flex-1 min-w-0">
-            <div
-              className="
-                relative
-                rounded-3xl
-                p-8
-                min-h-125
-                bg-linear-to-br from-white via-[#f9fbfd] to-[#eef3f8]
-                border border-white/60
-                backdrop-blur-xl
-                shadow-[0_10px_30px_rgba(23,57,92,0.08),inset_0_1px_0_rgba(255,255,255,0.8)]
-                transition-all duration-300
-                hover:shadow-[0_25px_60px_rgba(23,57,92,0.15),inset_0_1px_0_rgba(255,255,255,1)]
-              "
-            >
-              <div className="pointer-events-none absolute inset-0 rounded-3xl bg-linear-to-br from-white/40 via-transparent to-transparent opacity-60" />
+          {/* MAIN */}
+          <main className="flex-1">
+            <div className="rounded-3xl p-8 bg-white shadow">
               {children}
             </div>
           </main>

@@ -74,7 +74,7 @@ export default function LoginPage() {
       const data = await loginUser(username, password);
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.username);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       setDialog({
         type: "success",
@@ -196,7 +196,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-lg text-white text-sm font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition disabled:opacity-60"
+              className="w-full py-2.5 rounded-lg text-white text-sm font-medium bg-linear-to-r from-blue-600 to-purple-600 hover:opacity-90 transition disabled:opacity-60"
             >
               {loading ? "Logging In..." : "Log In"}
             </button>
