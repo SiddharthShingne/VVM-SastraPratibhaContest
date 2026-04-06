@@ -7,17 +7,17 @@ export default function MobileAppInstruction() {
       {/* Buttons */}
       <div className="flex flex-wrap gap-4 mb-6">
 
-        <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md hover:scale-105 transition">
+        <button className="flex items-center gap-2 px-3 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md hover:scale-105 transition">
           <span><Smartphone /></span>
           Download APK file
         </button>
 
-        <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-purple-500 shadow-md hover:scale-105 transition">
+        <button className="flex items-center gap-2 px-3 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-indigo-600 to-purple-500 shadow-md hover:scale-105 transition">
           <span><Apple /></span>
           Download iOS App
         </button>
 
-        <button className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-500 shadow-md hover:scale-105 transition">
+        <button className="flex items-center gap-2 px-3 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-blue-500 to-purple-500 shadow-md hover:scale-105 transition">
           <span><LaptopMinimal /></span>
           Download Apple File
         </button>

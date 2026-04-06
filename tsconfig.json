@@ -36,7 +36,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "next.config.js"
-, "src/components/ui/InputField.tsx", "src/app/studentDashboard/edit-profile/page.tsx"  ],
+, "src/components/ui/InputField.tsx", "src/app/studentDashboard/edit-profile/page.tsx", "src/components/downloads/promotional-video.jsx", "src/components/examDetails/StatelevelCamp.jsx", "src/components/registration/register.jsx"  ],
   "exclude": [
     "node_modules"
   ]
