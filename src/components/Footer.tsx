@@ -86,7 +86,7 @@ const Footer = () => {
                                 Get Contact
                             </h4>
                             <p>
-                                <strong className="text-white">Add:</strong> VVN Secretariat,
+                                <strong className="text-white">Add:</strong> VVM Secretariat,
                                 Vijnana Bharati (VIBHA),
                                 <br />
                                 D-12, South Extension-I, New Delhi - 110049

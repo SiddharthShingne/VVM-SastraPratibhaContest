@@ -1,36 +1,71 @@
+
 import React from "react";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-const page = () => {
-    return (
-        <div>
-            {/* Header */}
-            <div className="bg-linear-to-b from-[#f9faff] to-[#eef0ff] py-24 text-center">
-                <h1 className="text-5xl font-bold text-[#111d35] mb-4">Disputes</h1>
-                <div className="flex justify-center items-center space-x-1 text-base font-medium text-gray-500">
-                    <Link href="/" className="hover:text-[#7f00ff] transition-colors">
-                        Home
-                    </Link>
-                    <ChevronRight className="w-3 h-3" />
-                    <span>Exam Details</span>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className="text-[#111d35]"> Disputes</span>
-                </div>
-            </div>
-            <div className="max-w-5xl mx-auto px-2 mt-12 mb-20 space-y-9 font-[Euclid Circular,sans-serif]  text-[#111827]">
-                <div className="space-y-1 text-[15px] leading-relaxed text-[#4b5563]">
-                    <h2 className="text-base font-bold uppercase tracking-wide text-[#111827]">
-                        DISPUTES, IF ANY
-                    </h2>
-                    <p>
-                        In the event of any dispute, grievance or RTI (Right to Information)
-                        complaint, the decision made by the VVM Core Committee shall be
-                        considered final and binding.
-                    </p>
-                </div>
-            </div>
+
+const Disputes = () => {
+  return (
+    <div>
+      {/* Breadcrumb Section */}
+      <div className="bg-[#162a4a] py-[50px]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col justify-center min-h-[65px]">
+            
+            <h6 className="text-white text-[27px] font-medium mb-1  pl-40 ">
+              Disputes
+            </h6>
+
+            <nav>
+              <ol className="flex items-center text-white text-[12px] whitespace-nowrap pl-40">
+                <li>
+                  <Link href="/" className="hover:underline">
+                    Home
+                  </Link>
+                </li>
+
+                <li className="mx-2">{">"}</li>
+
+                <li>Exam Details</li>
+
+                <li className="mx-2">{">"}</li>
+
+                <li className="text-white">Disputes</li>
+              </ol>
+            </nav>
+
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Disputes Section */}
+      <div className="bg-white py-16 w-500px p-40 p-6">
+        <div className="container mx-auto px-4 py-5">
+
+          <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11),inset_0_1px_0_rgba(255,255,255,0.72)] mb-20">
+
+            {/* Top Gradient Border */}
+            <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]"></div>
+
+            <div className="p-8">
+
+              {/* Title */}
+              <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
+                Disputes, If Any
+              </h2>
+
+              {/* Content */}
+              <p className="text-[17px] leading-[1.8] text-[#4f6480] mt-2">
+                In the event of any dispute, grievance, or RTI (Right to Information)
+                complaint, the decision made by the VVM Core Committee shall be final
+                and binding.
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default page;
+export default Disputes;

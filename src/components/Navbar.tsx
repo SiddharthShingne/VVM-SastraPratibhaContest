@@ -36,7 +36,7 @@ const navItems = [
         href: "/registration",
         subLinks: [
             { label: "Individual Student Registration", href: "/registration/individual-student-registration" },
-            { label: "School Registration", href: "/registration/school-registration" },
+            { label: "Register", href: "/registration/register" },
             { label: "Registration Process", href: "/registration/registration-process" },
             { label: "Fee Structure", href: "/registration/fee-structure" },
         ],
@@ -45,10 +45,10 @@ const navItems = [
         label: "Exam Details",
         href: "/exam-details",
         subLinks: [
-            { label: "Syllabus", href: "/exam-details/syllabus" },
-            { label: "School Level Exam 1", href: "/exam-details/school-level-exam1" },
-            { label: "School Level Exam 2", href: "/exam-details/school-level-exam2" },
-            { label: "State Level Camp", href: "/exam-details/state-level-camp" },
+            // { label: "Syllabus", href: "/exam-details/syllabus" },
+            // { label: "School Level Exam 1", href: "/exam-details/school-level-exam1" },
+            //  { label: "State Level Camp", href: "/exam-details/state-level-camp" },
+            
             { label: "National Camp", href: "/exam-details/national-camp" },
             { label: "Student Awards", href: "/exam-details/student-awards" },
             { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
@@ -57,58 +57,61 @@ const navItems = [
             { label: "Disputes", href: "/exam-details/disputes" },
         ],
     },
-    {
-        label: "Brochure",
-        href: "/brochure",
-        subLinks: [
-            { label: "First", href: "/brochure/viewFlipbook" },
-            { label: "Download Brochure PDF", href: "/pdf/vvm-25-26-session-brochure.pdf", download: true },
-        ],
-    },
-    { label: "Endorsement Circular", href: "/endorsementCircular" },
-    {
-        label: "Gallery",
-        href: "/gallery",
-        subLinks: [
-            { label: "Preregistration Campaign", href: "/gallery/preregistrationcampaign" },
-            { label: "VVM In News", href: "/gallery/vvmInNews" },
-            { label: "State Camp", href: "/gallery/stateCamp" },
-            { label: "National Camp", href: "/gallery/NationalCamp" },
-            { label: "SRIJAN Internship", href: "/gallery/srijanInternship" },
-        ],
-    },
+    // {
+    //     label: "Brochure",
+    //     href: "/brochure",
+    //     subLinks: [
+    //         { label: "First", href: "/brochure/viewFlipbook" },
+    //         { label: "Download Brochure PDF", href: "/pdf/vvm-25-26-session-brochure.pdf", download: true },
+    //     ],
+    // },
+    // { label: "Endorsement Circular", href: "/endorsementCircular" }
+    // ,
+    // {
+    //     label: "Gallery",
+    //     href: "/gallery",
+    //     subLinks: [
+    //         { label: "Preregistration Campaign", href: "/gallery/preregistrationcampaign" },
+    //         { label: "VVM In News", href: "/gallery/vvmInNews" },
+    //         { label: "State Camp", href: "/gallery/stateCamp" },
+    //         { label: "National Camp", href: "/gallery/NationalCamp" },
+    //         { label: "SRIJAN Internship", href: "/gallery/srijanInternship" },
+    //     ],
+    // }
+    ,
+
     {
         label: "Downloads",
         href: "/downloads",
         subLinks: [
-            { label: "Promotional Video", href: "/downloads/promotionalVideo" },
-            { label: "Posters/Advertisements", href: "/downloads/posters&Advertisments" },
+            { label: "Promotional Video", href: "/downloads/promotional-video" },
+            { label: "Posters/Advertisements", href: "/downloads/poster-advertisement" },
         ],
     },
     {
         label: "Archive",
         href: "/archive",
         subLinks: [
-            { label: "Archives 2022", href: "/archives/archives2022" },
-            { label: "Archives 2023", href: "/archives/archives2023" },
-            { label: "Archives 2024", href: "/archives/archives2024" },
+            { label: "Archives 2025", href: "/archive/vvm-2025" },
+            { label: "Archives 2024", href: "/archive/vvm-2024" },
+            { label: "Archives 2023", href: "/archive/vvm-2023" },
         ],
     },
-    {
-        label: "Results",
-        href: "/results",
-        subLinks: [
-            { label: "VVM 2024-25 NLC -  ZONAL RESULT - ME COUNTRIES", href: "/pdf/results/VVM 2024-25 NLC - ZONAL RESULT - ME COUNTRIES.pdf", download: true },
-            { label: "VVM 2024-25 NLC - HIMALAYAN RESULT", href: "/pdf/results/VVM 2024-25 NLC - HIMALAYAN RESULT.pdf", download: true },
-            { label: "VVM 2024-25 NLC - ZONAL RESULT", href: "/pdf/results/VVM 2024-25 NLC - ZONAL RESULT.pdf" },
-        ],
-    },
+    // {
+    //     label: "Results",
+    //     href: "/results",
+    //     subLinks: [
+    //         { label: "VVM 2024-25 NLC -  ZONAL RESULT - ME COUNTRIES", href: "/pdf/results/VVM 2024-25 NLC - ZONAL RESULT - ME COUNTRIES.pdf", download: true },
+    //         { label: "VVM 2024-25 NLC - HIMALAYAN RESULT", href: "/pdf/results/VVM 2024-25 NLC - HIMALAYAN RESULT.pdf", download: true },
+    //         { label: "VVM 2024-25 NLC - ZONAL RESULT", href: "/pdf/results/VVM 2024-25 NLC - ZONAL RESULT.pdf" },
+    //     ],
+    // },
     {
         label: "Contact Us",
         href: "/contactUs",
         subLinks: [
-            { label: "First", href: "/contactUs/first" },
-            { label: "Office Contacts", href: "/contactUs/officeContacts" },
+            { label: "Country Coordinators", href: "/contactUs/countrycordinator" },
+            { label: "Office Contacts", href: "/contact-us/office-contact" },
         ],
     },
 ];

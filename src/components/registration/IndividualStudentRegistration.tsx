@@ -1,125 +1,153 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { ChevronRight } from "lucide-react";
 
-interface Step {
-    title: string;
-    desc: string;
-    icon: string;
+"use client";
+import Link from "next/link";
+
+export default function StudentRegistrationInstructions() {
+  return (
+    <div className="bg-[#f4f8fc]">
+
+      {/* Breadcrumb */}
+      <div className="bg-[#162a4a] py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <h1 className="text-white text-2xl md:text-3xl font-bold mb-2">
+            Student Registration Instructions
+          </h1>
+
+          <div className="text-white text-sm flex gap-2">
+            <Link href="/" className="hover:underline">Home</Link>
+            <span>&gt;</span>
+            <span>Registration</span>
+            <span>&gt;</span>
+            <span className="font-semibold">
+              Student Registration Instructions
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+
+        {/* Notice Card */}
+        <div className="bg-yellow-50 border border-yellow-200 shadow-lg rounded-2xl p-6 flex gap-4 mb-10">
+          <div className="text-yellow-500 text-4xl">⚠️</div>
+
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+              Important Registration Notice
+            </h2>
+
+            <p className="text-gray-700 mb-3">
+              If you are already registered as a student in the previous year
+              2025-26, you can use your existing credentials to log in.
+            </p>
+
+            <ul className="space-y-2 text-gray-700">
+              <li>✔ No need to register again</li>
+              <li>✔ Simply log in and update your profile</li>
+              <li>✔ Proceed with payment for 2026-27</li>
+            </ul>
+
+            <p className="mt-3 text-gray-600">
+              Use your same Username & Password.
+            </p>
+          </div>
+        </div>
+
+        {/* Button */}
+        <div className="flex justify-center mb-10">
+          <Link
+            href="/register"
+            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition"
+          >
+            Student Registration →
+          </Link>
+        </div>
+
+        {/* Steps */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 text-center"
+            >
+              <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-50 flex items-center justify-center shadow-inner">
+                <img src={step.img} alt="" className="h-16" />
+              </div>
+
+              <span className="inline-block bg-yellow-100 text-yellow-600 text-xs font-bold px-3 py-1 rounded-full mb-2">
+                Step {index + 1}
+              </span>
+
+              <h3 className="font-bold text-lg text-[#17395c] mb-2">
+                {step.title}
+              </h3>
+
+              <p className="text-gray-600 text-sm leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+
+        </div>
+
+        {/* Bottom Button */}
+        <div className="flex justify-center mt-12">
+          <Link
+            href="/register"
+            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition"
+          >
+            Student Registration →
+          </Link>
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
-const steps: Step[] = [
-    {
-        title: "Student details",
-        desc: "Enter basic details of student like name, date of birth and gender",
-        icon: "/student-registration-images/student.svg",
-    },
-    {
-        title: "Login details",
-        desc: "Create password for your account. Your username will be generated automatically and details will be sent on email id after registration.",
-        icon: "/student-registration-images/login_details.svg",
-    },
-    {
-        title: "Regional details",
-        desc: "Enter your location details.",
-        icon: "/student-registration-images/regional_details.svg",
-    },
-    {
-        title: "School details",
-        desc: "Enter your school name, board, address and class/grade.",
-        icon: "/student-registration-images/school1.svg",
-    },
-    {
-        title: "Contact details",
-        desc: "Enter your parent/guardian personal and contact information.",
-        icon: "/student-registration-images/contact_details.svg",
-    },
-    {
-        title: "OTP Verification",
-        desc: "Different OTPs will be sent on your email and mobile number to verify your contact details.",
-        icon: "/student-registration-images/email_otp.svg",
-    },
-    {
-        title: "Terms,Conditions & policy",
-        desc: "Read conditions carefully and accepting it to proceed for payment.",
-        icon: "/student-registration-images/confirmation.svg",
-    },
-    {
-        title: "Payment",
-        desc: "You can make payment fees ₹ 200/- using debit card/credit card/internet banking/UPI.",
-        icon: "/student-registration-images/payment.svg",
-    },
+
+/* Steps Data */
+const steps = [
+  {
+    title: "Fill Registration Form",
+    desc: "Enter student details carefully and complete all required fields.",
+    img: "/assets/images/student-registration-images/student.svg",
+  },
+  {
+    title: "Login Details",
+    desc: "Create a strong password with capital, small, number & special character.",
+    img: "/assets/images/student-registration-images/login_details.svg",
+  },
+  {
+    title: "Parent / Guardian Details",
+    desc: "Enter details and verify OTP received on email.",
+    img: "/assets/images/student-registration-images/login_details.svg",
+  },
+  {
+    title: "School Details",
+    desc: "Enter school name, board, address, state, district and PIN code.",
+    img: "/assets/images/student-registration-images/school1.svg",
+  },
+  {
+    title: "Submit Registration",
+    desc: "Click submit and credentials will be sent to your email.",
+    img: "/assets/images/student-registration-images/contact_details.svg",
+  },
+  {
+    title: "Login to Your Account",
+    desc: "Use credentials received on email to login.",
+    img: "/assets/images/student-registration-images/email_otp.svg",
+  },
+  {
+    title: "Update Profile",
+    desc: "Verify mobile number and complete profile details.",
+    img: "/assets/images/student-registration-images/confirmation.svg",
+  },
+  {
+    title: "Payment",
+    desc: "Choose payment option and complete process to access full dashboard.",
+    img: "/assets/images/student-registration-images/noun_payment_1800088.svg",
+  },
 ];
-
-const IndividualStudentRegistration = () => {
-    return (
-        <div>
-            {/* Banner Header */}
-            <div className="bg-linear-to-b from-[#f9faff] to-[#eef0ff] py-20 text-center">
-                <h1 className="text-5xl md:text-4xl font-bold text-[#111d35] mb-4">
-                    Student Registration Instructions
-                </h1>
-
-                <div className="flex justify-center items-center space-x-1 text-lg md:text-sm font-medium text-gray-500">
-                    <Link href="/" className="hover:text-[#7f00ff] transition-colors">
-                        Home
-                    </Link>
-                    <ChevronRight className="w-3 h-3" />
-                    <span>Registration</span>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className=" text-extralight ">Student Registration Instructions</span>
-                </div>
-            </div>
-
-            {/* Guide Section */}
-            <div className="bg-white py-16 px-4 sm:px-6 lg:px-8 font-open">
-                <div className="max-w-6xl mx-auto">
-                    <h2 className="text-3xl sm:text-4xl font-bold text-[#2F57EF] m-6 text-center">
-                        Student Registration Guide
-                    </h2>
-
-                    <div className="mb-6">
-                        <p className="text-gray-600 text-sm max-w-lg">
-                            To register as student please follow the steps given below.
-                        </p>
-
-                        <Link href="/register">
-                            <button className="mt-4 bg-linear-to-r from-[#2F57EF] to-[#8f16f2] hover:from-[#AC65E8] hover:to-[#4f46e5] text-white text-sm font-semibold px-6 py-2 rounded-lg shadow-md inline-flex items-center">
-                                Go To Student Registration
-                                <span className="ml-2 text-lg">→</span>
-                            </button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-    
-                {/* Steps Cards */}
-                <div className="bg-white py-16 px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-6xl mx-auto mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-                    {steps.map((step, index) => (
-                        <div key={index} className="text-center">
-                            <h2 className="text-[#2F57EF] font-bold m-4">STEP {index + 1}</h2>
-
-                            <div className="mb-4 mx-auto bg-[#f4f7ff] w-24 h-24 rounded-full flex items-center justify-center">
-                                <Image
-                                    src={step.icon}
-                                    alt={step.title}
-                                    width={50}
-                                    height={50}
-                                    className="object-contain"
-                                />
-                            </div>
-
-                            <p className="font-semibold text-[#2F57EF]">{step.title}</p>
-                            <p className="text-sm text-gray-500 mt-1">{step.desc}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default IndividualStudentRegistration;
