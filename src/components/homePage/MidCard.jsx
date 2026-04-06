@@ -1,76 +1,88 @@
 
-"use client";
-import React from "react";
+'use client';
+
+import Link from 'next/link';
+import { ArrowRight, Folder, UserPlus, Monitor, Award, BookOpen } from 'lucide-react';
 
 const VVMHeroAbout = () => {
   return (
-    <>
+    <div>
+
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden py-[70px] pb-[95px] bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
+      <section className="relative overflow-hidden py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
 
-        {/* Background Effects */}
-        <div className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(#17395c_1px,transparent_1px)] [background-size:26px_26px]" />
+        {/* Grid */}
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#17395c_1px,transparent_1px)] bg-[size:26px_26px]" />
 
-        <div className="absolute w-[280px] h-[280px] bg-yellow-300/30 blur-[70px] rounded-full top-[15px] -left-[70px] animate-pulse" />
-        <div className="absolute w-[340px] h-[340px] bg-blue-900/20 blur-[70px] rounded-full bottom-[-90px] -right-[-90px] animate-pulse" />
+        {/* Glow Shapes */}
+        <div className="absolute w-[280px] h-[280px] bg-yellow-300/30 blur-[70px] rounded-full top-5 -left-16 animate-pulse"></div>
+        <div className="absolute w-[340px] h-[340px] bg-blue-900/20 blur-[70px] rounded-full -bottom-20 -right-20 animate-pulse"></div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
 
           {/* TOP BUTTONS */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-4 mb-10">
 
-            <a href="#" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white shadow-lg border border-white/40 hover:scale-[1.02] transition">
-              <span className="px-3 py-1 bg-yellow-400 text-[#17395c] rounded-full text-xs font-bold">Registration</span>
-              <span className="font-semibold">VVM 2026-27</span>
+            <Link href="/register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
+              <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">Registration</span>
+              VVM 2026-27
+              <UserPlus size={18} />
+            </Link>
+
+            <a href="https://archive-2526.vvmstage.cloud" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white font-bold shadow-lg hover:scale-105 transition">
+              <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">Archive</span>
+              Visit Archive 2025-26
+              <Folder size={18} />
             </a>
 
-            <a href="#" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white shadow-lg border border-white/40">
-              <span className="px-3 py-1 bg-yellow-400 text-[#17395c] rounded-full text-xs font-bold">Archive</span>
-              <span className="font-semibold">Visit 2025-26</span>
-            </a>
-
-            <a href="#" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white shadow-lg border border-white/40">
-              <span className="px-3 py-1 bg-yellow-400 text-[#17395c] rounded-full text-xs font-bold">Latest</span>
-              <span className="font-semibold">SLC Result Updates</span>
-            </a>
+            <Link href="/state-level-camp-exam" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white font-bold shadow-lg hover:scale-105 transition">
+              <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">Latest</span>
+              SLC Result 2025-26
+              <ArrowRight size={18} />
+            </Link>
 
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
 
             {/* LEFT */}
-            <div className="text-center lg:text-left">
+            <div className="space-y-6 text-center md:text-left">
 
-              <div className="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-white shadow rounded-full">
-                🏆 <span className="font-semibold">VVM 2026-27</span>
+              <div className="inline-block bg-white px-4 py-2 rounded-full shadow font-bold">
+                🏆 VVM 2026-27
               </div>
 
-              <p className="uppercase tracking-widest text-yellow-600 font-bold text-xs mb-2">
+              <span className="block text-yellow-700 uppercase text-xs font-extrabold tracking-widest">
                 National Science Talent Journey
-              </p>
+              </span>
 
-              <h1 className="text-4xl md:text-5xl font-extrabold text-[#17395c] mb-4">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-[#17395c] leading-tight">
                 Vidyarthi Vigyan Manthan
               </h1>
 
-              <p className="text-gray-600 leading-relaxed mb-6 max-w-xl mx-auto lg:mx-0">
-                A digital-based and one of the largest science talent search examinations
-                designed for Emerging India, encouraging students to explore the scientific spirit.
+              <p className="text-gray-600 max-w-xl">
+                A digital-based and one of the largest science talent search examinations designed for Emerging India.
               </p>
 
-              {/* FEATURES */}
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-6">
-                <div className="px-4 py-2 bg-white rounded-full shadow text-sm font-semibold">💻 Digital Exam</div>
-                <div className="px-4 py-2 bg-white rounded-full shadow text-sm font-semibold">🏆 Recognition</div>
-                <div className="px-4 py-2 bg-white rounded-full shadow text-sm font-semibold">📘 Learning</div>
+              {/* Features */}
+              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
+                  <Monitor size={16} /> Digital Exam Platform
+                </div>
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
+                  <Award size={16} /> National Recognition
+                </div>
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
+                  <BookOpen size={16} /> Learning + Competition
+                </div>
               </div>
+
             </div>
 
-            {/* RIGHT */}
+            {/* RIGHT SLIDER CARD */}
             <div className="relative flex justify-center">
 
-              {/* Slider Card */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl w-full max-w-md">
+              <div className="bg-white/80 backdrop-blur-lg p-6 rounded-3xl shadow-xl max-w-md w-full">
 
                 <div className="flex gap-2 mb-4">
                   <span className="w-3 h-3 bg-red-400 rounded-full"></span>
@@ -78,21 +90,22 @@ const VVMHeroAbout = () => {
                   <span className="w-3 h-3 bg-green-400 rounded-full"></span>
                 </div>
 
-                <div className="bg-gradient-to-br from-[#eef3f8] to-[#f8fafc] p-6 rounded-2xl">
-                  <span className="px-3 py-1 bg-yellow-400 text-xs font-bold rounded-full inline-block mb-3">
-                    Internship
-                  </span>
+                <div className="space-y-4">
 
-                  <h4 className="text-lg font-bold text-[#17395c] mb-2">
-                    Srijan Internship VVM 2025-26
-                  </h4>
+                  <div>
+                    <span className="bg-yellow-300 px-3 py-1 rounded-full text-xs font-bold">Internship</span>
+                    <h4 className="text-lg font-bold mt-2 text-[#17395c]">Srijan Internship VVM 2025-26</h4>
+                    <p className="text-sm text-gray-600">Date & venue will be announced soon.</p>
+                  </div>
 
-                  <p className="text-sm text-gray-600">
-                    Date & venue will be announced soon. Stay connected for updates.
-                  </p>
+                  <div>
+                    <span className="bg-yellow-300 px-3 py-1 rounded-full text-xs font-bold">About VVM</span>
+                    <h4 className="text-lg font-bold mt-2 text-[#17395c]">Largest Digital Science Talent Search</h4>
+                    <p className="text-sm text-gray-600">Science exam for Emerging India.</p>
+                  </div>
+
                 </div>
               </div>
-
             </div>
 
           </div>
@@ -101,61 +114,56 @@ const VVMHeroAbout = () => {
 
       {/* ABOUT SECTION */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
 
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+          {/* LEFT */}
+          <div>
+            <span className="text-yellow-600 font-bold uppercase text-sm">About VVM</span>
 
-            {/* LEFT */}
-            <div>
-              <span className="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold">
-                About VVM
-              </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#17395c] mt-3 mb-4">
+              Know About Us
+            </h2>
 
-              <h2 className="text-3xl md:text-4xl font-bold mt-4 mb-3 text-[#17395c]">
-                Know About Us
-              </h2>
+            <h4 className="font-bold text-lg mb-4">
+              Largest Science Talent Search Examination
+            </h4>
 
-              <h4 className="text-lg font-semibold text-gray-700 mb-4">
-                A Digital Based Largest Science Talent Search Examination
-              </h4>
+            <p className="text-gray-600 mb-6">
+              VVM is a national program by <strong>VIBHA</strong> with NCERT & NCSM.
+            </p>
 
-              <p className="text-gray-600 leading-relaxed mb-6">
-                Vidyarthi Vigyan Manthan (VVM) is a national program by
-                <strong> VIBHA</strong> in collaboration with <strong>NCERT</strong> and <strong>NCSM</strong>.
-                It aims to popularize science among students.
-              </p>
-            </div>
-
-            {/* RIGHT STATS */}
+            {/* STATS */}
             <div className="grid grid-cols-2 gap-4">
 
-              <div className="p-4 bg-gray-50 rounded-xl shadow">
-                <h5 className="font-bold text-lg text-[#17395c]">267853</h5>
-                <span className="text-sm text-gray-500">Students</span>
-              </div>
-
-              <div className="p-4 bg-gray-50 rounded-xl shadow">
-                <h5 className="font-bold text-lg text-[#17395c]">6832</h5>
-                <span className="text-sm text-gray-500">Schools</span>
-              </div>
-
-              <div className="p-4 bg-gray-50 rounded-xl shadow">
-                <h5 className="font-bold text-lg text-[#17395c]">14</h5>
-                <span className="text-sm text-gray-500">Languages</span>
-              </div>
-
-              <div className="p-4 bg-gray-50 rounded-xl shadow">
-                <h5 className="font-bold text-lg text-[#17395c]">204821</h5>
-                <span className="text-sm text-gray-500">Level 1</span>
-              </div>
+              {[
+                ['267853', 'Students'],
+                ['6832', 'Schools'],
+                ['14', 'Languages'],
+                ['204821', 'Level 1'],
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl shadow">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    ⭐
+                  </div>
+                  <div>
+                    <h5 className="font-bold">{item[0]}</h5>
+                    <span className="text-sm text-gray-500">{item[1]}</span>
+                  </div>
+                </div>
+              ))}
 
             </div>
+          </div>
 
+          {/* RIGHT */}
+          <div className="text-center">
+            <img src="/logo.png" alt="logo" className="mx-auto w-48 rounded-full shadow-lg" />
           </div>
 
         </div>
       </section>
-    </>
+
+    </div>
   );
 };
 
