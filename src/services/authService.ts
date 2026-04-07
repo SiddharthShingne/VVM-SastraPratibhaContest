@@ -181,3 +181,13 @@ export const verifyMobileOtpWhileUpdating = async (
 
   return res.data;
 };
+// ================ COMPLETE STUDENT PROFILE ========== //
+export const completeStudentProfile = async (payload: Record<string, any>) => {
+  const token = localStorage.getItem("token");
+  const res = await api.post("/student/complete-profile", payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

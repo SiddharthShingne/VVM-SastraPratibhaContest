@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axiosInstance from "@/services/axiosInstance";
-import { fetchStates, fetchDistricts, sendEmailOtp, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating } from "@/services/authService";
+import { fetchStates, fetchDistricts, sendEmailOtp, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile} from "@/services/authService";
 interface FormData {
   name: string;
   schoolName: string;
@@ -26,7 +25,6 @@ interface FormData {
   aadharNumber: string;
   examLanguage: string;
 }
-
 type OtpTarget = "parentMobile" | "parentEmail";
 
 interface DialogState {
@@ -34,11 +32,7 @@ interface DialogState {
   type: "success" | "error";
   message: string;
 }
-
-/* ─────────────────────────────────────────────────────────────
-   ✅ FIX 1: DialogBox now receives dialog + setDialog as props
-   (previously tried to close over state from EditProfile scope)
-───────────────────────────────────────────────────────────── */
+/* ───────FIX 1: DialogBox now receives dialog + setDialog as props(previously tried to close over state from EditProfile scope)───── */
 const DialogBox = ({
   dialog,
   setDialog,
@@ -398,111 +392,7 @@ export default function EditProfile() {
     init();
   }, [reset]);
 
-  // const handleSendOtp = async (target: OtpTarget) => {
-  //   setOtpErrors((prev) => ({ ...prev, [target]: "" }));
-  //   setOtpLoading((prev) => ({ ...prev, [target]: true }));
-
-  //   try {
-  //     const token = localStorage.getItem("token");
-
-  //     if (target === "parentEmail") {
-  //       await sendEmailOtp(watch("parentEmail"));
-  //       setParentEmailOtpSent(true);
-  //       showDialog("success", "OTP sent successfully to email.");
-  //     } else {
-  //       await axiosInstance.post(
-  //         "/send-otp",
-  //         { type: target, value: watch(target) },
-  //         { headers: { Authorization: `Bearer ${token}` } }
-  //       );
-  //       setParentMobileOtpSent(true);
-  //       showDialog("success", "OTP sent successfully to mobile.");
-  //     }
-  //   } catch (err: any) {
-  //     /* ✅ FIX 3: error dialog shown on send failure */
-  //     const message =
-  //       err?.message || err?.response?.data?.message || "Failed to send OTP.";
-  //     setOtpErrors((prev) => ({ ...prev, [target]: message }));
-  //     showDialog("error", message);
-  //   } finally {
-  //     setOtpLoading((prev) => ({ ...prev, [target]: false }));
-  //   }
-  // };
-  // const handleVerifyOtp = async (target: OtpTarget) => {
-  //   setOtpErrors((prev) => ({ ...prev, [target]: "" }));
-  //   setVerifyLoading((prev) => ({ ...prev, [target]: true }));
-
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     const otp = target === "parentMobile" ? verifyParentMobileOtp : verifyParentEmailOtp;
-
-  //     if (target === "parentEmail") {
-  //       await verifyEmailOtp(watch("parentEmail"), otp);
-  //       setParentEmailVerified(true);
-  //       showDialog("success", "Email verified successfully.");
-  //     } else {
-  //       await axiosInstance.post(
-  //         "/verify-otp",
-  //         { type: target, value: watch(target), otp },
-  //         { headers: { Authorization: `Bearer ${token}` } }
-  //       );
-  //       setParentMobileVerified(true);
-  //       showDialog("success", "Mobile verified successfully.");
-  //     }
-  //   } catch (err: any) {
-  //     /* ✅ FIX 3: error dialog shown on verify failure */
-  //     const message =
-  //       err?.message || err?.response?.data?.message || "OTP verification failed.";
-  //     setOtpErrors((prev) => ({ ...prev, [target]: message }));
-  //     showDialog("error", message);
-  //   } finally {
-  //     setVerifyLoading((prev) => ({ ...prev, [target]: false }));
-  //   }
-  // };
-
-  const onSubmit = async (data: FormData) => {
-    try {
-      const token = localStorage.getItem("token");
-      const payload = {
-        name: data.name,
-        school_name: data.schoolName,
-        school_board_id: data.schoolBoard,
-        student_mobile_number: data.studentMobile,
-        student_email: data.studentEmail,
-        date_of_birth: data.dob,
-        parent_name: data.parentName,
-        parent_phone_number: data.parentMobile,
-        parent_email: data.parentEmail,
-        address: data.address,
-        class_id: data.grade,
-        gender: data.gender,
-        know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
-        state_id: data.state,
-        district_id: data.district,
-        city_id: data.city,
-        pin_code: data.pinCode,
-        aadhar_number: data.aadharNumber,
-        exam_language_id: data.examLanguage,
-      };
-
-      await axiosInstance.post("/update-profile", payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      showDialog("success", "Profile updated successfully.");
-
-      const raw = localStorage.getItem("user");
-      if (raw) {
-        const user = JSON.parse(raw);
-        user.user_detail = { ...user.user_detail, ...payload };
-        localStorage.setItem("user", JSON.stringify(user));
-      }
-    } catch (error: any) {
-      console.error("Update failed", error);
-      showDialog("error", error?.response?.data?.message || "Profile update failed.");
-    }
-  };
-
+  
   /// new handle functions
 
   const handleSendOtp = async (target: OtpTarget) => {
@@ -560,6 +450,136 @@ export default function EditProfile() {
       showDialog("error", message);
     } finally {
       setVerifyLoading((prev) => ({ ...prev, [target]: false }));
+    }
+  };
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      // Pull stored user to get fields we don't collect in the form
+      const raw = localStorage.getItem("user");
+      const user = raw ? JSON.parse(raw) : {};
+      const d = user?.user_detail ?? {};
+      const GRADE_MAP: Record<string, number> = {
+        "1": 6, "2": 7, "3": 8, "4": 9, "5": 10, "6": 11,
+      };
+
+      const payload = {
+        // ── Identity ────────────────────────────────────────────
+        user_id: user?.id ?? user?.user_id ?? "",
+
+        // ── Personal ────────────────────────────────────────────
+        fullName: data.name,
+        dob: data.dob,
+        gender: data.gender ? Number(data.gender) : "",
+        aadhar_number: data.aadharNumber || "",               // optional, can be empty
+
+        // ── Parent / Contact ────────────────────────────────────
+        parent_salutation: d.parent_salutation || "",             // preserved from localStorage
+        parent_name: data.parentName || "",
+        parent_mobile: data.parentMobile || "",
+        parent_email: data.parentEmail || "",
+
+        // ── Student contact (optional) ──────────────────────────
+        student_mobile: data.studentMobile || "",
+        student_email: data.studentEmail || "",
+
+        // ── Academic ────────────────────────────────────────────
+        grade: data.grade
+          ? String(GRADE_MAP[data.grade] ?? Number(data.grade))
+          : "",        school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
+        sch_name: data.schoolName || "",
+        school_id: d.school_id || "",               // preserved, can be empty
+
+        // ── Address ─────────────────────────────────────────────
+        address: data.address || "",
+        state_id: data.state ? Number(data.state) : "",
+        dist_id: data.district ? Number(data.district) : "",
+        city_name_2: data.city || "",    // ✅ text input — e.g. "Nagpur (Urban)"
+        // ✅ city_id NOT sent — backend uses city_name_2
+        pincode: data.pinCode || "",
+
+        // ── VVM ─────────────────────────────────────────────────
+        exam_lang_id: data.examLanguage ? Number(data.examLanguage) : "",
+        know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
+          ? Number(data.howDidYouGetToKnowAboutVVM)
+          : "",
+      };
+
+      // const payload = {
+      //   // ── Identity ──────────────────────────────────────────
+      //   user_id: user?.id ?? user?.user_id ?? "",          // top-level user id
+      //   fullName: data.name,
+      //   dob: data.dob,
+      //   gender: data.gender ? Number(data.gender) : "",
+      //   aadhar_number: data.aadharNumber || "",                       // optional
+
+      //   // ── Parent / Contact ──────────────────────────────────
+      //   parent_salutation: d.parent_salutation || "",                     // keep existing or empty
+      //   parent_name: data.parentName || "",
+      //   parent_mobile: data.parentMobile,
+      //   parent_email: data.parentEmail || "",
+
+      //   // ── Student contact (optional) ────────────────────────
+      //   student_mobile: data.studentMobile || "",
+      //   student_email: data.studentEmail || "",
+
+      //   // ── Academic ──────────────────────────────────────────
+      //   grade: data.grade ? Number([null, "6", "7", "8", "9", "10", "11"][Number(data.grade)] ?? data.grade ) : "",
+      //   school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
+      //   sch_name: data.schoolName,
+      //   school_id: d.school_id || "",                       // keep existing or empty
+
+      //   // ── Address ───────────────────────────────────────────
+      //   address: data.address,
+      //   state_id: data.state ? Number(data.state) : null,
+      //   dist_id: data.district ? Number(data.district) : null,
+      //   city_id: data.city ? Number(data.city) : "",
+      //   city_name_2: "",          // city name or id
+      //   pincode: data.pinCode || "",
+
+      //   // ── VVM ───────────────────────────────────────────────
+      //   exam_lang_id: data.examLanguage ? Number(data.examLanguage) : "",
+      //   know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
+      //     ? Number(data.howDidYouGetToKnowAboutVVM)
+      //     : "",
+      // };
+
+      await completeStudentProfile(payload);
+
+      // ── Sync localStorage so the rest of the app sees fresh data ──
+      if (raw) {
+        user.user_detail = {
+          ...d,
+          name: data.name,
+          date_of_birth: data.dob,
+          gender: data.gender,
+          aadhar_number: data.aadharNumber,
+          parent_name: data.parentName,
+          parent_phone_number: data.parentMobile,
+          parent_email: data.parentEmail,
+          student_mobile_number: data.studentMobile,
+          student_email: data.studentEmail,
+          class_id: data.grade,
+          school_board_id: data.schoolBoard,
+          school_name: data.schoolName,
+          address: data.address,
+          state_id: data.state,
+          district_id: data.district,
+          city_id: data.city,
+          pin_code: data.pinCode,
+          exam_language_id: data.examLanguage,
+          know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+
+      showDialog("success", "Profile updated successfully.");
+    } catch (error: any) {
+      console.error("Profile update failed:", error);
+      showDialog(
+        "error",
+        error?.response?.data?.message || "Profile update failed. Please try again.",
+      );
     }
   };
 
@@ -730,7 +750,6 @@ export default function EditProfile() {
                   { label: "9", value: "4" },
                   { label: "10", value: "5" },
                   { label: "11", value: "6" },
-                  { label: "12", value: "7" },
                 ]}
               />
             </VvmInput>
@@ -780,7 +799,7 @@ export default function EditProfile() {
               <VvmTextInput placeholder="Enter address" {...register("address")} />
             </VvmInput>
 
-            <VvmInput label="School State">
+            <VvmInput label="State">
               <VvmSelect
                 value={watch("state") || ""}
                 onChange={async (e) => {
@@ -797,7 +816,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="School District">
+            <VvmInput label="District">
               <VvmSelect
                 value={watch("district") || ""}
                 onChange={(e) => {
@@ -810,11 +829,10 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="School City">
-              <VvmSelect
-                value={watch("city") || ""}
-                onChange={(e) => setValue("city", e.target.value)}
-                options={cities.map((c: any) => ({ label: c.name, value: String(c.id) }))}
+            <VvmInput label="City">
+              <VvmTextInput
+                placeholder="Enter city name"
+                {...register("city")}
               />
             </VvmInput>
 

@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "./axiosInstance";
-
+import axios from "axios";
+import api from "./axiosInstance";
 
 // get important dates api call
 export const getImportantDates = async (page: number = 1) => {
-  const response = await axiosInstance.get(`/important-dates?page=${page}`);
+  const response = await api.get(`/important-dates?page=${page}`);
   return response.data;
 };
 
 // get instruction document api call
 export const getInstractionDocument = async (type: string) => {
-  const response = await axiosInstance.get(
+  const response = await api.get(
     `/get-instraction-document?type=${type}`,
   );
   return response.data;
@@ -18,19 +19,19 @@ export const getInstractionDocument = async (type: string) => {
 
 // get gcc qualified students api call
 export const getGccQualifiedStudents = async () => {
-  const response = await axiosInstance.get(`/get-gcc-qualified-student`);
+  const response = await api.get(`/get-gcc-qualified-student`);
   return response.data;
 };
 
 // get slc marks api call
 export const getSlcMarks = async () => {
-  const response = await axiosInstance.get(`/get-slc-marks`);
+  const response = await api.get(`/get-slc-marks`);
   return response.data;
 };
 
 //  get auth certificate api call
 export const getAuthCertificate = async () => {
-  const response = await axiosInstance.get(`/get-auth-certificate`);
+  const response = await api.get(`/get-auth-certificate`);
   return response.data;
 };
 
@@ -42,7 +43,7 @@ export const changePassword = async (
   confirmPassword: string,
 ) => {
   try {
-    const response = await axiosInstance.post("/change-password", {
+    const response = await api.post("/change-password", {
       old_password: oldPassword,
       new_password: newPassword,
       retypenewpassword: confirmPassword,
@@ -63,7 +64,7 @@ export const changePassword = async (
 // logout api call
 export const logoutUser = async () => {
   try {
-    const response = await axiosInstance.post("/logout", {});
+    const response = await api.post("/logout", {});
     return response.data;
   } catch (error: any) {
     // Even if API fails, we still force logout locally
