@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import api from "./axiosInstance";
+import { ApertureIcon } from "lucide-react";
 
 /* ================= LOGIN ================= */
 
@@ -24,7 +25,7 @@ export interface LoginResponse {
 
 export const loginUser = async (
   username: string,
-  password: string
+  password: string,
 ): Promise<LoginResponse> => {
   try {
     const body = new URLSearchParams();
@@ -85,8 +86,8 @@ export const fetchStates = async () => {
   try {
     const res = await api.get("/get-state");
 
-    console.log("RAW RESPONSE:", res);        // 👈 add this
-    console.log("RESPONSE DATA:", res.data);  // 👈 add this
+    console.log("RAW RESPONSE:", res); // 👈 add this
+    console.log("RESPONSE DATA:", res.data); // 👈 add this
 
     return res.data?.data || [];
   } catch (error) {
@@ -94,7 +95,6 @@ export const fetchStates = async () => {
     return [];
   }
 };
-
 
 //===============FETCH DISTRICTS============//
 export const fetchDistricts = async (state_id: string) => {
@@ -109,3 +109,75 @@ export const fetchDistricts = async (state_id: string) => {
   }
 };
 
+// =========EMAIL OTP==========//
+export const sendEmailOtp = async (email: string) => {
+  try {
+    const res = await api.post(
+      `/send-email-otp-new?email=${encodeURIComponent(email)}`,
+    );
+
+    return res.data;
+  } catch (error: any) {
+    console.error("sendEmailOtp error:", error?.response || error);
+    throw error?.response?.data || { message: "Failed to send OTP" };
+  }
+};
+
+// ========= VERIFY EMAIL OTP ==========//
+export const verifyEmailOtp = async (email: string, otp: string) => {
+  try {
+    const res = await api.post(
+      `/verify-email-otp-new?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`,
+    );
+
+    return res.data;
+  } catch (error: any) {
+    console.error("verifyEmailOtp error:", error?.response || error);
+    throw error?.response?.data || { message: "Failed to verify OTP" };
+  }
+};
+
+// ─── MOBILE OTP (UPDATE PROFILE) ─── */
+
+// SEND OTP
+export const sendMobileOtpWhileUpdating = async (mobile: string) => {
+  const token = localStorage.getItem("token");
+
+  const res = await api.post(
+    "/send-mobile-otp-while-updating",
+    {
+      mobile,
+      type: "student", // ⚠️ REQUIRED based on your payload
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return res.data;
+};
+
+// VERIFY OTP
+export const verifyMobileOtpWhileUpdating = async (
+  mobile: string,
+  otp: string,
+) => {
+  const token = localStorage.getItem("token");
+
+  const res = await api.post(
+    "/verify-mobile-otp-while-updating",
+    {
+      mobile,
+      otp,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  return res.data;
+};

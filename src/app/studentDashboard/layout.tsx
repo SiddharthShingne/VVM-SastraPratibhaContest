@@ -138,23 +138,55 @@ export default function StudentDashboardLayout({
       <div className="container mx-auto mt-12 px-4">
         <div className="flex gap-6 items-start">
           {/* ── SIDEBAR ── */}
-          <aside className="sticky top-25 h-[calc(100vh-120px)] w-75 xl:w-[320px] shrink-0 overflow-y-auto rounded-3xl bg-white/85 backdrop-blur-sm border border-white/40 shadow-lg">
+          <aside className="
+  sticky top-24 
+  h-[calc(100vh-120px)] 
+  w-72 xl:w-[320px] shrink-0 
+  overflow-y-auto 
+  rounded-[24px] 
 
-            <div className="px-4.5 pb-6 pt-7.5">
+  bg-white/60 backdrop-blur-xl 
+  border border-white/30 
+  shadow-[0_30px_80px_rgba(23,57,92,0.18)]
+
+  relative
+">
+
+            {/* TOP GRADIENT STRIP */}
+            <div className="absolute top-0 left-0 w-full h-1 
+    bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+
+            <div className="px-5 pb-6 pt-8">
 
               {/* USER HEADER */}
-              <div className="text-center pb-5 mb-3">
-                <div className="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[16px] bg-[#17395c]">
+              <div className="text-center pb-6 mb-4 border-b border-[#eef2f7]">
+
+                {/* Avatar */}
+                <div className="
+        w-14 h-14 rounded-full mx-auto mb-3 
+        flex items-center justify-center 
+        text-white font-black text-[18px] 
+        bg-linear-to-br from-[#17395c] to-[#1f4e7a]
+        shadow-md
+      ">
                   {studentName.charAt(0).toUpperCase()}
                 </div>
 
-                <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1">
+                {/* Label */}
+                <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
                   Welcome back
                 </p>
 
-                <h6 className="text-[16px] font-black text-[#17395c]">
+                {/* 🔥 SHINING NAME */}
+                <h6 className="
+        text-[17px] font-extrabold 
+        bg-linear-to-r from-[#162a4a] via-[#1f6fa3] to-[#f4df17] 
+        bg-clip-text text-transparent
+        animate-[shine_4s_linear_infinite]
+      ">
                   {studentName}
                 </h6>
+
               </div>
 
               {/* NAV */}
@@ -192,7 +224,15 @@ export default function StudentDashboardLayout({
                   Update Password
                 </Link>
 
-                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl hover:bg-red-500 hover:text-white transition">
+                <button
+                  onClick={handleLogout}
+                  className="
+          w-full flex items-center gap-3 px-3.5 py-3 
+          rounded-xl 
+          hover:bg-red-500 hover:text-white 
+          transition-all duration-200
+        "
+                >
                   <FaSignOutAlt />
                   Logout
                 </button>
@@ -203,7 +243,7 @@ export default function StudentDashboardLayout({
 
           {/* MAIN */}
           <main className="flex-1">
-            <div className="rounded-3xl p-8 bg-white shadow">
+            <div className="rounded-3xl p-8">
               {children}
             </div>
           </main>
