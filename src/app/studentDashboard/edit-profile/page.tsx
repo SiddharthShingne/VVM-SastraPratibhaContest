@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useForm } from "react-hook-form";
@@ -44,7 +45,7 @@ const DialogBox = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-2xl p-9 w-[450px] h-[200px] text-center shadow-xl">
+      <div className="bg-white rounded-2xl p-9 w-112.5 h-50 text-center shadow-xl">
         <h3
           className={`text-xl font-bold mb-3 ${dialog.type === "success" ? "text-green-600" : "text-red-600"
             }`}

@@ -139,11 +139,11 @@ export default function StudentDashboardLayout({
         <div className="flex gap-6 items-start">
           {/* ── SIDEBAR ── */}
           <aside className="
-  sticky top-24 
+  top-24 
   h-[calc(100vh-120px)] 
   w-72 xl:w-[320px] shrink-0 
   overflow-y-auto 
-  rounded-[24px] 
+  rounded-3xl 
 
   bg-white/60 backdrop-blur-xl 
   border border-white/30 
