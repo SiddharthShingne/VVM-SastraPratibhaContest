@@ -110,6 +110,10 @@ export const fetchDistricts = async (state_id: string) => {
 };
 
 // =========EMAIL OTP==========//
+/*
+https://core.vvmstage.cloud/api/send-email-otp-new?email=shingnesid@gmail.com
+*/
+
 export const sendEmailOtp = async (email: string) => {
   try {
     const res = await api.post(
@@ -123,6 +127,9 @@ export const sendEmailOtp = async (email: string) => {
   }
 };
 
+/*
+https://core.vvmstage.cloud/api/verify-email-otp-new?email=shingnesid@gmail.com&otp=555555
+*/
 // ========= VERIFY EMAIL OTP ==========//
 export const verifyEmailOtp = async (email: string, otp: string) => {
   try {

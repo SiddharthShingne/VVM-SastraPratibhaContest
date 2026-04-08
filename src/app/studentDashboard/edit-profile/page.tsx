@@ -357,7 +357,7 @@ export default function EditProfile() {
       const raw = localStorage.getItem("user");
       if (!raw) return;
       const user = JSON.parse(raw);
-      const d = user?.user_detail;
+      const d = user?.user_detail || user?.data?.user_detail;
       if (!d) return;
 
       reset({
@@ -506,71 +506,55 @@ export default function EditProfile() {
           : "",
       };
 
-      // const payload = {
-      //   // ── Identity ──────────────────────────────────────────
-      //   user_id: user?.id ?? user?.user_id ?? "",          // top-level user id
-      //   fullName: data.name,
-      //   dob: data.dob,
-      //   gender: data.gender ? Number(data.gender) : "",
-      //   aadhar_number: data.aadharNumber || "",                       // optional
-
-      //   // ── Parent / Contact ──────────────────────────────────
-      //   parent_salutation: d.parent_salutation || "",                     // keep existing or empty
-      //   parent_name: data.parentName || "",
-      //   parent_mobile: data.parentMobile,
-      //   parent_email: data.parentEmail || "",
-
-      //   // ── Student contact (optional) ────────────────────────
-      //   student_mobile: data.studentMobile || "",
-      //   student_email: data.studentEmail || "",
-
-      //   // ── Academic ──────────────────────────────────────────
-      //   grade: data.grade ? Number([null, "6", "7", "8", "9", "10", "11"][Number(data.grade)] ?? data.grade ) : "",
-      //   school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
-      //   sch_name: data.schoolName,
-      //   school_id: d.school_id || "",                       // keep existing or empty
-
-      //   // ── Address ───────────────────────────────────────────
-      //   address: data.address,
-      //   state_id: data.state ? Number(data.state) : null,
-      //   dist_id: data.district ? Number(data.district) : null,
-      //   city_id: data.city ? Number(data.city) : "",
-      //   city_name_2: "",          // city name or id
-      //   pincode: data.pinCode || "",
-
-      //   // ── VVM ───────────────────────────────────────────────
-      //   exam_lang_id: data.examLanguage ? Number(data.examLanguage) : "",
-      //   know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
-      //     ? Number(data.howDidYouGetToKnowAboutVVM)
-      //     : "",
-      // };
 
       await completeStudentProfile(payload);
 
-      // ── Sync localStorage so the rest of the app sees fresh data ──
-      if (raw) {
-        user.user_detail = {
-          ...d,
+        if (raw) {
+        const user = JSON.parse(raw);
+
+        // ✅ handle both structures
+        const existing = user?.user_detail || user?.data?.user_detail || {};
+
+        const updatedUserDetail = {
+          ...existing,
+
           name: data.name,
           date_of_birth: data.dob,
           gender: data.gender,
           aadhar_number: data.aadharNumber,
+
           parent_name: data.parentName,
           parent_phone_number: data.parentMobile,
           parent_email: data.parentEmail,
+
+          // ✅ VERY IMPORTANT
+          parent_mobile_verified: parentMobileVerified ? 1 : 0,
+          parent_email_verified: parentEmailVerified ? 1 : 0,
+
           student_mobile_number: data.studentMobile,
           student_email: data.studentEmail,
+
           class_id: data.grade,
           school_board_id: data.schoolBoard,
           school_name: data.schoolName,
+
           address: data.address,
           state_id: data.state,
           district_id: data.district,
           city_id: data.city,
+
           pin_code: data.pinCode,
           exam_language_id: data.examLanguage,
           know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
         };
+
+        // ✅ preserve original structure
+        if (user.user_detail) {
+          user.user_detail = updatedUserDetail;
+        } else if (user.data?.user_detail) {
+          user.data.user_detail = updatedUserDetail;
+        }
+
         localStorage.setItem("user", JSON.stringify(user));
       }
 
