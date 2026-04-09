@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-// ✅ Correct imports (must match exact file names)
+// ✅ Correct imports - make sure these files exist
 import BahrainForm from "./_components/BahrainForm";
 import KuwaitForm from "./_components/KuwaitForm";
 import UAEForm from "./_components/UAEForm";
@@ -11,90 +11,310 @@ import QatarForm from "./_components/QatarForm";
 import OmanForm from "./_components/OmanForm";
 
 export default function RegisterPage() {
-
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
-const countries = [
-  { value: "bahrain", label: "Bahrain", code: 1 },
-  { value: "kuwait", label: "Kuwait", code: 2 },
-  { value: "uae", label: "UAE", code: 3 },
-  { value: "saudi", label: "Saudi Arabia", code: 4 },
-  { value: "qatar", label: "Qatar", code: 5 },
-  { value: "oman", label: "Oman", code: 6 },
-];
+  const countries = [
+    { value: "bahrain", label: "Bahrain", code: "1" },
+    { value: "kuwait", label: "Kuwait", code: "2" },
+    { value: "uae", label: "UAE", code: "3" },
+    { value: "saudi", label: "Saudi Arabia", code: "4" },
+    { value: "qatar", label: "Qatar", code: "5" },
+    { value: "oman", label: "Oman", code: "6" },
+  ];
 
   const selectedCountryData = countries.find(
-  (c) => c.value === selectedCountry
-);
+    (c) => c.value === selectedCountry
+  );
 
-
-  // ✅ Cleaner than switch-case
-const countryComponentMap: Record<string, React.ReactNode> = {
-  bahrain: <BahrainForm country={selectedCountryData} />,
-  kuwait: <KuwaitForm country={selectedCountryData} />,
-  uae: <UAEForm countries={countries} />,
-  saudi: <SaudiForm country={selectedCountryData} />,
-  qatar: <QatarForm country={selectedCountryData} />,
-  oman: <OmanForm country={selectedCountryData} />,
-};
+  // Country component mapping
+  const countryComponentMap: Record<string, React.ReactNode> = {
+    bahrain: <BahrainForm country={selectedCountryData} />,
+    kuwait: <KuwaitForm country={selectedCountryData} />,
+    uae: <UAEForm countries={countries} />,
+    saudi: <SaudiForm country={selectedCountryData} />,
+    qatar: <QatarForm country={selectedCountryData} />,
+    oman: <OmanForm country={selectedCountryData} />,
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3">
-      <div className="w-full">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8eef5] to-[#f5f0d0] flex items-center justify-center p-4 md:p-10">
+      {/* Dynamic width based on selection */}
+      <div className={`w-full mx-auto transition-all duration-500 ${selectedCountry ? 'max-w-5xl' : 'max-w-[580px]'
+        }`}>
 
         {!selectedCountry && (
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-
-            <img
-              src="/nav-logo.png"
-              alt="VVM Logo"
-              className="mx-auto mb-4 h-14"
+          <div
+            className="relative rounded-[28px] overflow-hidden mb-10"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              border: "1px solid rgba(255,255,255,0.75)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              boxShadow:
+                "0 32px 64px rgba(23,57,92,0.13), 0 8px 24px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
+            }}
+          >
+            {/* Animated gradient top bar */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px]"
+              style={{
+                background:
+                  "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
+                backgroundSize: "300% 100%",
+                animation: "gradBar 4s ease infinite",
+              }}
             />
 
-            <h2 className="text-xl font-semibold mb-4">
-              Student Registration
-            </h2>
+            {/* Ambient orbs */}
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: 220,
+                height: 220,
+                right: -70,
+                top: -70,
+                background:
+                  "radial-gradient(circle, rgba(244,223,23,0.18) 0%, transparent 70%)",
+                zIndex: 0,
+                animation: "orb1 7s ease-in-out infinite",
+              }}
+            />
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: 180,
+                height: 180,
+                left: -50,
+                bottom: -50,
+                background:
+                  "radial-gradient(circle, rgba(23,57,92,0.11) 0%, transparent 70%)",
+                zIndex: 0,
+                animation: "orb2 9s ease-in-out infinite",
+              }}
+            />
 
-            <div className="bg-gray-100 rounded-md p-4 max-w-sm mx-auto">
-              <label className="block text-sm font-medium mb-2">
-                Select Country
-              </label>
+            <div className="relative z-10 p-10">
+              {/* Logo circle */}
+              <div className="flex justify-center mb-5">
+                <div
+                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center font-black text-white text-xl tracking-tight"
+                  style={{
+                    background: "linear-gradient(135deg, #17395c, #2a6099)",
+                    boxShadow: "0 8px 24px rgba(23,57,92,0.3)",
+                    animation: "float 4s ease-in-out infinite",
+                  }}
+                >
+                  <img
+                    src="/gcc/logo-latest.jpeg"
+                    alt="VVM Logo"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+              </div>
 
-              <select
-                value={selectedCountry}
-                onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              {/* Title */}
+              <h2
+                className="text-center text-[1.65rem] font-black tracking-tight mb-1"
+                style={{
+                  background: "linear-gradient(135deg, #17395c 30%, #2a6099 80%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
               >
-                <option value="">-- Select --</option>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.value}>
-                    {country.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                Student Registration
+              </h2>
+              <p className="text-center text-[0.82rem] text-[#7a8fa6] tracking-wide mb-7">
+                Select your country to get started
+              </p>
 
+              {/* Divider */}
+              <div
+                className="mb-7 h-px"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(23,57,92,0.15), transparent)",
+                }}
+              />
+
+              {/* Select */}
+              <div
+                className="bg-white/30 rounded-2xl p-5 border border-white/50"
+                style={{ boxShadow: "inset 0 1px 3px rgba(23,57,92,0.06)" }}
+              >
+                <label className="block text-[0.75rem] font-semibold uppercase tracking-widest text-[#4f6480] mb-2">
+                  Country
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className="w-full border-[1.5px] border-[rgba(23,57,92,0.18)] rounded-[14px] px-4 py-3 text-[0.95rem] font-medium text-[#17395c] bg-white/80 cursor-pointer pr-10 appearance-none hover:border-[rgba(23,57,92,0.4)] hover:bg-white/95 focus:border-[#17395c] focus:outline-none focus:shadow-[0_0_0_3px_rgba(23,57,92,0.1)] transition-all"
+                  >
+                    <option value="">— Select country —</option>
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.value}>
+                        {country.label}
+                      </option>
+                    ))}
+                  </select>
+                  {/* Custom chevron */}
+                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path
+                        d="M2 4l4 4 4-4"
+                        stroke="#17395c"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Country pills */}
+              <div className="flex flex-wrap justify-center gap-2 mt-5">
+                {["🇦🇪 UAE", "🇸🇦 KSA", "🇰🇼 KWT", "🇧🇭 BHR", "🇶🇦 QTR", "🇴🇲 OMN"].map(
+                  (pill) => (
+                    <span
+                      key={pill}
+                      className="px-3 py-1 rounded-full text-[0.72rem] font-semibold text-[#4f6480] tracking-wide transition-all duration-200 hover:-translate-y-0.5 cursor-default"
+                      style={{
+                        background: "rgba(23,57,92,0.06)",
+                        border: "1px solid rgba(23,57,92,0.1)",
+                      }}
+                    >
+                      {pill}
+                    </span>
+                  )
+                )}
+              </div>
+
+              {/* Step dots */}
+              <div className="flex justify-center gap-2 mt-6">
+                <div
+                  className="h-[7px] w-[22px] rounded-[4px]"
+                  style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
+                />
+                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+              </div>
+            </div>
           </div>
         )}
 
         {selectedCountry && (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div
+            className="relative rounded-[28px] overflow-hidden mb-10"
+            style={{
+              background: "rgba(255,255,255,0.72)",
+              border: "1px solid rgba(255,255,255,0.75)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              boxShadow:
+                "0 32px 64px rgba(23,57,92,0.13), 0 8px 24px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
+            }}
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px]"
+              style={{
+                background:
+                  "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
+                backgroundSize: "300% 100%",
+                animation: "gradBar 4s ease infinite",
+              }}
+            />
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: 220,
+                height: 220,
+                right: -70,
+                top: -70,
+                background:
+                  "radial-gradient(circle, rgba(244,223,23,0.18) 0%, transparent 70%)",
+                zIndex: 0,
+                animation: "orb1 7s ease-in-out infinite",
+              }}
+            />
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: 180,
+                height: 180,
+                left: -50,
+                bottom: -50,
+                background:
+                  "radial-gradient(circle, rgba(23,57,92,0.11) 0%, transparent 70%)",
+                zIndex: 0,
+                animation: "orb2 9s ease-in-out infinite",
+              }}
+            />
 
-            <button
-              onClick={() => setSelectedCountry("")}
-              className="mb-4 text-sm text-indigo-600 hover:underline"
-            >
-              ← Change Country
-            </button>
+            <div className="relative z-10 p-8">
+              {/* Back button */}
+              <button
+                onClick={() => setSelectedCountry("")}
+                className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[0.8rem] font-semibold text-[#4f6480] border border-[rgba(23,57,92,0.15)] bg-white/60 hover:text-[#17395c] hover:bg-white/90 hover:border-[rgba(23,57,92,0.3)] transition-all duration-200 hover:translate-x-[-2px]"
+              >
+                <span className="transition-transform duration-200 group-hover:translate-x-[-3px]">
+                  ←
+                </span>
+                Change Country
+              </button>
 
-            {countryComponentMap[selectedCountry]}
+              {/* Step dots — step 2 */}
+              <div className="flex justify-center gap-2 mb-6">
+                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div
+                  className="h-[7px] w-[22px] rounded-[4px]"
+                  style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
+                />
+                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+              </div>
 
+              {countryComponentMap[selectedCountry]}
+            </div>
           </div>
         )}
-
       </div>
 
+      {/* Add global styles for animations */}
+      <style jsx global>{`
+        @keyframes gradBar {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes orb1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(30px, -20px) scale(1.15); }
+        }
+        @keyframes orb2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-25px, 18px) scale(0.9); }
+        }
+        .reg-card {
+          animation: fadeSlideUp 0.5s cubic-bezier(0.34, 1.26, 0.64, 1) both;
+          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                      box-shadow 0.35s ease;
+        }
+        .reg-card:hover {
+          transform: translateY(-5px) scale(1.003);
+          box-shadow: 0 44px 88px rgba(23, 57, 92, 0.18),
+                      0 12px 32px rgba(23, 57, 92, 0.1),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+        }
+      `}</style>
     </div>
-  
   );
 }
