@@ -216,7 +216,7 @@ export default function UpdateProfile() {
   >
 
     {/* Top Gradient Bar */}
-    <div className="absolute top-0 left-0 w-full h-[5px] bg-[linear-gradient(90deg,#17395c_0%,#f4df17_50%,#17395c_100%)]" />
+    <div className="absolute top-0 left-0 w-full h-1.25 bg-[linear-gradient(90deg,#17395c_0%,#f4df17_50%,#17395c_100%)]" />
 
     <div className="p-8">
 

@@ -267,7 +267,7 @@ export default function StudentDashboardLayout({
         {/* ─────────────────────────────────────────────────
             MOBILE TOP HEADER — structured navbar
         ───────────────────────────────────────────────── */}
-        <header className="md:hidden fixed top-0 left-0 w-full z-[60] bg-white border-b border-[#e6edf5] shadow-sm">
+        <header className="md:hidden fixed top-0 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
           {/* accent bar */}
           <div
             className="absolute top-0 left-0 w-full h-0.5"

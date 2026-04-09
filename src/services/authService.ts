@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import api from "./axiosInstance";
-import { ApertureIcon } from "lucide-react";
 
 /* ================= LOGIN ================= */
 
@@ -188,12 +187,37 @@ export const verifyMobileOtpWhileUpdating = async (
 
   return res.data;
 };
+
 // ================ COMPLETE STUDENT PROFILE ========== //
 export const completeStudentProfile = async (payload: Record<string, any>) => {
   const token = localStorage.getItem("token");
   const res = await api.post("/student/complete-profile", payload, {
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+// ================= GET SCHOOL BOARD ========== //
+export const getSchoolBoard = async () => {
+  const token = localStorage.getItem("token");
+
+  const res = await api.get("/get-school-board", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+// ================= REGISTER STUDENT V2 (FOR SAUDI) ========== //
+export const registerStudentV2 = async (formData) => {
+  const res = await api.post("/students/register-v2", formData, {
+    headers: {
+      "Content-Type": "application/json",
+      // No Authorization header needed for registration (user isn't logged in yet)
     },
   });
   return res.data;
