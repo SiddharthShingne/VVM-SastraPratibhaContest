@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/ui/InputField";
 import SelectField from "@/components/ui/SelectField";
@@ -8,10 +9,31 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
-import { registerStudentV2 } from "@/services/authService"; // ← import your API
+import { registerStudentV2 , fetchDistricts} from "@/services/authService"; // ← import your API
 
-type RegistrationForm = RegistrationFormPayload;
-
+type RegistrationForm = {
+  fullName: string;
+  dob: string;
+  gender: string;
+  grade: number;
+  studentMobile: string;
+  studentEmail: string;
+  emiratesId: string;
+  schoolName: string;
+  board: string;
+  pincode: string;
+  schoolAddress: string;
+  parentName: string;
+  parentMobile: string;
+  parentEmail: string;
+  password: string;
+  confirmPassword: string;
+  termsAccepted: boolean;
+  hear: string;
+  emirate_id: string;
+  dist_id: string;
+  district: string;
+};
 const genders = [
   { label: "Male", value: "1" },
   { label: "Female", value: "2" },
@@ -19,12 +41,12 @@ const genders = [
 ];
 
 const grades = [
-  { label: "6", value: "1" },
-  { label: "7", value: "2" },
-  { label: "8", value: "3" },
-  { label: "9", value: "4" },
-  { label: "10", value: "5" },
-  { label: "11", value: "6" },
+  { label: "6", value: "6" },
+  { label: "7", value: "7" },
+  { label: "8", value: "8" },
+  { label: "9", value: "9" },
+  { label: "10", value: "10" },
+  { label: "11", value: "11" },
 ];
 
 const boards = [
@@ -32,6 +54,14 @@ const boards = [
   { label: "ICSE", value: "ICSE" },
   { label: "IB", value: "IB" },
   { label: "IGCSE", value: "IGCSE" },
+];
+
+const hearOptions = [
+  { label: "School", value: "1" },
+  { label: "Friend", value: "2" },
+  { label: "Social Media", value: "3" },
+  { label: "Newspaper", value: "4" },
+  { label: "Others", value: "5" },
 ];
 
 type DialogType = {
@@ -110,15 +140,15 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className={`bg-gradient-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center`}>
+    <div className="fixed inset-0 bg-black/50 flex items-center pb-[5vh] justify-center z-9999 p-4">
+      <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
         <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
           {c.icon}
         </div>
         <h2 className={`text-2xl font-bold mb-3 ${c.titleColor}`}>
           {dialog.title || titles[dialog.type]}
         </h2>
-        <p className="text-base text-gray-600 mb-7 leading-relaxed">{dialog.message}</p>
+        <p className="text-base text-gray-600 mb-7 leading-relaxed wrap-break-word overflow-hidden max-h-40 overflow-y-auto">{dialog.message}</p>
         <button
           onClick={onClose}
           className={`w-24 py-3 px-6 ${c.btnBg} text-white font-bold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 text-lg`}
@@ -217,11 +247,17 @@ export default function UAEForm({ countries }: Props) {
   const [dialog, setDialog] = useState<DialogType | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setUserData] = useState({ email: "", username: "" });
+  const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    fetchDistricts("38").then((data) => {
+      setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+    });
+  }, []);
 
   // Cooldown
   const [cooldown, setCooldown] = useState(0);
   const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   const startCooldown = () => {
     setCooldown(60);
     if (cooldownRef.current) clearInterval(cooldownRef.current);
@@ -238,6 +274,7 @@ export default function UAEForm({ countries }: Props) {
     handleSubmit,
     getValues,
     setError,
+    reset,
     formState: { errors, touchedFields },
   } = useForm<RegistrationForm>({ mode: "all" });
 
@@ -275,7 +312,7 @@ export default function UAEForm({ countries }: Props) {
     try {
       setVerifyLoading(true);
       const res = await verifyEmailOtp(email, emailOtpValue);
-      if (res?.status) {
+      if (res && res.status === true) {
         setEmailVerified(true);
         setOtpModalOpen(false);
         setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
@@ -295,8 +332,19 @@ export default function UAEForm({ countries }: Props) {
 
   // ── Submit ────────────────────────────────────────────────────────────────
   const onSubmit = async (data: RegistrationForm) => {
+    if (!data.termsAccepted) {
+      setDialog({
+        type: "error",
+        message: "You must accept Terms & Conditions"
+      });
+      return;
+    }
     if (!emailVerified) {
-      setDialog({ type: "error", message: "Please verify your parent email OTP before submitting." });
+      setDialog({
+        type: "error",
+        title: "Email Not Verified",
+        message: "Please verify parent email OTP before submitting the form."
+      });
       return;
     }
     try {
@@ -307,43 +355,51 @@ export default function UAEForm({ countries }: Props) {
         dob: data.dob,
         gender: Number(data.gender),
         grade: Number(data.grade),
+
         student_mobile: data.studentMobile,
         student_email: data.studentEmail,
-        emirates_id: data.emiratesId || null,
+
+        emirate_id: data.emiratesId || null,
+
         sch_name: data.schoolName,
-        school_board_id: data.board,          // string: "CBSE" | "ICSE" | "IB" | "IGCSE"
+        school_board_id: data.board,
+
         pincode: data.pincode,
         address: data.schoolAddress,
-        parent_name: data.parentName,
+        dist_id: data.district,  
+
+        parent_full_name: data.parentName,
         parent_mobile: data.parentMobile,
-        parent_email: data.parentEmail,       // ← used in success popup
+        parent_email: data.parentEmail,
+
         password: data.password,
         password_confirmation: data.confirmPassword,
-        country_code: "2",                    // ← UAE country code, always "2"
+        country_code: "AE", // ⚠️ confirm with backend
+        state_id: "38",      // ⚠️ must match backend DB
+        hear: Number(data.hear),
       };
 
       // ✅ Call registerStudentV2 — response: { status: true, message: "...", data: { username: "MH0458718" } }
       const res = await registerStudentV2(payload);
-
-      if (res?.status) {
+      console.log("REGISTER RESPONSE:", res);
+      if (res && res.status === true) {
         setUserData({
           email: data.parentEmail,            // from form
-          username: res.data?.username ?? "", // from API response
+          username: res?.data?.username || "", // from API response
         });
         setShowPopup(true);
+        reset(); // Clear form after successful registration
       } else {
         throw new Error(res?.message || "Registration failed");
       }
     } catch (error: any) {
       setDialog({
         type: "error",
-        message: error?.message || "Registration failed. Please try again.",
-      });
+        message: error?.response?.data?.message || error?.message || "Registration failed"      });
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen py-8 md:py-10">
       {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
@@ -364,7 +420,17 @@ export default function UAEForm({ countries }: Props) {
               error={errors.fullName}
             />
             <InputField label="Date of Birth" type="date" required
-              registration={register("dob", { required: "Date of Birth is required" })}
+              min="2008-01-01"
+              max="2015-12-31"
+              registration={register("dob", {
+                required: "Date of Birth is required",
+                validate: (value) => {
+                  const year = new Date(value).getFullYear();
+                  if (year < 2008) return "Date of Birth must be after 2008";
+                  if (year > 2015) return "Date of Birth must be before 2015";
+                  return true;
+                }
+              })}
               error={errors.dob}
             />
             <InputField label="Emirates ID" required maxLength={15} placeholder="Enter Emirates ID"
@@ -385,7 +451,11 @@ export default function UAEForm({ countries }: Props) {
             />
             <SelectField label="Class / Grade" required options={grades}
               registration={register("grade", { required: "Grade is required" })}
-              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
+              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined} 
+            />
+            <SelectField
+              label="How did you hear about VVM?" required options={hearOptions}
+              registration={register("hear", { required: "This field is required" })} error={touchedFields?.hear && errors?.hear ? errors.hear : undefined}
             />
           </Section>
 
@@ -411,12 +481,19 @@ export default function UAEForm({ countries }: Props) {
               registration={register("board", { required: "Board is required" })}
               error={touchedFields?.board && errors?.board ? errors.board : undefined}
             />
-            <InputField label="Country" disabled registration={register("country")}
+            <InputField label="Country" disabled 
               value={countries.find((c) => c.value === "uae")?.label || ""}
             />
             <InputField label="Pincode" required placeholder="Enter pincode"
               registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
               error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
+            />
+            <SelectField
+              label="City / District"
+              required
+              options={districts}
+              registration={register("district", { required: "District is required" })}
+              error={touchedFields?.district && errors?.district ? errors.district : undefined}
             />
             <div className="md:col-span-2">
               <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
@@ -424,6 +501,7 @@ export default function UAEForm({ countries }: Props) {
                 error={errors.schoolAddress}
               />
             </div>
+            
           </Section>
 
           {/* Parent Details */}
@@ -456,10 +534,10 @@ export default function UAEForm({ countries }: Props) {
                   type="button"
                   onClick={sendOtp}
                   disabled={otpLoading || cooldown > 0}
-                  className={`h-[42px] px-5 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm border
+                  className={`h-10.5 px-5 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm border
                     ${cooldown > 0
                       ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent hover:from-blue-700 hover:to-indigo-700 hover:shadow-md active:scale-95"
+                      : "bg-linear-to-r from-blue-600 to-indigo-600 text-white border-transparent hover:from-blue-700 hover:to-indigo-700 hover:shadow-md active:scale-95"
                     }`}
                 >
                   {otpLoading ? "Sending..." : cooldown > 0 ? `${cooldown}s` : "Send OTP"}
@@ -478,13 +556,13 @@ export default function UAEForm({ countries }: Props) {
                     onChange={(e) => setEmailOtpValue(e.target.value.replace(/\D/g, ""))}
                     placeholder="Enter 6-digit OTP"
                     disabled={emailVerified}
-                    className={`w-full h-[42px] border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
+                    className={`w-full h-10.5 border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
                       ${emailVerified ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300"}`}
                   />
                 </div>
 
                 {emailVerified ? (
-                  <span className="h-[42px] flex items-center gap-1.5 px-4 bg-green-50 border border-green-300 text-green-700 font-semibold text-sm rounded-lg">
+                  <span className="h-10.5 flex items-center gap-1.5 px-4 bg-green-50 border border-green-300 text-green-700 font-semibold text-sm rounded-lg">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -495,7 +573,7 @@ export default function UAEForm({ countries }: Props) {
                     type="button"
                     onClick={verifyOtp}
                     disabled={verifyLoading || !otpModalOpen}
-                    className="h-[42px] px-5 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-sm shadow-sm border-transparent hover:from-green-600 hover:to-emerald-700 hover:shadow-md transition-all active:scale-95 disabled:opacity-40"
+                    className="h-10.5 px-5 rounded-lg bg-linear-to-r from-green-500 to-emerald-600 text-white font-semibold text-sm shadow-sm border-transparent hover:from-green-600 hover:to-emerald-700 hover:shadow-md transition-all active:scale-95 disabled:opacity-40"
                   >
                     {verifyLoading ? "Verifying..." : "Verify OTP"}
                   </button>
@@ -538,7 +616,7 @@ export default function UAEForm({ countries }: Props) {
 
           <div className="pt-4 text-center">
             <Button type="submit" loading={loading} loadingText="Submitting..."
-              className="px-10 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold text-xl shadow-md hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 active:scale-95"
+              className="px-10 py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-extrabold text-xl shadow-md hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 active:scale-95"
             >
               Submit Registration
             </Button>

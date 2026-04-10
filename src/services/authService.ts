@@ -213,8 +213,8 @@ export const getSchoolBoard = async () => {
 };
 
 // ================= REGISTER STUDENT V2 (FOR SAUDI) ========== //
-export const registerStudentV2 = async (formData) => {
-  const res = await api.post("/students/register-v2", formData, {
+export const registerStudentV2 = async (formData: Record<string, unknown>) => {
+  const res = await api.post("/sif/register/student", formData, {
     headers: {
       "Content-Type": "application/json",
       // No Authorization header needed for registration (user isn't logged in yet)

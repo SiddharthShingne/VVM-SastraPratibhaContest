@@ -1,7 +1,13 @@
-const BahrainForm = () => {
+
+
+type Props = {
+  country?: { value: string; label: string; code: string };
+};
+
+const BahrainForm = ({ country }: Props) => {
   return (
     <div className="bg-white/30 rounded-2xl p-5 border border-white/50">
-      baharain form
+      bahrain form
       {/* Add Bahrain-specific form fields here */}
     </div>
   );

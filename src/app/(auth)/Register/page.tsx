@@ -9,7 +9,7 @@ import UAEForm from "./_components/UAEForm";
 import SaudiForm from "./_components/SaudiForm";
 import QatarForm from "./_components/QatarForm";
 import OmanForm from "./_components/OmanForm";
-
+import Image from "next/image";
 export default function RegisterPage() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
@@ -26,6 +26,7 @@ export default function RegisterPage() {
     (c) => c.value === selectedCountry
   );
 
+
   // Country component mapping
   const countryComponentMap: Record<string, React.ReactNode> = {
     bahrain: <BahrainForm country={selectedCountryData} />,
@@ -35,28 +36,25 @@ export default function RegisterPage() {
     qatar: <QatarForm country={selectedCountryData} />,
     oman: <OmanForm country={selectedCountryData} />,
   };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8eef5] to-[#f5f0d0] flex items-center justify-center p-4 md:p-10">
+    <div className="min-h-screen bg-linear-to-br from-[#e8eef5] to-[#f5f0d0] flex items-center justify-center p-4 md:p-10">
       {/* Dynamic width based on selection */}
-      <div className={`w-full mx-auto transition-all duration-500 ${selectedCountry ? 'max-w-5xl' : 'max-w-[580px]'
+      <div className={`w-full mx-auto transition-all duration-500 ${selectedCountry ? 'max-w-300' : 'max-w-145'
         }`}>
 
         {!selectedCountry && (
           <div
-            className="relative rounded-[28px] overflow-hidden mb-10"
+            className="relative rounded-[28px] mb-10"
             style={{
               background: "rgba(255,255,255,0.72)",
               border: "1px solid rgba(255,255,255,0.75)",
-              backdropFilter: "blur(16px)",
-              WebkitBackdropFilter: "blur(16px)",
               boxShadow:
                 "0 32px 64px rgba(23,57,92,0.13), 0 8px 24px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >
             {/* Animated gradient top bar */}
             <div
-              className="absolute top-0 left-0 right-0 h-[3px]"
+              className="absolute top-0 left-0 right-0 h-0.75"
               style={{
                 background:
                   "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
@@ -97,14 +95,16 @@ export default function RegisterPage() {
               {/* Logo circle */}
               <div className="flex justify-center mb-5">
                 <div
-                  className="w-[72px] h-[72px] rounded-full flex items-center justify-center font-black text-white text-xl tracking-tight"
+                  className="w-18 h-18 rounded-full flex items-center justify-center font-black text-white text-xl tracking-tight"
                   style={{
                     background: "linear-gradient(135deg, #17395c, #2a6099)",
                     boxShadow: "0 8px 24px rgba(23,57,92,0.3)",
                     animation: "float 4s ease-in-out infinite",
                   }}
                 >
-                  <img
+                  <Image
+                    width={80}
+                    height={80}
                     src="/gcc/logo-latest.jpeg"
                     alt="VVM Logo"
                     className="w-full h-full rounded-full object-cover"
@@ -175,11 +175,11 @@ export default function RegisterPage() {
 
               {/* Country pills */}
               <div className="flex flex-wrap justify-center gap-2 mt-5">
-                {["🇦🇪 UAE", "🇸🇦 KSA", "🇰🇼 KWT", "🇧🇭 BHR", "🇶🇦 QTR", "🇴🇲 OMN"].map(
+                {["UAE", "Saudi Arabia", "Kuwait", "Bahrain", "Qatar", "Oman"].map(
                   (pill) => (
                     <span
                       key={pill}
-                      className="px-3 py-1 rounded-full text-[0.72rem] font-semibold text-[#4f6480] tracking-wide transition-all duration-200 hover:-translate-y-0.5 cursor-default"
+                      className="px-3 py-1 rounded-full text-[0.72rem] font-extrabold text-[#03408f] tracking-wide transition-all duration-200 hover:-translate-y-0.5 cursor-default"
                       style={{
                         background: "rgba(23,57,92,0.06)",
                         border: "1px solid rgba(23,57,92,0.1)",
@@ -194,11 +194,11 @@ export default function RegisterPage() {
               {/* Step dots */}
               <div className="flex justify-center gap-2 mt-6">
                 <div
-                  className="h-[7px] w-[22px] rounded-[4px]"
+                  className="h-1.5 w-5.5 rounded-sm"
                   style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
                 />
-                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
-                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
               </div>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function RegisterPage() {
             }}
           >
             <div
-              className="absolute top-0 left-0 right-0 h-[3px]"
+              className="absolute top-0 left-0 right-0 h-0.75"
               style={{
                 background:
                   "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
@@ -256,9 +256,9 @@ export default function RegisterPage() {
               {/* Back button */}
               <button
                 onClick={() => setSelectedCountry("")}
-                className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[0.8rem] font-semibold text-[#4f6480] border border-[rgba(23,57,92,0.15)] bg-white/60 hover:text-[#17395c] hover:bg-white/90 hover:border-[rgba(23,57,92,0.3)] transition-all duration-200 hover:translate-x-[-2px]"
+                className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[0.8rem] font-semibold text-[#4f6480] border border-[rgba(23,57,92,0.15)] bg-white/60 hover:text-[#17395c] hover:bg-white/90 hover:border-[rgba(23,57,92,0.3)] transition-all duration-200 hover:-translate-x-0.5"
               >
-                <span className="transition-transform duration-200 group-hover:translate-x-[-3px]">
+                <span className="transition-transform duration-200 group-hover:-translate-x-0.75">
                   ←
                 </span>
                 Change Country
@@ -266,12 +266,12 @@ export default function RegisterPage() {
 
               {/* Step dots — step 2 */}
               <div className="flex justify-center gap-2 mb-6">
-                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
                 <div
-                  className="h-[7px] w-[22px] rounded-[4px]"
+                  className="h-1.5 w-5.5 rounded-sm"
                   style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
                 />
-                <div className="h-[7px] w-[7px] rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
               </div>
 
               {countryComponentMap[selectedCountry]}
