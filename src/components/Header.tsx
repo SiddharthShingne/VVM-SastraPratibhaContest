@@ -27,13 +27,7 @@ const Header = () => {
                     Education!
                 </b>
 
-                           {/* <img
-        src="/gcc/vvm-bg-image.png"
-        alt="Background"
-        fullWidth
-        className="object-cover"
-        priority
-      /> */}
+ 
             </div>
 
             <div className="flex gap-2 w-full lg:w-auto justify-end mt-1 lg:mt-0 pr-5">
@@ -54,7 +48,7 @@ const Header = () => {
         onClick={() =>
           isLoggedIn
             ? router.push("/studentDashboard")
-            : router.push("/Register")
+            : router.push("/registration/individual-student-registration")
         }
         className="border-2 border-[#b57edc] text-white text-xs font-semibold px-3 py-1 rounded-full transition duration-200 hover:text-yellow-200 hover:bg-[#485e94] hover:font-bold py-2 px-2  font-weight-bold-text-sm "
       >

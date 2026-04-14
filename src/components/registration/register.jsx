@@ -53,14 +53,14 @@ export default function RegistrationSection() {
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-2 gap-6 justify-center">
+          <div className="grid md:grid-cols-1 gap-6 justify-center items-center">
 
             {/* Student Card */}
-            <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300">
+            <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300  max-w-lg mx-auto">
               
               <div className="relative h-[250px] overflow-hidden">
                 <img
-                  src="/assets/images/student-registration.jpg"
+                  src="/student-registration-images/images-of-register-page/student-registration.jpg"
                   alt="Student"
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                 />
@@ -83,7 +83,7 @@ export default function RegistrationSection() {
                 </p>
 
                 <Link
-                  href="/Register"
+                  href="/registration/individual-student-registration"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →
@@ -92,40 +92,40 @@ export default function RegistrationSection() {
             </div>
 
             {/* School Card */}
-            <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300">
+            {/* <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300"> */}
               
-              <div className="relative h-[250px] overflow-hidden">
+              {/* <div className="relative h-[250px] overflow-hidden">
                 <img
-                  src="/assets/images/school-registration.jpg"
+                  src="/images-of-register-page/school-registration.jpg"
                   alt="School"
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#17395c40] to-[#17395c10]"></div>
-              </div>
+              </div> */}
 
-              <div className="text-center px-6 pb-6 pt-12 relative">
+              {/* <div className="text-center px-6 pb-6 pt-12 relative"> */}
                 
                 {/* Icon */}
-                <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#17395c] to-[#2c6aa0] text-white flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
+                {/* <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#17395c] to-[#2c6aa0] text-white flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
                   🏫
-                </div>
+                </div> */}
 
-                <h4 className="text-xl font-extrabold text-[#17395c] mb-2">
+                {/* <h4 className="text-xl font-extrabold text-[#17395c] mb-2">
                   School Registration
-                </h4>
+                </h4> */}
 
-                <p className="text-[#66788a] text-sm leading-7 mb-5">
+                {/* <p className="text-[#66788a] text-sm leading-7 mb-5">
                   Register your school and enable students to participate through your institution.
-                </p>
-
+                </p> */}
+{/* 
                 <Link
                   href="/Register"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →
-                </Link>
-              </div>
-            </div>
+                </Link> */}
+              {/* </div> */}
+            {/* </div> */}
 
           </div>
 

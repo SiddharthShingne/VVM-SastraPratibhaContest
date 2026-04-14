@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function VVMArchivePage() {
+export default function VVMArchivePage2025() {
   return (
     <div>
       {/* ================= Breadcrumb ================= */}
@@ -11,7 +11,7 @@ export default function VVMArchivePage() {
           <div className="flex flex-col justify-center min-h-[65px]">
             
             <h6 className="text-white text-[27px] font-medium mb-1">
-              VVM 2024
+              VVM 2025
             </h6>
 
             <nav>
@@ -21,16 +21,18 @@ export default function VVMArchivePage() {
                     Home
                   </Link>
                 </li>
-                <li>{">"}</li>
+
+                <li>&gt;</li>
 
                 <li>
-                  <a href="#" className="hover:underline">
+                  <Link href="/archive" className="hover:underline">
                     Archive
-                  </a>
+                  </Link>
                 </li>
-                <li>{">"}</li>
 
-                <li className="text-white">VVM 2024</li>
+                <li>&gt;</li>
+
+                <li className="text-white">VVM 2025</li>
               </ol>
             </nav>
 
@@ -54,23 +56,21 @@ export default function VVMArchivePage() {
 
             <div className="p-8">
 
-              {/* Title */}
               <h2 className="text-[32px] font-black text-[#17395c] mb-5">
-                School Level Winners for VVM 2024–25
+                School Level Winners for VVM 2025–26
               </h2>
 
-              {/* Description */}
               <p className="text-[17px] leading-8 text-[#4f6480]">
                 Please log in to your school or student dashboard to check the results.
               </p>
 
-              {/* Buttons */}
               <div className="flex flex-wrap justify-center gap-4 mt-6">
 
                 {/* Login Button */}
                 <a
-                  href="https://vvm-2425.cloud/login/"
+                  href="https://archive-2526.vvmstage.cloud/login"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="relative inline-flex items-center justify-center 
                     px-7 py-3 text-[15px] font-extrabold rounded-[14px]
                     bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white
@@ -83,7 +83,6 @@ export default function VVMArchivePage() {
                 >
                   Login
 
-                  {/* Shimmer Effect */}
                   <span className="absolute top-0 left-[-75%] w-1/2 h-full 
                     bg-gradient-to-r from-transparent via-white/40 to-transparent 
                     skew-x-[-20deg] group-hover:left-[130%] transition-all duration-500" />
@@ -91,8 +90,9 @@ export default function VVMArchivePage() {
 
                 {/* Visit Website */}
                 <a
-                  href="https://vvm-2425.cloud/"
+                  href="https://archive-2526.vvmstage.cloud/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="relative inline-flex items-center justify-center 
                     px-7 py-3 text-[15px] font-extrabold rounded-[14px]
                     bg-white/60 border border-[#17395c] text-[#17395c]
@@ -108,7 +108,6 @@ export default function VVMArchivePage() {
                 >
                   Visit Website
 
-                  {/* Shimmer Effect */}
                   <span className="absolute top-0 left-[-75%] w-1/2 h-full 
                     bg-gradient-to-r from-transparent via-white/40 to-transparent 
                     skew-x-[-20deg] group-hover:left-[130%] transition-all duration-500" />
@@ -123,4 +122,5 @@ export default function VVMArchivePage() {
       </div>
     </div>
   );
-}
+};
+

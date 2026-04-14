@@ -7,9 +7,10 @@ export default function HomePage() {
     return (
         <>
             <MidCard />
-            {/* <VVMExamInfo /> */}
             <Gallery />
          <VideoGallery />
+         
+            <VVMExamInfo />
             <Contact />
         </>
     );

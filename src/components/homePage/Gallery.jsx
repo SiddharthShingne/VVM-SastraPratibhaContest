@@ -1,8 +1,9 @@
 
 "use client";
 import Image from "next/image";
-
+import { useState } from "react";
 export default function PremiumGallery() {
+  const [activeImage, setActiveImage] = useState(null);
   const imagePaths = [
     "/home/img-1.jpg",
     "/home/img-2.jpg",
@@ -14,11 +15,7 @@ export default function PremiumGallery() {
     "/home/img-8.jpg",
   ];
 
-  const videoPaths = [
-    "/home/video-01.mp4",
-    "/home/video-02.mp4",
-    "/home/video-03.mp4",
-  ];
+
 
   return (
     <section className="relative py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc] overflow-hidden">
@@ -63,44 +60,58 @@ export default function PremiumGallery() {
                 />
               </div>
 
+
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#102c48]/80 to-transparent opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded-full bg-yellow-400 flex items-center justify-center text-[#17395c] text-xl shadow-lg mb-2">
-                    👁️
+                  <div onClick={(e) => {
+                    e.stopPropagation(); // important (prevents parent click)
+                    setActiveImage(src);
+                  }} className="w-14 h-14 rounded-full bg-yellow-400 flex items-center justify-center text-[#17395c] text-xl shadow-lg mb-2">
+                    &#9658;
                   </div>
-                  <span className="text-white text-sm font-semibold">
+                  {/* <span className="text-white text-sm font-semibold">
                     View Image
-                  </span>
+                  </span> */}
                 </div>
               </div>
+
+
+
+
             </div>
           ))}
         </div>
 
-        {/* VIDEO GALLERY */}
-        {/* <div className="mt-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#17395c] mb-8">
-            Video Gallery
-          </h2>
+        {activeImage && (
+          <div
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+            onClick={() => setActiveImage(null)}
+          >
+            <div
+              className="relative w-[90%] md:w-[700px]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={activeImage}
+                alt="Preview"
+                width={800}
+                height={500}
+                className="w-full h-auto rounded-lg"
+              />
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {videoPaths.map((src, idx) => (
-              <div
-                key={idx}
-                className="rounded-2xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition"
+              <button
+                onClick={() => setActiveImage(null)}
+                className="absolute top-2 right-2 bg-white text-black px-3 py-1 rounded"
               >
-                <video
-                  src={src}
-                  controls
-                  className="w-full aspect-video object-cover"
-                />
-              </div>
-            ))}
+                ✕
+              </button>
+            </div>
           </div>
-        </div> */}
+        )}
 
       </div>
+
     </section>
   );
 }

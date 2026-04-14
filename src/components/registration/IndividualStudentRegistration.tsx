@@ -1,6 +1,13 @@
-
 "use client";
+
 import Link from "next/link";
+import {
+  AlertCircle,
+  CheckCircle,
+  ArrowRight
+} from "lucide-react";
+
+
 
 export default function StudentRegistrationInstructions() {
   return (
@@ -30,7 +37,12 @@ export default function StudentRegistrationInstructions() {
 
         {/* Notice Card */}
         <div className="bg-yellow-50 border border-yellow-200 shadow-lg rounded-2xl p-6 flex gap-4 mb-10">
-          <div className="text-yellow-500 text-4xl">⚠️</div>
+
+          {/* ICON */}
+          <div className="text-yellow-500">
+            <AlertCircle size={40} />
+          </div>
+          
 
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">
@@ -43,9 +55,20 @@ export default function StudentRegistrationInstructions() {
             </p>
 
             <ul className="space-y-2 text-gray-700">
-              <li>✔ No need to register again</li>
-              <li>✔ Simply log in and update your profile</li>
-              <li>✔ Proceed with payment for 2026-27</li>
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-green-500" size={18} />
+                No need to register again
+              </li>
+
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-green-500" size={18} />
+                Simply log in and update your profile
+              </li>
+
+              <li className="flex items-center gap-2">
+                <CheckCircle className="text-green-500" size={18} />
+                Proceed with payment for 2026-27
+              </li>
             </ul>
 
             <p className="mt-3 text-gray-600">
@@ -57,10 +80,11 @@ export default function StudentRegistrationInstructions() {
         {/* Button */}
         <div className="flex justify-center mb-10">
           <Link
-            href="/register"
-            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition"
+            href="/Register"
+            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
-            Student Registration →
+            Student Registration
+            <ArrowRight size={18} />
           </Link>
         </div>
 
@@ -95,10 +119,11 @@ export default function StudentRegistrationInstructions() {
         {/* Bottom Button */}
         <div className="flex justify-center mt-12">
           <Link
-            href="/register"
-            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition"
+            href="/Register"
+            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
-            Student Registration →
+            Student Registration
+            <ArrowRight size={18} />
           </Link>
         </div>
 
@@ -112,42 +137,42 @@ export default function StudentRegistrationInstructions() {
 const steps = [
   {
     title: "Fill Registration Form",
-    desc: "Enter student details carefully and complete all required fields.",
-    img: "/assets/images/student-registration-images/student.svg",
+    desc: "Enter student details carefully and ensure all required fields are completed..",
+    img: "/student-registration-images/student.svg",
   },
   {
     title: "Login Details",
-    desc: "Create a strong password with capital, small, number & special character.",
-    img: "/assets/images/student-registration-images/login_details.svg",
+    desc: "Create password for your account.Your password must include: Capital letter, Small letter, Number, Special character. Enter the same password in Confirm Password.",
+    img: "/student-registration-images/login_details.svg",
   },
   {
     title: "Parent / Guardian Details",
-    desc: "Enter details and verify OTP received on email.",
-    img: "/assets/images/student-registration-images/login_details.svg",
+    desc: "Enter Parent/Guardian Name, Mobile Number, Email ID. Click “Send OTP” and enter OTP received on email to “Verify OTP”.",
+    img: "/student-registration-images/login_details.svg",
   },
   {
     title: "School Details",
-    desc: "Enter school name, board, address, state, district and PIN code.",
-    img: "/assets/images/student-registration-images/school1.svg",
+    desc: "Enter Your School Name, Select School Board, School Address, State, District, City and School PIN Code.",
+    img: "/student-registration-images/school1.svg",
   },
   {
     title: "Submit Registration",
-    desc: "Click submit and credentials will be sent to your email.",
-    img: "/assets/images/student-registration-images/contact_details.svg",
+    desc: "Click on “Submit Registration” and your Registration will be completed. Login credentials will be sent to your registered email id.",
+    img: "/student-registration-images/contact_details.svg",
   },
   {
     title: "Login to Your Account",
-    desc: "Use credentials received on email to login.",
-    img: "/assets/images/student-registration-images/email_otp.svg",
+    desc: "Click on Login and Enter credentials received on your email and click on login.",
+    img: "/student-registration-images/email_otp.svg",
   },
   {
     title: "Update Profile",
-    desc: "Verify mobile number and complete profile details.",
-    img: "/assets/images/student-registration-images/confirmation.svg",
+    desc: "After login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
+    img: "/student-registration-images/confirmation.svg",
   },
   {
     title: "Payment",
-    desc: "Choose payment option and complete process to access full dashboard.",
-    img: "/assets/images/student-registration-images/noun_payment_1800088.svg",
+    desc: "Click on the Payment button and choose your preferred payment option (QR Code or Credit Card) and complete the payment process.After successful payment: You will get full access to your profile.",
+    img: "/student-registration-images/payment.svg",
   },
 ];
