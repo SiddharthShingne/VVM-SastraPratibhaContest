@@ -8,8 +8,7 @@ interface InputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: FieldError;
-  registration: UseFormRegisterReturn;
-}
+  registration?: UseFormRegisterReturn; }
 
 export default function InputField({
   label,
