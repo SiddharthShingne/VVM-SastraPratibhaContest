@@ -3,7 +3,7 @@
 "use client";
 
 import Image from "next/image";
-import { MapPin } from "lucide-react";
+import { Contact, MapPin } from "lucide-react";
 export default function VVMContactSection() {
   return (
     <div className="  relative py-[45px] overflow-hidden bg-[linear-gradient(135deg,#edf2f7_0%,#e2e9f2_45%,#f7f9fc_100%)]">
@@ -61,7 +61,9 @@ export default function VVMContactSection() {
           {/* Heading */}
           <div className="flex items-center gap-4 mb-6">
             <div className="w-[58px] h-[58px] rounded-[18px] bg-gradient-to-br from-[#17395c] to-[#2b5d90] text-[#f4df17] flex items-center justify-center shadow-lg">
-              <i className="feather-home text-[24px]" />
+              {/* <i className="feather-home text-[24px]" /> */}
+              {/* <span className="text-yellow-400 text-2xl">🏢</span> */}
+              <span className="text-yellow-400 text-2xl"> <Contact size={25} className="text-[white]" /></span>
             </div>
             <h3 className="text-[1.45rem] font-extrabold text-[#17395c]">
               Head Office Contacts
