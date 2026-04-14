@@ -140,7 +140,7 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center pb-[5vh] justify-center z-9999 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
       <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
         <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
           {c.icon}
@@ -171,8 +171,8 @@ function RegistrationSuccessPopup({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl text-center w-full max-w-md p-10">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[9999] p-4">
+      <div className="bg-white rounded-2xl shadow-2xl text-center w-full max-w-md p-10 max-h-[90vh] overflow-y-auto">
         {/* Animated checkmark circle */}
         <div className="flex justify-center mb-6">
           <div className="w-24 h-24 rounded-full border-4 border-green-400 bg-white flex items-center justify-center shadow-md">
