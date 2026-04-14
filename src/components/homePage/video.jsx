@@ -1,169 +1,225 @@
 
 "use client";
+import { useState } from "react";
+import { useId } from "react";
+export default function VideoGallery() {
+const [activeVideo, setActiveVideo] = useState(null);
 
-const VideoGallery = () => {
+  const videos = [
+    {
+      id: "video1",
+      img: "/images/video1.jpg",
+      embed: "az4LDoONNj0",
+      title: "VVM Introduction",
+      desc: "Know more about the mission, vision, and spirit of Vidyarthi Vigyan Manthan.",
+      badge: "Featured",
+    },
+    {
+      id: "video2",
+      img: "/images/video2.jpg",
+      embed: "W7uYZm4su6o",
+      title: "Student Participation",
+      desc: "See how students engage with VVM through activities.",
+      badge: "Popular",
+    },
+    {
+      id: "video3",
+      img: "/images/video3.jpg",
+      embed: "Ir8dJMi3pkk",
+      title: "National Event Highlights",
+      desc: "Watch inspiring national-level moments.",
+      badge: "Event",
+    },
+    {
+  id: "video4",
+  img: "https://img.youtube.com/vi/m6e30MqTbdE/hqdefault.jpg",
+  embed: "m6e30MqTbdE",
+  title: "VVM Video",
+  desc: "Watch this informative VVM video and explore more insights.",
+  badge: "New",
+},
+{
+  id: "video5",
+  img: "https://img.youtube.com/vi/INSRUPCn7Tw/hqdefault.jpg",
+  embed: "INSRUPCn7Tw",
+  title: "VVM Event Video",
+  desc: "Watch this engaging VVM session and explore key highlights.",
+  badge: "New",
+}
+  ];
+
+
+
+
   return (
-    <section className="relative overflow-hidden py-12 
-      bg-[linear-gradient(135deg,#eef3f8_0%,#e4ebf3_45%,#f8fafc_100%)]">
+    <section className="relative py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc] overflow-hidden">
 
-      {/* 🔥 Glow Shapes */}
-      <div className="absolute w-[260px] h-[260px] bg-yellow-300/30 blur-[80px] rounded-full top-5 left-[-60px]"></div>
-      <div className="absolute w-[320px] h-[320px] bg-blue-900/20 blur-[90px] rounded-full bottom-[-60px] right-[-80px]"></div>
+      {/* Background */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#17395c_1px,transparent_1px)] [background-size:26px_26px]"></div>
 
-      {/* 🔲 Grid */}
-      <div className="absolute inset-0 opacity-10 
-        bg-[radial-gradient(#17395c_1px,transparent_1px)] 
-        bg-[size:26px_26px]"></div>
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <span className="inline-block px-5 py-2 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-400 text-xs font-bold tracking-widest mb-4">
+            WATCH & EXPLORE
+          </span>
 
-        {/* TOP */}
-        <div className="grid md:grid-cols-2 gap-10 items-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-[#17395c] mb-3">
+            Video Gallery
+          </h2>
 
-          {/* LEFT */}
-          <div>
-            <span className="inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase 
-              bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-400 shadow-md">
-              Watch & Explore
-            </span>
-
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[#17395c] mt-4">
-              Video Gallery
-            </h2>
-
-            <p className="text-gray-600 mt-4 max-w-xl">
-              Explore inspiring VVM highlights, event moments, student participation,
-              and important campaign videos in one premium showcase.
-            </p>
-          </div>
-
-          {/* RIGHT */}
-          <div className="flex items-center gap-4 p-6 rounded-2xl bg-white/70 backdrop-blur shadow-lg">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-r from-[#17395c] to-[#244d79] 
-              flex items-center justify-center text-yellow-400 text-xl">
-              ▶
-            </div>
-            <div>
-              <h5 className="font-bold text-[#17395c]">
-                Featured Learning & Event Videos
-              </h5>
-              <p className="text-gray-500 text-sm">
-                Designed in the official VVM theme with premium visual experience.
-              </p>
-            </div>
-          </div>
-
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Explore inspiring VVM highlights, events and student participation.
+          </p>
         </div>
 
-        {/* CARDS */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+      {videos.map((item) => (
+  <VideoCard 
+    key={item.id} 
+    item={item} 
+    setActiveVideo={setActiveVideo} 
+  />
+))}
+{/* Explore */}
+        <div className="rounded-[30px] bg-gradient-to-br from-[#1f446b] to-[#2b5a86] p-8 text-center shadow-xl pt-12">
 
-          {/* CARD */}
-          {[
-            {
-              id: "video1",
-              img: "/images/video1.jpg",
-              video: "az4LDoONNj0",
-              title: "VVM Introduction",
-              desc: "Know more about the mission, vision, and spirit of VVM.",
-              badge: "Featured"
-            },
-            {
-              id: "video2",
-              img: "/images/video2.jpg",
-              video: "W7uYZm4su6o",
-              title: "Student Participation",
-              desc: "See how students engage with VVM activities.",
-              badge: "Popular"
-            },
-            {
-              id: "video3",
-              img: "/images/video3.jpg",
-              video: "Ir8dJMi3pkk",
-              title: "Event Highlights",
-              desc: "Watch inspiring national-level moments.",
-              badge: "Event"
-            }
-          ].map((item) => (
-            <div key={item.id}
-              className="relative rounded-2xl overflow-hidden bg-white/70 backdrop-blur shadow-lg transition hover:-translate-y-2">
+  {/* Icon */}
+  <div className="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-yellow-400 mb-6 shadow-lg">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-8 h-8 text-[#1f446b]"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <rect x="3" y="7" width="13" height="10" rx="2" />
+      <polygon points="16,10 21,7 21,17 16,14" />
+    </svg>
+  </div>
 
-              {/* VIDEO AREA */}
-              <div className="relative h-[250px] overflow-hidden">
+  {/* Heading */}
+  <h4 className="text-white text-xl font-semibold mb-3">
+    Explore More Videos
+  </h4>
 
-                <input type="checkbox" id={item.id} className="hidden peer" />
+  {/* Description */}
+  <p className="text-gray-200 text-sm leading-relaxed mb-6">
+    Visit the official VVM video collection and stay connected with inspiring updates.
+  </p>
 
-                {/* IMAGE */}
-                <img
-                  src={item.img}
-                  alt=""
-                  className="w-full h-full object-cover transition peer-checked:opacity-0"
-                />
+  {/* Button */}
+  <a
+    href="https://www.youtube.com/@VidyarthiVigyanManthan"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-[#234c74] hover:bg-[#1b3d5c] text-yellow-400 px-6 py-3 rounded-full font-semibold transition"
+  >
+    Watch More
+    <span className="text-lg">→</span>
+  </a>
 
-                {/* IFRAME */}
-                <iframe
-                  src={`https://www.youtube.com/embed/${item.video}?autoplay=1`}
-                  className="absolute inset-0 w-full h-full opacity-0 pointer-events-none 
-                  peer-checked:opacity-100 peer-checked:pointer-events-auto"
-                  allow="autoplay"
-                />
+</div> 
+ </div>
 
-                {/* PLAY BUTTON */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition">
-                  <label
-                    htmlFor={item.id}
-                    className="w-16 h-16 flex items-center justify-center rounded-full 
-                    bg-yellow-400 text-[#17395c] text-xl cursor-pointer shadow-lg"
-                  >
-                    ▶
-                  </label>
-                </div>
+  
 
-                {/* BADGE */}
-                <span className="absolute top-3 left-3 text-xs font-bold px-3 py-1 rounded-full 
-                  bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-400">
-                  {item.badge}
-                </span>
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-5">
-                <h4 className="font-bold text-[#17395c]">{item.title}</h4>
-                <p className="text-gray-500 text-sm mt-2">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-
-          {/* CTA CARD */}
-          <div className="flex items-center justify-center rounded-2xl 
-            bg-gradient-to-br from-[#17395c] to-[#244d79] text-white p-6 text-center">
-
-            <div>
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-400 
-                flex items-center justify-center text-[#17395c] text-xl">
-                🎬
-              </div>
-
-              <h4 className="font-bold text-lg">Explore More Videos</h4>
-
-              <p className="text-sm opacity-80 mt-2">
-                Visit official VVM YouTube channel.
-              </p>
-
-              <a
-                href="https://www.youtube.com/@VidyarthiVigyanManthan"
-                target="_blank"
-                className="inline-block mt-4 bg-yellow-400 text-[#17395c] px-5 py-2 rounded-full font-bold"
-              >
-                Watch More →
-              </a>
-            </div>
-          </div>
-
-        </div>
       </div>
+
+      
+
+
+         {activeVideo && (
+  <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    
+    <div className="relative w-[90%] md:w-[700px] h-[400px] bg-black rounded-lg overflow-hidden">
+      
+      <iframe
+        src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1`}
+        className="w-full h-full"
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+      />
+
+      {/* Close Button */}
+      <button
+        onClick={() => setActiveVideo(null)}
+        className="absolute top-2 right-2 bg-white text-black px-3 py-1 rounded"
+      >
+        ✕
+      </button>
+
+    </div>
+
+  </div>
+)}
     </section>
   );
-};
+}
 
-export default VideoGallery;
+/* ================= CARD ================= */
+
+function VideoCard({ item , setActiveVideo}) {
+  const uniqueId = useId(); // avoid duplicate id issue
+
+  return (
+    <div className="rounded-2xl overflow-hidden shadow-lg bg-white">
+
+      <div className="relative h-[230px]">
+
+        {/* Checkbox */}
+        <input
+          type="checkbox"
+          id={uniqueId}
+          className="peer hidden"
+        />
+
+        {/* Thumbnail */}
+       <img
+  src={`https://img.youtube.com/vi/${item.embed}/hqdefault.jpg`}
+  alt={item.title}
+  className="absolute inset-0 w-full h-full object-cover transition peer-checked:opacity-0"
+/>
+
+        {/* Iframe */}
+        <iframe
+          src={`https://www.youtube.com/embed/${item.embed}?autoplay=1&mute=1`}
+          className="absolute inset-0 w-full h-full opacity-0 pointer-events-none transition peer-checked:opacity-100 peer-checked:pointer-events-auto z-10"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 transition peer-checked:opacity-0 z-20">
+          
+       
+          <button
+  onClick={() => setActiveVideo(item.embed)}
+  className="w-14 h-14 rounded-full bg-yellow-400 flex items-center justify-center text-[#17395c] text-xl shadow-lg cursor-pointer"
+>
+  ▶
+</button>
+
+        </div>
+
+        {/* Badge */}
+        <span className="absolute top-3 left-3 px-3 py-1 text-xs font-bold rounded-full bg-yellow-400 text-[#17395c]">
+          {item.badge}
+        </span>
+
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <h4 className="font-bold text-[#17395c] mb-1">{item.title}</h4>
+        <p className="text-sm text-gray-600">{item.desc}</p>
+      </div>
+
+   
+
+    </div>
+  );
+}

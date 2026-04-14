@@ -19,18 +19,18 @@ const navItems = [
             { label: "Structure Of VVM", href: "/about/structure-of-vvm" },
         ],
     },
-    {
-        label: "Our Teams",
-        href: "/ourTeams",
-        subLinks: [
-            { label: "Mentors and Patrons", href: "/ourTeams/mentorandpatrons" },
-            { label: "Advisors", href: "/ourTeams/advisors" },
-            { label: "Core Team", href: "/ourTeams/coreteam" },
-            { label: "Registration and Outreach Team", href: "/ourTeams/registrationandoutreachteam" },
-            { label: "Student Mentorship Team", href: "/ourTeams/studentmentorshipteam" },
-            { label: "Zonal Coordinators", href: "/ourTeams/zonalcoordinators" },
-        ],
-    },
+    // {
+    //     label: "Our Teams",
+    //     href: "/ourTeams",
+    //     subLinks: [
+    //         { label: "Mentors and Patrons", href: "/ourTeams/mentorandpatrons" },
+    //         { label: "Advisors", href: "/ourTeams/advisors" },
+    //         { label: "Core Team", href: "/ourTeams/coreteam" },
+    //         { label: "Registration and Outreach Team", href: "/ourTeams/registrationandoutreachteam" },
+    //         { label: "Student Mentorship Team", href: "/ourTeams/studentmentorshipteam" },
+    //         { label: "Zonal Coordinators", href: "/ourTeams/zonalcoordinators" },
+    //     ],
+    // },
     {
         label: "Registration",
         href: "/registration",
@@ -90,11 +90,11 @@ const navItems = [
     },
     {
         label: "Archive",
-        href: "/archive",
+        href: "/Archives",
         subLinks: [
-            { label: "Archives 2025", href: "/archive/vvm-2025" },
-            { label: "Archives 2024", href: "/archive/vvm-2024" },
-            { label: "Archives 2023", href: "/archive/vvm-2023" },
+            { label: "Archives 2025", href: "/Archives/vvm-2025" },
+            { label: "Archives 2024", href: "/Archives/vvm-2024" },
+            { label: "Archives 2023", href: "/Archives/vvm-2023" },
         ],
     },
     // {
@@ -139,9 +139,16 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap">
 
                 {/* LOGO */}
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 shrink-0 px-1 ">
                     <Image src="/nav-logo.png" alt="Logo" width={200} height={55} />
-                </div>
+                    <Image src="/gcc/oman.png" alt="oman" width={55} height={55} />
+<Image src="/gcc/qatar.png" alt="qatar" width={55} height={55} />
+<Image src="/gcc/kuwait.png" alt="kuwait" width={55} height={55} />
+<Image src="/gcc/saudi-arab.png" alt="saudi-arabia" width={55} height={55} />
+                    <Image src="/gcc/uae.png" alt="uae" width={55} height={55} />
+                    <Image src="/gcc/bahrain.png" alt="bahrain" width={55} height={55} />
+ </div>
+                            
 
                 {/* MOBILE MENU BUTTON */}
                 <div className="block lg:hidden">

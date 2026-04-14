@@ -1,258 +1,173 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/jsx-key */
 "use client";
+import { useState } from "react";
 
-import React, { useState } from "react";
+export default function VVMExamInfo({ importantDates = [] }) {
+  const [activeTab, setActiveTab] = useState("all");
 
-const VVMExamInfo = () => {
-    const [activeTab, setActiveTab] = useState("details");
+  return (
+    <section className="relative py-[45px] overflow-hidden 
+      bg-[linear-gradient(135deg,#eef3f8_0%,#e5ecf4_45%,#f8fafc_100%)]">
 
-    const details = [
-        [
-            "Eligibility",
-            "Students from Class VI to XI studying under CBSE, ICSE and State Boards",
-        ],
-        [
-            "Language",
-            <>
-                English, Hindi, Marathi, Tamil, Telugu, Kannada, Bengali, Gujarati,
-                Punjabi, Odia, Malayalam, Assamese, Sanskrit, Urdu
-                <br />
-                <span className="text-red-500 text-xs italic">
-                    Note: If less than 100 students are registered in any other language
-                    than English or Hindi, question paper will be available in English or
-                    Hindi only.
-                </span>
-            </>,
-        ],
-        ["Exam Venue", "School/Home"],
-        ["Fee", "Rs. 200/- (Rupees Two Hundred only)"],
-        [
-            "Mode of Payment",
-            <>
-                Through payment gateway and ONLINE (RTGS/NEFT) payment only.{" "}
-                <strong>NO CASH / DD / Cheque</strong> will be acceptable.
-                <br />
-                <br />
-                Exam Coordinators depositing fee directly in VVM's account are requested
-                to retain deposit slip with Transaction ID, Date & Time.
-                <br />
-                <span className="text-red-500 text-xs italic">
-                    This option is not applicable for Individually registering students.
-                </span>
-            </>,
-        ],
-        [
-            "ONLINE Payment Details for School Exam Coordinator Only",
-            <>
-                <div>
-                    <strong>Current Account Number:</strong> 7009670017
-                </div>
-                <div>
-                    <strong>Account Name:</strong> VIDYARTHI VIGYAN MANTHAN
-                </div>
-                <div>
-                    <strong>IFSC Code:</strong> IDIB000D008
-                </div>
-                <div>
-                    <strong>Branch Name & Address:</strong> Indian Bank, Defence Colony,
-                    New Delhi
-                </div>
-            </>,
-        ],
-        [
-            "Website URL",
-            <a
-                href="https://www.vvm.org.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
-            >
-                www.vvm.org.in
-            </a>,
-        ],
-    ];
+      {/* Background Grid */}
+      <div className="absolute inset-0 opacity-[0.08] 
+        bg-[radial-gradient(#17395c_1px,transparent_1px)] 
+        bg-[size:26px_26px]" />
 
-    const syllabus = [
-        {
-            content: "Science and Mathematics from text books",
-            contribution: "50% (50 Questions) [1 Mark Each]",
-            curriculum: "NCERT & State Board Textbooks",
-        },
-        {
-            content: "Indian Contributions to Science",
-            contribution: "20% (20 Questions)",
-            curriculum: "VVM Study Material",
-        },
-        {
-            content: "Life Story of Dr. Satyendra Nath Bose",
-            contribution: "20% (20 Questions)",
-            curriculum: "VVM Study Material",
-        },
-        {
-            content: "Logic & Reasoning",
-            contribution: "10% (10 Questions)",
-            curriculum: "General Reading",
-        },
-    ];
+      {/* Glow Shapes */}
+      <div className="absolute w-[260px] h-[260px] bg-yellow-300/20 blur-[70px] rounded-full top-5 -left-16 animate-pulse" />
+      <div className="absolute w-[320px] h-[320px] bg-blue-900/20 blur-[70px] rounded-full -bottom-16 -right-20 animate-pulse" />
 
-    const syllabusLevel2 = [
-        {
-            content: "Science and Mathematics from text books",
-            contribution: "60% (30 Questions) [2 Marks Each]",
-            curriculum: "NCERT & State Board Textbooks",
-        },
-        {
-            content: "Indian Contribution to Science",
-            contribution: "20% (10 Questions)",
-            curriculum: "VVM Study Material",
-        },
-        {
-            content: "Life Story of Dr. Satyendra Nath Bose",
-            contribution: "10% (5 Questions)",
-            curriculum: "VVM Study Material",
-        },
-        {
-            content: "Logic & Reasoning",
-            contribution: "10% (5 Questions)",
-            curriculum: "General Reading",
-        },
-    ];
+      <div className="max-w-6xl mx-auto px-4 relative">
 
-    const awards = [
-        {
-            level: "School Level",
-            awards: [
-                "Digital participation certificate for all students",
-                "Merit certificates for top performers",
-            ],
-        },
-        {
-            level: "State Level",
-            awards: [
-                "Top students receive State Rank certificates",
-                "Invitation to State Science Camp",
-            ],
-        },
-        {
-            level: "National Level",
-            awards: [
-                "National Rank certificates",
-                "Invitation to National Science Camp",
-                "Cash prizes & scholarships",
-            ],
-        },
-    ];
+        {/* Header */}
+        <div className="mb-10 max-w-3xl">
+          <span className="inline-block mb-4 px-5 py-2 rounded-full 
+            bg-gradient-to-r from-[#17395c] to-[#244d79] 
+            text-yellow-300 text-xs font-extrabold tracking-widest uppercase">
+            Important Information
+          </span>
 
-    return (
-        <div className="max-w-6xl mx-auto my-10 px-4">
-            {/* Tabs */}
-            <div className="flex flex-wrap gap-4 mb-6 justify-center">
-                {["details", "syllabus", "syllabus2", "awards"].map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-6 py-3 rounded-md font-semibold transition ${activeTab === tab
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                            }`}
-                    >
-                        {tab === "details"
-                            ? "VVM Details"
-                            : tab === "syllabus"
-                                ? "Syllabus Level I"
-                                : tab === "syllabus2"
-                                    ? "Syllabus Level II"
-                                    : "Awards & Recognition"}
-                    </button>
-                ))}
-            </div>
+          <h3 className="text-4xl font-black text-[#17395c] mb-3">
+            Important Information
+          </h3>
 
-            {/* DETAILS */}
-            {activeTab === "details" && (
-                <div className="overflow-x-auto border rounded-lg">
-                    <table className="w-full text-sm">
-                        <tbody>
-                            {details.map(([title, value], idx) => (
-                                <tr key={idx} className={idx % 2 ? "bg-gray-100" : "bg-white"}>
-                                    <td className="px-4 py-3 font-semibold w-1/3">{title}</td>
-                                    <td className="px-6 py-3">{value}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {/* SYLLABUS LEVEL I */}
-            {activeTab === "syllabus" && (
-                <div className="overflow-x-auto border rounded-lg">
-                    <table className="w-full text-sm">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-3">Content</th>
-                                <th className="px-4 py-3">Contribution</th>
-                                <th className="px-4 py-3">Curriculum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {syllabus.map((s, i) => (
-                                <tr key={i} className={i % 2 ? "bg-gray-50" : "bg-white"}>
-                                    <td className="px-4 py-3">{s.content}</td>
-                                    <td className="px-4 py-3">{s.contribution}</td>
-                                    <td className="px-4 py-3">{s.curriculum}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {/* SYLLABUS LEVEL II */}
-            {activeTab === "syllabus2" && (
-                <div className="overflow-x-auto border rounded-lg">
-                    <table className="w-full text-sm">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-4 py-3">Content</th>
-                                <th className="px-4 py-3">Contribution</th>
-                                <th className="px-4 py-3">Curriculum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {syllabusLevel2.map((s, i) => (
-                                <tr key={i} className={i % 2 ? "bg-gray-50" : "bg-white"}>
-                                    <td className="px-4 py-3">{s.content}</td>
-                                    <td className="px-4 py-3">{s.contribution}</td>
-                                    <td className="px-4 py-3">{s.curriculum}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            {/* AWARDS */}
-            {activeTab === "awards" && (
-                <div className="grid md:grid-cols-3 gap-6">
-                    {awards.map((level, i) => (
-                        <div key={i} className="border rounded-lg overflow-hidden">
-                            <div className="bg-blue-600 text-white px-4 py-3 font-bold">
-                                {level.level}
-                            </div>
-                            <ul>
-                                {level.awards.map((a, j) => (
-                                    <li key={j} className="px-4 py-3 border-t text-sm">
-                                        {a}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-            )}
+          <p className="text-[#5d7087] leading-7">
+            Check all key details related to important dates, registration process,
+            syllabus, and student awards in one place.
+          </p>
         </div>
-    );
-};
 
-export default VVMExamInfo;
+        {/* Glass Card */}
+        <div className="p-6 rounded-[30px] backdrop-blur-xl 
+          bg-white/60 border border-white/60 
+          shadow-[0_18px_40px_rgba(23,57,92,0.10)]">
+
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-3 justify-center mb-6">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-5 py-2 rounded-full text-sm font-bold transition 
+                ${activeTab === "all"
+                  ? "bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-300"
+                  : "bg-white text-[#17395c] shadow-md hover:-translate-y-1"
+                }`}
+            >
+              Important Dates
+            </button>
+
+            {/* <button
+              onClick={() => setActiveTab("featured")}
+              className={`px-5 py-2 rounded-full text-sm font-bold transition 
+                ${activeTab === "featured"
+                  ? "bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-300"
+                  : "bg-white text-[#17395c] shadow-md hover:-translate-y-1"
+                }`}
+            >
+              Registration Process
+            </button> */}
+          </div>
+
+          {/* ================= TAB CONTENT ================= */}
+
+          {/* IMPORTANT DATES */}
+          {activeTab === "all" && (
+            <div className="rounded-2xl overflow-hidden border 
+              bg-white shadow">
+
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gradient-to-r from-[#17395c] to-[#2c5c8c] text-white text-sm">
+                    <th className="p-4">Event</th>
+                    <th className="p-4">Details</th>
+                  </tr>
+                </thead>
+
+                <tbody className="text-center text-[#4f6480]">
+                  {importantDates.length === 0 ? (
+                    <tr>
+                      <td colSpan="2" className="py-6">
+                        No important dates available.
+                      </td>
+                    </tr>
+                  ) : (
+                    importantDates.map((item, index) => (
+                      <tr key={index} className="even:bg-gray-50 hover:bg-blue-50">
+                        <td
+                          className="font-extrabold text-[#17395c] p-4"
+                          dangerouslySetInnerHTML={{ __html: item.title }}
+                        />
+                        <td
+                          className="p-4 text-[17px]"
+                          dangerouslySetInnerHTML={{ __html: item.description }}
+                        />
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* REGISTRATION PROCESS */}
+          {/* {activeTab === "featured" && (
+            <div className="rounded-2xl overflow-hidden border bg-white shadow">
+
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-[#17395c] to-[#2c5c8c] text-white">
+                    <th className="p-4">Category</th>
+                    <th className="p-4">Details</th>
+                  </tr>
+                </thead>
+
+                <tbody className="text-[#4f6480]">
+                  <tr>
+                    <td className="font-bold p-4">Eligibility</td>
+                    <td className="p-4">
+                      Students from Class VI to XI studying under CBSE, ICSE and State Boards
+                    </td>
+                  </tr>
+
+                  <tr className="bg-gray-50">
+                    <td className="font-bold p-4">Exam Venue</td>
+                    <td className="p-4">School / Home</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-bold p-4">Registration</td>
+                    <td className="p-4">
+                      Opens on 1st July, 2025 <br />
+                      Closes on 10th October, 2025
+                    </td>
+                  </tr>
+
+                  <tr className="bg-gray-50">
+                    <td className="font-bold p-4">Fee</td>
+                    <td className="p-4">₹200/-</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-bold p-4">Website</td>
+                    <td className="p-4">
+                      <a
+                        href="https://vvm.org.in"
+                        target="_blank"
+                        className="inline-flex px-4 py-2 rounded-full 
+                        bg-gradient-to-r from-[#17395c] to-[#244d79] 
+                        text-yellow-300 font-bold hover:-translate-y-1"
+                      >
+                        Visit Website
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          )} */}
+
+        </div>
+      </div>
+    </section>
+  );
+}

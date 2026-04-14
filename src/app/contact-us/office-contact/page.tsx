@@ -1,6 +1,7 @@
 
 "use client";
 
+import { MapPin } from "lucide-react";
 import Link from "next/link";
 
 export default function ContactPage() {
@@ -119,7 +120,7 @@ export default function ContactPage() {
                 <div className="p-6 flex flex-col items-center text-center h-full">
 
                   <div className="w-16 h-16 mb-4 rounded-xl bg-gradient-to-br from-[#17395c] to-[#244d79] flex items-center justify-center shadow-lg">
-                    <span className="text-yellow-400 text-2xl">📍</span>
+                    <span className="text-yellow-400 text-2xl"> <MapPin size={25} className="text-[white]" /></span>
                   </div>
 
                   <h4 className="text-xl font-bold text-[#17395c] mb-4">

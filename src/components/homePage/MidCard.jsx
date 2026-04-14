@@ -1,6 +1,6 @@
 
 'use client';
-
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Folder, UserPlus, Monitor, Award, BookOpen } from 'lucide-react';
 
@@ -23,7 +23,7 @@ const VVMHeroAbout = () => {
           {/* TOP BUTTONS */}
           <div className="flex flex-wrap justify-center gap-4 mb-10">
 
-            <Link href="/register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
+            <Link href="/Register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">Registration</span>
               VVM 2026-27
               <UserPlus size={18} />
@@ -35,11 +35,11 @@ const VVMHeroAbout = () => {
               <Folder size={18} />
             </a>
 
-            <Link href="/state-level-camp-exam" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white font-bold shadow-lg hover:scale-105 transition">
+            {/* <Link href="/state-level-camp-exam" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">Latest</span>
               SLC Result 2025-26
               <ArrowRight size={18} />
-            </Link>
+            </Link> */}
 
           </div>
 
@@ -80,7 +80,9 @@ const VVMHeroAbout = () => {
             </div>
 
             {/* RIGHT SLIDER CARD */}
-            <div className="relative flex justify-center">
+            <div className="relative flex flex-col items-center gap-6"> 
+
+              
 
               <div className="bg-white/80 backdrop-blur-lg p-6 rounded-3xl shadow-xl max-w-md w-full">
 
@@ -113,7 +115,7 @@ const VVMHeroAbout = () => {
       </section>
 
       {/* ABOUT SECTION */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
 
           {/* LEFT */}
@@ -141,26 +143,42 @@ const VVMHeroAbout = () => {
                 ['14', 'Languages'],
                 ['204821', 'Level 1'],
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 bg-gray-50 p-4 rounded-xl shadow">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <div key={i} className="flex items-center gap-3 bg-blue-100 p-4 rounded-xl shadow border-2 border-[#17395c]">
+                  <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center">
                     ⭐
                   </div>
                   <div>
                     <h5 className="font-bold">{item[0]}</h5>
-                    <span className="text-sm text-gray-500">{item[1]}</span>
+                    <span className="text-sm text-[#17395c]">{item[1]}</span>
                   </div>
                 </div>
               ))}
 
+
+
             </div>
           </div>
 
-          {/* RIGHT */}
-          <div className="text-center">
-            <img src="/logo.png" alt="logo" className="mx-auto w-48 rounded-full shadow-lg" />
-          </div>
 
+          {/* Logo */}
+          <div className="flex justify-center">
+            <div className="relative w-[310px] h-[310px] flex items-center justify-center  animate-[floatSoft_5s_ease-in-out_infinite] ">
+              
+              <div className="absolute inset-0 rounded-full p-[8px] bg-[linear-gradient(135deg,#f4df17,#17395c)] shadow-[0_0_0_10px_rgba(244,223,23,0.1),0_25px_60px_rgba(23,57,92,0.22)]" />
+
+<div className="absolute inset-[14px] rounded-full bg-gradient-to-br from-[#17395c] to-[#254e7a] flex items-center justify-center overflow-hidden"></div>
+              <Image
+                src="/gcc/Vidyarthi-Vigyan-Manthan-logo.png"
+                alt="Logo"
+                width={245} 
+                height={245}
+                className="relative z-10 object-contain w-[230px] h-[230px] rounded-full"
+              />
+            </div>
+          </div>
+          
         </div>
+        
       </section>
 
     </div>

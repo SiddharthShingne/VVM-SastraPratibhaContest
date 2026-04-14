@@ -1,154 +1,215 @@
+
 "use client";
-import React from "react";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 
-const page = () => {
-    return (
-        <div>
-            {/* Header */}
-            <div className="bg-linear-to-b from-[#f9faff] to-[#eef0ff] py-24 text-center">
-                <h1 className="text-5xl font-bold text-[#111d35] mb-4">
-                    Student Awards
-                </h1>
-                <div className="flex justify-center items-center space-x-1 text-base font-medium text-gray-500">
-                    <Link href="/" className="hover:text-[#7f00ff] transition-colors">
-                        Home
-                    </Link>
-                    <ChevronRight className="w-3 h-3" />
-                    <span>Exam Details</span>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className="text-[#111d35]">Student Awards</span>
-                </div>
-            </div>
+export default function StudentAwards() {
+  return (
+    <div>
+      {/* ================= Breadcrumb ================= */}
+      <div className="bg-[#162a4a] py-[50px]">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col justify-center min-h-[65px]">
+            <h6 className="text-white text-[27px] font-medium mb-1">
+              Student Awards
+            </h6>
 
-            {/* Content Wrapper (Table + SRIJAN) */}
-            <div className="max-w-5xl mx-auto px-4 mt-12 mb-20 space-y-12 font-[Euclid Circular,sans-serif] text-[#111827]">
-                {/* Table */}
-                <div className="overflow-x-auto">
-                    <table className="min-w-full border-collapse text-left text-[15px]">
-                        <thead className="bg-indigo-100 text-[#0f172a] uppercase text-[14px] font-bold">
-                            <tr>
-                                <th className="px-5 py-4 w-30">Level</th>
-                                <th className="px-5 py-4">Name</th>
-                                <th className="px-5 py-4">Selection</th>
-                                <th className="px-5 py-4">Reward</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-gray-700">
-                            {/* LEVEL I */}
-                            <tr className="bg-white">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">LEVEL – I</td>
-                                <td className="px-5 py-5">SELECTION FOR LEVEL-II</td>
-                                <td className="px-5 py-5">
-                                    • All the successful participants will be eligible for participation in School Level Online Examination : Level-II
-                                </td>
-                                <td className="px-5 py-5">
-                                    Participation Certificate
-                                    <br />
-                                    Certificates will be generated online only. Participating students can download them after logging into their profile account on our website. No printed copy will be provided.
-                                </td>
-                            </tr>
-
-                            {/* LEVEL II - SCHOOL */}
-                            <tr className="bg-gray-50">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">LEVEL – II</td>
-                                <td className="px-5 py-5">SCHOOL TOPPERS</td>
-                                <td className="px-5 py-5">
-                                    The top 3 rankers per class will be SCHOOL winners (i.e. 18 students from each school). Minimum 10 students per class must be registered from a school to qualify for this category.
-                                </td>
-                                <td className="px-5 py-5">
-                                    Merit Certificate
-                                    <br />
-                                    Certificates generated online only. No printed copies.
-                                </td>
-                            </tr>
-
-                            {/* LEVEL II - DISTRICT */}
-                            <tr className="bg-white">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">LEVEL – II</td>
-                                <td className="px-5 py-5">DISTRICT TOPPERS</td>
-                                <td className="px-5 py-5">
-                                    Top 3 rankers per class will be DISTRICT winners (i.e. 18 students from each district). [All schools in that district are considered.]
-                                </td>
-                                <td className="px-5 py-5 space-y-2">
-                                    <p>Merit Certificate</p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                        <li>Certificates generated online only.</li>
-                                        <li>Download via profile login; no printed copies.</li>
-                                        <li>Fee waiver for Class 6–10 in next session registration.</li>
-                                        <li>Class 11: free e-copy of Science India magazine for 1 year.</li>
-                                    </ul>
-                                </td>
-                            </tr>
-
-                            {/* LEVEL III */}
-                            <tr className="bg-gray-50">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">LEVEL – III</td>
-                                <td className="px-5 py-5">STATE LEVEL WINNERS</td>
-                                <td className="px-5 py-5 space-y-2">
-                                    <p>Top 25 rankers per class from a state qualify for the State Level Camp.</p>
-                                    <p>Top 3 rankers per class are STATE winners (i.e. 18 students per state). Includes Sāstra Pratibhā & Zone-V participants.</p>
-                                </td>
-                                <td className="px-5 py-5 space-y-2">
-                                    <ul className="list-disc pl-5 space-y-1">
-                                        <li>State Camp Participation Certificate</li>
-                                        <li>State Camp Memento</li>
-                                        <li>₹5,000/-, ₹3,000/-, ₹2,000/- for 1st to 3rd rankers</li>
-                                        <li>Free visit to NCSM unit</li>
-                                    </ul>
-                                </td>
-                            </tr>
-
-                            {/* LEVEL IV */}
-                            <tr className="bg-white">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">LEVEL – IV</td>
-                                <td className="px-5 py-5">NATIONAL LEVEL WINNERS</td>
-                                <td className="px-5 py-5 space-y-2">
-                                    <p>Top 2 winners per state qualify for National Camp.</p>
-                                    <p>Top 3 rankers per class are NATIONAL winners (18 students). Top 3 from each zone are ZONAL winners.</p>
-                                </td>
-                                <td className="px-5 py-5 space-y-2">
-                                    <ul className="list-disc pl-5 space-y-1">
-                                        <li>National Camp Memento & Participation Certificate</li>
-                                        <li>₹25,000/-, ₹15,000/-, ₹10,000/- for National winners</li>
-                                        <li>Internship + Bhaskara Scholarship (1 year)</li>
-                                        <li>₹5,000/-, ₹3,000/-, ₹2,000/- for Zonal winners</li>
-                                        <li>NCSM Innovation Hub Membership</li>
-                                    </ul>
-                                </td>
-                            </tr>
-
-                            {/* SCHOOLS */}
-                            <tr className="bg-gray-50">
-                                <td className="px-5 py-5 font-semibold text-[#0f172a]">Schools</td>
-                                <td className="px-5 py-5" colSpan={3}>
-                                    Schools registering 100+ students can participate in a Special Activity if they visit a nearby NCSM unit with valid tickets.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* SRIJAN & BHASKARA */}
-                <div className="space-y-10 text-left">
-                    <div>
-                        <h2 className="text-sm font-bold uppercase tracking-wide mb-2">SRIJAN</h2>
-                        <p className="text-[15px] leading-relaxed text-[#4b5563]">
-                            Vidyarthi Vigyan Manthan 2025–26 edition will provide National (Himalayans) and Zonal Winners an opportunity to participate in an extensive training cum internship (1 to 3 weeks) in any one of the reputed national labs or premier research institutions like DRDO, ISRO, CSIR, BARC etc.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h2 className="text-sm font-bold uppercase tracking-wide mb-2">BHASKARA SCHOLARSHIP</h2>
-                        <p className="text-[15px] leading-relaxed text-[#4b5563]">
-                            Vidyarthi Vigyan Manthan will award the Bhaskara Scholarship of Rs. 2000/- per month to the National Winners (Himalayans) for one year. A specific project/activity will be assigned to every Himalayan at the end of the SRIJAN program. The scholarship will be released quarterly based on assessment by the Student Mentorship Team.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <ol className="flex text-white text-[12px] gap-2">
+              <li>Home</li>
+              <li>{">"}</li>
+              <li>Exam Details</li>
+              <li>{">"}</li>
+              <li className="font-semibold">Student Awards</li>
+            </ol>
+          </div>
         </div>
-    );
-};
+      </div>
 
-export default page;
+      {/* ================= Main Section ================= */}
+      <div className="bg-white py-16">
+        <div className="max-w-6xl mx-auto px-4">
+
+          {/* Glass Card */}
+          <div className="relative rounded-[28px] overflow-hidden bg-white/75 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11)] mb-20">
+
+            {/* Top Gradient Border */}
+            <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+
+            <div className="p-8">
+
+              {/* Header */}
+              <div className="text-center mb-6">
+                <span className="text-[20px] font-semibold">
+                  Awards & Recognition
+                </span>
+
+                <h6 className="text-[35px] font-extrabold text-[#17395c] mt-2">
+                  STUDENT AWARDS
+                </h6>
+              </div>
+
+              {/* ================= Table ================= */}
+              <div className="rounded-[20px] overflow-hidden shadow-[0_15px_35px_rgba(23,57,92,0.08)]">
+                <table className="w-full text-sm">
+
+                  {/* Table Head */}
+                  <thead className="bg-gradient-to-br from-[#17395c] to-[#244d79] text-white">
+                    <tr>
+                      <th className="p-4 font-extrabold text-center">Level</th>
+                      <th className="p-4 font-extrabold text-center">Name</th>
+                      <th className="p-4 font-extrabold text-center">Selection</th>
+                      {/* <th className="p-4 font-extrabold text-center">Reward</th> */}
+                    </tr>
+                  </thead>
+
+                  {/* Table Body */}
+                  <tbody className="text-[#4f6480]">
+
+                    {/* Row */}
+                    <tr className="border-b hover:bg-yellow-50">
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        LEVEL – I
+                      </td>
+                      <td className="p-4 font-bold text-[#17395c]">
+                        SELECTION FOR LEVEL-II
+                      </td>
+                      <td className="p-4">
+                        All successful participants will be eligible for School Level Online Examination (Level-II).
+                      </td>
+                      {/* <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
+                          Participation Certificate
+                        </span>
+                        <br />
+                        Certificates will be available online via student dashboard.
+                      </td> */}
+                    </tr>
+
+                    <tr className="border-b hover:bg-yellow-50">
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        LEVEL – II
+                      </td>
+                      <td className="p-4 font-bold text-[#17395c]">
+                        SCHOOL TOPPERS
+                      </td>
+                      <td className="p-4">
+                        Top 3 rankers per class (18 students per school). Minimum 10 students required per class.
+                      </td>
+                      {/* <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
+                          Merit Certificate
+                        </span>
+                        <br />
+                        Available online only.
+                      </td> */}
+                    </tr>
+
+                    <tr className="border-b hover:bg-yellow-50">
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        LEVEL – II
+                      </td>
+                      <td className="p-4 font-bold text-[#17395c]">
+                        DISTRICT TOPPERS
+                      </td>
+                      <td className="p-4">
+                        Top 3 rankers per class (18 per district). All schools in district included.
+                      </td>
+                      {/* <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
+                          Merit Certificate
+                        </span>
+                        <br />
+                        • Fee waiver (Class 6–10) <br />
+                        • Science India e-magazine (Class 11)
+                      </td> */}
+                    </tr>
+
+                    <tr className="border-b hover:bg-yellow-50">
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        LEVEL – III
+                      </td>
+                      <td className="p-4 font-bold text-[#17395c]">
+                        STATE LEVEL WINNERS
+                      </td>
+                      <td className="p-4">
+                        Top 25 qualify for camp. Top 3 per class become winners.
+                      </td>
+                      {/* <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 mb-1">
+                          State Rewards
+                        </span>
+                        <br />
+                        • Certificate & Memento <br />
+                        • ₹5000 / ₹3000 / ₹2000 prizes <br />
+                        • NCSM visit
+                      </td> */}
+                    </tr>
+
+                    <tr className="border-b hover:bg-yellow-50">
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        LEVEL – IV
+                      </td>
+                      <td className="p-4 font-bold text-[#17395c]">
+                        NATIONAL LEVEL WINNERS
+                      </td>
+                      <td className="p-4">
+                        Top 2 per state qualify. Top 3 per class become national winners.
+                      </td>
+                      {/* <td className="p-4">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600 mb-1">
+                          National Rewards
+                        </span>
+                        <br />
+                        • Certificate & Memento <br />
+                        • ₹25k / ₹15k / ₹10k prizes <br />
+                        • Internship & Scholarship
+                      </td> */}
+                    </tr>
+
+                    <tr>
+                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                        Schools
+                      </td>
+                      <td colSpan="3" className="p-4">
+                        Schools with 100+ registrations can access special NCSM activities.
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Divider */}
+              <div className="h-[1px] bg-[#17395c1a] my-8"></div>
+
+              {/* Info Cards */}
+              <div className="space-y-5">
+
+                <div className="p-5 rounded-[18px] bg-gradient-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
+                  <h5 className="font-extrabold text-[#17395c] mb-2">
+                    SRIJAN
+                  </h5>
+                  <p className="text-[15px] text-[#4f6480]">
+                    National and Zonal winners will get internship opportunities
+                    (1–3 weeks) in institutions like DRDO, ISRO, CSIR, BARC, etc.
+                  </p>
+                </div>
+
+                <div className="p-5 rounded-[18px] bg-gradient-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
+                  <h5 className="font-extrabold text-[#17395c] mb-2">
+                    BHASKARA SCHOLARSHIP
+                  </h5>
+                  <p className="text-[15px] text-[#4f6480]">
+                    ₹2000/month scholarship for 1 year for National Winners,
+                    based on project evaluation and mentorship.
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
