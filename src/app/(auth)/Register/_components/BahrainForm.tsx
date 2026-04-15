@@ -9,7 +9,8 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
-import { registerStudentV2 , fetchDistricts} from "@/services/authService"; // ← import your API
+import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
+import Link from "next/link";
 
 type RegistrationForm = {
   fullName: string;
@@ -147,7 +148,7 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 p-4">
       <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
         <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
           {c.icon}
@@ -178,7 +179,7 @@ function RegistrationSuccessPopup({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[9999] p-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-9999 p-4">
       <div className="bg-white rounded-2xl shadow-2xl text-center w-full max-w-md p-10 max-h-[90vh] overflow-y-auto">
         {/* Animated checkmark circle */}
         <div className="flex justify-center mb-6">
@@ -220,12 +221,14 @@ function RegistrationSuccessPopup({
         </p>
 
         {/* Go to Login button */}
-        <button
-          onClick={onClose}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
-        >
-          Go to Login
-        </button>
+        <Link href="/Login">
+          <button
+            onClick={onClose}
+            className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
+          >
+            Go to Login
+          </button>
+        </Link>
       </div>
     </div>
   );
@@ -371,7 +374,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
 
         pincode: data.pincode,
         address: data.schoolAddress,
-        dist_id: data.district,  
+        dist_id: data.district,
 
         parent_full_name: data.parentName,
         parent_mobile: data.parentMobile,
@@ -400,7 +403,8 @@ export default function BahraiinForm({ countries = [] }: Props) {
     } catch (error: any) {
       setDialog({
         type: "error",
-        message: error?.response?.data?.message || error?.message || "Registration failed"      });
+        message: error?.response?.data?.message || error?.message || "Registration failed"
+      });
     } finally {
       setLoading(false);
     }
@@ -414,7 +418,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
             Student Registration – bahrain
           </h1>
-          <Image src="/gcc/bahrain.webp" alt="bahrain" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+          <Image src="/gcc/bahrain.png" alt="bahrain" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -456,7 +460,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
             />
             <SelectField label="Class / Grade" required options={grades}
               registration={register("grade", { required: "Grade is required" })}
-              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined} 
+              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
             />
             <SelectField
               label="How did you hear about VVM?" required options={hearOptions}
@@ -486,9 +490,9 @@ export default function BahraiinForm({ countries = [] }: Props) {
               registration={register("board", { required: "Board is required" })}
               error={touchedFields?.board && errors?.board ? errors.board : undefined}
             />
-            <InputField label="Country" disabled 
+            <InputField label="Country" disabled
               value={countries.find((c) => c.value === "bahrain")?.label || "Bahrain"}
-              
+
             />
             <InputField label="Pincode" required placeholder="Enter pincode"
               registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
@@ -507,7 +511,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
                 error={errors.schoolAddress}
               />
             </div>
-            
+
           </Section>
 
           {/* Parent Details */}

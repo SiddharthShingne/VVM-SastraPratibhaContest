@@ -11,6 +11,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
+import Link from "next/link";
 
 type RegistrationForm = {
     fullName: string;
@@ -221,12 +222,14 @@ function RegistrationSuccessPopup({
                 </p>
 
                 {/* Go to Login button */}
+                <Link href="/Login">
                 <button
                     onClick={onClose}
                     className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
                 >
                     Go to Login
                 </button>
+                </Link>
             </div>
         </div>
     );
@@ -245,7 +248,7 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): 
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function SaudiForm({ country, countries = [] }: Props) {
+export default function SaudiForm({ countries }: Props) {
     const [loading, setLoading] = useState(false);
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);
@@ -382,7 +385,7 @@ export default function SaudiForm({ country, countries = [] }: Props) {
 
                 password: data.password,
                 password_confirmation: data.confirmPassword,
-                country_code: "SAU", // ⚠️ confirm with backend
+                country_code: "SA", // ⚠️ confirm with backend
                 state_id: "43",      // ⚠️ must match backend DB
                 hear: Number(data.hear),
             };
@@ -418,7 +421,7 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                     <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
                         Student Registration – SAUDI-ARABIA
                     </h1>
-                    <Image src="/gcc/saudi-arabia.webp" alt="SAUDI-ARABIA" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+                    <Image src="/gcc/saudi-arab.png" alt="SAUDI-ARABIA" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -447,8 +450,6 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                             error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
                         /> */}
 
-
-
                         <InputField
                             label="National ID / Iqama"
                             required
@@ -457,8 +458,8 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                             registration={register("emiratesId", {
                                 required: "ID is required",
                                 pattern: {
-                                    value: /^[12][0-9]{9}$/,
-                                    message: "ID must be 10 digits and start with 1 or 2"
+                                    value: /^[0-9]{10}$/,
+                                    message: "ID must be 10 digits"
                                 }
                             })}
                             error={
@@ -471,22 +472,14 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                             registration={register("gender", { required: "Gender is required" })}
                             error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
                         />
-
-
-
-
-
-
-
-
                         <InputField
                             label="Student Mobile"
                             placeholder="Enter mobile"
                             registration={register("studentMobile", {
                                 required: "Student Mobile is required",
                                 pattern: {
-                                    value: /^5[0-9]{8}$/,
-                                    message: "Mobile number must be 9 digits and start with 5"
+                                    value: /^[0-9]{9}$/,
+                                    message: "Mobile number must be 9 digits"
                                 }
                             })}
                             error={
@@ -567,11 +560,6 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                             error={errors.parentName}
                         />
 
-
-
-
-
-
                         <InputField
                             label="Parent Mobile"
                             required
@@ -579,8 +567,8 @@ export default function SaudiForm({ country, countries = [] }: Props) {
                             registration={register("parentMobile", {
                                 required: "Parent Mobile is required",
                                 pattern: {
-                                    value: /^5[0-9]{8}$/,
-                                    message: "Mobile number must be 9 digits and start with 5"
+                                    value: /^[0-9]{9}$/,
+                                    message: "Mobile number must be 9 digits"
                                 }
                             })}
                             error={errors.parentMobile}

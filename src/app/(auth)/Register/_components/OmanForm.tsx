@@ -11,7 +11,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
-
+import Link from "next/link";
 type RegistrationForm = {
     fullName: string;
     dob: string;
@@ -83,7 +83,13 @@ type Props = {
 };
 
 // ─── Styled Modal Dialog ──────────────────────────────────────────────────────
-function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => void }) {
+function StyledDialog({
+    dialog,
+    onClose,
+}: {
+    dialog: DialogType;
+    onClose: () => void;
+}) {
     const config = {
         success: {
             bg: "from-green-50 to-emerald-50",
@@ -93,8 +99,18 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
             titleColor: "text-green-700",
             btnBg: "bg-green-600 hover:bg-green-700",
             icon: (
-                <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                    className="w-10 h-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                 </svg>
             ),
         },
@@ -106,8 +122,18 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
             titleColor: "text-red-700",
             btnBg: "bg-red-600 hover:bg-red-700",
             icon: (
-                <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                    className="w-10 h-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                 </svg>
             ),
         },
@@ -119,8 +145,18 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
             titleColor: "text-blue-700",
             btnBg: "bg-blue-600 hover:bg-blue-700",
             icon: (
-                <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                    className="w-10 h-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                 </svg>
             ),
         },
@@ -132,8 +168,18 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
             titleColor: "text-purple-700",
             btnBg: "bg-purple-600 hover:bg-purple-700",
             icon: (
-                <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <svg
+                    className="w-10 h-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
                 </svg>
             ),
         },
@@ -149,14 +195,20 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center pb-[5vh] justify-center z-9999 p-4">
-            <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
-                <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
+            <div
+                className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}
+            >
+                <div
+                    className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}
+                >
                     {c.icon}
                 </div>
                 <h2 className={`text-2xl font-bold mb-3 ${c.titleColor}`}>
                     {dialog.title || titles[dialog.type]}
                 </h2>
-                <p className="text-base text-gray-600 mb-7 leading-relaxed wrap-break-word overflow-hidden max-h-40 overflow-y-auto">{dialog.message}</p>
+                <p className="text-base text-gray-600 mb-7 leading-relaxed wrap-break-word overflow-hidden max-h-40 overflow-y-auto">
+                    {dialog.message}
+                </p>
                 <button
                     onClick={onClose}
                     className={`w-24 py-3 px-6 ${c.btnBg} text-white font-bold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 text-lg`}
@@ -184,8 +236,18 @@ function RegistrationSuccessPopup({
                 {/* Animated checkmark circle */}
                 <div className="flex justify-center mb-6">
                     <div className="w-24 h-24 rounded-full border-4 border-green-400 bg-white flex items-center justify-center shadow-md">
-                        <svg className="w-12 h-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        <svg
+                            className="w-12 h-12 text-green-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 13l4 4L19 7"
+                            />
                         </svg>
                     </div>
                 </div>
@@ -212,35 +274,44 @@ function RegistrationSuccessPopup({
                 {/* Username */}
                 <div className="bg-gray-50 border border-gray-200 rounded-xl px-6 py-3 inline-block mb-4">
                     <span className="text-sm text-gray-500 mr-2">Username:</span>
-                    <span className="text-base font-bold text-gray-800 tracking-wide">{username}</span>
+                    <span className="text-base font-bold text-gray-800 tracking-wide">
+                        {username}
+                    </span>
                 </div>
 
                 {/* Spam note */}
                 <p className="text-xs text-gray-400 mb-7">
-                    If the credentials email is not in your INBOX,<br />please check your Spam folder.
+                    If the credentials email is not in your INBOX,
+                    <br />
+                    please check your Spam folder.
                 </p>
 
                 {/* Go to Login button */}
+                <Link href="/Login">
                 <button
                     onClick={onClose}
                     className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
                 >
                     Go to Login
                 </button>
+                </Link>
             </div>
         </div>
     );
 }
 
 // ─── Debounce hook ────────────────────────────────────────────────────────────
-function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): T {
+function useDebounce<T extends (...args: any[]) => void>(
+    fn: T,
+    delay: number,
+): T {
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
     return useCallback(
         (...args: Parameters<T>) => {
             if (timer.current) clearTimeout(timer.current);
             timer.current = setTimeout(() => fn(...args), delay);
         },
-        [fn, delay]
+        [fn, delay],
     ) as T;
 }
 
@@ -255,11 +326,15 @@ export default function OmanForm({ countries }: Props) {
     const [dialog, setDialog] = useState<DialogType | null>(null);
     const [showPopup, setShowPopup] = useState(false);
     const [userData, setUserData] = useState({ email: "", username: "" });
-    const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+    const [districts, setDistricts] = useState<
+        { value: string; label: string }[]
+    >([]);
 
     useEffect(() => {
         fetchDistricts("41").then((data) => {
-            setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+            setDistricts(
+                data.map((d: any) => ({ value: String(d.id), label: d.name })),
+            );
         });
     }, []);
 
@@ -271,7 +346,10 @@ export default function OmanForm({ countries }: Props) {
         if (cooldownRef.current) clearInterval(cooldownRef.current);
         cooldownRef.current = setInterval(() => {
             setCooldown((prev) => {
-                if (prev <= 1) { clearInterval(cooldownRef.current!); return 0; }
+                if (prev <= 1) {
+                    clearInterval(cooldownRef.current!);
+                    return 0;
+                }
                 return prev - 1;
             });
         }, 1000);
@@ -290,7 +368,10 @@ export default function OmanForm({ countries }: Props) {
     const _sendOtp = async () => {
         const email = getValues("parentEmail");
         if (!email) {
-            setError("parentEmail", { type: "manual", message: "Enter parent email first" });
+            setError("parentEmail", {
+                type: "manual",
+                message: "Enter parent email first",
+            });
             return;
         }
         try {
@@ -303,7 +384,10 @@ export default function OmanForm({ countries }: Props) {
                 message: `A 6-digit OTP has been sent to ${email}. Please check your inbox.`,
             });
         } catch {
-            setDialog({ type: "error", message: "Failed to send OTP. Please try again." });
+            setDialog({
+                type: "error",
+                message: "Failed to send OTP. Please try again.",
+            });
         } finally {
             setOtpLoading(false);
         }
@@ -323,7 +407,10 @@ export default function OmanForm({ countries }: Props) {
             if (res && res.status === true) {
                 setEmailVerified(true);
                 setOtpModalOpen(false);
-                setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
+                setDialog({
+                    type: "success",
+                    message: "Email verified successfully! You can now submit the form.",
+                });
             } else {
                 throw new Error(res?.message || "Invalid OTP");
             }
@@ -331,7 +418,9 @@ export default function OmanForm({ countries }: Props) {
             setDialog({
                 type: "error",
                 title: "Invalid OTP",
-                message: err.message || "The OTP you entered is incorrect or has expired. Please try again.",
+                message:
+                    err.message ||
+                    "The OTP you entered is incorrect or has expired. Please try again.",
             });
         } finally {
             setVerifyLoading(false);
@@ -343,7 +432,7 @@ export default function OmanForm({ countries }: Props) {
         if (!data.termsAccepted) {
             setDialog({
                 type: "error",
-                message: "You must accept Terms & Conditions"
+                message: "You must accept Terms & Conditions",
             });
             return;
         }
@@ -351,7 +440,7 @@ export default function OmanForm({ countries }: Props) {
             setDialog({
                 type: "error",
                 title: "Email Not Verified",
-                message: "Please verify parent email OTP before submitting the form."
+                message: "Please verify parent email OTP before submitting the form.",
             });
             return;
         }
@@ -382,8 +471,8 @@ export default function OmanForm({ countries }: Props) {
 
                 password: data.password,
                 password_confirmation: data.confirmPassword,
-                country_code: "OMN", // ⚠️ confirm with backend
-                state_id: "41",      // ⚠️ must match backend DB
+                country_code: "OM", // ⚠️ confirm with backend
+                state_id: "41", // ⚠️ must match backend DB
                 hear: Number(data.hear),
             };
 
@@ -392,7 +481,7 @@ export default function OmanForm({ countries }: Props) {
             console.log("REGISTER RESPONSE:", res);
             if (res && res.status === true) {
                 setUserData({
-                    email: data.parentEmail,            // from form
+                    email: data.parentEmail, // from form
                     username: res?.data?.username || "", // from API response
                 });
                 setShowPopup(true);
@@ -403,7 +492,10 @@ export default function OmanForm({ countries }: Props) {
         } catch (error: any) {
             setDialog({
                 type: "error",
-                message: error?.response?.data?.message || error?.message || "Registration failed"
+                message:
+                    error?.response?.data?.message ||
+                    error?.message ||
+                    "Registration failed",
             });
         } finally {
             setLoading(false);
@@ -411,24 +503,44 @@ export default function OmanForm({ countries }: Props) {
     };
     return (
         <div className="min-h-screen py-8 md:py-10">
-            {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
+            {dialog && (
+                <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />
+            )}
 
             <div className="mx-auto max-w-7xl px-4 sm:px-5">
                 <div className="mb-6 flex items-center justify-between md:mb-8">
                     <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
                         Student Registration – OMAN
                     </h1>
-                    <Image src="/gcc/oman.webp" alt="OMAN" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+                    <Image
+                        src="/gcc/oman.png"
+                        alt="OMAN"
+                        width={120}
+                        height={90}
+                        className="h-auto w-12 object-contain sm:w-14 md:w-16"
+                    />
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                     {/* Primary Details */}
                     <Section title="Primary Details">
-                        <InputField label="Student Full Name" required placeholder="Enter full name"
-                            registration={register("fullName", { required: "Student Full Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
+                        <InputField
+                            label="Student Full Name"
+                            required
+                            placeholder="Enter full name"
+                            registration={register("fullName", {
+                                required: "Student Full Name is required",
+                                pattern: {
+                                    value: /^[A-Za-z\s]+$/,
+                                    message: "Only alphabetical characters are allowed",
+                                },
+                            })}
                             error={errors.fullName}
                         />
-                        <InputField label="Date of Birth" type="date" required
+                        <InputField
+                            label="Date of Birth"
+                            type="date"
+                            required
                             min="2008-01-01"
                             max="2015-12-31"
                             registration={register("dob", {
@@ -438,7 +550,7 @@ export default function OmanForm({ countries }: Props) {
                                     if (year < 2008) return "Date of Birth must be after 2008";
                                     if (year > 2015) return "Date of Birth must be before 2015";
                                     return true;
-                                }
+                                },
                             })}
                             error={errors.dob}
                         />
@@ -450,14 +562,14 @@ export default function OmanForm({ countries }: Props) {
                         <InputField
                             label="Emirates ID"
                             required
-                            maxLength={18} // allow dashes also
+                            maxLength={8}
                             placeholder="Enter Emirates ID"
                             registration={register("emiratesId", {
                                 required: "Emirates ID is required",
                                 pattern: {
-                                    value: /^(784-?\d{4}-?\d{7}-?\d{1})$/,
-                                    message: "Enter valid Emirates ID (must start with 784 and be 15 digits)"
-                                }
+                                    value: /^[0-9]{8}$/,
+                                    message: "Emirates ID must be 8 digits",
+                                },
                             })}
                             error={
                                 touchedFields?.emiratesId && errors?.emiratesId
@@ -465,11 +577,19 @@ export default function OmanForm({ countries }: Props) {
                                     : undefined
                             }
                         />
-                        <SelectField label="Gender" required options={genders}
-                            registration={register("gender", { required: "Gender is required" })}
-                            error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
+                        <SelectField
+                            label="Gender"
+                            required
+                            options={genders}
+                            registration={register("gender", {
+                                required: "Gender is required",
+                            })}
+                            error={
+                                touchedFields?.gender && errors?.gender
+                                    ? errors.gender
+                                    : undefined
+                            }
                         />
-
 
                         <InputField
                             label="Student Mobile"
@@ -477,9 +597,9 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("studentMobile", {
                                 required: "Student Mobile is required",
                                 pattern: {
-                                    value: /^(7|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 7 or 9"
-                                }
+                                    value: /^[0-9]{8}$/,
+                                    message: "Mobile number must be 8 digits",
+                                },
                             })}
                             error={
                                 touchedFields?.studentMobile && errors?.studentMobile
@@ -487,41 +607,100 @@ export default function OmanForm({ countries }: Props) {
                                     : undefined
                             }
                         />
-                        <InputField label="Student Email" type="email" placeholder="Enter email"
-                            registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
+                        <InputField
+                            label="Student Email"
+                            type="email"
+                            placeholder="Enter email"
+                            registration={register("studentEmail", {
+                                required: "Email address is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Enter a valid email address",
+                                },
+                            })}
                             error={errors.studentEmail}
                         />
-                        <SelectField label="Class / Grade" required options={grades}
-                            registration={register("grade", { required: "Grade is required" })}
-                            error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
+                        <SelectField
+                            label="Class / Grade"
+                            required
+                            options={grades}
+                            registration={register("grade", {
+                                required: "Grade is required",
+                            })}
+                            error={
+                                touchedFields?.grade && errors?.grade ? errors.grade : undefined
+                            }
                         />
                         <SelectField
-                            label="How did you hear about VVM?" required options={hearOptions}
-                            registration={register("hear", { required: "This field is required" })} error={touchedFields?.hear && errors?.hear ? errors.hear : undefined}
+                            label="How did you hear about VVM?"
+                            required
+                            options={hearOptions}
+                            registration={register("hear", {
+                                required: "This field is required",
+                            })}
+                            error={
+                                touchedFields?.hear && errors?.hear ? errors.hear : undefined
+                            }
                         />
                     </Section>
 
                     {/* Login Details */}
                     <Section title="Login Details">
-                        <InputField label="Password" type="password" required placeholder="Enter password"
-                            registration={register("password", { required: "Password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, message: "Password must be at least 6 characters, include uppercase, lowercase, number and special character" } })}
+                        <InputField
+                            label="Password"
+                            type="password"
+                            required
+                            placeholder="Enter password"
+                            registration={register("password", {
+                                required: "Password is required",
+                                pattern: {
+                                    value:
+                                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                                    message:
+                                        "Password must be at least 6 characters, include uppercase, lowercase, number and special character",
+                                },
+                            })}
                             error={errors.password}
                         />
-                        <InputField label="Confirm Password" type="password" required placeholder="Confirm password"
-                            registration={register("confirmPassword", { required: "Confirm Password is required", validate: (value) => value === getValues("password") || "Passwords do not match" })}
+                        <InputField
+                            label="Confirm Password"
+                            type="password"
+                            required
+                            placeholder="Confirm password"
+                            registration={register("confirmPassword", {
+                                required: "Confirm Password is required",
+                                validate: (value) =>
+                                    value === getValues("password") || "Passwords do not match",
+                            })}
                             error={errors.confirmPassword}
                         />
                     </Section>
 
                     {/* School Details */}
                     <Section title="School Details">
-                        <InputField label="School Name" required placeholder="Enter school name"
-                            registration={register("schoolName", { required: "School Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
+                        <InputField
+                            label="School Name"
+                            required
+                            placeholder="Enter school name"
+                            registration={register("schoolName", {
+                                required: "School Name is required",
+                                pattern: {
+                                    value: /^[A-Za-z\s]+$/,
+                                    message: "Only alphabetical characters are allowed",
+                                },
+                            })}
                             error={errors.schoolName}
                         />
-                        <SelectField label="Board" required options={boards}
-                            registration={register("board", { required: "Board is required" })}
-                            error={touchedFields?.board && errors?.board ? errors.board : undefined}
+                        <SelectField
+                            label="Board"
+                            required
+                            options={boards}
+                            registration={register("board", {
+                                required: "Board is required",
+                            })}
+                            error={
+                                touchedFields?.board && errors?.board ? errors.board : undefined
+                            }
                         />
                         {/* <InputField label="Country" disabled
                             value={countries.find((c) => c.value === "oman")?.label || ""}
@@ -530,35 +709,69 @@ export default function OmanForm({ countries }: Props) {
                         <InputField
                             label="Country"
                             disabled
-                            value={countries?.find((c) => c.value === "oman")?.label || "OMAN"}
+                            value={
+                                countries?.find((c) => c.value === "oman")?.label || "OMAN"
+                            }
                         />
-                        <InputField label="Pincode" required placeholder="Enter pincode"
-                            registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
-                            error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
+                        <InputField
+                            label="Pincode"
+                            required
+                            placeholder="Enter pincode"
+                            registration={register("pincode", {
+                                required: "Pincode is required",
+                                pattern: {
+                                    value: /^[0-9]{5,6}$/,
+                                    message: "Pincode must be 5 or 6 digits",
+                                },
+                            })}
+                            error={
+                                touchedFields?.pincode && errors?.pincode
+                                    ? errors.pincode
+                                    : undefined
+                            }
                         />
                         <SelectField
                             label="City / District"
                             required
                             options={districts}
-                            registration={register("district", { required: "District is required" })}
-                            error={touchedFields?.district && errors?.district ? errors.district : undefined}
+                            registration={register("district", {
+                                required: "District is required",
+                            })}
+                            error={
+                                touchedFields?.district && errors?.district
+                                    ? errors.district
+                                    : undefined
+                            }
                         />
                         <div className="md:col-span-2">
-                            <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
-                                registration={register("schoolAddress", { required: "School Address is required" })}
+                            <TextAreaField
+                                label="School Address"
+                                rows={3}
+                                required
+                                placeholder="Enter school address"
+                                registration={register("schoolAddress", {
+                                    required: "School Address is required",
+                                })}
                                 error={errors.schoolAddress}
                             />
                         </div>
-
                     </Section>
 
                     {/* Parent Details */}
                     <Section title="Parent Details">
-                        <InputField label="Parent Name" required placeholder="Enter parent name"
-                            registration={register("parentName", { required: "Parent Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
+                        <InputField
+                            label="Parent Name"
+                            required
+                            placeholder="Enter parent name"
+                            registration={register("parentName", {
+                                required: "Parent Name is required",
+                                pattern: {
+                                    value: /^[A-Za-z\s]+$/,
+                                    message: "Only alphabetical characters are allowed",
+                                },
+                            })}
                             error={errors.parentName}
                         />
-
 
                         <InputField
                             label="Parent Mobile"
@@ -567,9 +780,9 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("parentMobile", {
                                 required: "Parent Mobile is required",
                                 pattern: {
-                                    value: /^(7|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 7 or 9"
-                                }
+                                    value: /^[0-9]{8}$/, 
+                                    message: "Mobile number must be 8 digits",
+                                },
                             })}
                             error={errors.parentMobile}
                         />
@@ -584,7 +797,9 @@ export default function OmanForm({ countries }: Props) {
                                         type="email"
                                         required
                                         placeholder="Parent email"
-                                        registration={register("parentEmail", { required: "Parent email is required" })}
+                                        registration={register("parentEmail", {
+                                            required: "Parent email is required",
+                                        })}
                                         error={errors.parentEmail}
                                         className={`transition-all ${emailVerified ? "border-green-400 bg-green-50 ring-2 ring-green-200" : ""}`}
                                     />
@@ -599,20 +814,28 @@ export default function OmanForm({ countries }: Props) {
                                             : "bg-linear-to-r from-blue-600 to-indigo-600 text-white border-transparent hover:from-blue-700 hover:to-indigo-700 hover:shadow-md active:scale-95"
                                         }`}
                                 >
-                                    {otpLoading ? "Sending..." : cooldown > 0 ? `${cooldown}s` : "Send OTP"}
+                                    {otpLoading
+                                        ? "Sending..."
+                                        : cooldown > 0
+                                            ? `${cooldown}s`
+                                            : "Send OTP"}
                                 </button>
                             </div>
 
                             {/* RIGHT: OTP input + Verify + Verified badge */}
                             <div className="flex gap-2 items-end">
                                 <div className="flex-1">
-                                    <label className="text-sm font-medium text-gray-600 mb-1 block">OTP Verification Code</label>
+                                    <label className="text-sm font-medium text-gray-600 mb-1 block">
+                                        OTP Verification Code
+                                    </label>
                                     <input
                                         type="text"
                                         inputMode="numeric"
                                         maxLength={6}
                                         value={emailOtpValue}
-                                        onChange={(e) => setEmailOtpValue(e.target.value.replace(/\D/g, ""))}
+                                        onChange={(e) =>
+                                            setEmailOtpValue(e.target.value.replace(/\D/g, ""))
+                                        }
                                         placeholder="Enter 6-digit OTP"
                                         disabled={emailVerified}
                                         className={`w-full h-10.5 border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
@@ -622,8 +845,18 @@ export default function OmanForm({ countries }: Props) {
 
                                 {emailVerified ? (
                                     <span className="h-10.5 flex items-center gap-1.5 px-4 bg-green-50 border border-green-300 text-green-700 font-semibold text-sm rounded-lg">
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth={2.5}
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M5 13l4 4L19 7"
+                                            />
                                         </svg>
                                         Verified
                                     </span>
@@ -646,35 +879,72 @@ export default function OmanForm({ countries }: Props) {
                         <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
                             <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
                                 <h3 className="font-semibold text-gray-800">Definitions</h3>
-                                <p>License – shall mean the terms and conditions for use, reproduction, and distribution...</p>
-                                <h3 className="font-semibold text-gray-800">Grant of Copyright License</h3>
-                                <p>Subject to the terms and conditions of this License, each Contributor hereby grants...</p>
-                                <h3 className="font-semibold text-gray-800">Disclaimer of Warranty</h3>
-                                <p>Unless required by applicable law, Licensor provides the Work on an &#34;AS IS&#34; BASIS...</p>
-                                <h3 className="font-semibold text-gray-800">Limitation of Liability</h3>
-                                <p>In no event shall any Contributor be liable for damages including loss of goodwill...</p>
-                                <h3 className="font-semibold text-gray-800">Dispute Resolution</h3>
-                                <p>The decision made by the VVM Core Committee shall be final and binding.</p>
-                                <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
+                                <p>
+                                    License – shall mean the terms and conditions for use,
+                                    reproduction, and distribution...
+                                </p>
+                                <h3 className="font-semibold text-gray-800">
+                                    Grant of Copyright License
+                                </h3>
+                                <p>
+                                    Subject to the terms and conditions of this License, each
+                                    Contributor hereby grants...
+                                </p>
+                                <h3 className="font-semibold text-gray-800">
+                                    Disclaimer of Warranty
+                                </h3>
+                                <p>
+                                    Unless required by applicable law, Licensor provides the Work
+                                    on an &#34;AS IS&#34; BASIS...
+                                </p>
+                                <h3 className="font-semibold text-gray-800">
+                                    Limitation of Liability
+                                </h3>
+                                <p>
+                                    In no event shall any Contributor be liable for damages
+                                    including loss of goodwill...
+                                </p>
+                                <h3 className="font-semibold text-gray-800">
+                                    Dispute Resolution
+                                </h3>
+                                <p>
+                                    The decision made by the VVM Core Committee shall be final and
+                                    binding.
+                                </p>
+                                <p className="text-center font-semibold text-gray-800">
+                                    END OF TERMS AND CONDITIONS
+                                </p>
                             </div>
                             <div className="mt-4 flex items-start gap-2">
-                                <input type="checkbox"
-                                    {...register("termsAccepted", { required: "You must accept the terms" })}
+                                <input
+                                    type="checkbox"
+                                    {...register("termsAccepted", {
+                                        required: "You must accept the terms",
+                                    })}
                                     className="mt-1"
                                 />
                                 <label className="text-sm text-gray-700">
-                                    I have read the terms and conditions mentioned above and accept them.
+                                    I have read the terms and conditions mentioned above and
+                                    accept them.
                                 </label>
                             </div>
-                            {errors.termsAccepted && <p className="text-red-500 text-sm mt-1">{errors.termsAccepted.message}</p>}
+                            {errors.termsAccepted && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.termsAccepted.message}
+                                </p>
+                            )}
                             <p className="text-red-500 text-sm mt-2">
-                                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
+                                After registration, please login and update your profile and
+                                proceed with payment to avoid any future disruptions.
                             </p>
                         </div>
                     </Section>
 
                     <div className="pt-4 text-center">
-                        <Button type="submit" loading={loading} loadingText="Submitting..."
+                        <Button
+                            type="submit"
+                            loading={loading}
+                            loadingText="Submitting..."
                             className="px-10 py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-extrabold text-xl shadow-md hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 active:scale-95"
                         >
                             Submit Registration

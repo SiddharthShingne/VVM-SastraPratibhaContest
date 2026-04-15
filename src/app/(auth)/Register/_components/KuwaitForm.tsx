@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -11,7 +12,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
-
+import Link from "next/link";
 type RegistrationForm = {
     fullName: string;
     dob: string;
@@ -221,12 +222,13 @@ function RegistrationSuccessPopup({
                 </p>
 
                 {/* Go to Login button */}
-                <button
-                    onClick={onClose}
-                    className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
-                >
-                    Go to Login
-                </button>
+                <Link href="/Login">
+                    <button
+                        className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
+                    >
+                        Go to Login
+                    </button>
+                </Link>
             </div>
         </div>
     );
@@ -245,7 +247,7 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): 
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function OmanForm({ countries }: Props) {
+export default function KuwaitForm({ countries }: Props) {
     const [loading, setLoading] = useState(false);
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);
@@ -382,7 +384,7 @@ export default function OmanForm({ countries }: Props) {
 
                 password: data.password,
                 password_confirmation: data.confirmPassword,
-                country_code: "KWT", // ⚠️ confirm with backend
+                country_code: "KW", // ⚠️ confirm with backend
                 state_id: "40",      // ⚠️ must match backend DB
                 hear: Number(data.hear),
             };
@@ -418,7 +420,7 @@ export default function OmanForm({ countries }: Props) {
                     <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
                         Student Registration – KUWAIT
                     </h1>
-                    <Image src="/gcc/oman.webp" alt="OMAN" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+                    <Image src="/gcc/kuwait.png" alt="KUWAIT" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -458,7 +460,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "ID is required",
                                 pattern: {
                                     value: /^[0-9]{12}$/,
-                                    message: "ID must be exactly 12 digits (Kuwait Civil ID)"
+                                    message: "ID must be 12 digits "
                                 }
                             })}
                             error={
@@ -472,17 +474,14 @@ export default function OmanForm({ countries }: Props) {
                             error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
                         />
 
-
-
-
                         <InputField
                             label="Student Mobile"
                             placeholder="Enter mobile"
                             registration={register("studentMobile", {
                                 required: "Student Mobile is required",
                                 pattern: {
-                                    value: /^(5|6|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 5, 6, or 9"
+                                    value: /^[0-9]{8}$/,
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={
@@ -562,9 +561,6 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("parentName", { required: "Parent Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
                             error={errors.parentName}
                         />
-
-
-
                         <InputField
                             label="Parent Mobile"
                             required
@@ -572,8 +568,8 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("parentMobile", {
                                 required: "Parent Mobile is required",
                                 pattern: {
-                                    value: /^(5|6|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 5, 6, or 9"
+                                    value: /^[0-9]{8}$/,
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={errors.parentMobile}

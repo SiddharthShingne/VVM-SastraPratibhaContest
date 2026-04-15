@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2 , fetchDistricts} from "@/services/authService"; // ← import your API
+import Link from "next/link";
 
 type RegistrationForm = {
   fullName: string;
@@ -147,7 +149,7 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 p-4">
       <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
         <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
           {c.icon}
@@ -178,7 +180,7 @@ function RegistrationSuccessPopup({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[9999] p-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-9999 p-4">
       <div className="bg-white rounded-2xl shadow-2xl text-center w-full max-w-md p-10 max-h-[90vh] overflow-y-auto">
         {/* Animated checkmark circle */}
         <div className="flex justify-center mb-6">
@@ -220,12 +222,13 @@ function RegistrationSuccessPopup({
         </p>
 
         {/* Go to Login button */}
-        <button
-          onClick={onClose}
-          className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
-        >
-          Go to Login
-        </button>
+        <Link href="/Login">
+          <button
+            className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
+          >
+            Go to Login
+          </button>
+        </Link>
       </div>
     </div>
   );
@@ -414,7 +417,7 @@ export default function QatarForm({ countries = [] }: Props) {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
             Student Registration – Qatar
           </h1>
-          <Image src="/gcc/qatar.webp" alt="qatar" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+          <Image src="/gcc/qatar.png" alt="qatar" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
