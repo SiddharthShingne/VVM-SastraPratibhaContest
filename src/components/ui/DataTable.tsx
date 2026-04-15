@@ -509,7 +509,7 @@ export type DataTableColumn<T> = {
   isDate?: boolean;
   className?: string;
   headerClassName?: string;
-  render?: (value: string, row: T, index: number) => React.ReactNode;
+  render?: (value: unknown, row: T, index: number) => React.ReactNode;
 };
 
 type DataTableProps<T> = {
@@ -529,22 +529,22 @@ type DataTableProps<T> = {
   showTotalRecords?: boolean;
 };
 
-  function formatCellValue(value: string) {
+function formatCellValue(value: unknown) {
   if (value === null || value === undefined || value === "") {
     return "Not available";
   }
   return String(value);
 }
 
-function isValidDate(value: string) {
+function isValidDate(value: unknown) {
   if (!value) return false;
-  const d = new Date(value);
+  const d = new Date(String(value));
   return !isNaN(d.getTime());
 }
 
-function formatDate(value: string) {
+function formatDate(value: unknown) {
   if (!isValidDate(value)) return "Not available";
-  const d = new Date(value);
+  const d = new Date(String(value));
   return d.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
@@ -552,16 +552,15 @@ function formatDate(value: string) {
   });
 }
 
-function getNestedValue(obj: Record<string, string>, path: string) {
-  // if (!obj || !path) return undefined;
-  // return path.split(".").reduce((acc, key) => acc[key], obj);
+function getNestedValue(obj: unknown, path: string): unknown {
+  if (!obj || !path) return undefined;
 
-    return path.split(".").reduce((acc, key) => {
+  return path.split(".").reduce<unknown>((acc, key) => {
     if (typeof acc === "object" && acc !== null && key in acc) {
-      return (acc as Record<string, string>)[key];
+      return (acc as Record<string, unknown>)[key];
     }
-    return undefined; // agar path invalid hai
-  }, obj as Record<string, string>);
+    return undefined;
+  }, obj);
 }
 
 function exportToCSV<T>(
@@ -578,12 +577,12 @@ function exportToCSV<T>(
           typeof col.key === "string"
             ? getNestedValue(row, col.key)
             : row[col.key as keyof T];
-            
 
- 
-  const cellValue = col.isDate
-  ? formatDate(String(rawValue ?? ""))
-  : formatCellValue(String(rawValue ?? ""));
+
+
+        const cellValue = col.isDate
+          ? formatDate(String(rawValue ?? ""))
+          : formatCellValue(String(rawValue ?? ""));
 
 
         return `"${String(cellValue).replace(/"/g, '""')}"`;
@@ -604,7 +603,7 @@ function exportToCSV<T>(
   URL.revokeObjectURL(url);
 }
 
-export default function DataTable<T extends Record<string, string>>({
+export default function DataTable<T extends Record<string, unknown>>({
   columns,
   data,
   allData,
@@ -629,11 +628,11 @@ export default function DataTable<T extends Record<string, string>>({
   const [currentPage, setCurrentPage] = useState(1);
   const [dateFilterOpen, setDateFilterOpen] = useState(false);
 
-useEffect(() => {
-  if (currentPage !== 1) {
-    setCurrentPage(1);
-  }
-}, [searchTerm, selectedDateValue, selectedDateColumn, data]);
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm, selectedDateValue, selectedDateColumn, data]);
 
   const searchableColumns = useMemo(() => {
     return columns.filter((col) => col.searchable !== false);
@@ -667,8 +666,8 @@ useEffect(() => {
         const value = getNestedValue(row, selectedDateColumn);
         if (!isValidDate(value)) return false;
 
-        const rowDate = new Date(value);
-        const filterDate = new Date(selectedDateValue);
+        const rowDate = new Date(String(value));
+        const filterDate = new Date(String(selectedDateValue));
 
         return (
           rowDate.getFullYear() === filterDate.getFullYear() &&
@@ -689,7 +688,8 @@ useEffect(() => {
         let result = 0;
 
         if (aIsDate && bIsDate) {
-          result = new Date(aVal).getTime() - new Date(bVal).getTime();
+          result =
+            new Date(String(aVal)).getTime() - new Date(String(bVal)).getTime();
         } else if (typeof aVal === "number" && typeof bVal === "number") {
           result = aVal - bVal;
         } else {
@@ -911,8 +911,8 @@ useEffect(() => {
                         {col.render
                           ? col.render(value, row, rowIndex)
                           : col.isDate
-                          ? formatDate(value)
-                          : formatCellValue(value)}
+                            ? formatDate(value)
+                            : formatCellValue(value)}
                       </td>
                     );
                   })}
@@ -947,11 +947,10 @@ useEffect(() => {
                 key={page}
                 type="button"
                 onClick={() => setCurrentPage(page)}
-                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  currentPage === page
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition ${currentPage === page
                     ? "bg-indigo-600 text-white shadow-md"
                     : "border border-slate-300 text-slate-700 hover:bg-slate-100"
-                }`}
+                  }`}
               >
                 {page}
               </button>

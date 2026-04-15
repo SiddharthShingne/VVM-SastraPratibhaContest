@@ -1,7 +1,16 @@
 "use client";
 import { useState } from "react";
 
-export default function VVMExamInfo({ importantDates = [] }) {
+type ImportantDateItem = {
+  title: string;
+  description: string;
+};
+
+type Props = {
+  importantDates?: ImportantDateItem[];
+};
+
+export default function VVMExamInfo({ importantDates = [] }: Props) {
   const [activeTab, setActiveTab] = useState("all");
 
   return (
@@ -85,7 +94,7 @@ export default function VVMExamInfo({ importantDates = [] }) {
                 <tbody className="text-center text-[#4f6480]">
                   {importantDates.length === 0 ? (
                     <tr>
-                      <td colSpan="2" className="py-6">
+                      <td colSpan={2} className="py-6">
                         No important dates available.
                       </td>
                     </tr>

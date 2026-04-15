@@ -71,8 +71,15 @@ type DialogType = {
     title?: string;
 };
 
+type CountryOption = {
+  value: string;
+  label: string;
+  code: string;
+};
+
 type Props = {
-    countries: { value: string; label: string; code: string }[];
+  country?: CountryOption;
+  countries?: CountryOption[];
 };
 
 // ─── Styled Modal Dialog ──────────────────────────────────────────────────────
@@ -238,7 +245,7 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): 
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function OmanForm({ countries }: Props) {
+export default function SaudiForm({ country, countries = [] }: Props) {
     const [loading, setLoading] = useState(false);
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);

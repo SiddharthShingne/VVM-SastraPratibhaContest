@@ -27,7 +27,7 @@
 //           phone: "9876543210",
 //           status: "Active",
 //           createdAt: "2026-03-01T10:30:00",
-          
+
 //         },
 //         {
 //           id: 2,
@@ -127,7 +127,7 @@
 //         loading={loading}
 //         pageSize={5}
 //         exportFileName="study_material"
-        
+
 //         showExport={false}
 //       />
 //     </div>
@@ -139,8 +139,15 @@
 import React, { useMemo, useState, useEffect } from "react";
 import DataTable, { DataTableColumn } from "@/components/ui/DataTable";
 
+// type MaterialRow = {
+//   id: number;
+//   language: string;
+//   bose: string;
+//   ics: string;
+//   iks: string;
+// };
 type MaterialRow = {
-  id: number;
+  id: string;
   language: string;
   bose: string;
   ics: string;
@@ -153,17 +160,29 @@ export default function StudyMaterial() {
 
   useEffect(() => {
     setTimeout(() => {
+      // setAllUsers([
+      //   { id: 1, language: "English", bose: "btn", ics: "btn", iks: "btn" },
+      //   { id: 2, language: "Hindi", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 3, language: "Marathi", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 4, language: "Tamil", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 5, language: "Telugu", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 6, language: "Kannada", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 7, language: "Malayalam", bose: "soon", ics: "btn", iks: "na" },
+      //   { id: 8, language: "Bengali", bose: "btn", ics: "btn", iks: "na" },
+      //   { id: 9, language: "Gujarati", bose: "soon", ics: "btn", iks: "na" },
+      //   { id: 10, language: "Odia", bose: "soon", ics: "btn", iks: "na" },
+      // ]);
       setAllUsers([
-        { id: 1, language: "English", bose: "btn", ics: "btn", iks: "btn" },
-        { id: 2, language: "Hindi", bose: "btn", ics: "btn", iks: "na" },
-        { id: 3, language: "Marathi", bose: "btn", ics: "btn", iks: "na" },
-        { id: 4, language: "Tamil", bose: "btn", ics: "btn", iks: "na" },
-        { id: 5, language: "Telugu", bose: "btn", ics: "btn", iks: "na" },
-        { id: 6, language: "Kannada", bose: "btn", ics: "btn", iks: "na" },
-        { id: 7, language: "Malayalam", bose: "soon", ics: "btn", iks: "na" },
-        { id: 8, language: "Bengali", bose: "btn", ics: "btn", iks: "na" },
-        { id: 9, language: "Gujarati", bose: "soon", ics: "btn", iks: "na" },
-        { id: 10, language: "Odia", bose: "soon", ics: "btn", iks: "na" },
+        { id: "1", language: "English", bose: "btn", ics: "btn", iks: "btn" },
+        { id: "2", language: "Hindi", bose: "btn", ics: "btn", iks: "na" },
+        { id: "3", language: "Marathi", bose: "btn", ics: "btn", iks: "na" },
+        { id: "4", language: "Tamil", bose: "btn", ics: "btn", iks: "na" },
+        { id: "5", language: "Telugu", bose: "btn", ics: "btn", iks: "na" },
+        { id: "6", language: "Kannada", bose: "btn", ics: "btn", iks: "na" },
+        { id: "7", language: "Malayalam", bose: "soon", ics: "btn", iks: "na" },
+        { id: "8", language: "Bengali", bose: "btn", ics: "btn", iks: "na" },
+        { id: "9", language: "Gujarati", bose: "soon", ics: "btn", iks: "na" },
+        { id: "10", language: "Odia", bose: "soon", ics: "btn", iks: "na" },
       ]);
       setLoading(false);
     }, 800);
@@ -220,42 +239,42 @@ export default function StudyMaterial() {
   //   []
   // );
   const columns: DataTableColumn<MaterialRow>[] = useMemo(
-  () => [
-    {
-      key: "id",
-      label: "ID",
-    },
-    {
-      key: "language",
-      label: "Language",
-    },
-    {
-      key: "bose",
-      label: "Life Story of Dr. Satyendra Nath Bose",
-      sortable: false,
-      searchable: false,
-      render: (value, row, index) => renderButton(value as string),
-    },
-    {
-      key: "ics",
-      label: "ICS - Indian Contributions to Science",
-      sortable: false,
-      searchable: false,
-      render: (value, row, index) => renderButton(value as string),
-    },
-    {
-      key: "iks",
-      label: "IKS - Supplementary Book",
-      sortable: false,
-      searchable: false,
-      render: (value, row, index) => renderButton(value as string),
-    },
-  ],
-  []
-);
+    () => [
+      {
+        key: "id",
+        label: "ID",
+      },
+      {
+        key: "language",
+        label: "Language",
+      },
+      {
+        key: "bose",
+        label: "Life Story of Dr. Satyendra Nath Bose",
+        sortable: false,
+        searchable: false,
+        render: (value, row, index) => renderButton(value as string),
+      },
+      {
+        key: "ics",
+        label: "ICS - Indian Contributions to Science",
+        sortable: false,
+        searchable: false,
+        render: (value, row, index) => renderButton(value as string),
+      },
+      {
+        key: "iks",
+        label: "IKS - Supplementary Book",
+        sortable: false,
+        searchable: false,
+        render: (value, row, index) => renderButton(value as string),
+      },
+    ],
+    []
+  );
 
   return (
-<div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       <DataTable<MaterialRow>
         title="Study Material"
         columns={columns}
@@ -265,8 +284,8 @@ export default function StudyMaterial() {
         pageSize={10}
         exportFileName="study_material"
         showExport={false}
-         showSearch={false}
-  showTotalRecords={false}
+        showSearch={false}
+        showTotalRecords={false}
       />
     </div>
   );

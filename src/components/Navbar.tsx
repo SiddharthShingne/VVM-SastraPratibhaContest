@@ -5,7 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navItems = [
+type SubLink = {
+  label: string;
+  href: string;
+  download?: boolean;
+};
+
+type NavItem = {
+  label: string;
+  href: string;
+  subLinks?: SubLink[];
+};
+
+
+const navItems: NavItem[] = [
     { label: "Home", href: "/" },
     {
         label: "About Us",
@@ -78,7 +91,7 @@ const navItems = [
     //         { label: "SRIJAN Internship", href: "/gallery/srijanInternship" },
     //     ],
     // }
-    ,
+
 
     {
         label: "Downloads",

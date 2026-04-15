@@ -70,8 +70,15 @@ type DialogType = {
   title?: string;
 };
 
+type CountryOption = {
+  value: string;
+  label: string;
+  code: string;
+};
+
 type Props = {
-  countries: { value: string; label: string; code: string }[];
+  country?: CountryOption;
+  countries?: CountryOption[];
 };
 
 // ─── Styled Modal Dialog ──────────────────────────────────────────────────────

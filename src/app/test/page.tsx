@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import DataTable, { DataTableColumn } from "@/components/ui/DataTable";
 
 type UserRow = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -20,7 +20,7 @@ export default function UsersPage() {
     setTimeout(() => {
       setAllUsers([
         {
-          id: 1,
+          id: "1",
           name: "Abhishek Thakre",
           email: "abhishek@gmail.com",
           phone: "9876543210",
@@ -28,7 +28,7 @@ export default function UsersPage() {
           createdAt: "2026-03-01T10:30:00",
         },
         {
-          id: 2,
+          id: "2",
           name: "Rahul Sharma",
           email: "",
           phone: "9988776655",
@@ -36,7 +36,7 @@ export default function UsersPage() {
           createdAt: "2026-02-25T14:10:00",
         },
         {
-          id: 3,
+          id: "3",
           name: "Priya Verma",
           email: "priya@gmail.com",
           phone: "",
@@ -79,7 +79,7 @@ export default function UsersPage() {
         sortable: true,
         searchable: true,
         render: (value) => {
-          const status = value || "Not available";
+          const status = value ? String(value) : "Not available";
 
           const styles: Record<string, string> = {
             Active: "bg-emerald-100 text-emerald-700",
@@ -90,9 +90,8 @@ export default function UsersPage() {
 
           return (
             <span
-              className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                styles[status] || "bg-slate-100 text-slate-700"
-              }`}
+              className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${styles[status] || "bg-slate-100 text-slate-700"
+                }`}
             >
               {status}
             </span>
