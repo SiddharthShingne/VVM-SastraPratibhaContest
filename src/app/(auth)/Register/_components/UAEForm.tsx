@@ -9,7 +9,8 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
-import { registerStudentV2 , fetchDistricts} from "@/services/authService"; // ← import your API
+import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
+import Link from "next/link";
 
 type RegistrationForm = {
   fullName: string;
@@ -213,12 +214,14 @@ function RegistrationSuccessPopup({
         </p>
 
         {/* Go to Login button */}
+        <Link href="/Login">
         <button
           onClick={onClose}
           className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
         >
           Go to Login
         </button>
+        </Link>
       </div>
     </div>
   );
