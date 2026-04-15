@@ -238,7 +238,7 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): 
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function OmanForm({ countries }: Props) {
+export default function KuwaitForm({ countries }: Props) {
     const [loading, setLoading] = useState(false);
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);
@@ -451,7 +451,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "ID is required",
                                 pattern: {
                                     value: /^[0-9]{12}$/,
-                                    message: "ID must be exactly 12 digits (Kuwait Civil ID)"
+                                    message: "ID must be 12 digits "
                                 }
                             })}
                             error={
@@ -475,7 +475,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Student Mobile is required",
                                 pattern: {
                                     value: /^(5|6|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 5, 6, or 9"
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={
@@ -566,7 +566,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Parent Mobile is required",
                                 pattern: {
                                     value: /^(5|6|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 5, 6, or 9"
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={errors.parentMobile}

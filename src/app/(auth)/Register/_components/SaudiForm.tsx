@@ -238,7 +238,7 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number): 
 }
 
 // ─── Main Form ────────────────────────────────────────────────────────────────
-export default function OmanForm({ countries }: Props) {
+export default function SaudiForm({ countries }: Props) {
     const [loading, setLoading] = useState(false);
     const [otpLoading, setOtpLoading] = useState(false);
     const [verifyLoading, setVerifyLoading] = useState(false);
@@ -411,7 +411,7 @@ export default function OmanForm({ countries }: Props) {
                     <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
                         Student Registration – SAUDI-ARABIA
                     </h1>
-                    <Image src="/gcc/saudi-arabia.webp" alt="SAUDI-ARABIA" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+                    <Image src="/gcc/saudi-arabia.png" alt="SAUDI-ARABIA" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -451,7 +451,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "ID is required",
                                 pattern: {
                                     value: /^[12][0-9]{9}$/,
-                                    message: "ID must be 10 digits and start with 1 or 2"
+                                    message: "ID must be 10 digits"
                                 }
                             })}
                             error={
@@ -464,14 +464,6 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("gender", { required: "Gender is required" })}
                             error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
                         />
-
-
-
-
-
-
-
-
                         <InputField
                             label="Student Mobile"
                             placeholder="Enter mobile"
@@ -479,7 +471,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Student Mobile is required",
                                 pattern: {
                                     value: /^5[0-9]{8}$/,
-                                    message: "Mobile number must be 9 digits and start with 5"
+                                    message: "Mobile number must be 9 digits"
                                 }
                             })}
                             error={
@@ -560,11 +552,6 @@ export default function OmanForm({ countries }: Props) {
                             error={errors.parentName}
                         />
 
-
-
-
-
-
                         <InputField
                             label="Parent Mobile"
                             required
@@ -573,7 +560,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Parent Mobile is required",
                                 pattern: {
                                     value: /^5[0-9]{8}$/,
-                                    message: "Mobile number must be 9 digits and start with 5"
+                                    message: "Mobile number must be 9 digits"
                                 }
                             })}
                             error={errors.parentMobile}

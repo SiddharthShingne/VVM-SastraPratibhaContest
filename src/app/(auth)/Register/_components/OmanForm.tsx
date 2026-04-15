@@ -449,7 +449,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Emirates ID is required",
                                 pattern: {
                                     value: /^(784-?\d{4}-?\d{7}-?\d{1})$/,
-                                    message: "Enter valid Emirates ID (must start with 784 and be 15 digits)"
+                                    message: "Emirates ID must be 15 digits)"
                                 }
                             })}
                             error={
@@ -471,7 +471,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Student Mobile is required",
                                 pattern: {
                                     value: /^(7|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 7 or 9"
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={
@@ -561,7 +561,7 @@ export default function OmanForm({ countries }: Props) {
                                 required: "Parent Mobile is required",
                                 pattern: {
                                     value: /^(7|9)[0-9]{7}$/,
-                                    message: "Mobile number must be 8 digits and start with 7 or 9"
+                                    message: "Mobile number must be 8 digits"
                                 }
                             })}
                             error={errors.parentMobile}

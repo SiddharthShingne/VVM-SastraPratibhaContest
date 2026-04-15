@@ -140,7 +140,7 @@ function StyledDialog({ dialog, onClose }: { dialog: DialogType; onClose: () => 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 p-4">
       <div className={`bg-linear-to-br ${c.bg} border ${c.border} rounded-2xl shadow-2xl w-full max-w-md p-8 text-center overflow-hidden`}>
         <div className={`mx-auto mb-5 w-20 h-20 rounded-full ${c.iconBg} ${c.iconColor} flex items-center justify-center shadow-inner`}>
           {c.icon}
@@ -171,7 +171,7 @@ function RegistrationSuccessPopup({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[9999] p-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-9999 p-4">
       <div className="bg-white rounded-2xl shadow-2xl text-center w-full max-w-md p-10 max-h-[90vh] overflow-y-auto">
         {/* Animated checkmark circle */}
         <div className="flex justify-center mb-6">
@@ -249,9 +249,20 @@ export default function UAEForm({ countries }: Props) {
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
 
+  // useEffect(() => {
+  //   fetchDistricts("38").then((data) => {
+  //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+  //   });
+  // }, []);
   useEffect(() => {
     fetchDistricts("38").then((data) => {
-      setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+      console.log("DISTRICTS DATA:", data); // ← check karo
+      setDistricts(data.map((d: any) => ({
+        value: String(d.id),
+        label: d.name
+      })));
+    }).catch((err) => {
+      console.error("DISTRICTS ERROR:", err); // ← error dekho
     });
   }, []);
 
@@ -409,7 +420,7 @@ export default function UAEForm({ countries }: Props) {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
             Student Registration – UAE
           </h1>
-          <Image src="/gcc/uae.webp" alt="UAE" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+          <Image src="/gcc/uae.png" alt="UAE" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">

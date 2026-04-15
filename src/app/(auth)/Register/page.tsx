@@ -105,7 +105,7 @@ export default function RegisterPage() {
                   <Image
                     width={80}
                     height={80}
-                    src="/gcc/logo-latest.jpeg"
+                    src="/gcc/logo-latest.png"
                     alt="VVM Logo"
                     className="w-full h-full rounded-full object-cover"
                   />
