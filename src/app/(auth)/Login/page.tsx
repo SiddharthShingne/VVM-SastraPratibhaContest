@@ -156,7 +156,7 @@ export default function LoginPage() {
               <h2 className="text-3xl font-extrabold text-center mb-2 
             bg-linear-to-r from-[#162a4a] via-[#1f6fa3] to-[#f4df17] 
             bg-clip-text text-transparent">
-                Welcome Back
+              Login
               </h2>
 
               <p className="text-center text-sm text-gray-500 mb-6">
@@ -275,7 +275,7 @@ export default function LoginPage() {
   flex items-center justify-center shadow-2xl animate-[float_4s_ease-in-out_infinite]">
 
               <Image
-                src="/gcc/logo-latest.jpeg"
+                src="/gcc/logo.png"
                 alt="VVM Logo"
                 width={180}
                 height={180}

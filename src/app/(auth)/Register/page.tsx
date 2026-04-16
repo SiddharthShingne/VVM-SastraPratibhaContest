@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
-// ✅ Correct imports - make sure these files exist
 import BahrainForm from "./_components/BahrainForm";
 import KuwaitForm from "./_components/KuwaitForm";
 import UAEForm from "./_components/UAEForm";
@@ -10,6 +8,7 @@ import SaudiForm from "./_components/SaudiForm";
 import QatarForm from "./_components/QatarForm";
 import OmanForm from "./_components/OmanForm";
 import Image from "next/image";
+
 export default function RegisterPage() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
@@ -22,12 +21,17 @@ export default function RegisterPage() {
     { value: "oman", label: "Oman", code: "6" },
   ];
 
-  const selectedCountryData = countries.find(
-    (c) => c.value === selectedCountry
-  );
+  const flagCards = [
+    { name: "UAE", logo: "/gcc/uae.png", value: "uae" },
+    { name: "Saudi Arabia", logo: "/gcc/saudi-arab.png", value: "saudi" },
+    { name: "Kuwait", logo: "/gcc/kuwait.png", value: "kuwait" },
+    { name: "Bahrain", logo: "/gcc/bahrain.png", value: "bahrain" },
+    { name: "Qatar", logo: "/gcc/qatar.png", value: "qatar" },
+    { name: "Oman", logo: "/gcc/oman.png", value: "oman" },
+  ];
 
+  const selectedCountryData = countries.find((c) => c.value === selectedCountry);
 
-  // Country component mapping
   const countryComponentMap: Record<string, React.ReactNode> = {
     bahrain: <BahrainForm country={selectedCountryData} />,
     kuwait: <KuwaitForm country={selectedCountryData} />,
@@ -36,91 +40,55 @@ export default function RegisterPage() {
     qatar: <QatarForm country={selectedCountryData} />,
     oman: <OmanForm country={selectedCountryData} />,
   };
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#e8eef5] to-[#f5f0d0] flex items-center justify-center p-4 md:p-10">
-      {/* Dynamic width based on selection */}
-      <div className={`w-full mx-auto transition-all duration-500 ${selectedCountry ? 'max-w-300' : 'max-w-145'
-        }`}>
+    <div
+      className="min-h-screen flex items-center justify-center p-4 md:p-10"
+      style={{
+        background: "linear-gradient(145deg, #dde8f5 0%, #eef3fa 40%, #f5f0d8 100%)",
+      }}
+    >
+      <div className={`w-full mx-auto transition-all duration-500 ${selectedCountry ? "max-w-300" : "max-w-145"}`}>
 
         {!selectedCountry && (
           <div
-            className="relative rounded-[28px] mb-10"
+            className="relative rounded-[32px] overflow-hidden"
             style={{
-              background: "rgba(255,255,255,0.72)",
-              border: "1px solid rgba(255,255,255,0.75)",
-              boxShadow:
-                "0 32px 64px rgba(23,57,92,0.13), 0 8px 24px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
+              background: "rgba(255,255,255,0.78)",
+              border: "1px solid rgba(255,255,255,0.9)",
+              boxShadow: "0 40px 80px rgba(23,57,92,0.14), 0 8px 24px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,1)",
             }}
           >
-            {/* Animated gradient top bar */}
+            {/* Animated top bar */}
             <div
-              className="absolute top-0 left-0 right-0 h-0.75"
+              className="absolute top-0 left-0 right-0 h-1"
               style={{
-                background:
-                  "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
+                background: "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
                 backgroundSize: "300% 100%",
                 animation: "gradBar 4s ease infinite",
               }}
             />
 
             {/* Ambient orbs */}
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 220,
-                height: 220,
-                right: -70,
-                top: -70,
-                background:
-                  "radial-gradient(circle, rgba(244,223,23,0.18) 0%, transparent 70%)",
-                zIndex: 0,
-                animation: "orb1 7s ease-in-out infinite",
-              }}
-            />
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 180,
-                height: 180,
-                left: -50,
-                bottom: -50,
-                background:
-                  "radial-gradient(circle, rgba(23,57,92,0.11) 0%, transparent 70%)",
-                zIndex: 0,
-                animation: "orb2 9s ease-in-out infinite",
-              }}
-            />
+            <div className="absolute rounded-full pointer-events-none" style={{ width: 260, height: 260, right: -80, top: -80, background: "radial-gradient(circle, rgba(244,223,23,0.15) 0%, transparent 70%)", zIndex: 0, animation: "orb1 7s ease-in-out infinite" }} />
+            <div className="absolute rounded-full pointer-events-none" style={{ width: 200, height: 200, left: -60, bottom: -60, background: "radial-gradient(circle, rgba(23,57,92,0.09) 0%, transparent 70%)", zIndex: 0, animation: "orb2 9s ease-in-out infinite" }} />
 
             <div className="relative z-10 p-10">
-              {/* Logo circle */}
-              <div className="flex justify-center mb-5">
+
+              {/* Logo */}
+              <div className="flex justify-center mb-6">
                 <div
-                  className="w-18 h-18 rounded-full flex items-center justify-center font-black text-white text-xl tracking-tight"
-                  style={{
-                    background: "linear-gradient(135deg, #17395c, #2a6099)",
-                    boxShadow: "0 8px 24px rgba(23,57,92,0.3)",
-                    animation: "float 4s ease-in-out infinite",
-                  }}
+                  className="w-20 h-20 rounded-full overflow-hidden"
+                  style={{ boxShadow: "0 8px 28px rgba(23,57,92,0.25)", animation: "float 4s ease-in-out infinite" }}
                 >
-                  <Image
-                    width={80}
-                    height={80}
-                    src="/gcc/logo-latest.png"
-                    alt="VVM Logo"
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                  <Image width={80} height={80} src="/gcc/logo-latest.png" alt="VVM Logo" className="w-full h-full object-cover" />
                 </div>
               </div>
 
               {/* Title */}
               <h2
-                className="text-center text-[1.65rem] font-black tracking-tight mb-1"
-                style={{
-                  background: "linear-gradient(135deg, #17395c 30%, #2a6099 80%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+                className="text-center text-[1.75rem] font-black tracking-tight mb-1"
+                style={{ background: "linear-gradient(135deg, #17395c 30%, #2a6099 80%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
               >
                 Student Registration
               </h2>
@@ -129,76 +97,88 @@ export default function RegisterPage() {
               </p>
 
               {/* Divider */}
-              <div
-                className="mb-7 h-px"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(23,57,92,0.15), transparent)",
-                }}
-              />
+              <div className="mb-7 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(23,57,92,0.15), transparent)" }} />
 
-              {/* Select */}
-              <div
-                className="bg-white/30 rounded-2xl p-5 border border-white/50"
-                style={{ boxShadow: "inset 0 1px 3px rgba(23,57,92,0.06)" }}
-              >
-                <label className="block text-[0.75rem] font-semibold uppercase tracking-widest text-[#4f6480] mb-2">
-                  Country
-                </label>
-                <div className="relative">
+              {/* Select dropdown */}
+              <div className="rounded-2xl p-5 mb-6" >
+                              <div className="relative">
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="w-full border-[1.5px] border-[rgba(23,57,92,0.18)] rounded-[14px] px-4 py-3 text-[0.95rem] font-medium text-[#17395c] bg-white/80 cursor-pointer pr-10 appearance-none hover:border-[rgba(23,57,92,0.4)] hover:bg-white/95 focus:border-[#17395c] focus:outline-none focus:shadow-[0_0_0_3px_rgba(23,57,92,0.1)] transition-all"
+                    className="w-full border-[1.5px] border-[rgba(23,57,92,0.18)] rounded-[14px] px-4 py-3 text-[0.95rem] font-medium text-[#17395c] bg-white cursor-pointer pr-10 appearance-none hover:border-[rgba(23,57,92,0.4)] focus:border-[#17395c] focus:outline-none focus:shadow-[0_0_0_3px_rgba(23,57,92,0.1)] transition-all"
                   >
                     <option value="">— Select country —</option>
                     {countries.map((country) => (
-                      <option key={country.code} value={country.value}>
-                        {country.label}
-                      </option>
+                      <option key={country.code} value={country.value}>{country.label}</option>
                     ))}
                   </select>
-                  {/* Custom chevron */}
                   <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path
-                        d="M2 4l4 4 4-4"
-                        stroke="#17395c"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                      <path d="M2 4l4 4 4-4" stroke="#17395c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                 </div>
               </div>
 
-              {/* Country pills */}
-              <div className="flex flex-wrap justify-center gap-2 mt-5">
-                {["UAE", "Saudi Arabia", "Kuwait", "Bahrain", "Qatar", "Oman"].map(
-                  (pill) => (
-                    <span
-                      key={pill}
-                      className="px-3 py-1 rounded-full text-[0.72rem] font-extrabold text-[#03408f] tracking-wide transition-all duration-200 hover:-translate-y-0.5 cursor-default"
+              {/* OR divider */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex-1 h-px" style={{ background: "rgba(23,57,92,0.1)" }} />
+                {/* <span className="text-[0.7rem] font-bold uppercase tracking-widest text-[#9aadbe]">or pick directly</span> */}
+                <div className="flex-1 h-px" style={{ background: "rgba(23,57,92,0.1)" }} />
+              </div>
+
+              {/* Flag Cards */}
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                {flagCards.map((country) => (
+                  <button
+                    key={country.name}
+                    onClick={() => setSelectedCountry(country.value)}
+                    className="group flex flex-col items-center gap-2 py-3 px-2 rounded-2xl transition-all duration-250 cursor-pointer"
+                    style={{
+                      background: "white",
+                      border: "1.5px solid rgba(23,57,92,0.1)",
+                      boxShadow: "0 2px 8px rgba(23,57,92,0.07)",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.border = "1.5px solid rgba(23,57,92,0.35)";
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 20px rgba(23,57,92,0.14)";
+                      (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-3px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.border = "1.5px solid rgba(23,57,92,0.1)";
+                      (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(23,57,92,0.07)";
+                      (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                    }}
+                  >
+                    {/* Flag image on pure white */}
+                    <div
+                      className="w-11 h-8 relative overflow-hidden rounded-lg"
                       style={{
-                        background: "rgba(23,57,92,0.06)",
-                        border: "1px solid rgba(23,57,92,0.1)",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)",
                       }}
                     >
-                      {pill}
+                      <Image
+                        src={country.logo}
+                        alt={`${country.name} flag`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <span
+                      className="text-[0.6rem] font-bold tracking-wide text-center leading-tight"
+                      style={{ color: "#2a4a6b" }}
+                    >
+                      {country.name}
                     </span>
-                  )
-                )}
+                  </button>
+                ))}
               </div>
 
               {/* Step dots */}
-              <div className="flex justify-center gap-2 mt-6">
-                <div
-                  className="h-1.5 w-5.5 rounded-sm"
-                  style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
-                />
-                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
-                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
+              <div className="flex justify-center gap-2 mt-8">
+                <div className="h-1.5 w-6 rounded-full" style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }} />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ background: "rgba(23,57,92,0.15)" }} />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ background: "rgba(23,57,92,0.15)" }} />
               </div>
             </div>
           </div>
@@ -206,72 +186,32 @@ export default function RegisterPage() {
 
         {selectedCountry && (
           <div
-            className="relative rounded-[28px] overflow-hidden mb-10"
+            className="relative rounded-[32px] overflow-hidden mb-10"
             style={{
-              background: "rgba(255,255,255,0.72)",
-              border: "1px solid rgba(255,255,255,0.75)",
+              background: "rgba(255,255,255,0.78)",
+              border: "1px solid rgba(255,255,255,0.9)",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
-              boxShadow:
-                "0 32px 64px rgba(23,57,92,0.13), 0 8px 24px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
+              boxShadow: "0 40px 80px rgba(23,57,92,0.14), 0 8px 24px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,1)",
             }}
           >
-            <div
-              className="absolute top-0 left-0 right-0 h-0.75"
-              style={{
-                background:
-                  "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)",
-                backgroundSize: "300% 100%",
-                animation: "gradBar 4s ease infinite",
-              }}
-            />
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 220,
-                height: 220,
-                right: -70,
-                top: -70,
-                background:
-                  "radial-gradient(circle, rgba(244,223,23,0.18) 0%, transparent 70%)",
-                zIndex: 0,
-                animation: "orb1 7s ease-in-out infinite",
-              }}
-            />
-            <div
-              className="absolute rounded-full pointer-events-none"
-              style={{
-                width: 180,
-                height: 180,
-                left: -50,
-                bottom: -50,
-                background:
-                  "radial-gradient(circle, rgba(23,57,92,0.11) 0%, transparent 70%)",
-                zIndex: 0,
-                animation: "orb2 9s ease-in-out infinite",
-              }}
-            />
+            <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, #17395c, #2a6099, #f4df17, #e8b800, #17395c, #2a6099)", backgroundSize: "300% 100%", animation: "gradBar 4s ease infinite" }} />
+            <div className="absolute rounded-full pointer-events-none" style={{ width: 220, height: 220, right: -70, top: -70, background: "radial-gradient(circle, rgba(244,223,23,0.18) 0%, transparent 70%)", zIndex: 0, animation: "orb1 7s ease-in-out infinite" }} />
+            <div className="absolute rounded-full pointer-events-none" style={{ width: 180, height: 180, left: -50, bottom: -50, background: "radial-gradient(circle, rgba(23,57,92,0.11) 0%, transparent 70%)", zIndex: 0, animation: "orb2 9s ease-in-out infinite" }} />
 
             <div className="relative z-10 p-8">
-              {/* Back button */}
               <button
                 onClick={() => setSelectedCountry("")}
-                className="mb-5 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[0.8rem] font-semibold text-[#4f6480] border border-[rgba(23,57,92,0.15)] bg-white/60 hover:text-[#17395c] hover:bg-white/90 hover:border-[rgba(23,57,92,0.3)] transition-all duration-200 hover:-translate-x-0.5"
+                className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[0.8rem] font-semibold text-[#4f6480] bg-white hover:text-[#17395c] hover:bg-white hover:shadow-md transition-all duration-200"
+                style={{ border: "1.5px solid rgba(23,57,92,0.15)" }}
               >
-                <span className="transition-transform duration-200 group-hover:-translate-x-0.75">
-                  ←
-                </span>
-                Change Country
+                ← Change Country
               </button>
 
-              {/* Step dots — step 2 */}
               <div className="flex justify-center gap-2 mb-6">
-                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
-                <div
-                  className="h-1.5 w-5.5 rounded-sm"
-                  style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }}
-                />
-                <div className="h-1.5 w-1.5 rounded-full bg-[rgba(23,57,92,0.15)]" />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ background: "rgba(23,57,92,0.15)" }} />
+                <div className="h-1.5 w-6 rounded-full" style={{ background: "linear-gradient(90deg,#17395c,#2a6099)" }} />
+                <div className="h-1.5 w-1.5 rounded-full" style={{ background: "rgba(23,57,92,0.15)" }} />
               </div>
 
               {countryComponentMap[selectedCountry]}
@@ -280,7 +220,6 @@ export default function RegisterPage() {
         )}
       </div>
 
-      {/* Add global styles for animations */}
       <style jsx global>{`
         @keyframes gradBar {
           0% { background-position: 0% 50%; }
@@ -302,17 +241,6 @@ export default function RegisterPage() {
         @keyframes orb2 {
           0%, 100% { transform: translate(0, 0) scale(1); }
           50% { transform: translate(-25px, 18px) scale(0.9); }
-        }
-        .reg-card {
-          animation: fadeSlideUp 0.5s cubic-bezier(0.34, 1.26, 0.64, 1) both;
-          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                      box-shadow 0.35s ease;
-        }
-        .reg-card:hover {
-          transform: translateY(-5px) scale(1.003);
-          box-shadow: 0 44px 88px rgba(23, 57, 92, 0.18),
-                      0 12px 32px rgba(23, 57, 92, 0.1),
-                      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
         }
       `}</style>
     </div>
