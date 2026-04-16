@@ -17,7 +17,9 @@ export default function SelectField({
   registration,
   required,
   ...props
-}: SelectFieldProps) {
+}: SelectFieldProps)
+
+{
   return (
     <div className="w-full">
       <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -35,12 +37,13 @@ export default function SelectField({
         }`}
       >
         <option value="">Select</option>
-        {options.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>
+      
 
       {error && <p className="mt-1 text-xs text-red-500">{error.message}</p>}
     </div>

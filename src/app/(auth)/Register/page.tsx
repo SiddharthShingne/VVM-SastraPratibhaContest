@@ -52,7 +52,7 @@ export default function RegisterPage() {
 
         {!selectedCountry && (
           <div
-            className="relative rounded-[32px] overflow-hidden"
+            className="relative rounded-4xl overflow-hidden"
             style={{
               background: "rgba(255,255,255,0.78)",
               border: "1px solid rgba(255,255,255,0.9)",
@@ -186,7 +186,7 @@ export default function RegisterPage() {
 
         {selectedCountry && (
           <div
-            className="relative rounded-[32px] overflow-hidden mb-10"
+            className="relative rounded-4xl overflow-hidden mb-10"
             style={{
               background: "rgba(255,255,255,0.78)",
               border: "1px solid rgba(255,255,255,0.9)",

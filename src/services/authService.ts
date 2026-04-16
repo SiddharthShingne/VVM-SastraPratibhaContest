@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import api from "./axiosInstance";
+import { ApertureIcon } from "lucide-react";
 
 /* ================= LOGIN ================= */
 
@@ -96,10 +98,22 @@ export const fetchStates = async () => {
 };
 
 //===============FETCH DISTRICTS============//
+// export const fetchDistricts = async (state_id: string) => {
+//   try {
+//     const res = await api.post("/fetchDistrict", {
+//       state_id,
+//     });
+//     return res.data?.data || [];
+//   } catch (error) {
+//     console.error("fetchDistricts error:", error);
+//     return [];
+//   }
+// };
+
 export const fetchDistricts = async (state_id: string) => {
   try {
     const res = await api.post("/fetchDistrict", {
-      state_id,
+      state_id: Number(state_id),
     });
     return res.data?.data || [];
   } catch (error) {
@@ -107,7 +121,6 @@ export const fetchDistricts = async (state_id: string) => {
     return [];
   }
 };
-
 // =========EMAIL OTP==========//
 /*
 https://core.vvmstage.cloud/api/send-email-otp-new?email=shingnesid@gmail.com
