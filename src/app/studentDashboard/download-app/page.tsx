@@ -22,7 +22,7 @@ export default function DownloadApp() {
 
   return (
     <div className="min-h-screen py-10 px-4">
-      <div className="max-w-[1100px] mx-auto">
+      <div className="max-w-275 mx-auto">
         <div className="flex w-full flex-col">
           <Tabs
             aria-label="Download App Tabs"

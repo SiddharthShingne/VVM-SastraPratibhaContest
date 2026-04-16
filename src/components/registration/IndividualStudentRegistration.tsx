@@ -42,7 +42,7 @@ export default function StudentRegistrationInstructions() {
           <div className="text-yellow-500">
             <AlertCircle size={40} />
           </div>
-          
+
 
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">
@@ -80,7 +80,7 @@ export default function StudentRegistrationInstructions() {
         {/* Button */}
         <div className="flex justify-center mb-10">
           <Link
-            href="/Register"
+            href="/register"
             className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration
@@ -119,7 +119,7 @@ export default function StudentRegistrationInstructions() {
         {/* Bottom Button */}
         <div className="flex justify-center mt-12">
           <Link
-            href="/Register"
+            href="/register"
             className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration

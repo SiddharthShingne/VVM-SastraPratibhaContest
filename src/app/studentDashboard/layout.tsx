@@ -114,7 +114,7 @@ export default function StudentDashboardLayout({
       localStorage.clear();
       sessionStorage.clear();
       delete axiosInstance.defaults.headers.common["Authorization"];
-      router.replace("/Login");
+      router.replace("/login");
     }
   };
 

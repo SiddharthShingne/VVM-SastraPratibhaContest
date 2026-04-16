@@ -287,13 +287,13 @@ function RegistrationSuccessPopup({
                 </p>
 
                 {/* Go to Login button */}
-                <Link href="/Login">
-                <button
-                    onClick={onClose}
-                    className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
-                >
-                    Go to Login
-                </button>
+                <Link href="/login">
+                    <button
+                        onClick={onClose}
+                        className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
+                    >
+                        Go to Login
+                    </button>
                 </Link>
             </div>
         </div>
@@ -780,7 +780,7 @@ export default function OmanForm({ countries }: Props) {
                             registration={register("parentMobile", {
                                 required: "Parent Mobile is required",
                                 pattern: {
-                                    value: /^[0-9]{8}$/, 
+                                    value: /^[0-9]{8}$/,
                                     message: "Mobile number must be 8 digits",
                                 },
                             })}

@@ -1,6 +1,5 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/authService";
 import { Eye, EyeOff, CheckCircle, XCircle } from "lucide-react";
@@ -59,9 +58,11 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const trimmedUsername = username.trim(); // ✅ trim here
+    const trimmedPassword = password.trim(); // ✅ optional but good practice
 
-    const userErr = validateUsername(username);
-    const passErr = validatePassword(password);
+    const userErr = validateUsername(trimmedUsername);
+    const passErr = validatePassword(trimmedPassword);
 
     setUsernameError(userErr);
     setPasswordError(passErr);
@@ -71,11 +72,11 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const data = await loginUser(username, password);
+      const data = await loginUser(trimmedUsername, trimmedPassword);
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
+      window.dispatchEvent(new Event("auth-change"));
       setDialog({
         type: "success",
         message: "Login successful. Redirecting to dashboard...",
@@ -96,6 +97,15 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setUsername("");
+    setPassword("");
+
+    // Force clear in case browser bypasses React state
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach((input) => (input.value = ""));
+  }, []);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#e8eef5] to-[#f5f0d0] relative">
@@ -154,29 +164,29 @@ export default function LoginPage() {
               </p>
 
               {/* FORM */}
-              <form onSubmit={handleLogin} className="space-y-5">
+              <form onSubmit={handleLogin} autoComplete="off" className="space-y-5">
 
                 {/* USERNAME */}
                 <div className="relative">
                   <input
                     type="text"
                     placeholder=" "
+                    autoComplete="off"
+                    name="vvm_user_field"
+                    readOnly
+                    onFocus={(e) => e.currentTarget.removeAttribute("readOnly")}
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
                       setUsernameError("");
                     }}
                     className="peer w-full px-10 py-3 border border-gray-300 rounded-xl 
-                bg-[#f8fbff] text-sm focus:outline-none focus:border-[#1f4e7a] 
-                focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
+    bg-[#f8fbff] text-sm focus:outline-none focus:border-[#1f4e7a] 
+    focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
                   />
 
-                  <label className="absolute left-10 text-gray-500 text-sm transition-all px-1
-  top-3 
-  peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#162a4a] peer-focus:bg-white
-  peer-not-placeholder-shown:-top-2 
-  peer-not-placeholder-shown:text-xs 
-  peer-not-placeholder-shown:bg-white">
+                  <label className="absolute left-10 text-gray-500 text-sm transition-all px-1  top-3 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#162a4a] peer-focus:bg-white
+                                          peer-not-placeholder-shown:-top-2  peer-not-placeholder-shown:text-xs  peer-not-placeholder-shown:bg-white">
                     Username
                   </label>
 
@@ -190,14 +200,16 @@ export default function LoginPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder=" "
+                    autoComplete="new-password"
+                    name="vvm_pass_field"
+                    readOnly
+                    onFocus={(e) => e.currentTarget.removeAttribute("readOnly")}
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
                       setPasswordError("");
                     }}
-                    className="peer w-full px-10 py-3 border border-gray-300 rounded-xl 
-                bg-[#f8fbff] text-sm focus:outline-none focus:border-[#1f4e7a] 
-                focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
+                    className="peer w-full px-10 py-3 border border-gray-300 rounded-xl    bg-[#f8fbff] text-sm focus:outline-none focus:border-[#1f4e7a]     focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
                   />
 
                   <label className="absolute left-10 text-gray-500 text-sm transition-all px-1
@@ -223,6 +235,17 @@ export default function LoginPage() {
                   )}
                 </div>
 
+                {/* Forgot Password */}
+                <div className="flex justify-start">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/forgot-password")}
+                    className="text-xs text-[#5bacf8] hover:text-[#1a60a5] font-bold transition"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
                 {/* BUTTON */}
                 <button
                   type="submit"
@@ -240,8 +263,7 @@ export default function LoginPage() {
           </div>
 
           {/* ================= RIGHT: HERO ================= */}
-          <div className="hidden md:flex items-center justify-center relative 
-bg-linear-to-br from-[#162a4a] via-[#1f4e7a] to-[#2f6fa3] p-10">
+          <div className="hidden md:flex items-center justify-center relative bg-linear-to-br from-[#162a4a] via-[#1f4e7a] to-[#2f6fa3] p-10">
 
             {/* decorative blobs */}
             <div className="absolute w-64 h-64 bg-white/10 rounded-full -top-16 -right-16" />

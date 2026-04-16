@@ -30,7 +30,7 @@ export default function RegistrationSection() {
 
       {/* Registration Section */}
       <div className="relative overflow-hidden bg-gradient-to-b from-[#f7fbff] to-[#eef5fb] py-16">
-        
+
         {/* Background Effects */}
         <div className="absolute -top-[100px] -left-[80px] w-[260px] h-[260px] bg-[radial-gradient(circle,rgba(23,57,92,0.12)_0%,transparent_70%)] rounded-full"></div>
         <div className="absolute -bottom-[100px] -right-[80px] w-[280px] h-[280px] bg-[radial-gradient(circle,rgba(255,193,7,0.18)_0%,transparent_70%)] rounded-full"></div>
@@ -57,7 +57,7 @@ export default function RegistrationSection() {
 
             {/* Student Card */}
             <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300  max-w-lg mx-auto">
-              
+
               <div className="relative h-[250px] overflow-hidden">
                 <img
                   src="/student-registration-images/images-of-register-page/student-registration.jpg"
@@ -68,7 +68,7 @@ export default function RegistrationSection() {
               </div>
 
               <div className="text-center px-6 pb-6 pt-12 relative">
-                
+
                 {/* Icon */}
                 <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#f4df17] to-[#f7b500] text-[#17395c] flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
                   👤
@@ -93,8 +93,8 @@ export default function RegistrationSection() {
 
             {/* School Card */}
             {/* <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300"> */}
-              
-              {/* <div className="relative h-[250px] overflow-hidden">
+
+            {/* <div className="relative h-[250px] overflow-hidden">
                 <img
                   src="/images-of-register-page/school-registration.jpg"
                   alt="School"
@@ -103,28 +103,28 @@ export default function RegistrationSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#17395c40] to-[#17395c10]"></div>
               </div> */}
 
-              {/* <div className="text-center px-6 pb-6 pt-12 relative"> */}
-                
-                {/* Icon */}
-                {/* <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#17395c] to-[#2c6aa0] text-white flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
+            {/* <div className="text-center px-6 pb-6 pt-12 relative"> */}
+
+            {/* Icon */}
+            {/* <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#17395c] to-[#2c6aa0] text-white flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
                   🏫
                 </div> */}
 
-                {/* <h4 className="text-xl font-extrabold text-[#17395c] mb-2">
+            {/* <h4 className="text-xl font-extrabold text-[#17395c] mb-2">
                   School Registration
                 </h4> */}
 
-                {/* <p className="text-[#66788a] text-sm leading-7 mb-5">
+            {/* <p className="text-[#66788a] text-sm leading-7 mb-5">
                   Register your school and enable students to participate through your institution.
                 </p> */}
-{/* 
+            {/* 
                 <Link
-                  href="/Register"
+                  href="/register"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →
                 </Link> */}
-              {/* </div> */}
+            {/* </div> */}
             {/* </div> */}
 
           </div>

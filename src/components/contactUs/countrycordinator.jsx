@@ -1,6 +1,6 @@
 export default function CountryCordinator() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#f7fbff] to-[#eef5fb]">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-[#f7fbff] to-[#eef5fb]">
             <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
                 <h2 className="text-2xl font-bold text-[#17395c] mb-4">Country Coordinators</h2>
                 <p className="text-gray-700 text-lg mb-6">

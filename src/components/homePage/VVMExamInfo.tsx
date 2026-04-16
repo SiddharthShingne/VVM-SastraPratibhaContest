@@ -14,24 +14,24 @@ export default function VVMExamInfo({ importantDates = [] }: Props) {
   const [activeTab, setActiveTab] = useState("all");
 
   return (
-    <section className="relative py-[45px] overflow-hidden 
+    <section className="relative py-11.25 overflow-hidden 
       bg-[linear-gradient(135deg,#eef3f8_0%,#e5ecf4_45%,#f8fafc_100%)]">
 
       {/* Background Grid */}
       <div className="absolute inset-0 opacity-[0.08] 
         bg-[radial-gradient(#17395c_1px,transparent_1px)] 
-        bg-[size:26px_26px]" />
+        bg-size-[26px_26px]" />
 
       {/* Glow Shapes */}
-      <div className="absolute w-[260px] h-[260px] bg-yellow-300/20 blur-[70px] rounded-full top-5 -left-16 animate-pulse" />
-      <div className="absolute w-[320px] h-[320px] bg-blue-900/20 blur-[70px] rounded-full -bottom-16 -right-20 animate-pulse" />
+      <div className="absolute w-65 h-65 bg-yellow-300/20 blur-[70px] rounded-full top-5 -left-16 animate-pulse" />
+      <div className="absolute w-80 h-80 bg-blue-900/20 blur-[70px] rounded-full -bottom-16 -right-20 animate-pulse" />
 
       <div className="max-w-6xl mx-auto px-4 relative">
 
         {/* Header */}
         <div className="mb-10 max-w-3xl">
           <span className="inline-block mb-4 px-5 py-2 rounded-full 
-            bg-gradient-to-r from-[#17395c] to-[#244d79] 
+            bg-linear-to-r from-[#17395c] to-[#244d79] 
             text-yellow-300 text-xs font-extrabold tracking-widest uppercase">
             Important Information
           </span>
@@ -57,7 +57,7 @@ export default function VVMExamInfo({ importantDates = [] }: Props) {
               onClick={() => setActiveTab("all")}
               className={`px-5 py-2 rounded-full text-sm font-bold transition 
                 ${activeTab === "all"
-                  ? "bg-gradient-to-r from-[#17395c] to-[#244d79] text-yellow-300"
+                  ? "bg-linear-to-r from-[#17395c] to-[#244d79] text-yellow-300"
                   : "bg-white text-[#17395c] shadow-md hover:-translate-y-1"
                 }`}
             >
@@ -85,7 +85,7 @@ export default function VVMExamInfo({ importantDates = [] }: Props) {
 
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-gradient-to-r from-[#17395c] to-[#2c5c8c] text-white text-sm">
+                  <tr className="bg-linear-to-r from-[#17395c] to-[#2c5c8c] text-white text-sm">
                     <th className="p-4">Event</th>
                     <th className="p-4">Details</th>
                   </tr>
@@ -95,7 +95,7 @@ export default function VVMExamInfo({ importantDates = [] }: Props) {
                   {importantDates.length === 0 ? (
                     <tr>
                       <td colSpan={2} className="py-6">
-                        No important dates available.
+                        Coming Soon...
                       </td>
                     </tr>
                   ) : (

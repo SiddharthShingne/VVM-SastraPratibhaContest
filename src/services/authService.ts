@@ -222,3 +222,22 @@ export const registerStudentV2 = async (formData: Record<string, unknown>) => {
   });
   return res.data;
 };
+
+// ================= FORGOT PASSWORD ========== //
+export const forgotPassword = async (payload: {
+  username: string;
+  frontend_url: string;
+}) => {
+  const res = await api.post(
+    "https://core.vvmstage.cloud/api/forgot-password",
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        // No token required
+      },
+    },
+  );
+
+  return res.data;
+};

@@ -10,7 +10,7 @@ import TextAreaField from "@/components/ui/TextAreaField";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
-import { registerStudentV2 , fetchDistricts} from "@/services/authService"; // ← import your API
+import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
 import Link from "next/link";
 
 type RegistrationForm = {
@@ -222,7 +222,7 @@ function RegistrationSuccessPopup({
         </p>
 
         {/* Go to Login button */}
-        <Link href="/Login">
+        <Link href="/login">
           <button
             className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
           >
@@ -374,7 +374,7 @@ export default function QatarForm({ countries = [] }: Props) {
 
         pincode: data.pincode,
         address: data.schoolAddress,
-        dist_id: data.district,  
+        dist_id: data.district,
 
         parent_full_name: data.parentName,
         parent_mobile: data.parentMobile,
@@ -403,7 +403,8 @@ export default function QatarForm({ countries = [] }: Props) {
     } catch (error: any) {
       setDialog({
         type: "error",
-        message: error?.response?.data?.message || error?.message || "Registration failed"      });
+        message: error?.response?.data?.message || error?.message || "Registration failed"
+      });
     } finally {
       setLoading(false);
     }
@@ -459,7 +460,7 @@ export default function QatarForm({ countries = [] }: Props) {
             />
             <SelectField label="Class / Grade" required options={grades}
               registration={register("grade", { required: "Grade is required" })}
-              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined} 
+              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
             />
             <SelectField
               label="How did you hear about VVM?" required options={hearOptions}
@@ -489,9 +490,9 @@ export default function QatarForm({ countries = [] }: Props) {
               registration={register("board", { required: "Board is required" })}
               error={touchedFields?.board && errors?.board ? errors.board : undefined}
             />
-            <InputField label="Country" disabled 
+            <InputField label="Country" disabled
               value={countries.find((c) => c.value === "qatar")?.label || "Qatar"}
-              
+
             />
             <InputField label="Pincode" required placeholder="Enter pincode"
               registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
@@ -510,7 +511,7 @@ export default function QatarForm({ countries = [] }: Props) {
                 error={errors.schoolAddress}
               />
             </div>
-            
+
           </Section>
 
           {/* Parent Details */}

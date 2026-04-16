@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import React from "react";
 // import Link from "next/link";
 // import { ChevronRight } from "lucide-react";
@@ -84,17 +85,17 @@ const ŚāstraPratibhāContest = () => {
           <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11),inset_0_1px_0_rgba(255,255,255,0.7)] p-8">
 
             {/* Top Gradient Line */}
-            <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+            <div className="absolute top-0 left-0 w-full h-1.25 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="text-center">
 
               {/* BADGES */}
               <div className="flex justify-center gap-3 mb-5 flex-wrap">
-                <span className="px-4 py-1.5 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-[10px] font-extrabold tracking-widest uppercase">
+                <span className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-[10px] font-extrabold tracking-widest uppercase">
                   International Edition
                 </span>
 
-                <span className="px-4 py-1.5 rounded-full bg-yellow-100 border border-yellow-400 text-[#b88d00] text-[10px] font-extrabold uppercase">
+                <span className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#f4df17] to-[#b88d00] border border-[#b88d00] text-[#17395c] text-[10px] font-extrabold uppercase">
                   Middle East Zone
                 </span>
               </div>
@@ -129,7 +130,7 @@ const ŚāstraPratibhāContest = () => {
               </p>
 
               {/* QUOTE BLOCK */}
-              <div className="mt-6 flex gap-3 items-start bg-gradient-to-br from-[#17395c]/5 to-[#f4df17]/10 p-4 rounded-r-xl border-l-4 border-[#f4df17]">
+              <div className="mt-6 flex gap-3 items-start bg-linear-to-br from-[#17395c]/5 to-[#f4df17]/10 p-4 rounded-r-xl border-l-4 border-[#f4df17]">
                 <p className="text-sm text-[#4f6480] font-medium text-left">
                   Encouraging young minds globally to engage in science and
                   innovation through competitive excellence.
@@ -138,7 +139,7 @@ const ŚāstraPratibhāContest = () => {
 
               {/* STATS */}
               <div className="flex flex-wrap gap-4 mt-6">
-                <div className="flex-1 min-w-[120px] bg-gradient-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
+                <div className="flex-1 min-w-30 bg-linear-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
                   <span className="block text-lg font-extrabold text-[#f4df17]">
                     6+
                   </span>
@@ -147,7 +148,7 @@ const ŚāstraPratibhāContest = () => {
                   </span>
                 </div>
 
-                <div className="flex-1 min-w-[120px] bg-gradient-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
+                <div className="flex-1 min-w-30 bg-linear-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
                   <span className="block text-lg font-extrabold text-[#f4df17]">
                     Top 2
                   </span>
@@ -156,7 +157,7 @@ const ŚāstraPratibhāContest = () => {
                   </span>
                 </div>
 
-                <div className="flex-1 min-w-[120px] bg-gradient-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
+                <div className="flex-1 min-w-30 bg-linear-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
                   <span className="block text-lg font-extrabold text-[#f4df17]">
                     Zone 5
                   </span>
@@ -168,7 +169,7 @@ const ŚāstraPratibhāContest = () => {
 
               {/* BUTTONS */}
               <div className="flex justify-center gap-4 mt-8 flex-wrap">
-                <button className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-sm font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
+                <button className="px-6 py-2.5 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-sm font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
                   Learn More
                 </button>
 

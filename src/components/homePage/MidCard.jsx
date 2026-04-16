@@ -2,40 +2,40 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Folder, UserPlus, Monitor, Award, BookOpen } from 'lucide-react';
+import { Folder, UserPlus, Monitor, BookOpen } from 'lucide-react';
 
 const VVMHeroAbout = () => {
   return (
     <div>
 
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
+      <section className="relative overflow-hidden py-16 bg-linear-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
 
         {/* Grid */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#17395c_1px,transparent_1px)] bg-[size:26px_26px]" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#17395c_1px,transparent_1px)] bg-size-[26px_26px]" />
 
         {/* Glow Shapes */}
-        <div className="absolute w-[280px] h-[280px] bg-yellow-300/30 blur-[70px] rounded-full top-5 -left-16 animate-pulse"></div>
-        <div className="absolute w-[340px] h-[340px] bg-blue-900/20 blur-[70px] rounded-full -bottom-20 -right-20 animate-pulse"></div>
+        <div className="absolute w-70 h-70 bg-yellow-300/30 blur-[70px] rounded-full top-5 -left-16 animate-pulse"></div>
+        <div className="absolute w-85 h-85 bg-blue-900/20 blur-[70px] rounded-full -bottom-20 -right-20 animate-pulse"></div>
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
 
           {/* TOP BUTTONS */}
           <div className="flex flex-wrap justify-center gap-4 mb-10">
 
-            <Link href="/Register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
+            <Link href="/register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">Registration</span>
               VVM 2026-27
               <UserPlus size={18} />
             </Link>
 
-            <a href="https://archive-2526.vvmstage.cloud" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white font-bold shadow-lg hover:scale-105 transition">
+            <a href="https://archive-2526.vvmstage.cloud" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-[#102c48] to-[#1e4a74] text-white font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">Archive</span>
-              Visit Archive 2025-26
+              Visit VVM SIF Archive 2025-26
               <Folder size={18} />
             </a>
 
-            {/* <Link href="/state-level-camp-exam" className="flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-r from-[#17395c] to-[#244d79] text-white font-bold shadow-lg hover:scale-105 transition">
+            {/* <Link href="/state-level-camp-exam" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-white font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">Latest</span>
               SLC Result 2025-26
               <ArrowRight size={18} />
@@ -53,24 +53,21 @@ const VVMHeroAbout = () => {
               </div>
 
               <span className="block text-yellow-700 uppercase text-xs font-extrabold tracking-widest">
-                National Science Talent Journey
+                Science Talent Journey
               </span>
 
               <h1 className="text-4xl md:text-6xl font-extrabold text-[#17395c] leading-tight">
-                Vidyarthi Vigyan Manthan
+                Śāstra Pratibhā Contest
               </h1>
 
               <p className="text-gray-600 max-w-xl">
-                A digital-based and one of the largest science talent search examinations designed for Emerging India.
+                A digital-based and one of the largest science talent search examination
               </p>
 
               {/* Features */}
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
                   <Monitor size={16} /> Digital Exam Platform
-                </div>
-                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
-                  <Award size={16} /> National Recognition
                 </div>
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow font-semibold">
                   <BookOpen size={16} /> Learning + Competition
@@ -80,9 +77,9 @@ const VVMHeroAbout = () => {
             </div>
 
             {/* RIGHT SLIDER CARD */}
-            <div className="relative flex flex-col items-center gap-6"> 
+            <div className="relative flex flex-col items-center gap-6">
 
-              
+
 
               <div className="bg-white/80 backdrop-blur-lg p-6 rounded-3xl shadow-xl max-w-md w-full">
 
@@ -96,7 +93,7 @@ const VVMHeroAbout = () => {
 
                   <div>
                     <span className="bg-yellow-300 px-3 py-1 rounded-full text-xs font-bold">Internship</span>
-                    <h4 className="text-lg font-bold mt-2 text-[#17395c]">Srijan Internship VVM 2025-26</h4>
+                    <h4 className="text-lg font-bold mt-2 text-[#17395c]">Srijan Internship VVM 2026-27</h4>
                     <p className="text-sm text-gray-600">Date & venue will be announced soon.</p>
                   </div>
 
@@ -115,7 +112,7 @@ const VVMHeroAbout = () => {
       </section>
 
       {/* ABOUT SECTION */}
-      <section className="py-16 bg-gradient-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
+      <section className="py-16 bg-linear-to-br from-[#eef3f8] via-[#e4ebf3] to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
 
           {/* LEFT */}
@@ -140,8 +137,9 @@ const VVMHeroAbout = () => {
               {[
                 ['267853', 'Students'],
                 ['6832', 'Schools'],
-                ['14', 'Languages'],
-                ['204821', 'Level 1'],
+                ['14', 'Indian Languages'],
+                ['17261 ', 'SIF Students'],
+                ['214', 'SIF Schools'],
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 bg-blue-100 p-4 rounded-xl shadow border-2 border-[#17395c]">
                   <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center">
@@ -162,23 +160,23 @@ const VVMHeroAbout = () => {
 
           {/* Logo */}
           <div className="flex justify-center">
-            <div className="relative w-[310px] h-[310px] flex items-center justify-center  animate-[floatSoft_5s_ease-in-out_infinite] ">
-              
-              <div className="absolute inset-0 rounded-full p-[8px] bg-[linear-gradient(135deg,#f4df17,#17395c)] shadow-[0_0_0_10px_rgba(244,223,23,0.1),0_25px_60px_rgba(23,57,92,0.22)]" />
+            <div className="relative w-77.5 h-77.5 flex items-center justify-center  animate-[floatSoft_5s_ease-in-out_infinite] ">
 
-<div className="absolute inset-[14px] rounded-full bg-gradient-to-br from-[#17395c] to-[#254e7a] flex items-center justify-center overflow-hidden"></div>
+              <div className="absolute inset-0 rounded-full p-2 bg-[linear-gradient(135deg,#f4df17,#17395c)] shadow-[0_0_0_10px_rgba(244,223,23,0.1),0_25px_60px_rgba(23,57,92,0.22)]" />
+
+              <div className="absolute inset-3.5 rounded-full bg-linear-to-br from-[#17395c] to-[#254e7a] flex items-center justify-center overflow-hidden"></div>
               <Image
                 src="/gcc/Vidyarthi-Vigyan-Manthan-logo.png"
                 alt="Logo"
-                width={245} 
+                width={245}
                 height={245}
-                className="relative z-10 object-contain w-[230px] h-[230px] rounded-full"
+                className="relative z-10 object-contain w-57.5 h-57.5 rounded-full"
               />
             </div>
           </div>
-          
+
         </div>
-        
+
       </section>
 
     </div>

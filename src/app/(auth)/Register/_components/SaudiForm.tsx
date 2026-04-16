@@ -73,14 +73,14 @@ type DialogType = {
 };
 
 type CountryOption = {
-  value: string;
-  label: string;
-  code: string;
+    value: string;
+    label: string;
+    code: string;
 };
 
 type Props = {
-  country?: CountryOption;
-  countries?: CountryOption[];
+    country?: CountryOption;
+    countries?: CountryOption[];
 };
 
 // ─── Styled Modal Dialog ──────────────────────────────────────────────────────
@@ -222,13 +222,13 @@ function RegistrationSuccessPopup({
                 </p>
 
                 {/* Go to Login button */}
-                <Link href="/Login">
-                <button
-                    onClick={onClose}
-                    className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
-                >
-                    Go to Login
-                </button>
+                <Link href="/login">
+                    <button
+                        onClick={onClose}
+                        className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"
+                    >
+                        Go to Login
+                    </button>
                 </Link>
             </div>
         </div>
