@@ -416,7 +416,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
       <div className="mx-auto max-w-7xl px-4 sm:px-5">
         <div className="mb-6 flex items-center justify-between md:mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
-            Student Registration – bahrain
+            Student Registration – Bahrain
           </h1>
           <Image src="/gcc/bahrain.png" alt="bahrain" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>

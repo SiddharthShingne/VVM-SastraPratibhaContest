@@ -219,7 +219,7 @@ export default function DashboardHome() {
           </div>
 
           <h3 className="text-[#17395c] font-bold text-lg mb-2">
-            No important dates available
+                Important dates will be displayed here when available
           </h3>
 
           <p className="text-[#9aa9bc] text-sm max-w-xs">

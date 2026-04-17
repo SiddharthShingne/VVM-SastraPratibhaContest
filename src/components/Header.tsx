@@ -49,13 +49,39 @@ const Header = () => {
 
       <div className="flex gap-2 w-full lg:w-auto justify-end mt-1 lg:mt-0 pr-5">
 
-        <button
+        {/* <button
           onClick={() =>
             isLoggedIn
               ? handleLogout()
               : router.push("/login")
           }
           className="border-2 border-[#b57edc] text-white text-xs font-semibold rounded-full transition duration-200 hover:text-yellow-200 hover:bg-[#485e94] hover:font-bold py-2 px-3"
+        >
+          {isLoggedIn ? "Logout" : "Login"}
+        </button> */}
+
+        {/* <button
+          onClick={() =>
+            isLoggedIn
+              ? router.push("/studentDashboard")
+              : router.push("/registration/individual-student-registration")
+          }
+          className="border-2 border-[#b57edc] text-white text-xs font-semibold px-3 rounded-full transition duration-200 hover:text-yellow-200 hover:bg-[#485e94] hover:font-bold py-2"
+        >
+          {isLoggedIn ? "User Profile" : "Register"}
+        </button> */}
+
+
+        <button
+          onClick={() =>
+            isLoggedIn
+              ? handleLogout()
+              : router.push("/login")
+          }
+          className="
+    bg-linear-to-r from-[#f5f0d0] to-[#efe4b0]    text-[#17395c] text-xs font-semibold    px-4 py-2 rounded-full    border border-[#e6d98c]    shadow-sm
+    hover:from-[#efe4b0] hover:to-[#f5e6a0]    hover:shadow-md hover:-translate-y-px    active:scale-95    transition-all duration-300
+  "
         >
           {isLoggedIn ? "Logout" : "Login"}
         </button>
@@ -66,7 +92,9 @@ const Header = () => {
               ? router.push("/studentDashboard")
               : router.push("/registration/individual-student-registration")
           }
-          className="border-2 border-[#b57edc] text-white text-xs font-semibold px-3 rounded-full transition duration-200 hover:text-yellow-200 hover:bg-[#485e94] hover:font-bold py-2"
+          className="     bg-[#fff8dc]    text-[#17395c] text-xs font-semibold    px-4 py-2 rounded-full    border border-[#e6d98c]    shadow-sm    hover:bg-[#f5e6a0]
+    hover:shadow-md hover:-translate-y-px    active:scale-95    transition-all duration-300
+  "
         >
           {isLoggedIn ? "User Profile" : "Register"}
         </button>

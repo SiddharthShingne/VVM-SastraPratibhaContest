@@ -5,9 +5,9 @@ export default function StudentAwards() {
   return (
     <div>
       {/* ================= Breadcrumb ================= */}
-      <div className="bg-[#162a4a] py-[50px]">
+      <div className="bg-[#162a4a] py-12.5">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col justify-center min-h-[65px]">
+          <div className="flex flex-col justify-center min-h-16.25">
             <h6 className="text-white text-[27px] font-medium mb-1">
               Student Awards
             </h6>
@@ -31,7 +31,7 @@ export default function StudentAwards() {
           <div className="relative rounded-[28px] overflow-hidden bg-white/75 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11)] mb-20">
 
             {/* Top Gradient Border */}
-            <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+            <div className="absolute top-0 left-0 w-full h-1.25 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="p-8">
 
@@ -51,7 +51,7 @@ export default function StudentAwards() {
                 <table className="w-full text-sm">
 
                   {/* Table Head */}
-                  <thead className="bg-gradient-to-br from-[#17395c] to-[#244d79] text-white">
+                  <thead className="bg-linear-to-br from-[#17395c] to-[#244d79] text-white">
                     <tr>
                       <th className="p-4 font-extrabold text-center">Level</th>
                       <th className="p-4 font-extrabold text-center">Name</th>
@@ -178,12 +178,12 @@ export default function StudentAwards() {
               </div>
 
               {/* Divider */}
-              <div className="h-[1px] bg-[#17395c1a] my-8"></div>
+              <div className="h-px bg-[#17395c1a] my-8"></div>
 
               {/* Info Cards */}
               <div className="space-y-5">
 
-                <div className="p-5 rounded-[18px] bg-gradient-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
+                <div className="p-5 rounded-[18px] bg-linear-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
                   <h5 className="font-extrabold text-[#17395c] mb-2">
                     SRIJAN
                   </h5>
@@ -193,7 +193,7 @@ export default function StudentAwards() {
                   </p>
                 </div>
 
-                <div className="p-5 rounded-[18px] bg-gradient-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
+                <div className="p-5 rounded-[18px] bg-linear-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
                   <h5 className="font-extrabold text-[#17395c] mb-2">
                     BHASKARA SCHOLARSHIP
                   </h5>
