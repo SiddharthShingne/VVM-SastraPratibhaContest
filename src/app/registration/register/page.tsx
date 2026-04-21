@@ -1,5 +1,5 @@
 
-import RegistrationSection from '@/components/registration/register';
+import RegistrationSection from '@/components/registration/Register';
 export default function SchoolRegistration() {
-    return <RegistrationSection  />;
+    return <RegistrationSection />;
 }               

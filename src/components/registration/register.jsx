@@ -119,7 +119,7 @@ export default function RegistrationSection() {
                 </p> */}
             {/* 
                 <Link
-                  href="/register"
+                  href="/Register"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →

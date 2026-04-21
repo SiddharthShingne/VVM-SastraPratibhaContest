@@ -9,7 +9,7 @@ export default function VVMArchivePage2025() {
       <div className="bg-[#162a4a] py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col justify-center min-h-[65px]">
-            
+
             <h6 className="text-white text-[27px] font-medium mb-1">
               VVM 2025
             </h6>
@@ -68,7 +68,7 @@ export default function VVMArchivePage2025() {
 
                 {/* Login Button */}
                 <a
-                  href="https://archive-2526.vvmstage.cloud/login"
+                  href="https://archive-2526.vvmstage.cloud/Login"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative inline-flex items-center justify-center 

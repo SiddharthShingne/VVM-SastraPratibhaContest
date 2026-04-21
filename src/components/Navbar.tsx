@@ -6,15 +6,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 type SubLink = {
-  label: string;
-  href: string;
-  download?: boolean;
+    label: string;
+    href: string;
+    download?: boolean;
 };
 
 type NavItem = {
-  label: string;
-  href: string;
-  subLinks?: SubLink[];
+    label: string;
+    href: string;
+    subLinks?: SubLink[];
 };
 
 
@@ -49,7 +49,7 @@ const navItems: NavItem[] = [
         href: "/registration",
         subLinks: [
             { label: "Individual Student Registration", href: "/registration/individual-student-registration" },
-            { label: "Register", href: "/registration/register" },
+            { label: "Register", href: "/registration/Register" },
             { label: "Registration Process", href: "/registration/registration-process" },
             { label: "Fee Structure", href: "/registration/fee-structure" },
         ],
@@ -61,7 +61,7 @@ const navItems: NavItem[] = [
             // { label: "Syllabus", href: "/exam-details/syllabus" },
             // { label: "School Level Exam 1", href: "/exam-details/school-level-exam1" },
             //  { label: "State Level Camp", href: "/exam-details/state-level-camp" },
-            
+
             { label: "National Camp", href: "/exam-details/national-camp" },
             { label: "Student Awards", href: "/exam-details/student-awards" },
             { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
@@ -155,13 +155,13 @@ const Navbar = () => {
                 <div className="flex items-center gap-3 shrink-0 px-1 ">
                     <Image src="/nav-logo.png" alt="Logo" width={200} height={55} />
                     <Image src="/gcc/oman.png" alt="oman" width={55} height={55} />
-<Image src="/gcc/qatar.png" alt="qatar" width={55} height={55} />
-<Image src="/gcc/kuwait.png" alt="kuwait" width={55} height={55} />
-<Image src="/gcc/saudi-arab.png" alt="saudi-arabia" width={55} height={55} />
+                    <Image src="/gcc/qatar.png" alt="qatar" width={55} height={55} />
+                    <Image src="/gcc/kuwait.png" alt="kuwait" width={55} height={55} />
+                    <Image src="/gcc/saudi-arab.png" alt="saudi-arabia" width={55} height={55} />
                     <Image src="/gcc/uae.png" alt="uae" width={55} height={55} />
                     <Image src="/gcc/bahrain.png" alt="bahrain" width={55} height={55} />
- </div>
-                            
+                </div>
+
 
                 {/* MOBILE MENU BUTTON */}
                 <div className="block lg:hidden">
@@ -195,8 +195,8 @@ const Navbar = () => {
                                 {hasDropdown ? (
                                     <span
                                         className={`cursor-pointer border-b ${isActive
-                                                ? "border-blue-700 text-blue-700"
-                                                : "border-transparent hover:border-blue-600"
+                                            ? "border-blue-700 text-blue-700"
+                                            : "border-transparent hover:border-blue-600"
                                             }`}
                                     >
                                         {label}
@@ -205,8 +205,8 @@ const Navbar = () => {
                                     <Link
                                         href={href}
                                         className={`border-b ${isActive
-                                                ? "border-blue-700 text-blue-700"
-                                                : "border-transparent hover:border-blue-600"
+                                            ? "border-blue-700 text-blue-700"
+                                            : "border-transparent hover:border-blue-600"
                                             }`}
                                     >
                                         {label}
@@ -224,8 +224,8 @@ const Navbar = () => {
                                                 <Link
                                                     href={sublink.href}
                                                     className={`block px-4 py-2 text-[13px] hover:bg-gray-100 ${pathname === sublink.href
-                                                            ? "text-blue-700 font-medium"
-                                                            : "text-gray-700"
+                                                        ? "text-blue-700 font-medium"
+                                                        : "text-gray-700"
                                                         }`}
                                                     {...(sublink.download
                                                         ? { download: true, target: "_blank" }

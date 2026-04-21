@@ -80,7 +80,7 @@ export default function StudentRegistrationInstructions() {
         {/* Button */}
         <div className="flex justify-center mb-10">
           <Link
-            href="/register"
+            href="/Register"
             className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration
@@ -119,7 +119,7 @@ export default function StudentRegistrationInstructions() {
         {/* Bottom Button */}
         <div className="flex justify-center mt-12">
           <Link
-            href="/register"
+            href="/Register"
             className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration
@@ -143,12 +143,12 @@ const steps = [
   {
     title: "Login Details",
     desc: "Create password for your account.Your password must include: Capital letter, Small letter, Number, Special character. Enter the same password in Confirm Password.",
-    img: "/student-registration-images/login_details.svg",
+    img: "/student-registration-images/Login_details.svg",
   },
   {
     title: "Parent / Guardian Details",
     desc: "Enter Parent/Guardian Name, Mobile Number, Email ID. Click “Send OTP” and enter OTP received on email to “Verify OTP”.",
-    img: "/student-registration-images/login_details.svg",
+    img: "/student-registration-images/Login_details.svg",
   },
   {
     title: "School Details",

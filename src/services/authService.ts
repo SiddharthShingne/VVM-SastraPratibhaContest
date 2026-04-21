@@ -33,7 +33,7 @@ export const loginUser = async (
     body.append("username", username);
     body.append("password", password);
 
-    const response = await api.post<RawLoginApiResponse>("/login", body, {
+    const response = await api.post<RawLoginApiResponse>("/Login", body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -227,7 +227,7 @@ export const getSchoolBoard = async () => {
 
 // ================= REGISTER STUDENT V2 (FOR SAUDI) ========== //
 export const registerStudentV2 = async (formData: Record<string, unknown>) => {
-  const res = await api.post("/sif/register/student", formData, {
+  const res = await api.post("/sif/Register/student", formData, {
     headers: {
       "Content-Type": "application/json",
       // No Authorization header needed for registration (user isn't logged in yet)

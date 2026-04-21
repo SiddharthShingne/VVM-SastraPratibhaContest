@@ -23,7 +23,7 @@ const VVMHeroAbout = () => {
           {/* TOP BUTTONS */}
           <div className="flex flex-wrap justify-center gap-4 mb-10">
 
-            <Link href="/register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
+            <Link href="/Register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">Registration</span>
               VVM 2026-27
               <UserPlus size={18} />

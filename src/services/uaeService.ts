@@ -41,7 +41,7 @@ export const sendUaeOtp = async (email: string) => {
 export const verifyUaeOtp = async (email: string, otp: string) => {
   try {
     const res = await axiosInstance.post(
-      `/verify-email-otp-new?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
+      `/verify-email-otp-new?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`,
     );
     return res.data;
   } catch (error: unknown) {
@@ -52,11 +52,9 @@ export const verifyUaeOtp = async (email: string, otp: string) => {
   }
 };
 
-export const registerUaeStudent = async (
-  payload: RegistrationFormPayload
-) => {
+export const registerUaeStudent = async (payload: RegistrationFormPayload) => {
   try {
-    const res = await axiosInstance.post("/sif/register/student", payload);
+    const res = await axiosInstance.post("/sif/Register/student", payload);
     return res.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

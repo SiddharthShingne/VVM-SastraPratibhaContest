@@ -222,7 +222,7 @@ function RegistrationSuccessPopup({
                 </p>
 
                 {/* Go to Login button */}
-                <Link href="/login">
+                <Link href="/Login">
                     <button
                         onClick={onClose}
                         className="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold text-base rounded-xl transition-all duration-200 active:scale-95 shadow-md"

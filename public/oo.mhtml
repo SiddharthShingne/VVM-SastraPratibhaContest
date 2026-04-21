@@ -180,14 +180,14 @@ polygon>
                         <div id=3D"desktop-login-register" class=3D"" style=
 =3D"display: block;">
                           <a class=3D"rbt-btn btn-border-gradient radius-ro=
-und btn-sm hover-transform-none" href=3D"https://vvm.org.in/login.html" sty=
+und btn-sm hover-transform-none" href=3D"https://vvm.org.in/Login.html" sty=
 le=3D"margin: 10px 0px 0px 0px !important">Login</a>
                         </div>
                         <div id=3D"desktop-register-btn" class=3D"ps-3" sty=
 le=3D"display: block;">
                           <a class=3D"rbt-btn rbt-marquee-btn marquee-auto =
 btn-border-gradient radius-round btn-sm hover-transform-none" href=3D"https=
-://vvm.org.in/login.html" style=3D"margin: 10px 0px 0px 0px !important">
+://vvm.org.in/Login.html" style=3D"margin: 10px 0px 0px 0px !important">
                             <span data-text=3D"Register">Register</span>
                           </a>
                         </div>
@@ -228,7 +228,7 @@ gon>
 "display: block;">
                       <ul class=3D"rbt-dropdown-menu">
                         <li class=3D"has-child-menu">
-                          <a href=3D"https://vvm.org.in/login.html" class=
+                          <a href=3D"https://vvm.org.in/Login.html" class=
 =3D"rbt-btn btn-border-gradient radius-round btn-sm hover-transform-none">
                             <span class=3D"menu-item">Login</span>
                           </a>
@@ -240,7 +240,7 @@ gon>
 style=3D"display: block;">
                       <ul class=3D"rbt-dropdown-menu">
                         <li class=3D"has-child-menu">
-                          <a href=3D"https://vvm.org.in/login.html" class=
+                          <a href=3D"https://vvm.org.in/Login.html" class=
 =3D"rbt-btn btn-border-gradient radius-round btn-sm hover-transform-none">
                             <span class=3D"menu-item">Register</span>
                           </a>

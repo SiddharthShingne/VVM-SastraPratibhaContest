@@ -34,7 +34,7 @@ const Header = () => {
     // 🔥 notify whole app
     window.dispatchEvent(new Event("auth-change"));
 
-    router.push("/login");
+    router.push("/Login");
   };
 
   return (
@@ -53,7 +53,7 @@ const Header = () => {
           onClick={() =>
             isLoggedIn
               ? handleLogout()
-              : router.push("/login")
+              : router.push("/Login")
           }
           className="border-2 border-[#b57edc] text-white text-xs font-semibold rounded-full transition duration-200 hover:text-yellow-200 hover:bg-[#485e94] hover:font-bold py-2 px-3"
         >
@@ -76,7 +76,7 @@ const Header = () => {
           onClick={() =>
             isLoggedIn
               ? handleLogout()
-              : router.push("/login")
+              : router.push("/Login")
           }
           className="
     bg-linear-to-r from-[#f5f0d0] to-[#efe4b0]    text-[#17395c] text-xs font-semibold    px-4 py-2 rounded-full    border border-[#e6d98c]    shadow-sm
