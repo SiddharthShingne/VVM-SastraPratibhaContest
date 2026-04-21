@@ -81,7 +81,7 @@ export default function RegisterPage() {
                   className="w-20 h-20 rounded-full overflow-hidden"
                   style={{ boxShadow: "0 8px 28px rgba(23,57,92,0.25)", animation: "float 4s ease-in-out infinite" }}
                 >
-                  <Image width={80} height={80} src="/gcc/logo-latest.png" alt="VVM Logo" className="w-full h-full object-cover" />
+                  <Image width={80} height={80} src="/gcc/logo.png" alt="VVM Logo" className="w-full h-full object-cover" />
                 </div>
               </div>
 

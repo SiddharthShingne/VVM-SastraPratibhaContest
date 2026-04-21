@@ -65,7 +65,7 @@ const navItems: NavItem[] = [
             { label: "National Camp", href: "/exam-details/national-camp" },
             { label: "Student Awards", href: "/exam-details/student-awards" },
             { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
-            { label: "Important Dates", href: "/exam-details/important-dates" },
+            // { label: "Important Dates", href: "/exam-details/important-dates" },
             { label: "Unfair Means", href: "/exam-details/unfair-means" },
             { label: "Disputes", href: "/exam-details/disputes" },
         ],
@@ -107,7 +107,7 @@ const navItems: NavItem[] = [
         subLinks: [
             { label: "Archives 2025", href: "/Archives/vvm-2025" },
             { label: "Archives 2024", href: "/Archives/vvm-2024" },
-            { label: "Archives 2023", href: "/Archives/vvm-2023" },
+            // { label: "Archives 2023", href: "/Archives/vvm-2023" },
         ],
     },
     // {
