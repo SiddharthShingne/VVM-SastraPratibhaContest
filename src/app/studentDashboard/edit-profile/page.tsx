@@ -4,7 +4,7 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import axiosInstance from "@/services/axiosInstance";
-import { fetchStates, fetchDistricts, sendEmailOtp, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile} from "@/services/authService";
+import { fetchStates, fetchDistricts, sendEmailOtpDashboard, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile} from "@/services/authService";
 interface FormData {
   name: string;
   schoolName: string;
@@ -402,11 +402,11 @@ export default function EditProfile() {
 
     try {
       if (target === "parentEmail") {
-        await sendEmailOtp(watch("parentEmail"));
+        await sendEmailOtpDashboard(watch("parentEmail"), "IN"); // ✅ FIXED
         setParentEmailOtpSent(true);
         showDialog("success", "OTP sent successfully to email.");
       } else {
-        await sendMobileOtpWhileUpdating(watch("parentMobile")); // ✅ FIXED
+        await sendMobileOtpWhileUpdating(watch("parentMobile")); // ✅ FIXED  
         setParentMobileOtpSent(true);
         showDialog("success", "OTP sent successfully to mobile.");
       }

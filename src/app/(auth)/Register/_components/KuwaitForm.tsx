@@ -297,7 +297,7 @@ export default function KuwaitForm({ countries }: Props) {
         }
         try {
             setOtpLoading(true);
-            await sendEmailOtp(email);
+            await sendEmailOtp(email ,"KW");
             setOtpModalOpen(true);
             startCooldown();
             setDialog({

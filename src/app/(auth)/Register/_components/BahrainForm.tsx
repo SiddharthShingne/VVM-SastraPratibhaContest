@@ -297,7 +297,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
     }
     try {
       setOtpLoading(true);
-      await sendEmailOtp(email);
+      await sendEmailOtp(email, "BH");
       setOtpModalOpen(true);
       startCooldown();
       setDialog({

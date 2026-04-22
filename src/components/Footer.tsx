@@ -18,10 +18,10 @@ const Footer = () => {
                         <div className="inline-block bg-white text-left p-2 rounded-xl shadow-md mb-4">
                             <Image
                                 src="/nav-logo.png"
-                                alt="VVM Logo"
-                                width={170}
-                                height={50}
-                                className="object-contain"
+                                alt="Logo"
+                                width={200}
+                                height={55}
+                                className="w-30 h-auto object-contain"
                             />
                         </div>
 

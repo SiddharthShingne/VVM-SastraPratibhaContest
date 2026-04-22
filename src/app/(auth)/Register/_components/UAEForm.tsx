@@ -293,15 +293,38 @@ export default function UAEForm({ countries }: Props) {
   } = useForm<RegistrationForm>({ mode: "all" });
 
   // ── Send OTP ──────────────────────────────────────────────────────────────
+  // const _sendOtp = async () => {
+  //   const email = getValues("parentEmail");
+  //   if (!email) {
+  //     setError("parentEmail", { type: "manual", message: "Enter parent email first" });
+  //     return;
+  //   }
+  //   try {
+  //     setOtpLoading(true);
+  //     await sendEmailOtp(email);
+  //     setOtpModalOpen(true);
+  //     startCooldown();
+  //     setDialog({
+  //       type: "otp-sent",
+  //       message: `A 6-digit OTP has been sent to ${email}. Please check your inbox.`,
+  //     });
+  //   } catch {
+  //     setDialog({ type: "error", message: "Failed to send OTP. Please try again." });
+  //   } finally {
+  //     setOtpLoading(false);
+  //   }
+  // };
   const _sendOtp = async () => {
     const email = getValues("parentEmail");
+
     if (!email) {
-      setError("parentEmail", { type: "manual", message: "Enter parent email first" });
+      setError("parentEmail", { type: "manual", message: "Enter parent email first",  });
       return;
     }
+
     try {
       setOtpLoading(true);
-      await sendEmailOtp(email);
+      await sendEmailOtp(email, "AE"); // ✅ FIXED
       setOtpModalOpen(true);
       startCooldown();
       setDialog({
@@ -309,11 +332,15 @@ export default function UAEForm({ countries }: Props) {
         message: `A 6-digit OTP has been sent to ${email}. Please check your inbox.`,
       });
     } catch {
-      setDialog({ type: "error", message: "Failed to send OTP. Please try again." });
+      setDialog({
+        type: "error",
+        message: "Failed to send OTP. Please try again.",
+      });
     } finally {
       setOtpLoading(false);
     }
   };
+
   const sendOtp = useDebounce(_sendOtp, 300);
 
   // ── Verify OTP ────────────────────────────────────────────────────────────

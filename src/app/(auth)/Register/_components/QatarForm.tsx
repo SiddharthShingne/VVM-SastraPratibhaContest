@@ -297,7 +297,7 @@ export default function QatarForm({ countries = [] }: Props) {
     }
     try {
       setOtpLoading(true);
-      await sendEmailOtp(email);
+      await sendEmailOtp(email, "QA");
       setOtpModalOpen(true);
       startCooldown();
       setDialog({

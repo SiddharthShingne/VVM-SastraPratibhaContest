@@ -298,7 +298,7 @@ export default function SaudiForm({ countries }: Props) {
         }
         try {
             setOtpLoading(true);
-            await sendEmailOtp(email);
+            await sendEmailOtp(email, "SA");
             setOtpModalOpen(true);
             startCooldown();
             setDialog({

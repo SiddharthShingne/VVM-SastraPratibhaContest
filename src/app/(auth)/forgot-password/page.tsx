@@ -29,10 +29,7 @@ export default function ForgotPassword() {
         }
         try {
             setLoading(true);
-            const res = await forgotPassword({
-                username: username.trim(),
-                frontend_url: "https://www.vvmstage.cloud/reset-password",
-            });
+            const res = await forgotPassword(username.trim());
             if (!res?.status || !res?.data?.email) {
                 throw new Error(res?.message || "Something went wrong");
             }

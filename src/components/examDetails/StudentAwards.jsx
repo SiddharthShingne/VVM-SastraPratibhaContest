@@ -47,8 +47,9 @@ export default function StudentAwards() {
               </div>
 
               {/* ================= Table ================= */}
-              <div className="rounded-[20px] overflow-hidden shadow-[0_15px_35px_rgba(23,57,92,0.08)]">
-                <table className="w-full text-sm">
+              <div className="rounded-[20px] shadow-[0_15px_35px_rgba(23,57,92,0.08)] overflow-hidden">
+                <div className="w-full overflow-x-auto">
+                  <table className="min-w-175 w-full text-sm">
 
                   {/* Table Head */}
                   <thead className="bg-linear-to-br from-[#17395c] to-[#244d79] text-white">
@@ -174,7 +175,8 @@ export default function StudentAwards() {
                     </tr>
 
                   </tbody>
-                </table>
+                  </table>
+                </div>
               </div>
 
               {/* Divider */}

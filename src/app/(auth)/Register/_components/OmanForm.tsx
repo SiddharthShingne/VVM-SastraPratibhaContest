@@ -376,7 +376,7 @@ export default function OmanForm({ countries }: Props) {
         }
         try {
             setOtpLoading(true);
-            await sendEmailOtp(email);
+            await sendEmailOtp(email , "OM");
             setOtpModalOpen(true);
             startCooldown();
             setDialog({
