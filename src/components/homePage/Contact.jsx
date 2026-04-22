@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Contact, MapPin } from "lucide-react";
 export default function VVMContactSection() {
   return (
-    <div className="  relative py-11.25 overflow-hidden bg-[linear-gradient(135deg,#edf2f7_0%,#e2e9f2_45%,#f7f9fc_100%)]">
+    <div className="  relative py-10 sm:py-12 overflow-hidden bg-[linear-gradient(135deg,#edf2f7_0%,#e2e9f2_45%,#f7f9fc_100%)]">
 
       {/* Background Shapes */}
       <div className="absolute w-65 h-65#f4df17]/30 rounded-full blur-[70px] opacity-40 top-10 -left-15 animate-[floatGlow_8s_ease-in-out_infinite]" />
@@ -36,7 +36,7 @@ export default function VVMContactSection() {
 
           {/* Logo */}
           <div className="flex justify-center">
-            <div className="relative w-77.5 h-77.5 flex items-center justify-center animate-[floatSoft_5s_ease-in-out_infinite]">
+            <div className="relative w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 flex items-center justify-center animate-[floatSoft_5s_ease-in-out_infinite]">
 
               <div className="absolute inset-0 rounded-full p-2 bg-[linear-gradient(135deg,#f4df17,#17395c)] shadow-[0_0_0_10px_rgba(244,223,23,0.1),0_25px_60px_rgba(23,57,92,0.22)]" />
 
@@ -47,14 +47,14 @@ export default function VVMContactSection() {
                 alt="Logo"
                 width={245}
                 height={245}
-                className="relative z-10 object-contain w-57.5 h-57.5 rounded-full"
+                className="relative z-10 object-contain w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full"
               />
             </div>
           </div>
         </div>
 
         {/* Card */}
-        <div className="bg-white/70 backdrop-blur-md border border-white/60 rounded-[28px] w-full p-8 shadow-lg relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+        <div className="bg-white/70 backdrop-blur-md border border-white/60 rounded-[28px] w-full  p-4 sm:p-6 md:p-8 shadow-lg relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
 
           <div className="absolute top-0 left-0 h-1.25 w-full bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
@@ -74,9 +74,9 @@ export default function VVMContactSection() {
           <div className="grid md:grid-cols-2 gap-6">
 
             {/* Person Card */}
-            <div className="flex gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex flex-col sm:flex-row gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-4 sm:p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
 
-              <div className="w-37.5 h-37.5 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden">
+              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden mx-auto sm:mx-0">
                 <Image
                   src="/head-office/raj.jpeg"
                   alt="Raj Kumar"
@@ -110,9 +110,9 @@ export default function VVMContactSection() {
             </div>
 
             {/* Person 2 */}
-            <div className="flex gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex flex-col sm:flex-row gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-4 sm:p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
 
-              <div className="w-37.5 h-37.5 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden">
+              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden mx-auto sm:mx-0">
                 <Image
                   src="/head-office/praveen.jpg"
                   alt="Praveen"

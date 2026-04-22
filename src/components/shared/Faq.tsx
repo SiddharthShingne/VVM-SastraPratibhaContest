@@ -35,11 +35,11 @@ export default function FAQ() {
                             <p>
                                 Login Page:{" "}
                                 <a
-                                    href="https://vvm.org.in/login"
+                                    href="https://vvm.org.in/Login"
                                     target="_blank"
                                     className="text-blue-600 underline"
                                 >
-                                    https://vvm.org.in/login
+                                    https://vvm.org.in/Login
                                 </a>
                             </p>
                             <p>Use your registered ID and password to log in.</p>
@@ -94,11 +94,11 @@ export default function FAQ() {
                         <p>
                             Visit{" "}
                             <a
-                                href="https://vvm.org.in/login"
+                                href="https://vvm.org.in/Login"
                                 target="_blank"
                                 className="text-blue-600 underline"
                             >
-                                https://vvm.org.in/login
+                                https://vvm.org.in/Login
                             </a>{" "}
                             and click “Forgot Password”.
                         </p>
@@ -305,5 +305,4 @@ export default function FAQ() {
         </div>
     );
 }
-   
-   
+

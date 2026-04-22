@@ -126,11 +126,26 @@ export const fetchDistricts = async (state_id: string) => {
 https://core.vvmstage.cloud/api/send-email-otp-new?email=shingnesid@gmail.com
 */
 
-export const sendEmailOtp = async (email: string) => {
+// export const sendEmailOtp = async (email: string, p0: string) => {
+//   try {
+//     const res = await api.post(
+//       `/send-email-otp-new?email=${encodeURIComponent(email)}`,
+//     );
+
+//     return res.data;
+//   } catch (error: any) {
+//     console.error("sendEmailOtp error:", error?.response || error);
+//     throw error?.response?.data || { message: "Failed to send OTP" };
+//   }
+// };
+
+export const sendEmailOtp = async (email: string, country: string) => {
   try {
-    const res = await api.post(
-      `/send-email-otp-new?email=${encodeURIComponent(email)}`,
-    );
+    const res = await api.post("/send-email-otp-new", {
+      email,
+      country, // ✅ added
+      type: "student", // optional but consistent
+    });
 
     return res.data;
   } catch (error: any) {
@@ -139,9 +154,26 @@ export const sendEmailOtp = async (email: string) => {
   }
 };
 
+export const sendEmailOtpDashboard = async (email: string, country: string) => {
+  try {
+    const res = await api.post("/send-email-otp-new", {
+      email,
+      country, // ✅ added
+    });
+
+    return res.data;
+  } catch (error: any) {
+    console.error("sendEmailOtp error:", error?.response || error);
+    throw error?.response?.data || { message: "Failed to send OTP" };
+  }
+};
+
+
 /*
 https://core.vvmstage.cloud/api/verify-email-otp-new?email=shingnesid@gmail.com&otp=555555
 */
+
+
 // ========= VERIFY EMAIL OTP ==========//
 export const verifyEmailOtp = async (email: string, otp: string) => {
   try {
@@ -177,6 +209,7 @@ export const sendMobileOtpWhileUpdating = async (mobile: string) => {
 
   return res.data;
 };
+
 
 // VERIFY OTP
 export const verifyMobileOtpWhileUpdating = async (
@@ -237,17 +270,33 @@ export const registerStudentV2 = async (formData: Record<string, unknown>) => {
 };
 
 // ================= FORGOT PASSWORD ========== //
-export const forgotPassword = async (payload: {
-  username: string;
-  frontend_url: string;
-}) => {
+// export const forgotPassword = async (payload: {
+//   username: string;
+//   frontend_url: string;
+// }) => {
+//   const res = await api.post(
+//     "https://core.vvmstage.cloud/api/forgot-password",
+//     payload,
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//         // No token required
+//       },
+//     },
+//   );
+
+//   return res.data;
+// };
+export const forgotPassword = async (username: string) => {
   const res = await api.post(
-    "https://core.vvmstage.cloud/api/forgot-password",
-    payload,
+    "/forgot-password",
+    {
+      username,
+      frontend_url: window.location.origin, // dynamic like a real app
+    },
     {
       headers: {
         "Content-Type": "application/json",
-        // No token required
       },
     },
   );

@@ -1,14 +1,14 @@
 
 "use client";
 import Link from "next/link";
-
+import Image from "next/image";
 export default function RegistrationSection() {
   return (
     <div>
       {/* Breadcrumb */}
-      <div className="bg-[#162a4a] py-[50px]  ">
+      <div className="bg-[#162a4a] py-12.5  ">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col justify-center min-h-[65px]">
+          <div className="flex flex-col justify-center min-h-16.25">
             <h6 className="text-white text-[27px] font-medium mb-1">
               Register
             </h6>
@@ -29,17 +29,17 @@ export default function RegistrationSection() {
       </div>
 
       {/* Registration Section */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#f7fbff] to-[#eef5fb] py-16">
+      <div className="relative overflow-hidden bg-linear-to-b from-[#f7fbff] to-[#eef5fb] py-16">
 
         {/* Background Effects */}
-        <div className="absolute -top-[100px] -left-[80px] w-[260px] h-[260px] bg-[radial-gradient(circle,rgba(23,57,92,0.12)_0%,transparent_70%)] rounded-full"></div>
-        <div className="absolute -bottom-[100px] -right-[80px] w-[280px] h-[280px] bg-[radial-gradient(circle,rgba(255,193,7,0.18)_0%,transparent_70%)] rounded-full"></div>
+        <div className="absolute -top-25 -left-20 w-65 h-65 bg-[radial-gradient(circle,rgba(23,57,92,0.12)_0%,transparent_70%)] rounded-full"></div>
+        <div className="absolute -bottom-25 -right-20 w-70 h-70 bg-[radial-gradient(circle,rgba(255,193,7,0.18)_0%,transparent_70%)] rounded-full"></div>
 
         <div className="container mx-auto px-4 relative z-10">
 
           {/* Header */}
           <div className="text-center mb-12">
-            <span className="inline-block bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white text-[13px] font-bold px-5 py-2 rounded-full shadow-lg mb-4">
+            <span className="inline-block bg-linear-to-r from-[#17395c] to-[#295c8a] text-white text-[13px] font-bold px-5 py-2 rounded-full shadow-lg mb-4">
               Registration Open For 2026-27
             </span>
 
@@ -47,7 +47,7 @@ export default function RegistrationSection() {
               Choose Your Registration Type
             </h2>
 
-            <p className="text-[#5f6f81] max-w-[700px] mx-auto leading-7">
+            <p className="text-[#5f6f81] max-w-175 mx-auto leading-7">
               Select the suitable registration option and complete your enrollment easily.
             </p>
           </div>
@@ -58,19 +58,22 @@ export default function RegistrationSection() {
             {/* Student Card */}
             <div className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-[#17395c14] hover:-translate-y-2 transition duration-300  max-w-lg mx-auto">
 
-              <div className="relative h-[250px] overflow-hidden">
-                <img
+              <div className="relative h-62.5 overflow-hidden">
+                <Image
                   src="/student-registration-images/images-of-register-page/student-registration.jpg"
                   alt="Student"
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                  fill
+                  className="object-cover group-hover:scale-110 transition duration-500"
+                  style={{ objectFit: 'cover' }}
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#17395c40] to-[#17395c10]"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-[#17395c40] to-[#17395c10]"></div>
               </div>
 
               <div className="text-center px-6 pb-6 pt-12 relative">
 
                 {/* Icon */}
-                <div className="w-[68px] h-[68px] bg-gradient-to-r from-[#f4df17] to-[#f7b500] text-[#17395c] flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
+                <div className="w-17 h-17 bg-linear-to-r from-[#f4df17] to-[#f7b500] text-[#17395c] flex items-center justify-center rounded-full text-2xl absolute -top-8 left-1/2 -translate-x-1/2 border-4 border-white shadow-lg">
                   👤
                 </div>
 
@@ -84,7 +87,7 @@ export default function RegistrationSection() {
 
                 <Link
                   href="/registration/individual-student-registration"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
+                  className="inline-flex items-center gap-2 bg-linear-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →
                 </Link>
@@ -119,7 +122,7 @@ export default function RegistrationSection() {
                 </p> */}
             {/* 
                 <Link
-                  href="/register"
+                  href="/Register"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-[#17395c] to-[#295c8a] text-white px-6 py-3 rounded-full font-bold text-sm shadow-md hover:-translate-y-1 transition"
                 >
                   Register Now →

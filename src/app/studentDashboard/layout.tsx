@@ -77,7 +77,7 @@ export default function StudentDashboardLayout({
 
   useEffect(() => {
     if (token === null) return;
-    if (!token) router.replace("/login");
+    if (!token) router.replace("/Login");
   }, [token, router]);
 
   // Detect mobile breakpoint
@@ -114,7 +114,7 @@ export default function StudentDashboardLayout({
       localStorage.clear();
       sessionStorage.clear();
       delete axiosInstance.defaults.headers.common["Authorization"];
-      router.replace("/login");
+      router.replace("/Login");
     }
   };
 

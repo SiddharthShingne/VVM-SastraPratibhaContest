@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import {
   AlertCircle,
@@ -80,8 +80,8 @@ export default function StudentRegistrationInstructions() {
         {/* Button */}
         <div className="flex justify-center mb-10">
           <Link
-            href="/register"
-            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
+            href="/Register"
+            className="bg-linear-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration
             <ArrowRight size={18} />
@@ -96,8 +96,14 @@ export default function StudentRegistrationInstructions() {
               key={index}
               className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 text-center"
             >
-              <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-50 flex items-center justify-center shadow-inner">
-                <img src={step.img} alt="" className="h-16" />
+              <div className="relative w-24 h-24 mx-auto mb-4 rounded-full bg-gray-50 shadow-inner">
+                <Image
+                  src={step.img}
+                  alt={step.title}
+                  fill
+                  className="object-contain p-4"
+                  sizes="(max-width: 640px) 96px, 128px"
+                />
               </div>
 
               <span className="inline-block bg-yellow-100 text-yellow-600 text-xs font-bold px-3 py-1 rounded-full mb-2">
@@ -119,8 +125,8 @@ export default function StudentRegistrationInstructions() {
         {/* Bottom Button */}
         <div className="flex justify-center mt-12">
           <Link
-            href="/register"
-            className="bg-gradient-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
+            href="/Register"
+            className="bg-linear-to-r from-[#102c48] to-[#1e4a74] text-white px-10 py-4 rounded-full font-bold shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             Student Registration
             <ArrowRight size={18} />
@@ -143,12 +149,12 @@ const steps = [
   {
     title: "Login Details",
     desc: "Create password for your account.Your password must include: Capital letter, Small letter, Number, Special character. Enter the same password in Confirm Password.",
-    img: "/student-registration-images/login_details.svg",
+    img: "/student-registration-images/Login_details.svg",
   },
   {
     title: "Parent / Guardian Details",
     desc: "Enter Parent/Guardian Name, Mobile Number, Email ID. Click “Send OTP” and enter OTP received on email to “Verify OTP”.",
-    img: "/student-registration-images/login_details.svg",
+    img: "/student-registration-images/Login_details.svg",
   },
   {
     title: "School Details",

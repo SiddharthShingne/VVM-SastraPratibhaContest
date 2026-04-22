@@ -9,7 +9,7 @@ export default function VVMArchivePage2024() {
       {/* ================= Breadcrumb ================= */}
       <div className="bg-[#162a4a] py-12">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col justify-center min-h-[65px]">
+          <div className="flex flex-col justify-center min-h-16.25">
 
             <h6 className="text-white text-[27px] font-medium mb-1">
               VVM 2024
@@ -50,8 +50,8 @@ export default function VVMArchivePage2024() {
             text-center mb-16">
 
             {/* Top Gradient Line */}
-            <div className="absolute top-0 left-0 h-[5px] w-full 
-              bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+            <div className="absolute top-0 left-0 h-1.25 w-full 
+              bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="p-8">
 
@@ -67,22 +67,22 @@ export default function VVMArchivePage2024() {
 
                 {/* Login Button */}
                 <a
-                  href="https://vvm-2425.cloud/login/"
+                  href="https://vvm-2425.cloud/Login/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative inline-flex items-center justify-center 
                     px-7 py-3 text-[15px] font-extrabold rounded-[14px]
-                    bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white
+                    bg-linear-to-br from-[#17395c] to-[#1f4e7a] text-white
                     shadow-[0_6px_20px_rgba(23,57,92,0.30),inset_0_1px_0_rgba(255,255,255,0.18)]
                     hover:from-[#1f4e7a] hover:to-[#17395c]
                     hover:shadow-[0_10px_30px_rgba(23,57,92,0.40)]
-                    hover:text-[#f4df17] hover:-translate-y-[2px]
+                    hover:text-[#f4df17] hover:-translate-y-0.5
                     active:scale-95 transition-all duration-300
                     overflow-hidden group"
                 >
                   Login
                   <span className="absolute top-0 left-[-75%] w-1/2 h-full 
-                    bg-gradient-to-r from-transparent via-white/40 to-transparent 
+                    bg-linear-to-r from-transparent via-white/40 to-transparent 
                     skew-x-[-20deg] group-hover:left-[130%] transition-all duration-500" />
                 </a>
 
@@ -96,17 +96,17 @@ export default function VVMArchivePage2024() {
                     bg-white/60 border border-[#17395c] text-[#17395c]
                     backdrop-blur-md
                     shadow-[0_6px_20px_rgba(23,57,92,0.10),inset_0_1px_0_rgba(255,255,255,0.72)]
-                    hover:bg-gradient-to-br hover:from-[#f4df17] hover:to-[#e8cc00]
+                    hover:bg-linear-to-br hover:from-[#f4df17] hover:to-[#e8cc00]
                     hover:border-[#e8cc00]
                     hover:text-[#17395c]
                     hover:shadow-[0_10px_30px_rgba(244,223,23,0.40)]
-                    hover:-translate-y-[2px]
+                    hover:-translate-y-0.5
                     active:scale-95 transition-all duration-300
                     overflow-hidden group"
                 >
                   Visit Website
                   <span className="absolute top-0 left-[-75%] w-1/2 h-full 
-                    bg-gradient-to-r from-transparent via-white/40 to-transparent 
+                    bg-linear-to-r from-transparent via-white/40 to-transparent 
                     skew-x-[-20deg] group-hover:left-[130%] transition-all duration-500" />
                 </a>
 
