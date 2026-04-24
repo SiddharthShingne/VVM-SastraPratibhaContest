@@ -85,16 +85,16 @@ const ObjectivesOfVVM = () => {
                 ">
 
                   {/* Top Gradient Border */}
-                  <div className="absolute top-0 left-0 w-full h-[4px] 
-                    bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                  <div className="absolute top-0 left-0 w-full h-1.25 
+                    bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
                   {/* ICON BOX */}
                   <div className="
-                    w-[70px] h-[70px] mb-4 rounded-[18px]
-                    bg-gradient-to-br from-[#17395c] to-[#2b5c8a]
+                    w-17.5 h-17.5 mb-4 rounded-[18px]
+                    bg-linear-to-br from-[#17395c] to-[#2b5c8a]
                     flex items-center justify-center
                     shadow-[0_10px_25px_rgba(23,57,92,0.25)]
-                    group-hover:scale-110 transition flex-shrink-0
+                    group-hover:scale-110 transition shrink-0
                   ">
                     <div className="text-[#f4df17] w-7 h-7 flex items-center justify-center">
                       {method.icon}

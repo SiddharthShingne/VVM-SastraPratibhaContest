@@ -149,12 +149,12 @@ const steps = [
   {
     title: "Login Details",
     desc: "Create password for your account.Your password must include: Capital letter, Small letter, Number, Special character. Enter the same password in Confirm Password.",
-    img: "/student-registration-images/Login_details.svg",
+    img: "/student-registration-images/login_details.svg",
   },
   {
     title: "Parent / Guardian Details",
     desc: "Enter Parent/Guardian Name, Mobile Number, Email ID. Click “Send OTP” and enter OTP received on email to “Verify OTP”.",
-    img: "/student-registration-images/Login_details.svg",
+    img: "/student-registration-images/login_details.svg",
   },
   {
     title: "School Details",

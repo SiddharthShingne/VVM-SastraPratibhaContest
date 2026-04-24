@@ -70,7 +70,7 @@ export default function StudentDashboardLayout({
   const [token, setToken] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -104,6 +104,15 @@ export default function StudentDashboardLayout({
       document.body.style.overflow = "";
     };
   }, [isMobile, sidebarOpen]);
+
+  // ESC key close (pro UX)
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSidebarOpen(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -201,8 +210,16 @@ export default function StudentDashboardLayout({
           <FaKey className={iconClass("/studentDashboard/update-password")} />
           Update Password
         </Link>
-        <button
+        {/* <button
           onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"
+        >
+          
+          <FaSignOutAlt />
+          Logout
+        </button> */}
+        <button
+          onClick={() => setShowLogoutDialog(true)}
           className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
@@ -245,15 +262,16 @@ export default function StudentDashboardLayout({
       `}</style>
 
       {/* ── Page shell ── */}
+      <div className="min-h-screen ">
       <div
-        className="min-h-screen"
+          className=" fixed inset-0 -z-10"
         style={{
           background:
             "linear-gradient(135deg, #e8eef6 0%, #dce7f3 40%, #eaf0f8 70%, #d8e6f2 100%)",
           backgroundSize: "300% 300%",
           animation: "gradientShift 12s ease infinite",
         }}
-      >
+      />
         {/* dot-grid texture */}
         <div
           className="fixed inset-0 pointer-events-none"
@@ -267,7 +285,7 @@ export default function StudentDashboardLayout({
         {/* ─────────────────────────────────────────────────
             MOBILE TOP HEADER — structured navbar
         ───────────────────────────────────────────────── */}
-        <header className="md:hidden fixed top-0 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
+        <header className="md:hidden fixed top-[154px] left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
           {/* accent bar */}
           <div
             className="absolute top-0 left-0 w-full h-0.5"
@@ -284,9 +302,9 @@ export default function StudentDashboardLayout({
 
             {/* RIGHT: profile avatar — opens sidebar */}
             <button
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open menu"
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Open menu" className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md 
+              transition-all duration-200 hover:scale-105 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, #17395c, #1f4e7a)",
               }}
@@ -301,9 +319,8 @@ export default function StudentDashboardLayout({
         ───────────────────────────────────────────────── */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/40 z-40 backdrop-blur-[2px]"
+            className="fixed left-0 right-0 bottom-0 top-[210px] bg-black/40 z-40"
             onClick={() => setSidebarOpen(false)}
-            aria-hidden="true"
           />
         )}
 
@@ -312,7 +329,8 @@ export default function StudentDashboardLayout({
         ───────────────────────────────────────────────── */}
         <aside
           className={[
-            "md:hidden fixed top-0 left-0 h-full w-72 z-50 overflow-y-auto",
+            "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
+            "top-[210px] h-[calc(100vh-210px)]",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
@@ -352,20 +370,20 @@ export default function StudentDashboardLayout({
             DESKTOP LAYOUT
             pt-16 on mobile clears fixed header; md:pt-6 = desktop
         ───────────────────────────────────────────────── */}
-        <div className="relative container mx-auto px-4 pt-16 md:pt-6 pb-10">
+        <div className="relative container mx-auto px-4 pt-[220px] md:pt-6 pb-10">
           <div className="flex gap-5 items-start">
 
             {/* ── DESKTOP SIDEBAR — hidden on mobile, sticky in flex ── */}
             <aside
               className="sidebar-animate hidden md:block sticky top-6 w-72 xl:w-75 shrink-0 overflow-y-auto rounded-3xl"
               style={{
-                height: "calc(100vh - 3rem)",
+                height: "h-fit min-h-[60vh]",
                 background: "#ffffff",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
                 border: "1px solid rgba(255,255,255,0.55)",
                 boxShadow:
-                  "0 20px 60px rgba(23,57,92,0.16), 0 2px 8px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  "0 10px 30px rgba(23,57,92,0.10), 0 2px 8px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
               }}
             >
               {/* accent bar */}
@@ -381,14 +399,14 @@ export default function StudentDashboardLayout({
 
             {/* ── MAIN CONTENT — flex-1 fills space after sidebar ── */}
             <main
-              className="content-animate flex-1 min-w-0 min-h-[calc(100vh-3rem)] rounded-3xl"
+              className="content-animate flex-1 min-w-0 h-fit min-h-[60vh] rounded-3xl"
               style={{
-                background: "linear-gradient(160deg, #ffffff, #ffffff 100%)",
+                background: "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
-                border: "1px solid rgba(255,255,255,0.55)",
+                border: "1px solid rgba(23,57,92,0.09)",
                 boxShadow:
-                  "0 20px 60px rgba(23,57,92,0.13), 0 2px 8px rgba(23,57,92,0.07), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  "0 8px 32px rgba(23,57,92,0.10), 0 1px 4px rgba(23,57,92,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
               }}
             >
               <div className="p-8">{children}</div>
@@ -397,6 +415,63 @@ export default function StudentDashboardLayout({
           </div>
         </div>
       </div>
+      
+
+      {/* ── LOGOUT CONFIRMATION DIALOG ── */}
+      {showLogoutDialog && (
+        <div className="fixed inset-0 z-200 flex items-center justify-center">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50 "
+            onClick={() => setShowLogoutDialog(false)}
+          />
+          {/* Dialog card */}
+          <div
+            className="relative z-10 w-[90vw] max-w-sm mx-auto rounded-2xl p-6 shadow-2xl"
+            style={{
+              background: "linear-gradient(145deg, #ffffff, #f4f8fc)",
+              border: "1px solid rgba(23,57,92,0.12)",
+            }}
+          >
+            {/* Top accent */}
+            <div
+              className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
+              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+            />
+
+            {/* Icon */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
+              style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+            >
+              <FaSignOutAlt />
+            </div>
+
+            <h3 className="text-center text-[17px] font-extrabold text-[#17395c] mb-1">
+              Confirm Logout
+            </h3>
+            <p className="text-center text-[13px] text-[#7a90a8] mb-6">
+              Are you sure you want to log out of your account?
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutDialog(false)}
+                className="flex-1 py-2.5 rounded-xl border border-[#d0dde9] text-[#4a6278] text-[13.5px] font-semibold hover:bg-[#f0f4f8] transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => { setShowLogoutDialog(false); handleLogout(); }}
+                className="flex-1 py-2.5 rounded-xl text-white text-[13.5px] font-semibold transition-all duration-200 hover:opacity-90 shadow-md"
+                style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

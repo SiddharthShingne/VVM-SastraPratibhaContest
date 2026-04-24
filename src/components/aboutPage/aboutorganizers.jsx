@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React from "react";
 import Image from "next/image";
@@ -13,7 +13,7 @@ const OrganizerSection = ({ logo, name, title, description, qr }) => (
 
             {/* VVM CARD */}
             <div className="
-                relative rounded-[24px] overflow-hidden
+                relative rounded-3xl overflow-hidden
                 bg-white/70 backdrop-blur-xl border border-white/60
                 shadow-[0_20px_45px_rgba(23,57,92,0.12),inset_0_1px_0_rgba(255,255,255,0.7)]
                 transition-all duration-300
@@ -21,8 +21,8 @@ const OrganizerSection = ({ logo, name, title, description, qr }) => (
             ">
 
                 {/* Top Gradient Border */}
-                <div className="absolute top-0 left-0 w-full h-[4px] 
-                    bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                <div className="absolute top-0 left-0 w-full h-1.25
+                    bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
                 {/* Inner Content */}
                 <div className="p-7">

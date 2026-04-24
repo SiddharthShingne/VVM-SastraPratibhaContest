@@ -157,7 +157,7 @@ export default function VVMContactSection() {
                 State Coordinator Directory
               </h5>
               <p className="text-sm text-[#5d7087]">
-                Quick access to state-level coordination contacts across India.
+                Quick access to state-level coordination contacts.
               </p>
             </div>
 

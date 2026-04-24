@@ -26,7 +26,8 @@ const Footer = () => {
                         </div>
 
                         <p className="text-sm text-gray-300 leading-relaxed mb-4">
-                            India’s Largest Online Science Talent <br />
+                            {/* India’s */}
+                            Largest Online Science Talent <br />
                             Search Examination
                         </p>
 
