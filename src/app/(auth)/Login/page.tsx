@@ -75,16 +75,32 @@ export default function LoginPage() {
       const data = await loginUser(trimmedUsername, trimmedPassword);
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("username", trimmedUsername);
+      localStorage.setItem(
+  "role",
+  trimmedUsername.toUpperCase().startsWith("STC") ||
+    trimmedUsername.toUpperCase().startsWith("ZOC")
+    ? "STATE"
+    : "STUDENT"
+);
       window.dispatchEvent(new Event("auth-change"));
       setDialog({
         type: "success",
         message: "Login successful. Redirecting to dashboard...",
       });
 
+      
       setTimeout(() => {
-        router.replace("/studentDashboard");
-      }, 1500);
+
+
+  const usernameUpper = trimmedUsername.toUpperCase();
+
+if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
+  router.replace("/state-dashboard");
+} else {
+  router.replace("/studentDashboard");
+}
+}, 1500);
     } catch (err) {
       setDialog({
         type: "error",

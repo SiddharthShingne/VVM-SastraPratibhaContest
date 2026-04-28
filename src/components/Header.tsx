@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 
 const Header = () => {
+  
+  
+  // localStorage.setItem("username", Response.username:any  );
   const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
