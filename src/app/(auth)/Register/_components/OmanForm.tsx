@@ -22,7 +22,7 @@ type RegistrationForm = {
     emiratesId: string;
     schoolName: string;
     board: string;
-    pincode: string;
+    // pincode: string;
     schoolAddress: string;
     parentName: string;
     parentMobile: string;
@@ -461,7 +461,7 @@ export default function OmanForm({ countries }: Props) {
                 sch_name: data.schoolName,
                 school_board_id: data.board,
 
-                pincode: data.pincode,
+                // pincode: data.pincode,
                 address: data.schoolAddress,
                 dist_id: data.district,
 
@@ -713,7 +713,7 @@ export default function OmanForm({ countries }: Props) {
                                 countries?.find((c) => c.value === "oman")?.label || "OMAN"
                             }
                         />
-                        <InputField
+                        {/* <InputField
                             label="Pincode"
                             required
                             placeholder="Enter pincode"
@@ -729,7 +729,7 @@ export default function OmanForm({ countries }: Props) {
                                     ? errors.pincode
                                     : undefined
                             }
-                        />
+                        /> */}
                         <SelectField
                             label="City / District"
                             required

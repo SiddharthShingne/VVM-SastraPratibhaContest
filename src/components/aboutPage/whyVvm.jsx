@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 import React from "react";
@@ -45,8 +46,8 @@ const WhyVVM = () => {
                         shadow-[0_22px_50px_rgba(23,57,92,0.11)]">
 
                         {/* Top Gradient Border */}
-                        <div className="absolute top-0 left-0 w-full h-[5px] 
-                            bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                        <div className="absolute top-0 left-0 w-full h-1.25
+                            bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
                         <div className="p-8 flex flex-col justify-between h-full">
 
@@ -87,8 +88,8 @@ const WhyVVM = () => {
                             transition-all duration-300 hover:-translate-y-1"
                         >
                             {/* Top Gradient Border */}
-                            <div className="absolute top-0 left-0 w-full h-[4px] 
-                                bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                            <div className="absolute top-0 left-0 w-full h-1 
+                                bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
                             <div className="mb-4">{item.icon}</div>
 

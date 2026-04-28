@@ -1,10 +1,9 @@
-//
-
 "use client";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaSignOutAlt } from "react-icons/fa";
 
 const Header = () => {
   
@@ -19,36 +18,39 @@ const Header = () => {
     return false;
   });
 
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false); // success state
+
   useEffect(() => {
     const syncAuth = () => {
       setIsLoggedIn(!!localStorage.getItem("token"));
     };
-
     window.addEventListener("auth-change", syncAuth);
-
-    return () => {
-      window.removeEventListener("auth-change", syncAuth);
-    };
+    return () => window.removeEventListener("auth-change", syncAuth);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-
-    // 🔥 notify whole app
     window.dispatchEvent(new Event("auth-change"));
+    setShowLogoutDialog(false);
+    setLoggedOut(true); // show success dialog
 
-    router.push("/Login");
+    // After 2s, redirect to login
+    setTimeout(() => {
+      setLoggedOut(false);
+      router.push("/Login");
+    }, 2000);
   };
 
   return (
-    <div className="flex items-center justify-between flex-wrap px-3 bg-[#111d35] text-[#ffffffa2] text-xs font-medium py-3">
-
-      <div className="flex items-center gap-1 max-w-full lg:flex">
-        <Image src="/hand-emoji.svg" alt="Hand Emoji" width={16} height={16} />
-        <b className="text-sm">
-          Welcome to Vidyarthi Vigyan Manthan – Unlocking the Power of Education!
-        </b>
-      </div>
+    <>
+      <div className="flex items-center justify-between flex-wrap px-3 bg-[#111d35] text-[#ffffffa2] text-xs font-medium py-3">
+        <div className="flex items-center gap-1 max-w-full lg:flex">
+          <Image src="/hand-emoji.svg" alt="Hand Emoji" width={16} height={16} />
+          <b className="text-sm">
+            Welcome to Vidyarthi Vigyan Manthan – Unlocking the Power of Education!
+          </b>
+        </div>
 
       <div className="flex gap-2 w-full lg:w-auto justify-end mt-1 lg:mt-0 pr-5">
 

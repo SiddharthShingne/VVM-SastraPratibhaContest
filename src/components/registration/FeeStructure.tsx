@@ -5,12 +5,12 @@ import Link from "next/link";
 
 export default function FeeStructure() {
   return (
-    <div className="min-h-screen pb-[50px]">
+    <div className="min-h-screen pb-12.5">
 
       {/* ================= Breadcrumb ================= */}
-      <div className="bg-[#162a4a] py-[50px]">
+      <div className="bg-[#162a4a] py-12.5">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col justify-center min-h-[65px]">
+          <div className="flex flex-col justify-center min-h-16.25">
 
             <h6 className="text-white text-[27px] font-medium mb-1">
               Fee Structure
@@ -53,8 +53,8 @@ export default function FeeStructure() {
               mb-20">
 
             {/* Top Gradient Line */}
-            <div className="absolute top-0 left-0 w-full h-[5px] 
-              bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+            <div className="absolute top-0 left-0 w-full h-1.25 
+              bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="p-8">
 
@@ -92,7 +92,7 @@ export default function FeeStructure() {
               </ul>
 
               {/* Divider */}
-              <div className="h-[1px] bg-[#17395c]/10 my-8"></div>
+              <div className="h-px bg-[#17395c]/10 my-8"></div>
 
               {/* Subtitle */}
               <h4 className="text-[20px] font-extrabold text-[#17395c] mt-6">

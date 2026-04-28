@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 "use client";
 
@@ -83,7 +84,7 @@ const WhatIsVvm = () => {
           <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11)]">
 
             {/* top gradient line */}
-            <div className="absolute top-0 left-0 w-full h-[5px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+            <div className="absolute top-0 left-0 w-full h-1.25 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="p-6 sm:p-8 text-center">
 
@@ -112,7 +113,7 @@ const WhatIsVvm = () => {
 
               {/* Buttons */}
               <div className="flex flex-wrap justify-center gap-3 mt-6">
-                <button className="px-5 py-2 rounded-full bg-gradient-to-br from-[#17395c] to-[#244d79] text-[#f4df17] text-xs font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
+                <button className="px-5 py-2 rounded-full bg-linear-to-br from-[#17395c] to-[#244d79] text-[#f4df17] text-xs font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
                   Learn More
                 </button>
                 <button className="px-5 py-2 rounded-full bg-white border border-[#17395c]/20 text-[#17395c] text-xs font-extrabold hover:border-[#f4df17]/60 hover:bg-[#fffde8] transition">
@@ -133,21 +134,21 @@ const WhatIsVvm = () => {
             {methods.map((method, index) => (
               <div key={index} className="flex justify-center">
 
-                <div className="relative bg-white/80 border border-white/60 rounded-2xl p-5 backdrop-blur-md shadow-[0_14px_30px_rgba(31,60,91,0.09)] hover:-translate-y-2 hover:shadow-[0_22px_44px_rgba(23,57,92,0.14)] transition w-full max-w-[260px] text-center">
+                <div className="relative bg-white/80 border border-white/60 rounded-2xl p-5 backdrop-blur-md shadow-[0_14px_30px_rgba(31,60,91,0.09)] hover:-translate-y-2 hover:shadow-[0_22px_44px_rgba(23,57,92,0.14)] transition w-full max-w-65 text-center">
 
                   {/* top line */}
-                  <div className="absolute top-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                  <div className="absolute top-0 left-0 w-full h-1.25 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
          
                   
                                     {/* ICON BOX */}
                                     <div className="
-                                        w-[70px] h-[70px] mx-auto mb-4 rounded-[18px]
-                                        bg-gradient-to-br from-[#17395c] to-[#244d79]
+                                        w-17.5 h-17.5 mx-auto mb-4 rounded-[18px]
+                                        bg-linear-to-br from-[#17395c] to-[#244d79]
                                         flex items-center justify-center
                                         shadow-[0_10px_25px_rgba(23,57,92,0.25)]
                                     ">
-                                        <div className="w-[40px] h-[40px]">
+                                        <div className="w-10 h-10">
                                             {method.icon}
                                         </div>
                                     </div>

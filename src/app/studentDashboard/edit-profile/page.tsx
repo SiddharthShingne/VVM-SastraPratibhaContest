@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import axiosInstance from "@/services/axiosInstance";
-import { fetchStates, fetchDistricts, sendEmailOtpDashboard, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile} from "@/services/authService";
+import { fetchStates, fetchDistricts, sendEmailOtpDashboard, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile } from "@/services/authService";
 interface FormData {
   name: string;
   schoolName: string;
@@ -25,6 +25,7 @@ interface FormData {
   pinCode: string;
   aadharNumber: string;
   examLanguage: string;
+  parentSalutation: string;
 }
 type OtpTarget = "parentMobile" | "parentEmail";
 
@@ -315,16 +316,31 @@ const CSS = `
   }
   .vvm-btn--submit:active { transform: translateY(0) scale(.98); }
 `;
+// ── Outside component — never recreated on re-render ──
+const COUNTRY_PHONE_RULES: Record<string, { digits: number; label: string }> = {
+  "2": { digits: 9, label: "UAE" },
+  "3": { digits: 8, label: "Oman" },
+  "4": { digits: 8, label: "Qatar" },
+  "5": { digits: 9, label: "Saudi Arabia" },
+  "6": { digits: 8, label: "Bahrain" },
+  "7": { digits: 8, label: "Kuwait" },
+};
 
+const COUNTRY_MAP: Record<string, string> = {
+  "2": "UAE", "3": "Oman", "4": "Qatar",
+  "5": "Saudi Arabia", "6": "Bahrain", "7": "Kuwait",
+};
+
+const GRADE_MAP: Record<string, number> = {
+  "1": 6, "2": 7, "3": 8, "4": 9, "5": 10, "6": 11,
+};
 /* ─── main component ─── */
 
 export default function EditProfile() {
-  const { register, handleSubmit, watch, reset, setValue } = useForm<FormData>();
-
+  const { register, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm<FormData>();
   const [states, setStates] = useState<any[]>([]);
   const [districts, setDistricts] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
-
   const [verifyParentMobileOtp, setVerifyParentMobileOtp] = useState("");
   const [verifyParentEmailOtp, setVerifyParentEmailOtp] = useState("");
   const [parentMobileOtpSent, setParentMobileOtpSent] = useState(false);
@@ -334,25 +350,107 @@ export default function EditProfile() {
   const [otpLoading, setOtpLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [verifyLoading, setVerifyLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [otpErrors, setOtpErrors] = useState<Partial<Record<OtpTarget, string>>>({});
-
+  const [countryName, setCountryName] = useState("");
   /* ✅ FIX 1b: dialog state lives in EditProfile, passed down as props to DialogBox */
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    type: "success",
-    message: "",
-  });
+  const [dialog, setDialog] = useState<DialogState>({ open: false, type: "success", message: "", });
+  const genderOptions = useMemo(() => [
+    { label: "Male", value: "1" },
+    { label: "Female", value: "2" },
+    { label: "Other", value: "3" },
+  ], []);
+
+  const gradeOptions = useMemo(() => [
+    { label: "6", value: "1" }, { label: "7", value: "2" },
+    { label: "8", value: "3" }, { label: "9", value: "4" },
+    { label: "10", value: "5" }, { label: "11", value: "6" },
+  ], []);
+
+  const boardOptions = useMemo(() => [
+    { label: "ICSE (Indian Certificate of Secondary Education)", value: "1" },
+    { label: "CBSE (Central Board of Secondary Education)", value: "2" },
+    { label: "State Board", value: "3" },
+    { label: "IGCSE (International General Certificate of Secondary Education)", value: "5" },
+    { label: "IB (International Baccalaureate)", value: "6" },
+  ], []);
+
+  const howDidYouOptions = useMemo(() => [
+    { label: "Website", value: "1" },
+    { label: "School Circular/Teacher", value: "2" },
+    { label: "State Coordinator", value: "3" },
+    { label: "News / Print Media", value: "4" },
+    { label: "NCSM", value: "5" },
+    { label: "Social Media", value: "6" },
+    { label: "Friend/Family", value: "7" },
+  ], []);
+  const [countryId, setCountryId] = useState<string>("");
 
   /* ✅ Optional upgrade: centralised helper — shows dialog and auto-closes after 2.5s */
-  const showDialog = (type: "success" | "error", message: string) => {
+  const showDialog = useCallback((type: "success" | "error", message: string) => {
     setDialog({ open: true, type, message });
-    setTimeout(() => setDialog((prev) => ({ ...prev, open: false })), 2500);
-  };
-
+    const timer = setTimeout(
+      () => setDialog((prev) => ({ ...prev, open: false })),
+      2500
+    );
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(() => {
     fetchStates().then(setStates);
   }, []);
 
   useEffect(() => {
+    // const init = async () => {
+    //   const raw = localStorage.getItem("user");
+    //   if (!raw) return;
+    //   const user = JSON.parse(raw);
+    //   const d = user?.user_detail || user?.data?.user_detail;
+    //   if (!d) return;
+
+    //   reset({
+    //     name: d.name || "",
+    //     schoolName: d.school_name || "",
+    //     schoolBoard: String(d.school_board_id || ""),
+    //     studentMobile: d.student_mobile_number || "",
+    //     studentEmail: d.student_email || "",
+    //     dob: d.date_of_birth || "",
+    //     parentName: d.parent_name || "",
+    //     parentMobile: d.parent_phone_number || "",
+    //     parentEmail: d.parent_email || "",
+    //     address: d.address || "",
+    //     gender: String(d.gender || ""),
+    //     grade: String(d.class_id || ""),
+    //     howDidYouGetToKnowAboutVVM: String(d.know_about_vvm_id || ""),
+    //     state: String(d.state_id || ""),
+    //     district: String(d.district_id || ""),
+    //     city: String(d.city_id || ""),
+    //     pinCode: d.pin_code || "",
+    //     aadharNumber: d.aadhar_number || "",
+    //     examLanguage: String(d.exam_language_id || ""),
+    //   });
+
+
+    //   // Read country from localStorage
+    //   const countryId = user?.country_id ? String(user.country_id) : "";
+
+    //   const countryMap: Record<string, string> = {
+    //     "2": "UAE",
+    //     "3": "Oman",
+    //     "4": "Qatar",
+    //     "5": "Saudi Arabia",
+    //     "6": "Bahrain",
+    //     "7": "Kuwait",
+    //   };
+    //   setCountryName(countryMap[countryId] || "");
+
+    //   setParentMobileVerified(!!d.parent_mobile_verified);
+    //   setParentEmailVerified(!!d.parent_email_verified);
+
+    //   if (d.state_id) {
+    //     const districtData = await fetchDistricts(String(d.state_id));
+    //     setDistricts(districtData);
+    //   }
+    // };
+
+
     const init = async () => {
       const raw = localStorage.getItem("user");
       if (!raw) return;
@@ -364,11 +462,11 @@ export default function EditProfile() {
         name: d.name || "",
         schoolName: d.school_name || "",
         schoolBoard: String(d.school_board_id || ""),
-        studentMobile: d.student_mobile_number || "",
+        studentMobile: (d.student_mobile_number || "").replace(/\D/g, "").replace(/^0+/, ""),
+        parentMobile: (d.parent_phone_number || "").replace(/\D/g, "").replace(/^0+/, ""),
         studentEmail: d.student_email || "",
         dob: d.date_of_birth || "",
         parentName: d.parent_name || "",
-        parentMobile: d.parent_phone_number || "",
         parentEmail: d.parent_email || "",
         address: d.address || "",
         gender: String(d.gender || ""),
@@ -377,13 +475,21 @@ export default function EditProfile() {
         state: String(d.state_id || ""),
         district: String(d.district_id || ""),
         city: String(d.city_id || ""),
-        pinCode: d.pin_code || "",
+        pinCode: d.pin_code || d.pincode || "",  // ← your data uses "pincode" not "pin_code"
         aadharNumber: d.aadhar_number || "",
-        examLanguage: String(d.exam_language_id || ""),
+        examLanguage: String(d.exam_language_id || d.exam_lang_id || ""), // ← your data uses exam_lang_id
+        parentSalutation: d.parent_salutation || "",
       });
 
-      setParentMobileVerified(!!d.parent_mobile_verified);
-      setParentEmailVerified(!!d.parent_email_verified);
+      // ✅ country_id is on ROOT user, not user_detail
+      const countryId = user?.country_id ? String(user.country_id) : "";
+      setCountryId(countryId);
+
+
+      setCountryName(COUNTRY_MAP[countryId] || "");
+
+      setParentMobileVerified(!!d.is_parent_phone_number_verified); // ← your data uses this key
+      setParentEmailVerified(!!d.is_parent_email_verified);         // ← your data uses this key
 
       if (d.state_id) {
         const districtData = await fetchDistricts(String(d.state_id));
@@ -393,10 +499,10 @@ export default function EditProfile() {
     init();
   }, [reset]);
 
-  
+
   /// new handle functions
 
-  const handleSendOtp = async (target: OtpTarget) => {
+  const handleSendOtp = useCallback(async (target: OtpTarget) => {
     setOtpErrors((prev) => ({ ...prev, [target]: "" }));
     setOtpLoading((prev) => ({ ...prev, [target]: true }));
 
@@ -419,9 +525,9 @@ export default function EditProfile() {
     } finally {
       setOtpLoading((prev) => ({ ...prev, [target]: false }));
     }
-  };
+  }, [watch, showDialog]);
 
-  const handleVerifyOtp = async (target: OtpTarget) => {
+  const handleVerifyOtp = useCallback(async (target: OtpTarget) => {
     setOtpErrors((prev) => ({ ...prev, [target]: "" }));
     setVerifyLoading((prev) => ({ ...prev, [target]: true }));
 
@@ -452,18 +558,19 @@ export default function EditProfile() {
     } finally {
       setVerifyLoading((prev) => ({ ...prev, [target]: false }));
     }
-  };
+  }, [verifyParentMobileOtp, verifyParentEmailOtp, watch, showDialog]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = useCallback(async (data: FormData) => {
+
     try {
       // Pull stored user to get fields we don't collect in the form
       const raw = localStorage.getItem("user");
       const user = raw ? JSON.parse(raw) : {};
       const d = user?.user_detail ?? {};
-      const GRADE_MAP: Record<string, number> = {
-        "1": 6, "2": 7, "3": 8, "4": 9, "5": 10, "6": 11,
+      const cleanMobile = (num: string) => {
+        if (!num) return "";
+        return num.replace(/\D/g, "").replace(/^0+/, "");
       };
-
       const payload = {
         // ── Identity ────────────────────────────────────────────
         user_id: user?.id ?? user?.user_id ?? "",
@@ -475,19 +582,19 @@ export default function EditProfile() {
         aadhar_number: data.aadharNumber || "",               // optional, can be empty
 
         // ── Parent / Contact ────────────────────────────────────
-        parent_salutation: d.parent_salutation || "",             // preserved from localStorage
+        parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
         parent_name: data.parentName || "",
-        parent_mobile: data.parentMobile || "",
+        parent_mobile: cleanMobile(data.parentMobile || ""),
         parent_email: data.parentEmail || "",
 
         // ── Student contact (optional) ──────────────────────────
-        student_mobile: data.studentMobile || "",
+        student_mobile: cleanMobile(data.studentMobile || ""),
         student_email: data.studentEmail || "",
 
         // ── Academic ────────────────────────────────────────────
         grade: data.grade
           ? String(GRADE_MAP[data.grade] ?? Number(data.grade))
-          : "",        school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
+          : "", school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
         sch_name: data.schoolName || "",
         school_id: d.school_id || "",               // preserved, can be empty
 
@@ -495,12 +602,13 @@ export default function EditProfile() {
         address: data.address || "",
         state_id: data.state ? Number(data.state) : "",
         dist_id: data.district ? Number(data.district) : "",
-        city_name_2: data.city || "",    // ✅ text input — e.g. "Nagpur (Urban)"
+        // city_id: data.district ? Number(data.district) : "",
+        city_name_2: "",     // ✅ text input — e.g. "Nagpur (Urban)"
         // ✅ city_id NOT sent — backend uses city_name_2
         pincode: data.pinCode || "",
 
         // ── VVM ─────────────────────────────────────────────────
-        exam_lang_id: data.examLanguage ? Number(data.examLanguage) : "",
+        exam_lang_id: data.examLanguage ? Number(data.examLanguage) : 14,
         know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
           ? Number(data.howDidYouGetToKnowAboutVVM)
           : "",
@@ -509,7 +617,7 @@ export default function EditProfile() {
 
       await completeStudentProfile(payload);
 
-        if (raw) {
+      if (raw) {
         const user = JSON.parse(raw);
 
         // ✅ handle both structures
@@ -523,6 +631,7 @@ export default function EditProfile() {
           gender: data.gender,
           aadhar_number: data.aadharNumber,
 
+          parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
           parent_name: data.parentName,
           parent_phone_number: data.parentMobile,
           parent_email: data.parentEmail,
@@ -566,7 +675,7 @@ export default function EditProfile() {
         error?.response?.data?.message || "Profile update failed. Please try again.",
       );
     }
-  };
+  }, [parentMobileVerified, parentEmailVerified, showDialog]);
 
   return (
     <>
@@ -588,36 +697,103 @@ export default function EditProfile() {
               <VvmTextInput placeholder="Enter full name" {...register("name")} />
             </VvmInput>
 
-            <VvmInput label="Date Of Birth" required>
-              <VvmTextInput type="date" {...register("dob")} />
+            <VvmInput label="Date Of Birth" required >
+              <VvmTextInput
+                type="date"
+                min="2008-01-01"
+                max="2015-12-31"
+                {...register("dob", {
+                  required: "Date of Birth is required",
+                  validate: (value) => {
+                    if (!value) return "Date of Birth is required";
+
+                    const date = new Date(value);
+                    const min = new Date("2008-01-01");
+                    const max = new Date("2015-12-31");
+
+                    if (date < min) return "DOB must be after 1 Jan 2008";
+                    if (date > max) return "DOB must be before 31 Dec 2015";
+
+                    return true;
+                  },
+                })}
+              />
             </VvmInput>
 
-            <VvmInput label="Aadhar Number">
+            {/* <VvmInput label="Aadhar Number">
               <VvmTextInput
                 placeholder="Enter 12-digit Aadhar Number"
                 maxLength={12}
                 {...register("aadharNumber")}
               />
-            </VvmInput>
+            </VvmInput> */}
 
             <VvmInput label="Select Gender">
               <VvmSelect
                 value={watch("gender") || ""}
                 onChange={(e) => setValue("gender", e.target.value)}
-                options={[
-                  { label: "Male", value: "1" },
-                  { label: "Female", value: "2" },
-                  { label: "Other", value: "3" },
-                ]}
+                options={genderOptions}
+              />
+            </VvmInput>
+
+            <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
+              <VvmTextInput
+                placeholder="Student mobile number"
+                {...register("studentMobile", {
+                  validate: (value) => {
+                    if (!value) return true; // optional field
+                    const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
+                    if (digitsOnly.length < 7 || digitsOnly.length > 10)
+                      return "Enter a valid mobile number (7-10 digits)";
+                    return true;
+                  }
+                })}
+              />
+            </VvmInput>
+
+            <VvmInput label="Student Email">
+              <VvmTextInput
+                type="email"
+                placeholder="Student email address"
+                {...register("studentEmail")}
               />
             </VvmInput>
 
             {/* ── Parent / Contact ── */}
             <div className="vvm-section-label">Parent / Contact Details</div>
 
-            <VvmInput label="Parent Mobile No." required>
+            {/* <VvmInput label="Parent Mobile No." required>
               <div className="vvm-otp-row">
                 <VvmTextInput placeholder="Enter mobile number" {...register("parentMobile")} />
+                <button
+                  type="button"
+                  className="vvm-btn vvm-btn--success"
+                  onClick={() => handleSendOtp("parentMobile")}
+                  disabled={otpLoading.parentMobile || parentMobileVerified}
+                >
+                  {otpLoading.parentMobile ? "Sending…" : "Send OTP"}
+                </button>
+              </div>
+              {parentMobileVerified ? (
+                <p className="vvm-status vvm-status--ok">✓ Mobile Verified</p>
+              ) : (
+                <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
+              )}
+            </VvmInput> */}
+            <VvmInput label="Parent Mobile No." required error={errors.parentMobile?.message}>
+              <div className="vvm-otp-row">
+                <VvmTextInput
+                  placeholder="Enter mobile number"
+                  {...register("parentMobile", {
+                    required: "Parent mobile number is required",
+                    validate: (value) => {
+                      const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
+                      if (digitsOnly.length < 7 || digitsOnly.length > 10)
+                        return "Enter a valid mobile number (7-10 digits)";
+                      return true;
+                    }
+                  })}
+                />
                 <button
                   type="button"
                   className="vvm-btn vvm-btn--success"
@@ -717,9 +893,22 @@ export default function EditProfile() {
               )}
             </VvmInput>
 
+            <VvmInput label="Parent Salutation" required>
+              <VvmSelect
+                value={watch("parentSalutation") || ""}
+                onChange={(e) => setValue("parentSalutation", e.target.value)}
+                options={[
+                  { label: "Mr.", value: "Mr" },
+                  { label: "Mrs.", value: "Mrs" },
+                  { label: "Dr.", value: "Dr" },
+                ]}
+              />
+            </VvmInput>
+
             <VvmInput label="Parent / Guardian Full Name">
               <VvmTextInput placeholder="Enter parent name" {...register("parentName")} />
             </VvmInput>
+
 
             {/* ── Academic ── */}
             <div className="vvm-section-label">Academic Details</div>
@@ -728,14 +917,7 @@ export default function EditProfile() {
               <VvmSelect
                 value={watch("grade") || ""}
                 onChange={(e) => setValue("grade", e.target.value)}
-                options={[
-                  { label: "6", value: "1" },
-                  { label: "7", value: "2" },
-                  { label: "8", value: "3" },
-                  { label: "9", value: "4" },
-                  { label: "10", value: "5" },
-                  { label: "11", value: "6" },
-                ]}
+                options={gradeOptions}
               />
             </VvmInput>
 
@@ -747,33 +929,15 @@ export default function EditProfile() {
               <VvmSelect
                 value={watch("schoolBoard") || ""}
                 onChange={(e) => setValue("schoolBoard", e.target.value)}
-                options={[
-                  { label: "CBSE (Central Board of Secondary Education)", value: "1" },
-                  { label: "ICSE (Indian Certificate of Secondary Education)", value: "2" },
-                  { label: "State Board", value: "3" },
-                  { label: "IB (International Baccalaureate)", value: "4" },
-                  { label: "IGCSE (Cambridge)", value: "5" },
-                  { label: "Other", value: "6" },
-                ]}
+                options={boardOptions}
               />
             </VvmInput>
 
             <VvmInput label="Exam Language">
-              <VvmSelect
-                value={watch("examLanguage") || ""}
-                onChange={(e) => setValue("examLanguage", e.target.value)}
-                options={[
-                  { label: "English", value: "1" },
-                  { label: "Hindi", value: "2" },
-                  { label: "Marathi", value: "3" },
-                  { label: "Gujarati", value: "4" },
-                  { label: "Bengali", value: "5" },
-                  { label: "Tamil", value: "6" },
-                  { label: "Telugu", value: "7" },
-                  { label: "Kannada", value: "8" },
-                  { label: "Malayalam", value: "9" },
-                  { label: "Punjabi", value: "10" },
-                ]}
+              <VvmTextInput
+                value="English"
+
+                readOnly
               />
             </VvmInput>
 
@@ -784,7 +948,7 @@ export default function EditProfile() {
               <VvmTextInput placeholder="Enter address" {...register("address")} />
             </VvmInput>
 
-            <VvmInput label="State">
+            {/* <VvmInput label="State">
               <VvmSelect
                 value={watch("state") || ""}
                 onChange={async (e) => {
@@ -799,9 +963,17 @@ export default function EditProfile() {
                 }}
                 options={states.map((s: any) => ({ label: s.name, value: String(s.id) }))}
               />
+            </VvmInput> */}
+
+            {/* ADD THIS — Country: read-only */}
+            <VvmInput label="Country">
+              <VvmTextInput
+                value={countryName}
+                readOnly
+              />
             </VvmInput>
 
-            <VvmInput label="District">
+            <VvmInput label="City/Region">
               <VvmSelect
                 value={watch("district") || ""}
                 onChange={(e) => {
@@ -811,13 +983,6 @@ export default function EditProfile() {
                   // hook fetchCities(e.target.value) here when available
                 }}
                 options={districts.map((d: any) => ({ label: d.name, value: String(d.id) }))}
-              />
-            </VvmInput>
-
-            <VvmInput label="City">
-              <VvmTextInput
-                placeholder="Enter city name"
-                {...register("city")}
               />
             </VvmInput>
 
@@ -836,15 +1001,7 @@ export default function EditProfile() {
               <VvmSelect
                 value={watch("howDidYouGetToKnowAboutVVM") || ""}
                 onChange={(e) => setValue("howDidYouGetToKnowAboutVVM", e.target.value)}
-                options={[
-                  { label: "Website", value: "1" },
-                  { label: "School Circular/Teacher", value: "2" },
-                  { label: "State Coordinator", value: "3" },
-                  { label: "News / Print Media", value: "4" },
-                  { label: "NCSM", value: "5" },
-                  { label: "Social Media", value: "6" },
-                  { label: "Friend/Family", value: "7" },
-                ]}
+                options={howDidYouOptions}
               />
             </VvmInput>
 

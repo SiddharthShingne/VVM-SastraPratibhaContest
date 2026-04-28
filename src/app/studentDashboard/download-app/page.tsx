@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import MobileAppInstruction from "./Mobile-app-instruction/page";
 import DestopAppInstruction from "./destop-app-instruction/page";
@@ -16,8 +17,8 @@ export default function DownloadApp() {
 
   const tabs: TabItem[] = [
     { id: "Mobile App Instruction", label: "Mobile App Instruction", content: <MobileAppInstruction /> },
-    { id: "Desktop App Instruction", label: "Desktop App Instruction", content: <DestopAppInstruction /> },
-    { id: "Level 1 SIF Exam", label: "Level 1 SIF Exam", content: <Level1AppPage /> },
+    // { id: "Desktop App Instruction", label: "Desktop App Instruction", content: <DestopAppInstruction /> },
+    // { id: "Level 1 SIF Exam", label: "Level 1 SIF Exam", content: <Level1AppPage /> },
   ];
 
   return (
