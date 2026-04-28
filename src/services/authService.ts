@@ -37,6 +37,7 @@ export const loginUser = async (
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
+      
     });
 
     const data = response.data;
@@ -71,6 +72,7 @@ export const logoutUser = async (): Promise<LogoutApiResponse> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("username");
+      localStorage.removeItem("role"); 
     }
 
     return response.data;

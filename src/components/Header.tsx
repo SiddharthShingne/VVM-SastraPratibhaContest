@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Header = () => {
+  
+  
+  // localStorage.setItem("username", Response.username:any  );
   const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
@@ -74,6 +77,7 @@ const Header = () => {
 
         <button
           onClick={() =>
+            
             isLoggedIn
               ? handleLogout()
               : router.push("/Login")
@@ -86,7 +90,7 @@ const Header = () => {
           {isLoggedIn ? "Logout" : "Login"}
         </button>
 
-        <button
+        {/* <button
           onClick={() =>
             isLoggedIn
               ? router.push("/studentDashboard")
@@ -97,7 +101,43 @@ const Header = () => {
   "
         >
           {isLoggedIn ? "User Profile" : "Register"}
-        </button>
+        </button> */}
+
+        
+        <button
+  // onClick={() => {
+  //   if (!isLoggedIn) {
+  //     router.push("/registration/individual-student-registration");
+  //     return;
+  //   }
+
+  //   const username = localStorage.getItem("username");
+
+  //   if (username?.startsWith("STC") || username?.startsWith("ZOC")) {
+  //     router.push("/state-dashboard"); // ✅ State users
+  //   } else {
+  //     router.push("/studentDashboard"); // ✅ Normal students
+  //   }
+  // }}
+
+  onClick={() => {
+  if (!isLoggedIn) {
+    router.push("/registration/individual-student-registration");
+    return;
+  }
+
+  const role = localStorage.getItem("role");
+
+  if (role === "STATE") {
+    router.push("/state-dashboard");
+  } else {
+    router.push("/studentDashboard");
+  }
+}}
+  className="bg-[#fff8dc] text-[#17395c] text-xs font-semibold px-4 py-2 rounded-full border border-[#e6d98c] shadow-sm hover:bg-[#f5e6a0] hover:shadow-md hover:-translate-y-px active:scale-95 transition-all duration-300"
+>
+  {isLoggedIn ? "User Profile" : "Register"}
+</button>
 
       </div>
     </div>
