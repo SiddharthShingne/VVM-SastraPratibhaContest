@@ -11,10 +11,17 @@ export const getImportantDates = async (page: number = 1) => {
 };
 
 // get instruction document api call
+// export const getInstractionDocument = async (type: string) => {
+//   const response = await api.get(
+//     `/get-instraction-document?type=${type}`,
+//   );
+//   return response.data;
+// };
 export const getInstractionDocument = async (type: string) => {
-  const response = await api.get(
-    `/get-instraction-document?type=${type}`,
-  );
+  const response = await api.get("/get-instraction-document", {
+    params: { type },
+  });
+
   return response.data;
 };
 

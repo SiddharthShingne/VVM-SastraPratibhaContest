@@ -23,7 +23,7 @@ type RegistrationForm = {
     emiratesId: string;
     schoolName: string;
     board: string;
-    pincode: string;
+    // pincode: string;
     schoolAddress: string;
     parentName: string;
     parentMobile: string;
@@ -374,7 +374,7 @@ export default function KuwaitForm({ countries }: Props) {
                 sch_name: data.schoolName,
                 school_board_id: data.board,
 
-                pincode: data.pincode,
+            //  pincode: data.pincode,
                 address: data.schoolAddress,
                 dist_id: data.district,
 
@@ -535,10 +535,10 @@ export default function KuwaitForm({ countries }: Props) {
                             disabled
                             value={countries?.find((c) => c.value === "kuwait")?.label || "KUWAIT"}
                         />
-                        <InputField label="Pincode" required placeholder="Enter pincode"
+                        {/* <InputField label="Pincode" required placeholder="Enter pincode"
                             registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
                             error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
-                        />
+                        /> */}
                         <SelectField
                             label="City / District"
                             required
