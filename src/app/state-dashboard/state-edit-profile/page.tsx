@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "@/services/axiosInstance";
 import { FaUser, FaCamera, FaEnvelope, FaPhone, FaUserTag, FaSpinner, FaUpload, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface ProfileData {
   name: string;
@@ -274,7 +274,7 @@ export default function UpdateProfilePage() {
             <div className={`w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-xl overflow-hidden border-4 border-white ring-2 ring-[#17395c]/20 transition-all duration-300 group-hover:ring-4 group-hover:ring-[#17395c]/40 ${!preview && "bg-linear-to-br from-[#17395c] to-[#1f4e7a]"
               }`}>
               {preview ? (
-                <Image width={128} height={128} src={preview} alt="Profile" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <img src={preview} alt="Profile" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
               ) : (
                 <FaUser className="transition-transform duration-300 group-hover:scale-110" />
               )}

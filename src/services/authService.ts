@@ -104,10 +104,40 @@ export const fetchStates = async () => {
 };
 
 //===============FETCH DISTRICTS============//
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+interface FetchDistrictPayload {
+  state_ids: number[];
+  prant_ids: number[];
+}
+
+export const fetchDistricts = async (
+  payload: FetchDistrictPayload
+) => {
+  try {
+    const res = await api.post("/fetchDistrict", payload);
+
+    // API already returns array in data
+    return res.data?.data || [];
+  } catch (error: any) {
+    console.error("fetchDistricts error:", error);
+
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || "Failed to fetch districts"
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
 // export const fetchDistricts = async (state_id: string) => {
 //   try {
 //     const res = await api.post("/fetchDistrict", {
-//       state_id,
+//       state_id: Number(state_id),
 //     });
 //     return res.data?.data || [];
 //   } catch (error) {
@@ -115,18 +145,6 @@ export const fetchStates = async () => {
 //     return [];
 //   }
 // };
-
-export const fetchDistricts = async (state_id: string) => {
-  try {
-    const res = await api.post("/fetchDistrict", {
-      state_id: Number(state_id),
-    });
-    return res.data?.data || [];
-  } catch (error) {
-    console.error("fetchDistricts error:", error);
-    return [];
-  }
-};
 // =========EMAIL OTP==========//
 /*
 https://core.vvmstage.cloud/api/send-email-otp-new?email=shingnesid@gmail.com
