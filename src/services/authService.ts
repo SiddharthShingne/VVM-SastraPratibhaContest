@@ -14,12 +14,15 @@ interface RawLoginApiResponse {
     user: {
       id: number;
       username: string;
+      role_name?: string;
       [key: string]: unknown;
     };
   };
 }
 
 export interface LoginResponse {
+  username: string;
+  role_name: string;
   token: string;
   user: any;
 }
@@ -37,7 +40,6 @@ export const loginUser = async (
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      
     });
 
     const data = response.data;
@@ -47,6 +49,8 @@ export const loginUser = async (
     }
 
     return {
+      username: data.data.user?.username || "",
+      role_name: data.data.user?.role_name || "",
       token: data.data.token,
       user: data.data.user,
     };
@@ -72,7 +76,7 @@ export const logoutUser = async (): Promise<LogoutApiResponse> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
       localStorage.removeItem("username");
-      localStorage.removeItem("role"); 
+      localStorage.removeItem("role");
     }
 
     return response.data;
@@ -170,11 +174,9 @@ export const sendEmailOtpDashboard = async (email: string, country: string) => {
   }
 };
 
-
 /*
 https://core.vvmstage.cloud/api/verify-email-otp-new?email=shingnesid@gmail.com&otp=555555
 */
-
 
 // ========= VERIFY EMAIL OTP ==========//
 export const verifyEmailOtp = async (email: string, otp: string) => {
@@ -211,7 +213,6 @@ export const sendMobileOtpWhileUpdating = async (mobile: string) => {
 
   return res.data;
 };
-
 
 // VERIFY OTP
 export const verifyMobileOtpWhileUpdating = async (

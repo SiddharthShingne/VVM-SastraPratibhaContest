@@ -85,3 +85,67 @@ export const logoutUser = async () => {
     }
   }
 };
+
+// update coordinator profile 
+export const updateCoordinatorProfile = async (profileData: {
+  name: string;
+  phone: string;
+  email: string;
+  // Add other fields as needed
+}) => {
+  try {
+    const response = await api.post("/coordinators/update", {
+      name: profileData.name,
+      username: "STC000167",        // Should be dynamic from your user store
+      designation: "State Coordinator", // Should be dynamic
+      phone: profileData.phone,
+      email: profileData.email,
+      type: "state-coordinator",     // Should be dynamic based on role
+      user_id: 167196,               // Should be dynamic from your user store
+      location_id: 43                // Should be dynamic
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Profile update failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Dashboard Card Summary API call
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+interface DashboardPayload {
+  zone_id: number[];
+  state_id: number[];
+  prant_id: number[];
+  district_id: number[];
+}
+
+export const fetchDashboardCardSummary = async (
+  payload: DashboardPayload
+) => {
+  try {
+    const response = await api.post(
+      "/admin/dashboard/card-summary",
+      payload
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || "Failed to fetch dashboard summary"
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};

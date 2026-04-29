@@ -58,8 +58,8 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const trimmedUsername = username.trim(); // ✅ trim here
-    const trimmedPassword = password.trim(); // ✅ optional but good practice
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
 
     const userErr = validateUsername(trimmedUsername);
     const passErr = validatePassword(trimmedPassword);
@@ -74,33 +74,47 @@ export default function LoginPage() {
     try {
       const data = await loginUser(trimmedUsername, trimmedPassword);
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", trimmedUsername);
+      // ✅ Store full user object — this fixes name, profile, dashboard data
+      localStorage.setItem("user", JSON.stringify(data));
+
+      // ✅ Store token only if backend returns one
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      // ✅ Prefer role from API response, fallback to username prefix check
       localStorage.setItem(
-  "role",
-  trimmedUsername.toUpperCase().startsWith("STC") ||
-    trimmedUsername.toUpperCase().startsWith("ZOC")
-    ? "STATE"
-    : "STUDENT"
-);
+        "username",
+        data.username || trimmedUsername
+      );
+      localStorage.setItem(
+        "role",
+        data.role_name ||
+        (trimmedUsername.toUpperCase().startsWith("STC") ||
+          trimmedUsername.toUpperCase().startsWith("ZOC")
+          ? "STATE"
+          : "STUDENT")
+      );
+
       window.dispatchEvent(new Event("auth-change"));
+
       setDialog({
         type: "success",
         message: "Login successful. Redirecting to dashboard...",
       });
 
-      
       setTimeout(() => {
+        const usernameUpper = trimmedUsername.toUpperCase();
 
-
-  const usernameUpper = trimmedUsername.toUpperCase();
-
-if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
-  router.replace("/state-dashboard");
-} else {
-  router.replace("/studentDashboard");
-}
-}, 1500);
+        if (
+          usernameUpper.startsWith("STC") ||
+          usernameUpper.startsWith("ZOC")
+        ) {
+          router.replace("/state-dashboard");
+        } else {
+          router.replace("/studentDashboard");
+        }
+      }, 1500);
     } catch (err) {
       setDialog({
         type: "error",
@@ -129,7 +143,6 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
       {dialog && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
           <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-2xl p-8 text-center">
-
             {dialog.type === "success" ? (
               <CheckCircle className="mx-auto text-green-500 mb-4" size={48} />
             ) : (
@@ -157,22 +170,23 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
       {/* ---------------- LOGIN SECTION ---------------- */}
 
       <div className="flex justify-center items-start py-16 px-4">
-        <div className="grid md:grid-cols-2 w-full max-w-5xl rounded-2xl overflow-hidden 
-      backdrop-blur-md bg-white/60 border border-white/40 shadow-[0_30px_80px_rgba(23,57,92,0.18)]">
-
+        <div
+          className="grid md:grid-cols-2 w-full max-w-5xl rounded-2xl overflow-hidden 
+      backdrop-blur-md bg-white/60 border border-white/40 shadow-[0_30px_80px_rgba(23,57,92,0.18)]"
+        >
           {/* ================= LEFT: FORM ================= */}
           <div className="bg-white p-10 flex items-center justify-center relative">
-
             {/* top gradient stripe */}
             <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
             <div className="w-full max-w-sm">
-
               {/* HEADING */}
-              <h2 className="text-3xl font-extrabold text-center mb-2 
+              <h2
+                className="text-3xl font-extrabold text-center mb-2 
             bg-linear-to-r from-[#162a4a] via-[#1f6fa3] to-[#f4df17] 
-            bg-clip-text text-transparent">
-              Login
+            bg-clip-text text-transparent"
+              >
+                Login
               </h2>
 
               <p className="text-center text-sm text-gray-500 mb-6">
@@ -180,8 +194,11 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
               </p>
 
               {/* FORM */}
-              <form onSubmit={handleLogin} autoComplete="off" className="space-y-5">
-
+              <form
+                onSubmit={handleLogin}
+                autoComplete="off"
+                className="space-y-5"
+              >
                 {/* USERNAME */}
                 <div className="relative">
                   <input
@@ -201,8 +218,10 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
     focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
                   />
 
-                  <label className="absolute left-10 text-gray-500 text-sm transition-all px-1  top-3 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#162a4a] peer-focus:bg-white
-                                          peer-not-placeholder-shown:-top-2  peer-not-placeholder-shown:text-xs  peer-not-placeholder-shown:bg-white">
+                  <label
+                    className="absolute left-10 text-gray-500 text-sm transition-all px-1  top-3 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#162a4a] peer-focus:bg-white
+                                          peer-not-placeholder-shown:-top-2  peer-not-placeholder-shown:text-xs  peer-not-placeholder-shown:bg-white"
+                  >
                     Username
                   </label>
 
@@ -228,12 +247,14 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
                     className="peer w-full px-10 py-3 border border-gray-300 rounded-xl    bg-[#f8fbff] text-sm focus:outline-none focus:border-[#1f4e7a]     focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20"
                   />
 
-                  <label className="absolute left-10 text-gray-500 text-sm transition-all px-1
+                  <label
+                    className="absolute left-10 text-gray-500 text-sm transition-all px-1
   top-3 
   peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[#162a4a] peer-focus:bg-white
   peer-not-placeholder-shown:-top-2 
   peer-not-placeholder-shown:text-xs 
-  peer-not-placeholder-shown:bg-white">
+  peer-not-placeholder-shown:bg-white"
+                  >
                     Password
                   </label>
 
@@ -280,16 +301,16 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
 
           {/* ================= RIGHT: HERO ================= */}
           <div className="hidden md:flex items-center justify-center relative bg-linear-to-br from-[#162a4a] via-[#1f4e7a] to-[#2f6fa3] p-10">
-
             {/* decorative blobs */}
             <div className="absolute w-64 h-64 bg-white/10 rounded-full -top-16 -right-16" />
             <div className="absolute w-40 h-40 bg-white/10 rounded-full -bottom-10 -left-10" />
 
             {/* logo */}
-            <div className="relative w-44 h-44 rounded-full 
+            <div
+              className="relative w-44 h-44 rounded-full 
   border-4 border-white/40 bg-white/10 backdrop-blur-md 
-  flex items-center justify-center shadow-2xl animate-[float_4s_ease-in-out_infinite]">
-
+  flex items-center justify-center shadow-2xl animate-[float_4s_ease-in-out_infinite]"
+            >
               <Image
                 src="/gcc/logo.png"
                 alt="VVM Logo"
@@ -297,10 +318,8 @@ if (usernameUpper.startsWith("STC") || usernameUpper.startsWith("ZOC")) {
                 height={180}
                 className="w-full h-full object-cover rounded-full"
               />
-
             </div>
           </div>
-
         </div>
       </div>
     </div>

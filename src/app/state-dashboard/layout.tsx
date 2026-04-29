@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -23,8 +22,14 @@ function extractNameFromStorage(): string {
   try {
     const raw = localStorage.getItem("user");
     if (!raw) return "State Coordinator";
-    const user = JSON.parse(raw);
-    return user?.user_detail?.name || "State Coordinator";
+    const parsed = JSON.parse(raw);
+    // handles { token, user: { user_detail: { name } } }  ← current API shape
+    // also handles { user_detail: { name } }              ← flat shape fallback
+    return (
+      parsed?.user?.user_detail?.name ||
+      parsed?.user_detail?.name ||
+      "State Coordinator"
+    );
   } catch (err) {
     return "State Coordinator";
   }
@@ -74,13 +79,12 @@ export default function StateDashboardLayout({
   const [token, setToken] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-const [studentOpen, setStudentOpen] = useState(false);
-const [schoolOpen, setSchoolOpen] = useState(false);
-const [openMenu, setOpenMenu] = useState<"student" | "school" | null>(null);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [studentOpen, setStudentOpen] = useState(false);
+  const [schoolOpen, setSchoolOpen] = useState(false);
 
-const isSchoolActive = pathname.startsWith("/stateDashboard/schools");
-
-const isStudentActive = pathname.startsWith("/stateDashboard/students");
+  const isSchoolActive = pathname.startsWith("/state-dashboard/school");
+  const isStudentActive = pathname.startsWith("/state-dashboard/student");
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -113,6 +117,15 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
     };
   }, [isMobile, sidebarOpen]);
 
+  // ESC key close
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSidebarOpen(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -130,7 +143,7 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
 
   const linkClass = (path: string) =>
     [
-      "group relative flex items-center gap-3 min-h-11.5 px-3.5 rounded-xl",
+      "group relative flex items-center gap-3 [min-height:2.875rem] px-3.5 rounded-xl",
       "text-[13.5px] font-semibold no-underline cursor-pointer",
       "transition-all duration-220 ease-out overflow-hidden",
       isActive(path)
@@ -150,6 +163,7 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
 
   const SidebarContent = () => (
     <div className="px-5 pb-6 pt-8">
+      {/* USER HEADER */}
       <div className="text-center pb-5 mb-3 border-b border-[#eef2f7]">
         <div
           className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[18px] shadow-md transition-transform duration-300 hover:scale-105"
@@ -158,134 +172,135 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
           {name.charAt(0).toUpperCase()}
         </div>
         <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
-          Welcome State Coordinator
+          Welcome back
         </p>
         <h6 className="shine-name text-[17px] font-extrabold">
           {name}
         </h6>
       </div>
 
+      {/* NAV */}
       <nav className="space-y-1">
         <Link href="/state-dashboard" className={linkClass("/state-dashboard")}>
           <FaHome className={iconClass("/state-dashboard")} />
           Dashboard
         </Link>
-  
-        
-          <div>
-    <button
-      onClick={() => setStudentOpen(!studentOpen)}
-      
-      className={[
-        "group relative flex items-center justify-between w-full min-h-11.5 px-3.5 rounded-xl",
-        "text-[13.5px] font-semibold transition-all duration-220",
-        isStudentActive
-          ? "bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white"
-          : "text-[#4a6278] hover:bg-[rgba(23,57,92,0.06)] hover:text-[#17395c]",
-      ].join(" ")}
-    >
-      <div className="flex items-center gap-3">
-        <FaUserGraduate
-          className={[
-            "text-[17px] transition-all",
-            isStudentActive
-              ? "text-[#f4df17]"
-              : "text-[#7a8fa6] group-hover:text-[#b88d00]",
-          ].join(" ")}
-        />
-        Students
-      </div>
 
-      <span className="text-xs">{studentOpen ? "▲" : "▼"}</span>
-    </button>
-
-    {studentOpen && (
-      <div className="ml-8 mt-1 space-y-1">
-        <Link
-          href="/state-dashboard/student/student-bulk-import"
-          className={linkClass("/state-dashboard/student/student-bulk-import")}
-        >
-          Students Bulk Import
-        </Link>
-
-        <Link
-          href="/state-dashboard/student/view-indivisual-student"
-          className={linkClass("/state-dashboard/student/view-indivisual-student")}
-        >
-          View Individual Students
-        </Link>
-
-        <Link
-          href="/state-dashboard/student/total-student"
-          className={linkClass("/state-dashboard/student/total-student")}
-        >
-          Total Students
-        </Link>
-      </div>
-    )}
-  </div>
-    
-    {/* school optiom */}
+        {/* Students dropdown */}
         <div>
-  <button
-    onClick={() => setSchoolOpen(!schoolOpen)}
-    className={[
-      "group relative flex items-center justify-between w-full min-h-11.5 px-3.5 rounded-xl",
-      "text-[13.5px] font-semibold transition-all duration-220",
-      isSchoolActive
-        ? "bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white"
-        : "text-[#4a6278] hover:bg-[rgba(23,57,92,0.06)] hover:text-[#17395c]",
-    ].join(" ")}
-  >
-    <div className="flex items-center gap-3">
-      <FaSchool
-        className={[
-          "text-[17px] transition-all",
-          isSchoolActive
-            ? "text-[#f4df17]"
-            : "text-[#7a8fa6] group-hover:text-[#b88d00]",
-        ].join(" ")}
-      />
-      Schools
-    </div>
+          <button
+            onClick={() => setStudentOpen(!studentOpen)}
+            className={[
+              "group relative flex items-center justify-between w-full min-h-11.5 px-3.5 rounded-xl",
+              "text-[13.5px] font-semibold transition-all duration-220",
+              isStudentActive
+                ? "bg-linear-to-br from-[#17395c] to-[#1f4e7a] text-white border border-white/20 shadow-[0_8px_24px_rgba(23,57,92,0.30)]"
+                : "text-[#4a6278] border border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:border-[#d0dde9] hover:text-[#17395c]",
+            ].join(" ")}
+          >
+            <div className="flex items-center gap-3">
+              <FaUserGraduate
+                className={[
+                  "text-[17px] transition-all",
+                  isStudentActive
+                    ? "text-[#f4df17]"
+                    : "text-[#7a8fa6] group-hover:text-[#b88d00]",
+                ].join(" ")}
+              />
+              Students
+            </div>
+            <span className="text-xs">{studentOpen ? "▲" : "▼"}</span>
+          </button>
 
-    <span className="text-xs">{schoolOpen ? "▲" : "▼"}</span>
-  </button>
+          {studentOpen && (
+            <div className="ml-8 mt-1 space-y-1">
+              <Link
+                href="/state-dashboard/student/student-bulk-import"
+                className={linkClass("/state-dashboard/student/student-bulk-import")}
+              >
+                Students Bulk Import
+              </Link>
+              <Link
+                href="/state-dashboard/student/view-indivisual-student"
+                className={linkClass("/state-dashboard/student/view-indivisual-student")}
+              >
+                View Individual Students
+              </Link>
+              <Link
+                href="/state-dashboard/student/total-student"
+                className={linkClass("/state-dashboard/student/total-student")}
+              >
+                Total Students
+              </Link>
+            </div>
+          )}
+        </div>
 
-  {schoolOpen && (
-    <div className="ml-8 mt-1 space-y-1">
-  
-      <Link
-        href="/state-dashboard/school/total-school"
-        className={linkClass("/state-dashboard/school/total-school")}
-      >
-        Total Schools
-      </Link>
-    </div>
-  )}
-</div>
-        
+        {/* Schools dropdown */}
+        <div>
+          <button
+            onClick={() => setSchoolOpen(!schoolOpen)}
+            className={[
+              "group relative flex items-center justify-between w-full min-h-11.5 px-3.5 rounded-xl",
+              "text-[13.5px] font-semibold transition-all duration-220",
+              isSchoolActive
+                ? "bg-linear-to-br from-[#17395c] to-[#1f4e7a] text-white border border-white/20 shadow-[0_8px_24px_rgba(23,57,92,0.30)]"
+                : "text-[#4a6278] border border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:border-[#d0dde9] hover:text-[#17395c]",
+            ].join(" ")}
+          >
+            <div className="flex items-center gap-3">
+              <FaSchool
+                className={[
+                  "text-[17px] transition-all",
+                  isSchoolActive
+                    ? "text-[#f4df17]"
+                    : "text-[#7a8fa6] group-hover:text-[#b88d00]",
+                ].join(" ")}
+              />
+              Schools
+            </div>
+            <span className="text-xs">{schoolOpen ? "▲" : "▼"}</span>
+          </button>
+
+          {schoolOpen && (
+            <div className="ml-8 mt-1 space-y-1">
+              <Link
+                href="/state-dashboard/school/total-school"
+                className={linkClass("/state-dashboard/school/total-school")}
+              >
+                Total Schools
+              </Link>
+            </div>
+          )}
+        </div>
       </nav>
 
       <NavDivider />
 
       <SectionTitle label="Security" />
-      <Link href="/state-dashboard/state-update-password" className={linkClass("/state-dashboard/state-update-  password")}>
+      <Link
+        href="/state-dashboard/state-update-password"
+        className={linkClass("/state-dashboard/state-update-password")}
+      >
         <FaKey className={iconClass("/state-dashboard/state-update-password")} />
-         Update Password 
+        Update Password
       </Link>
 
       <NavDivider />
 
       <SectionTitle label="Profile" />
       <nav className="space-y-1">
-        <Link href="/state-dashboard/state-edit-profile" className={linkClass("/state-dashboard/state-edit-profile")}>
+        <Link
+          href="/state-dashboard/state-edit-profile"
+          className={linkClass("/state-dashboard/state-edit-profile")}
+        >
           <FaUser className={iconClass("/state-dashboard/state-edit-profile")} />
           View Profile
         </Link>
 
+        {/* Logout — opens confirmation dialog (same as student sidebar) */}
         <button
-          onClick={handleLogout}
+          onClick={() => setShowLogoutDialog(true)}
           className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
@@ -297,6 +312,7 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
 
   return (
     <>
+      {/* ── Global keyframes ── */}
       <style>{`
         @keyframes gradientShift {
           0%   { background-position: 0% 50%; }
@@ -326,15 +342,19 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
         }
       `}</style>
 
-      <div
-        className="min-h-[150vh]"
-        style={{
-          background:
-            "linear-gradient(135deg, #e8eef6 0%, #dce7f3 40%, #eaf0f8 70%, #d8e6f2 100%)",
-          backgroundSize: "300% 300%",
-          animation: "gradientShift 12s ease infinite",
-        }}
-      >
+      {/* ── Page shell ── */}
+      <div className="min-h-screen">
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(135deg, #e8eef6 0%, #dce7f3 40%, #eaf0f8 70%, #d8e6f2 100%)",
+            backgroundSize: "300% 300%",
+            animation: "gradientShift 12s ease infinite",
+          }}
+        />
+
+        {/* dot-grid texture */}
         <div
           className="fixed inset-0 pointer-events-none"
           style={{
@@ -344,8 +364,8 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
           }}
         />
 
-        {/* MOBILE HEADER */}
-        <header className="md:hidden fixed top-0 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
+        {/* MOBILE TOP HEADER */}
+        <header className="md:hidden fixed top-38.5 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
           <div
             className="absolute top-0 left-0 w-full h-0.5"
             style={{
@@ -357,50 +377,170 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
             <h2 className="text-[15px] font-bold text-[#17395c] tracking-tight">
               Dashboard
             </h2>
-
             <button
-              onClick={() => setSidebarOpen(true)}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md"
-              style={{
-                background: "linear-gradient(135deg, #17395c, #1f4e7a)",
-              }}
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Open menu"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
             >
               {name.charAt(0).toUpperCase()}
             </button>
           </div>
         </header>
 
+        {/* OVERLAY */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/40 z-40 backdrop-blur-[2px]"
+            className="fixed left-0 right-0 bottom-0 top-52.5 bg-black/40 z-40"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
+        {/* MOBILE SIDEBAR */}
         <aside
           className={[
-            "md:hidden fixed top-0 left-0 h-full w-72 z-50 overflow-y-auto",
+            "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
+            "top-52.5 h-[calc(100vh-210px)]",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
+          style={{
+            background: "#ffffff",
+            boxShadow:
+              "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+          }}
         >
+          {/* accent bar */}
+          <div
+            className="absolute top-0 left-0 w-full h-0.5"
+            style={{
+              background:
+                "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
+            }}
+          />
+
+          {/* Close button row */}
+          <div className="flex items-center justify-between px-4 pt-5 pb-2">
+            <span className="text-[11px] font-extrabold text-[#7a90a8] uppercase tracking-widest">
+              Menu
+            </span>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              aria-label="Close menu"
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-[#4a6278] hover:bg-red-50 hover:text-red-500 transition-all duration-200"
+            >
+              <FaTimes size={15} />
+            </button>
+          </div>
+
           <SidebarContent />
         </aside>
 
-        <div className="relative container mx-auto px-4 pt-16 md:pt-6 pb-10">
+        {/* DESKTOP LAYOUT */}
+        <div className="relative container mx-auto px-4 pt-55 md:pt-6 pb-10">
           <div className="flex gap-5 items-start">
 
-            <aside className="sidebar-animate hidden md:block sticky top-6 w-72 xl:w-75 shrink-0 overflow-y-auto rounded-3xl bg-white shadow">
+            {/* DESKTOP SIDEBAR */}
+            <aside
+              className="sidebar-animate hidden md:block sticky top-6 w-72 xl:w-75 shrink-0 overflow-y-auto rounded-3xl"
+              style={{
+                background: "#ffffff",
+                backdropFilter: "blur(18px)",
+                WebkitBackdropFilter: "blur(18px)",
+                border: "1px solid rgba(255,255,255,0.55)",
+                boxShadow:
+                  "0 10px 30px rgba(23,57,92,0.10), 0 2px 8px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+              }}
+            >
+              {/* accent bar */}
+              <div
+                className="absolute top-0 left-0 w-full h-0.75 rounded-t-3xl"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
+                }}
+              />
               <SidebarContent />
             </aside>
 
-            <main className="content-animate flex-1 min-w-0 rounded-3xl bg-white shadow">
-              <div className="p-8 min-h-[150vh]">{children}</div>
+            {/* MAIN CONTENT */}
+            <main
+              className="content-animate flex-1 min-w-0 h-fit min-h-[60vh] rounded-3xl"
+              style={{
+                background: "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
+              
+             
+                border: "1px solid rgba(23,57,92,0.09)",
+                      }}
+            >
+              <div className="p-8">{children}</div>
             </main>
 
           </div>
         </div>
       </div>
+
+      {/* ── LOGOUT CONFIRMATION DIALOG (matches student sidebar) ── */}
+      {showLogoutDialog && (
+        <div className="fixed inset-0 z-200 flex items-center justify-center">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowLogoutDialog(false)}
+          />
+          {/* Dialog card */}
+          <div
+            className="relative z-10 w-[90vw] max-w-sm mx-auto rounded-2xl p-6 shadow-2xl"
+            style={{
+              background: "linear-gradient(145deg, #ffffff, #f4f8fc)",
+              border: "1px solid rgba(23,57,92,0.12)",
+            }}
+          >
+            {/* Top accent */}
+            <div
+              className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
+              style={{
+                background:
+                  "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
+              }}
+            />
+
+            {/* Icon */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
+              style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+            >
+              <FaSignOutAlt />
+            </div>
+
+            <h3 className="text-center text-[17px] font-extrabold text-[#17395c] mb-1">
+              Confirm Logout
+            </h3>
+            <p className="text-center text-[13px] text-[#7a90a8] mb-6">
+              Are you sure you want to log out of your account?
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutDialog(false)}
+                className="flex-1 py-2.5 rounded-xl border border-[#d0dde9] text-[#4a6278] text-[13.5px] font-semibold hover:bg-[#f0f4f8] transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowLogoutDialog(false);
+                  handleLogout();
+                }}
+                className="flex-1 py-2.5 rounded-xl text-white text-[13.5px] font-semibold transition-all duration-200 hover:opacity-90 shadow-md"
+                style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

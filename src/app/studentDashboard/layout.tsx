@@ -21,7 +21,7 @@ function extractNameFromStorage(): string {
     const raw = localStorage.getItem("user");
     if (!raw) return "Student";
     const user = JSON.parse(raw);
-    return user?.user_detail?.name || "Student";
+    return user?.user?.user_detail?.name || user?.user_detail?.name || "Student";
   } catch (err) {
     console.error("extractNameFromStorage error:", err);
     return "Student";
@@ -285,7 +285,7 @@ export default function StudentDashboardLayout({
         {/* ─────────────────────────────────────────────────
             MOBILE TOP HEADER — structured navbar
         ───────────────────────────────────────────────── */}
-        <header className="md:hidden fixed top-[154px] left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
+        <header className="md:hidden fixed top-38.5 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
           {/* accent bar */}
           <div
             className="absolute top-0 left-0 w-full h-0.5"
@@ -319,7 +319,7 @@ export default function StudentDashboardLayout({
         ───────────────────────────────────────────────── */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed left-0 right-0 bottom-0 top-[210px] bg-black/40 z-40"
+            className="fixed left-0 right-0 bottom-0 top-52.5 bg-black/40 z-40"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -330,7 +330,7 @@ export default function StudentDashboardLayout({
         <aside
           className={[
             "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
-            "top-[210px] h-[calc(100vh-210px)]",
+            "top-52.5 h-[calc(100vh-210px)]",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
@@ -370,7 +370,7 @@ export default function StudentDashboardLayout({
             DESKTOP LAYOUT
             pt-16 on mobile clears fixed header; md:pt-6 = desktop
         ───────────────────────────────────────────────── */}
-        <div className="relative container mx-auto px-4 pt-[220px] md:pt-6 pb-10">
+        <div className="relative container mx-auto px-4 pt-55 md:pt-6 pb-10">
           <div className="flex gap-5 items-start">
 
             {/* ── DESKTOP SIDEBAR — hidden on mobile, sticky in flex ── */}
