@@ -199,3 +199,30 @@ export const fetchStateSummary = async (
     }
   }
 };
+
+
+// Bulk Student Upload API call
+export const importStudents = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file); // backend usually expects "file"
+
+    const response = await api.post("/sif/student/import", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || "Failed to import students",
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
