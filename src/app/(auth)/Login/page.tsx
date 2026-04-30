@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
-
+  const [showNotice, setShowNotice] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -166,7 +166,29 @@ export default function LoginPage() {
           </div>
         </div>
       )}
+      {/* ---------------- SIF NOTICE DIALOG ---------------- */}
+      {showNotice && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-2xl p-8 text-center">
+            <div className="text-5xl mb-4">⚠️</div>
 
+            <h3 className="text-xl font-bold text-[#17395c] mb-3">
+              Important Notice
+            </h3>
+
+            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+              This site is accessible only for <strong>SIF Students</strong>.
+                        </p>
+
+            <button
+              onClick={() => setShowNotice(false)}
+              className="px-6 py-2.5 bg-[#17395c] text-white rounded-lg text-sm font-semibold hover:bg-[#0f2742] transition"
+            >
+            OK 
+            </button>
+          </div>
+        </div>
+      )}
       {/* ---------------- LOGIN SECTION ---------------- */}
 
       <div className="flex justify-center items-start py-16 px-4">

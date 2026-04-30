@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   return (
-    <>
+    <div id="announcement-bar">
       <div className="flex items-center justify-between flex-wrap px-3 bg-[#111d35] text-[#ffffffa2] text-xs font-medium py-3">
         <div className="flex items-center gap-1 max-w-full lg:flex">
           <Image src="/hand-emoji.svg" alt="Hand Emoji" width={16} height={16} />
@@ -175,7 +175,7 @@ const Header = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

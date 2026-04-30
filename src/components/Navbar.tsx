@@ -155,6 +155,7 @@ const Navbar = () => {
         <>
             <nav
                 ref={navRef}
+                id="global-navbar"
                 className="bg-white shadow-sm sticky top-0 z-50 font-sans"
                 aria-label="Main navigation"
             >
