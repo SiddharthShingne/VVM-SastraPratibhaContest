@@ -259,8 +259,14 @@ export default function BahraiinForm({ countries = [] }: Props) {
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
 
+  // useEffect(() => {
+  //   fetchDistricts("39").then((data) => {
+  //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+  //   });
+  // }, []);
+  
   useEffect(() => {
-    fetchDistricts("39").then((data) => {
+    fetchDistricts({ state_ids: [39], prant_ids: [] }).then((data) => {
       setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
     });
   }, []);

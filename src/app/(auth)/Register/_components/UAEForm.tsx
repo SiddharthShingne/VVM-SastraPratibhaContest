@@ -258,14 +258,8 @@ export default function UAEForm({ countries }: Props) {
   //   });
   // }, []);
   useEffect(() => {
-    fetchDistricts("38").then((data) => {
-      console.log("DISTRICTS DATA:", data); // ← check karo
-      setDistricts(data.map((d: any) => ({
-        value: String(d.id),
-        label: d.name
-      })));
-    }).catch((err) => {
-      console.error("DISTRICTS ERROR:", err); // ← error dekho
+    fetchDistricts({ state_ids: [38], prant_ids: [] }).then((data) => {
+      setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
     });
   }, []);
 

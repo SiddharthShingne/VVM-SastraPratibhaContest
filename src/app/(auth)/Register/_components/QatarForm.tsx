@@ -259,11 +259,18 @@ export default function QatarForm({ countries = [] }: Props) {
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
 
+  // useEffect(() => {
+  //   fetchDistricts("42").then((data) => {
+  //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+  //   });
+  // }, []);
+
   useEffect(() => {
-    fetchDistricts("42").then((data) => {
+    fetchDistricts({ state_ids: [42], prant_ids: [] }).then((data) => {
       setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
     });
   }, []);
+
 
   // Cooldown
   const [cooldown, setCooldown] = useState(0);

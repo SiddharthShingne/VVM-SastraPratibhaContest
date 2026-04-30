@@ -259,8 +259,13 @@ export default function KuwaitForm({ countries }: Props) {
     const [userData, setUserData] = useState({ email: "", username: "" });
     const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
 
+    // useEffect(() => {
+    //     fetchDistricts("40").then((data) => {
+    //         setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+    //     });
+    // }, []);
     useEffect(() => {
-        fetchDistricts("40").then((data) => {
+        fetchDistricts({ state_ids: [40], prant_ids: [] }).then((data) => {
             setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
         });
     }, []);
