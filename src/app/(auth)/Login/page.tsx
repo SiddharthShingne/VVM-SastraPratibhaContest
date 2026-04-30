@@ -32,7 +32,7 @@ export default function LoginPage() {
     const regex = /^[a-zA-Z0-9_]{3,20}$/;
 
     if (!regex.test(value)) {
-      return "Username must be 3–20 characters and can contain letters, numbers, and underscore only.";
+      return "Username must be 3–20 characters and can contain letters, numbers, symbols and underscore only.";
     }
 
     return "";

@@ -36,7 +36,7 @@ export const loginUser = async (
     body.append("username", username);
     body.append("password", password);
 
-    const response = await api.post<RawLoginApiResponse>("/login", body, {
+    const response = await api.post<RawLoginApiResponse>("/login-new", body, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

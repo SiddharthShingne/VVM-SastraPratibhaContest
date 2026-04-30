@@ -50,17 +50,16 @@ export default function RegistrationProcess() {
                   Registration & Examination Guide
                 </span>
 
-                <h2 className="text-[32px] font-extrabold text-[#17395c] mt-2">
+                <h2 className="text-[36px] font-extrabold text-[#17395c] mt-2">
                   ALL ABOUT REGISTRATION
                 </h2>
               </div>
 
               {/* INTRO */}
               <p className="text-[15px] text-[#4f6480] leading-7 mb-5">
-                <strong>Vidyarthi Vigyan Manthan</strong> is a national-level,
+                <strong>Śāstra Pratibhā Contest</strong> is a national-level,
                 app-based science talent search examination conducted online.
                 Students can take the exam from mobile, laptop, or desktop.
-                The exam is available on Windows and Android platforms only.
               </p>
 
               <div className="h-px bg-[#17395c1a] my-6"></div>
@@ -79,12 +78,12 @@ export default function RegistrationProcess() {
                 <li>
                   Students must fill Name, DoB, Class, School, etc. with OTP verification.
                 </li>
-                <li>
+                {/* <li>
                   Fee: <strong>Rs. 200/-</strong>{" "}
                   <span className="text-gray-500 text-[13px]">
                     (*Applicable in India only)
                   </span>
-                </li>
+                </li> */}
                 <li>Unique login credentials provided after registration.</li>
                 <li>Evaluation is based on school and district data.</li>
               </ul>
@@ -128,7 +127,7 @@ export default function RegistrationProcess() {
                     STEP III: Student Registration
                   </h5>
                   <ul className="list-disc pl-5 text-sm text-[#4f6480]">
-                    <li>Students register & pay Rs. 200/-</li>
+                    <li>Students register</li>
                     <li>Use referral code</li>
                     <li>Excel upload supported</li>
                     <li>Min 10 students required</li>
@@ -148,10 +147,10 @@ export default function RegistrationProcess() {
 
               </div>
 
-              <div className="h-px bg-[#17395c1a] my-6"></div>
+          
 
               {/* ================= FEE ================= */}
-              <h4 className="text-[20px] font-bold text-[#17395c] mb-3">
+              {/* <h4 className="text-[20px] font-bold text-[#17395c] mb-3">
                 FEE STRUCTURE
               </h4>
 
@@ -162,7 +161,7 @@ export default function RegistrationProcess() {
                 <li>
                   Schools can retain <strong>Rs. 30/-</strong> per student.
                 </li>
-              </ul>
+              </ul> */}
 
             </div>
           </div>

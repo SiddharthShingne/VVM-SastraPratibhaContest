@@ -75,7 +75,21 @@ const WhatIsVvm = () => {
   return (
     <div className="font-sans">
 
+ {/* ================= Breadcrumb Header ================= */}
+            <div className="bg-[#162a4a] py-12.5">
+                <div className="max-w-6xl mx-auto px-4 text-white">
+                    <h1 className="text-[27px] font-medium mb-1">
+                        What Is VVM
+                    </h1>
 
+                    <p className="text-[12px] opacity-90">
+                        <Link href="/" className="hover:underline">
+                            Home
+                        </Link>{" "}
+            {" > "} About {" > "}What Is VVM
+                    </p>
+                </div>
+            </div>
 
       {/* ================= HERO CARD ================= */}
       <div className="bg-white mt-14 px-4 sm:px-6 lg:px-8">
@@ -112,14 +126,14 @@ const WhatIsVvm = () => {
               </p>
 
               {/* Buttons */}
-              <div className="flex flex-wrap justify-center gap-3 mt-6">
+              {/* <div className="flex flex-wrap justify-center gap-3 mt-6">
                 <button className="px-5 py-2 rounded-full bg-linear-to-br from-[#17395c] to-[#244d79] text-[#f4df17] text-xs font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
                   Learn More
                 </button>
                 <button className="px-5 py-2 rounded-full bg-white border border-[#17395c]/20 text-[#17395c] text-xs font-extrabold hover:border-[#f4df17]/60 hover:bg-[#fffde8] transition">
                   Explore
                 </button>
-              </div>
+              </div> */}
 
             </div>
           </div>

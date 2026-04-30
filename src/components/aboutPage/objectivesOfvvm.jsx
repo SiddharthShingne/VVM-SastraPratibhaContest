@@ -1,6 +1,6 @@
 
 "use client";
-
+import Link from "next/link";
 import React from "react";
 import {
   Lightbulb,
@@ -58,14 +58,29 @@ const ObjectivesOfVVM = () => {
 
   return (
     <div className="font-open">
+      {/* ================= Breadcrumb Header ================= */}
+      <div className="bg-[#162a4a] py-12.5">
+        <div className="max-w-6xl mx-auto px-4 text-white">
+          <h1 className="text-[27px] font-medium mb-1">
+            Objectives of  Śāstra Pratibhā Contest
+          </h1>
 
+          <p className="text-[12px] opacity-90">
+            <Link href="/" className="hover:underline">
+              Home
+            </Link>{" "}
+            {" > "} About {" > "} Objectives of  Śāstra Pratibhā Contest
+          </p>
+        </div>
+      </div>
       {/* Section */}
       <div className="bg-gray-100 py-12">
         <div className="container mx-auto px-4 max-w-6xl">
 
           {/* Title */}
-          <h6 className="font-[Montserrat,sans-serif] text-[30px] my-9 font-extrabold uppercase tracking-[1.5px] text-[#1a1a2e] leading-[1.4] text-center">
-            OBJECTIVES OF VIDYARTHI VIGYAN MANTHAN (VVM)
+          <h6 className="font-['Montserrat',sans-serif] text-[36px] sm:text-[36px] lg:text-[42px] my-9 font-extrabold uppercase tracking-[1.5px] 
+          bg-linear-to-r from-[#1c51a7] to-[#165177] bg-clip-text text-transparent leading-[1.4] text-center drop-shadow-sm">
+            Śāstra Pratibhā Contest
           </h6>
 
           {/* Grid */}

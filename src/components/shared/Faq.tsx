@@ -32,7 +32,7 @@ export default function FAQ() {
                     question: "1. Login Issues",
                     answer: (
                         <>
-                            <p>
+                            {/* <p>
                                 Login Page:{" "}
                                 <a
                                     href="https://vvm.org.in/Login"
@@ -41,7 +41,7 @@ export default function FAQ() {
                                 >
                                     https://vvm.org.in/Login
                                 </a>
-                            </p>
+                            </p> */}
                             <p>Use your registered ID and password to log in.</p>
                         </>
                     ),
@@ -58,91 +58,95 @@ export default function FAQ() {
                         </>
                     ),
                 },
+                // {
+                //     question: "3. Invalid ID or Password Error",
+                //     answer: (
+                //         <>
+                //             <p>
+                //                 Ensure you are registered on{" "}
+                //                 <a
+                //                     href="https://vvm.org.in"
+                //                     target="_blank"
+                //                     className="text-blue-600 underline"
+                //                 >
+                //                     https://vvm.org.in
+                //                 </a>
+                //             </p>
+                //             <p>
+                //                 If registered on vvmuat, please register again on official site.
+                //             </p>
+                //             <p>
+                //                 Need help?{" "}
+                //                 <a
+                //                     href="https://vvm.org.in/contact-us"
+                //                     target="_blank"
+                //                     className="text-blue-600 underline"
+                //                 >
+                //                     Contact support
+                //                 </a>
+                //             </p>
+                //         </>
+                //     ),
+                // },
                 {
-                    question: "3. Invalid ID or Password Error",
-                    answer: (
-                        <>
-                            <p>
-                                Ensure you are registered on{" "}
-                                <a
-                                    href="https://vvm.org.in"
-                                    target="_blank"
-                                    className="text-blue-600 underline"
-                                >
-                                    https://vvm.org.in
-                                </a>
-                            </p>
-                            <p>
-                                If registered on vvmuat, please register again on official site.
-                            </p>
-                            <p>
-                                Need help?{" "}
-                                <a
-                                    href="https://vvm.org.in/contact-us"
-                                    target="_blank"
-                                    className="text-blue-600 underline"
-                                >
-                                    Contact support
-                                </a>
-                            </p>
-                        </>
-                    ),
-                },
-                {
-                    question: "4. Forgot Password",
+                    question: "3. Forgot Password",
                     answer: (
                         <p>
-                            Visit{" "}
-                            <a
+                            Visit the login page{" "}
+                            {/* <a
                                 href="https://vvm.org.in/Login"
                                 target="_blank"
                                 className="text-blue-600 underline"
                             >
                                 https://vvm.org.in/Login
-                            </a>{" "}
+                            </a>{" "} */}
                             and click “Forgot Password”.
                         </p>
                     ),
                 },
+                // {
+                //     question: "5. Important Dates",
+                //     answer: (
+                //         <p>
+                //             All important dates are available{" "}
+                //             <Link
+                //                 href="/#important-dates"
+                //                 className="text-blue-600 underline"
+                //             >
+                //                 here
+                //             </Link>
+                //             .
+                //         </p>
+                //     ),
+                // },
                 {
-                    question: "5. Important Dates",
-                    answer: (
-                        <p>
-                            All important dates are available{" "}
-                            <Link href="/#important-dates" className="text-blue-600 underline">
-                                here
-                            </Link>
-                            .
-                        </p>
-                    ),
-                },
-                {
-                    question: "6. Question Bank Availability",
+                    question: "4. Question Bank Availability",
                     answer: <p>Currently unavailable.</p>,
                 },
                 {
-                    question: "7. Study Material Availability",
+                    question: "5. Study Material Availability",
                     answer: (
                         <>
-                            <p>Available on both portals:</p>
+                            {/* <p>Available on both portals:</p> */}
                             <ul className="list-disc ml-5">
-                                <li>School Portal → Study Material → Download</li>
+                                {/* <li>School Portal → Study Material → Download</li> */}
                                 <li>Student Portal → Study Material → Download</li>
                             </ul>
                         </>
                     ),
                 },
-                {
-                    question: "8. Student Bulk Upload Issues",
-                    answer: (
-                        <>
-                            <p>Ensure your data matches the sample Excel format.</p>
-                            <p>
-                                Path: School Portal → Student → Add Student → Download Sample File
-                            </p>
-                        </>
-                    ),
-                },
+                // {
+                //     question: "8. Student Bulk Upload Issues",
+                //     answer: (
+                //         <>
+                //             <p>Ensure your data matches the sample Excel format.</p>
+                //             <p>
+                //                 Path: School Portal → Student → Add Student → Download Sample
+                //                 File
+                //             </p>
+                //         </>
+                //     ),
+                // },
                 {
                     question: "System Requirements & Support",
                     answer: (
@@ -182,7 +186,6 @@ export default function FAQ() {
 
     return (
         <div className="min-h-screen bg-[#f4f6fb]">
-
             {/* ================= Breadcrumb Header ================= */}
             <div className="bg-[#162a4a] py-12.5">
                 <div className="max-w-6xl mx-auto px-4 text-white">
@@ -191,7 +194,10 @@ export default function FAQ() {
                     </h1>
 
                     <p className="text-[12px] opacity-90">
-                        <Link href="/" className="hover:underline">Home</Link> {" > "} FAQ
+                        <Link href="/" className="hover:underline">
+                            Home
+                        </Link>{" "}
+                        {" > "} FAQ
                     </p>
                 </div>
             </div>
@@ -199,23 +205,22 @@ export default function FAQ() {
             {/* ================= MAIN SECTION ================= */}
             <div className="py-16">
                 <div className="max-w-6xl mx-auto px-4">
-
                     {/* ================= Glass Card ================= */}
-                    <div className="relative rounded-[28px] overflow-hidden 
+                    <div
+                        className="relative rounded-[28px] overflow-hidden 
         bg-white/75 border border-white/60 backdrop-blur-xl 
-        shadow-[0_22px_50px_rgba(23,57,92,0.11)]">
-
+        shadow-[0_22px_50px_rgba(23,57,92,0.11)]"
+                    >
                         {/* Top Gradient Line */}
-                        <div className="absolute top-0 left-0 w-full h-1.25 
-          bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                        <div
+                            className="absolute top-0 left-0 w-full h-1.25 
+          bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]"
+                        />
 
                         <div className="p-8">
-
                             {/* HEADER */}
                             <div className="text-center mb-8">
-                                <span className="text-[20px] font-semibold">
-                                    Support
-                                </span>
+                                <span className="text-[20px] font-semibold">Support</span>
 
                                 <h2 className="text-[35px] font-extrabold text-[#17395c] mt-2">
                                     FAQ
@@ -224,7 +229,6 @@ export default function FAQ() {
 
                             {/* ================= ACCORDION ================= */}
                             <div className="space-y-5">
-
                                 {faqGroups.map((group, gIndex) => (
                                     <div
                                         key={gIndex}
@@ -232,7 +236,6 @@ export default function FAQ() {
                 border border-[#17395c1a]
                 shadow-[0_10px_25px_rgba(23,57,92,0.06)]"
                                     >
-
                                         {/* GROUP HEADER */}
                                         <button
                                             onClick={() => toggleGroup(gIndex)}
@@ -245,12 +248,14 @@ export default function FAQ() {
                                                 {group.title}
                                             </span>
 
-                                            <span className={`w-9 h-9 flex items-center justify-center 
+                                            <span
+                                                className={`w-9 h-9 flex items-center justify-center 
                     rounded-full text-lg font-bold transition-all
                     ${openGroup === gIndex
-                                                    ? "bg-white text-[#17395c]"
-                                                    : "bg-white/20 text-white"
-                                                }`}>
+                                                        ? "bg-white text-[#17395c]"
+                                                        : "bg-white/20 text-white"
+                                                    }`}
+                                            >
                                                 {openGroup === gIndex ? "−" : "+"}
                                             </span>
                                         </button>
@@ -258,14 +263,12 @@ export default function FAQ() {
                                         {/* GROUP CONTENT */}
                                         {openGroup === gIndex && (
                                             <div className="p-5 bg-white space-y-3">
-
                                                 {group.items.map((item, iIndex) => (
                                                     <div
                                                         key={iIndex}
                                                         className="rounded-[14px] border border-[#17395c1a] 
                         overflow-hidden hover:bg-yellow-50 transition"
                                                     >
-
                                                         {/* ITEM HEADER */}
                                                         <button
                                                             onClick={() => toggleItem(iIndex)}
@@ -289,20 +292,15 @@ export default function FAQ() {
                                                         )}
                                                     </div>
                                                 ))}
-
                                             </div>
                                         )}
                                     </div>
                                 ))}
-
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     );
 }
-
