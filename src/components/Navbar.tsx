@@ -25,10 +25,10 @@ const navItems: NavItem[] = [
         subLinks: [
             { label: "What is VVM", href: "/about/what-is-vvm" },
             { label: "Śāstra Pratibhā Contest", href: "/about/sastra-pratibha-contest" },
-            { label: "Why VVM", href: "/about/why-vvm" },
+            { label: "Why Śāstra Pratibhā Contest", href: "/about/why-vvm" },
             { label: "About Organizers", href: "/about/about-organizers" },
-            { label: "Objectives Of VVM", href: "/about/objectives-of-vvm" },
-            { label: "Structure Of VVM", href: "/about/structure-of-vvm" },
+            { label: "Objectives Of Śāstra Pratibhā Contest", href: "/about/objectives-of-vvm" },
+            { label: "Structure Of Śāstra Pratibhā Contest", href: "/about/structure-of-vvm" },
         ],
     },
     {

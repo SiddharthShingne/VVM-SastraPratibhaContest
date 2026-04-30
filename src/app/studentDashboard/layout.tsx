@@ -184,16 +184,16 @@ export default function StudentDashboardLayout({
       </nav>
 
       <NavDivider />
-      <SectionTitle label="Contact" />
+      {/* <SectionTitle label="Contact" />
       <Link
         href="/studentDashboard/contact"
         className={linkClass("/studentDashboard/contact")}
       >
         <FaPhone className={iconClass("/studentDashboard/contact")} />
         Contact Information
-      </Link>
+      </Link> */}
 
-      <NavDivider />
+      {/* <NavDivider /> */}
       <SectionTitle label="Profile" />
       <nav className="space-y-1">
         <Link

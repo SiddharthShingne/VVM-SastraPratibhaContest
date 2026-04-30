@@ -398,64 +398,12 @@ export default function EditProfile() {
   }, []);
 
   useEffect(() => {
-    // const init = async () => {
-    //   const raw = localStorage.getItem("user");
-    //   if (!raw) return;
-    //   const user = JSON.parse(raw);
-    //   const d = user?.user_detail || user?.data?.user_detail;
-    //   if (!d) return;
-
-    //   reset({
-    //     name: d.name || "",
-    //     schoolName: d.school_name || "",
-    //     schoolBoard: String(d.school_board_id || ""),
-    //     studentMobile: d.student_mobile_number || "",
-    //     studentEmail: d.student_email || "",
-    //     dob: d.date_of_birth || "",
-    //     parentName: d.parent_name || "",
-    //     parentMobile: d.parent_phone_number || "",
-    //     parentEmail: d.parent_email || "",
-    //     address: d.address || "",
-    //     gender: String(d.gender || ""),
-    //     grade: String(d.class_id || ""),
-    //     howDidYouGetToKnowAboutVVM: String(d.know_about_vvm_id || ""),
-    //     state: String(d.state_id || ""),
-    //     district: String(d.district_id || ""),
-    //     city: String(d.city_id || ""),
-    //     pinCode: d.pin_code || "",
-    //     aadharNumber: d.aadhar_number || "",
-    //     examLanguage: String(d.exam_language_id || ""),
-    //   });
-
-
-    //   // Read country from localStorage
-    //   const countryId = user?.country_id ? String(user.country_id) : "";
-
-    //   const countryMap: Record<string, string> = {
-    //     "2": "UAE",
-    //     "3": "Oman",
-    //     "4": "Qatar",
-    //     "5": "Saudi Arabia",
-    //     "6": "Bahrain",
-    //     "7": "Kuwait",
-    //   };
-    //   setCountryName(countryMap[countryId] || "");
-
-    //   setParentMobileVerified(!!d.parent_mobile_verified);
-    //   setParentEmailVerified(!!d.parent_email_verified);
-
-    //   if (d.state_id) {
-    //     const districtData = await fetchDistricts(String(d.state_id));
-    //     setDistricts(districtData);
-    //   }
-    // };
-
 
     const init = async () => {
       const raw = localStorage.getItem("user");
       if (!raw) return;
       const user = JSON.parse(raw);
-      const d = user?.user_detail || user?.data?.user_detail;
+      const d = user?.user_detail || user?.user?.user_detail || user?.data?.user_detail;
       if (!d) return;
 
       reset({
@@ -473,7 +421,7 @@ export default function EditProfile() {
         grade: String(d.class_id || ""),
         howDidYouGetToKnowAboutVVM: String(d.know_about_vvm_id || ""),
         state: String(d.state_id || ""),
-        district: String(d.district_id || ""),
+        district:"",
         city: String(d.city_id || ""),
         pinCode: d.pin_code || d.pincode || "",  // ← your data uses "pincode" not "pin_code"
         aadharNumber: d.aadhar_number || "",
@@ -482,22 +430,24 @@ export default function EditProfile() {
       });
 
       // ✅ country_id is on ROOT user, not user_detail
-      const countryId = user?.country_id ? String(user.country_id) : "";
+      const countryId = String(user?.user?.country_id || user?.country_id || "");
       setCountryId(countryId);
-
-
       setCountryName(COUNTRY_MAP[countryId] || "");
 
-      setParentMobileVerified(!!d.is_parent_phone_number_verified); // ← your data uses this key
-      setParentEmailVerified(!!d.is_parent_email_verified);         // ← your data uses this key
+      setParentMobileVerified(!!user?.onboarding?.is_parent_phone_number_verified || !!d.is_parent_phone_number_verified);
+      setParentEmailVerified(!!user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
 
       if (d.state_id) {
-        const districtData = await fetchDistricts(String(d.state_id));
+        const districtData = await fetchDistricts({
+          state_ids: [Number(d.state_id)],
+          prant_ids: []
+        });
         setDistricts(districtData);
+        setValue("district", String(d.district_id || ""));
       }
     };
     init();
-  }, [reset]);
+  }, [reset, setValue]);
 
 
   /// new handle functions
@@ -566,15 +516,15 @@ export default function EditProfile() {
       // Pull stored user to get fields we don't collect in the form
       const raw = localStorage.getItem("user");
       const user = raw ? JSON.parse(raw) : {};
-      const d = user?.user_detail ?? {};
+      const d = user?.user_detail ?? user?.user?.user_detail ?? {};
       const cleanMobile = (num: string) => {
         if (!num) return "";
         return num.replace(/\D/g, "").replace(/^0+/, "");
       };
       const payload = {
         // ── Identity ────────────────────────────────────────────
-        user_id: user?.id ?? user?.user_id ?? "",
-
+        // user_id: user?.id ?? user?.user_id ?? "",
+        user_id: user?.user?.id ?? user?.id ?? "",
         // ── Personal ────────────────────────────────────────────
         fullName: data.name,
         dob: data.dob,
@@ -1013,7 +963,7 @@ export default function EditProfile() {
               className="vvm-btn vvm-btn--submit"
               onClick={handleSubmit(onSubmit)}
             >
-              Submit Profile
+              Update Profile
             </button>
           </div>
         </div>
