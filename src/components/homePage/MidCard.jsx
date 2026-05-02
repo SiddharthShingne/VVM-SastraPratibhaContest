@@ -25,7 +25,7 @@ const VVMHeroAbout = () => {
 
             <Link href="/Register" className="flex items-center gap-3 px-5 py-3 rounded-full bg-linear-to-r from-yellow-400 to-yellow-300 text-[#17395c] font-bold shadow-lg hover:scale-105 transition">
               <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">Registration</span>
-              VVM 2026-27
+              VVM SIF 2026-27
               <UserPlus size={18} />
             </Link>
 
@@ -49,7 +49,7 @@ const VVMHeroAbout = () => {
             <div className="space-y-6 text-center md:text-left">
 
               <div className="inline-block bg-white px-4 py-2 rounded-full shadow font-bold">
-                🏆 VVM 2026-27
+                🏆 VVM SIF 2026-27
               </div>
 
               <span className="block text-yellow-700 uppercase text-xs font-extrabold tracking-widest">

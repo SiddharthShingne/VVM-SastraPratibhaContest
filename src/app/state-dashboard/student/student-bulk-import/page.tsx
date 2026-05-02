@@ -1,58 +1,82 @@
-
 "use client";
 
 import { useState } from "react";
-import { FaUpload, FaDownload } from "react-icons/fa";
-import axiosInstance from "@/services/axiosInstance";
+import { FaUpload, FaDownload, FaCheckCircle, FaTimesCircle, FaFileExcel } from "react-icons/fa";
+import { importStudents } from "@/services/importantDatesService";
+
+/* ─── Dialog types ─── */
+type DialogState =
+  | { open: false }
+  | { open: true; type: "success"; message: string }
+  | { open: true; type: "error"; message: string; errorFileUrl?: string };
 
 export default function BulkUploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [dialog, setDialog] = useState<DialogState>({ open: false });
 
-  /* ---------------- FILE CHANGE ---------------- */
+  /* ── helpers ── */
+  const closeDialog = () => setDialog({ open: false });
+
+  /* ── file change ── */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setFile(e.target.files[0]);
-    }
+    if (e.target.files?.[0]) setFile(e.target.files[0]);
   };
 
-  /* ---------------- DOWNLOAD SAMPLE ---------------- */
-  const handleDownload = () => {
-    window.open("/sample-students.xlsx"); // change API if needed
-  };
+  /* ── download sample ── */
+  const handleDownload = () => window.open("/sample-students.xlsx");
 
-  /* ---------------- SUBMIT ---------------- */
+  /* ── submit ── */
   const handleSubmit = async () => {
     if (!file) {
-      alert("Please upload file");
+      setDialog({ open: true, type: "error", message: "Please select a file before submitting." });
       return;
     }
 
     try {
       setLoading(true);
+      const data = await importStudents(file);
 
-      const formData = new FormData();
-      formData.append("file", file);
-
-      await axiosInstance.post("/students/bulk-upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      setDialog({
+        open: true,
+        type: "success",
+        message:
+          data?.message ||
+          `Upload successful! ${data?.inserted ?? ""} record(s) imported.`.trim(),
       });
-
-      alert("Upload successful");
       setFile(null);
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed");
+    } catch (err: any) {
+      /* Backend may return a blob / URL for an error report Excel */
+      const errorFileUrl: string | undefined =
+        err?.response?.data?.errorFileUrl ?? err?.errorFileUrl ?? undefined;
+
+      setDialog({
+        open: true,
+        type: "error",
+        message:
+          err?.message ||
+          err?.response?.data?.message ||
+          "Upload failed. Please check the file and try again.",
+        errorFileUrl,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#eef3f9] ">
+  /* ── download error sheet ── */
+  const handleErrorSheetDownload = (url: string) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "error-report.xlsx";
+    a.click();
+  };
 
-      {/* CARD */}
-      <div className=" w-full max-w-4xl bg-white rounded-[30px] shadow-xl relative overflow-hidden p-10">
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+
+      {/* ── CARD ── */}
+      <div className="w-full max-w-4xl bg-white rounded-[30px] shadow-xl relative overflow-hidden p-10">
 
         {/* TOP GRADIENT BORDER */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
@@ -64,16 +88,15 @@ export default function BulkUploadPage() {
 
         {/* INSTRUCTIONS */}
         <div className="bg-[#f4f7fb] border border-dashed border-[#c9d6e4] rounded-xl p-5 text-[14px] text-[#4a6278] space-y-2 mb-6">
-          <p>1. Click <b>Download Sample File</b> to get Excel format.</p>
+          <p>1. Click <b>Download Sample File</b> to get the Excel format.</p>
           <p>2. Fill student data as per columns. Remove sample rows.</p>
-          <p>3. Upload the file and click Submit.</p>
+          <p>3. Upload the file and click <b>Submit</b>.</p>
           <p>4. Fix errors if any record is rejected.</p>
-          <p>5. Re-upload only rejected records.</p>
+          <p>5. Re-upload only the rejected records.</p>
         </div>
 
         {/* BUTTONS */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-          
           <button
             onClick={handleDownload}
             className="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow hover:scale-105 transition"
@@ -106,13 +129,85 @@ export default function BulkUploadPage() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="px-10 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow-lg hover:scale-105 transition"
+            className="px-10 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow-lg hover:scale-105 transition disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
           >
-            {loading ? "Submitting..." : "Submit"}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Submitting…
+              </span>
+            ) : "Submit"}
           </button>
         </div>
-
       </div>
+
+      {/* ════════════════ DIALOG ════════════════ */}
+      {dialog.open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          onClick={closeDialog}
+        >
+          <div
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top accent */}
+            <div
+              className={`h-1.5 w-full ${dialog.type === "success"
+                  ? "bg-gradient-to-r from-emerald-400 to-teal-500"
+                  : "bg-gradient-to-r from-red-400 to-rose-600"
+                }`}
+            />
+
+            <div className="p-8">
+              {/* Icon */}
+              <div className="flex justify-center mb-4">
+                {dialog.type === "success" ? (
+                  <div className="rounded-full bg-emerald-50 p-4">
+                    <FaCheckCircle className="text-4xl text-emerald-500" />
+                  </div>
+                ) : (
+                  <div className="rounded-full bg-rose-50 p-4">
+                    <FaTimesCircle className="text-4xl text-rose-500" />
+                  </div>
+                )}
+              </div>
+
+              {/* Heading */}
+              <h3 className="text-xl font-extrabold text-center text-[#243f5c] mb-2">
+                {dialog.type === "success" ? "Upload Successful" : "Upload Failed"}
+              </h3>
+
+              {/* Message */}
+              <p className="text-sm text-center text-[#4a6278] leading-relaxed mb-6">
+                {dialog.message}
+              </p>
+
+              {/* Error sheet download */}
+              {dialog.type === "error" && dialog.errorFileUrl && (
+                <button
+                  onClick={() => handleErrorSheetDownload((dialog as any).errorFileUrl)}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 mb-4 rounded-xl text-white font-semibold bg-gradient-to-r from-orange-500 to-amber-500 shadow hover:scale-105 transition text-sm"
+                >
+                  <FaFileExcel className="text-lg" />
+                  Download Error Report (.xlsx)
+                </button>
+              )}
+
+              {/* Close */}
+              <button
+                onClick={closeDialog}
+                className="w-full px-5 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow hover:scale-105 transition text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

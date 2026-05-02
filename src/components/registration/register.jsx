@@ -82,7 +82,7 @@ export default function RegistrationSection() {
                 </h4>
 
                 <p className="text-[#66788a] text-sm leading-7 mb-5">
-                  Register as an individual student and begin your journey with Vidyarthi Vigyan Manthan.
+                  Register as an individual student and begin your journey with Śāstra Pratibhā Contest(VVM).
                 </p>
 
                 <Link

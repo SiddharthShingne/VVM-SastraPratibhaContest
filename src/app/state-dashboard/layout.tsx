@@ -23,8 +23,6 @@ function extractNameFromStorage(): string {
     const raw = localStorage.getItem("user");
     if (!raw) return "State Coordinator";
     const parsed = JSON.parse(raw);
-    // handles { token, user: { user_detail: { name } } }  ← current API shape
-    // also handles { user_detail: { name } }              ← flat shape fallback
     return (
       parsed?.user?.user_detail?.name ||
       parsed?.user_detail?.name ||
@@ -83,6 +81,9 @@ export default function StateDashboardLayout({
   const [studentOpen, setStudentOpen] = useState(false);
   const [schoolOpen, setSchoolOpen] = useState(false);
 
+  // ── ADDED: dynamic navbar height ──
+  const [navbarHeight, setNavbarHeight] = useState(64);
+
   const isSchoolActive = pathname.startsWith("/state-dashboard/school");
   const isStudentActive = pathname.startsWith("/state-dashboard/student");
 
@@ -117,13 +118,36 @@ export default function StateDashboardLayout({
     };
   }, [isMobile, sidebarOpen]);
 
-  // ESC key close
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSidebarOpen(false);
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
+  // ── ADDED: measure useEffect (from student dashboard) ──
+  useEffect(() => {
+    const measure = () => {
+      const navbar = document.getElementById("global-navbar");
+      const navBottom = navbar?.getBoundingClientRect().bottom ?? 64;
+      const finalHeight = Math.max(0, navBottom);
+      setNavbarHeight(finalHeight);
+    };
+
+    measure();
+    const t1 = setTimeout(measure, 100);
+    const t2 = setTimeout(measure, 500);
+
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, { passive: true });
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -298,7 +322,6 @@ export default function StateDashboardLayout({
           View Profile
         </Link>
 
-        {/* Logout — opens confirmation dialog (same as student sidebar) */}
         <button
           onClick={() => setShowLogoutDialog(true)}
           className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"
@@ -364,8 +387,11 @@ export default function StateDashboardLayout({
           }}
         />
 
-        {/* MOBILE TOP HEADER */}
-        <header className="md:hidden fixed top-38.5 left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
+        {/* MOBILE TOP HEADER — now uses navbarHeight */}
+        <header
+          className="md:hidden fixed left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm"
+          style={{ top: navbarHeight }}
+        >
           <div
             className="absolute top-0 left-0 w-full h-0.5"
             style={{
@@ -388,23 +414,25 @@ export default function StateDashboardLayout({
           </div>
         </header>
 
-        {/* OVERLAY */}
+        {/* OVERLAY — now uses navbarHeight */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed left-0 right-0 bottom-0 top-52.5 bg-black/40 z-40"
+            className="fixed left-0 right-0 bottom-0 bg-black/40 z-40"
+            style={{ top: navbarHeight + 56 }}
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
-        {/* MOBILE SIDEBAR */}
+        {/* MOBILE SIDEBAR — now uses navbarHeight */}
         <aside
           className={[
             "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
-            "top-52.5 h-[calc(100vh-210px)]",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
           style={{
+            top: navbarHeight + 56,
+            height: `calc(100vh - ${navbarHeight + 56}px)`,
             background: "#ffffff",
             boxShadow:
               "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
@@ -436,14 +464,22 @@ export default function StateDashboardLayout({
           <SidebarContent />
         </aside>
 
-        {/* DESKTOP LAYOUT */}
-        <div className="relative container mx-auto px-4 pt-55 md:pt-6 pb-10">
+        {/* DESKTOP LAYOUT — now uses navbarHeight for content padding */}
+        <div
+          className="relative container mx-auto px-4 md:pt-6 pb-10"
+          style={{ paddingTop: isMobile ? `${navbarHeight + 56}px` : undefined }}
+        >
           <div className="flex gap-5 items-start">
 
             {/* DESKTOP SIDEBAR */}
             <aside
-              className="sidebar-animate hidden md:block sticky top-6 w-72 xl:w-75 shrink-0 overflow-y-auto rounded-3xl"
+              className="sidebar-animate hidden md:block w-72 xl:w-75 shrink-0 rounded-3xl"
               style={{
+                position: "sticky",
+                top: `${navbarHeight + 16}px`,
+                maxHeight: `calc(100vh - ${navbarHeight + 32}px)`,
+                overflowY: "auto",
+                alignSelf: "flex-start",
                 background: "#ffffff",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
@@ -468,10 +504,8 @@ export default function StateDashboardLayout({
               className="content-animate flex-1 min-w-0 h-fit min-h-[60vh] rounded-3xl"
               style={{
                 background: "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
-              
-             
                 border: "1px solid rgba(23,57,92,0.09)",
-                      }}
+              }}
             >
               <div className="p-8">{children}</div>
             </main>
@@ -480,7 +514,7 @@ export default function StateDashboardLayout({
         </div>
       </div>
 
-      {/* ── LOGOUT CONFIRMATION DIALOG (matches student sidebar) ── */}
+      {/* ── LOGOUT CONFIRMATION DIALOG ── */}
       {showLogoutDialog && (
         <div className="fixed inset-0 z-200 flex items-center justify-center">
           {/* Backdrop */}

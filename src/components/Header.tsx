@@ -48,7 +48,7 @@ const Header = () => {
         <div className="flex items-center gap-1 max-w-full lg:flex">
           <Image src="/hand-emoji.svg" alt="Hand Emoji" width={16} height={16} />
           <b className="text-sm">
-            Welcome to Vidyarthi Vigyan Manthan – Unlocking the Power of Education!
+            Welcome to Śāstra Pratibhā Contest – Unlocking the Power of Education!
           </b>
         </div>
 

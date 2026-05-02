@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Link from "next/link";
@@ -84,7 +85,7 @@ export default function TermsConditions() {
                                 </Section>
 
                                 <Section title="5. Intellectual Property">
-                                    All content belongs to Vidyarthi Vigyan Manthan. Users are granted limited, non-transferable rights strictly for exam purposes.
+                                    All content belongs to Śāstra Pratibhā Contest(VVM). Users are granted limited, non-transferable rights strictly for exam purposes.
                                 </Section>
 
                                 <Section title="6. Disclaimer of Liability">
