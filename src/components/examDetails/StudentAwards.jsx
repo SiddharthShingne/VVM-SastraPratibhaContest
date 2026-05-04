@@ -84,7 +84,7 @@ export default function StudentAwards() {
                       </td> */}
                     </tr>
 
-                    <tr className="border-b hover:bg-yellow-50">
+                    {/* <tr className="border-b hover:bg-yellow-50">
                       <td className="p-4 font-extrabold text-[#17395c] text-center">
                         LEVEL – II
                       </td>
@@ -93,7 +93,7 @@ export default function StudentAwards() {
                       </td>
                       <td className="p-4">
                         Top 3 rankers per class (18 students per school). Minimum 10 students required per class.
-                      </td>
+                      </td> */}
                       {/* <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
                           Merit Certificate
@@ -101,7 +101,7 @@ export default function StudentAwards() {
                         <br />
                         Available online only.
                       </td> */}
-                    </tr>
+                    {/* </tr> */}
 
                     <tr className="border-b hover:bg-yellow-50">
                       <td className="p-4 font-extrabold text-[#17395c] text-center">

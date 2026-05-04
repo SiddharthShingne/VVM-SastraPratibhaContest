@@ -113,18 +113,39 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
     };
   }, [isMobile, sidebarOpen]);
 
+  // const handleLogout = async () => {
+  //   try {
+  //     await logoutUser();
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     localStorage.clear();
+  //     sessionStorage.clear();
+  //     delete axiosInstance.defaults.headers.common["Authorization"];
+  //     router.replace("/Login");
+  //   }
+  // };
+
   const handleLogout = async () => {
-    try {
-      await logoutUser();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      localStorage.clear();
-      sessionStorage.clear();
-      delete axiosInstance.defaults.headers.common["Authorization"];
-      router.replace("/Login");
-    }
-  };
+  try {
+    await logoutUser();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    delete axiosInstance.defaults.headers.common["Authorization"];
+
+    setToken(null); // ✅ layout ko turant update karega
+
+    window.dispatchEvent(new Event("auth-change")); // ✅ header sync
+
+    router.replace("/Login");
+  }
+};
+
+  
 
   const isActive = (path: string) => pathname === path;
 
@@ -270,7 +291,7 @@ const isStudentActive = pathname.startsWith("/stateDashboard/students");
       <NavDivider />
 
       <SectionTitle label="Security" />
-      <Link href="/state-dashboard/state-update-password" className={linkClass("/state-dashboard/state-update-  password")}>
+      <Link href="/state-dashboard/state-update-password" className={linkClass("/state-dashboard/state-update-password")}>
         <FaKey className={iconClass("/state-dashboard/state-update-password")} />
          Update Password 
       </Link>
