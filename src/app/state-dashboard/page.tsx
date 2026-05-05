@@ -9,6 +9,7 @@ import {
   fetchStateSummary,
 } from "@/services/importantDatesService";
 import { fetchDistricts } from "@/services/authService";
+import { exportStateSummary } from "@/services/importantDatesService";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Assignment {
@@ -93,7 +94,7 @@ function ExportBtn({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 active:scale-95 text-white text-xs font-semibold rounded-lg transition-all duration-150 shadow-sm whitespace-nowrap"
+      className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 active:scale-95 text-white text-xs font-semibold rounded-lg transition-all duration-150 shadow-sm whitespace-nowrap"
     >
       Export
     </button>
@@ -182,7 +183,7 @@ export default function StateDashboardPage() {
       .finally(() => setLoading(false));
   }, [stateId, selectedFilter]);
 
-  // ── FIXED: Close dropdown on outside click — checks containment ──────────
+  // ── Close dropdown on outside click ──────────────────────────────────────
   useEffect(() => {
     if (!dropdownOpen) return;
     const handler = (e: MouseEvent) => {
@@ -213,26 +214,15 @@ export default function StateDashboardPage() {
       options.push({
         label: p.name,
         isPrantHeader: true,
-        value: {
-          type: "prant",
-          prantId: p.id,
-          districtId: null,
-          label: p.name,
-        },
+        value: { type: "prant", prantId: p.id, districtId: null, label: p.name },
       });
 
-      const prantDistricts = districts.filter((d) => d.prant_id === p.id);
-      prantDistricts.forEach((d) => {
+      districts.filter((d) => d.prant_id === p.id).forEach((d) => {
         options.push({
           label: d.name,
           subLabel: p.name,
           isPrantHeader: false,
-          value: {
-            type: "district",
-            prantId: p.id,
-            districtId: d.id,
-            label: d.name,
-          },
+          value: { type: "district", prantId: p.id, districtId: d.id, label: d.name },
         });
       });
     });
@@ -263,31 +253,50 @@ export default function StateDashboardPage() {
     return { schools, individual, total, paid, lvl1Attempted, lvl1Submitted };
   }, [stateSummaryRows]);
 
-  const handleExport = (type: "submitted" | "level2") => {
-    console.log("Export", type);
+  const handleExport = async () => {
+    if (!stateId) return;
+    try {
+      const payload = {
+        search: "",
+        filters: {
+          state_id: [stateId],
+          prant_id: selectedFilter?.prantId ? [selectedFilter.prantId] : [],
+          district_id: selectedFilter?.districtId ? [selectedFilter.districtId] : [],
+        },
+      };
+      const blob = await exportStateSummary(payload);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "state-summary.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.error(err);
+      alert("Export failed");
+    }
   };
 
+  // ── Stat cards — NO left accent border, rounded-square icon ──────────────
   const stats = [
     {
       label: "Student Count",
       value: (summary?.total_student ?? 0).toLocaleString(),
       icon: <FaUserGraduate size={20} />,
       iconBg: "bg-emerald-50 text-emerald-500",
-      accent: "border-l-emerald-400",
     },
     {
       label: "School Count",
       value: (summary?.total_school ?? 0).toLocaleString(),
       icon: <FaSchool size={20} />,
       iconBg: "bg-amber-50 text-amber-500",
-      accent: "border-l-amber-400",
     },
     {
       label: "Upgraded Students",
       value: summary?.upgrade_summary ?? "0 (Upgraded) / 0 (Non-Upgraded)",
       icon: <FaArrowUp size={20} />,
       iconBg: "bg-sky-50 text-sky-500",
-      accent: "border-l-sky-400",
     },
   ];
 
@@ -307,9 +316,9 @@ export default function StateDashboardPage() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        .anim-down  { animation: fadeSlideDown 0.35s ease both; }
-        .anim-up    { animation: fadeSlideUp 0.4s ease both; }
-        .anim-fade  { animation: fadeIn 0.25s ease both; }
+        .anim-down { animation: fadeSlideDown 0.35s ease both; }
+        .anim-up   { animation: fadeSlideUp 0.4s ease both; }
+        .anim-fade { animation: fadeIn 0.25s ease both; }
 
         @media (max-width: 640px) {
           .resp-table thead { display: none; }
@@ -361,15 +370,42 @@ export default function StateDashboardPage() {
           </p>
         </div>
 
-        {/* ── Single Combined Region/District Dropdown ── */}
-        <div className="mb-5 anim-down relative z-50" style={{ animationDelay: "60ms" }}>
-          {/* CHANGE 1: added id="region-dropdown-wrapper" */}
+        {/* ── Stat Cards — no left accent border ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-3
+                         flex items-center gap-3 sm:gap-4
+                         hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              {/* Rounded-square icon (borderRadius 10px, NOT circle) */}
+              <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
+                {s.icon}
+              </div>
+              <div className="min-w-0">
+                <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-0.5 truncate">
+                  {s.label}
+                </p>
+                <p className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">
+                  {s.value}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Search + Export row — OUTSIDE the table card, above it ── */}
+        <div className="mb-4 flex items-center justify-between gap-3 relative z-50 anim-down"
+          style={{ animationDelay: "60ms" }}>
+
+          {/* Region / District dropdown */}
           <div
             id="region-dropdown-wrapper"
             className="relative w-full sm:w-72"
             onMouseDown={(e) => e.stopPropagation()}
           >
-            {/* Trigger input */}
             <div
               className={`flex items-center gap-2 w-full px-4 py-2.5 rounded-xl border bg-white text-sm
                           cursor-pointer transition-all duration-150 shadow-sm
@@ -384,24 +420,15 @@ export default function StateDashboardPage() {
               </svg>
               <input
                 type="text"
-                placeholder={selectedFilter ? selectedFilter.label : "Search Region / District…"}
+                placeholder={selectedFilter ? selectedFilter.label : "Select Region"}
                 value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setDropdownOpen(true);
-                }}
+                onChange={(e) => { setSearch(e.target.value); setDropdownOpen(true); }}
                 onClick={(e) => { e.stopPropagation(); setDropdownOpen(true); }}
                 className="flex-1 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 text-sm min-w-0"
               />
-              {/* Clear */}
-              {(selectedFilter || search) && (
+              {(selectedFilter || search) ? (
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedFilter(null);
-                    setSearch("");
-                    setPage(1);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setSelectedFilter(null); setSearch(""); setPage(1); }}
                   className="text-slate-300 hover:text-slate-500 transition-colors shrink-0"
                   aria-label="Clear filter"
                 >
@@ -409,10 +436,11 @@ export default function StateDashboardPage() {
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
                 </button>
-              )}
-              {/* Chevron */}
-              {!selectedFilter && !search && (
-                <svg className={`text-slate-400 shrink-0 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              ) : (
+                <svg
+                  className={`text-slate-400 shrink-0 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                  width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                >
                   <path d="m6 9 6 6 6-6" />
                 </svg>
               )}
@@ -420,26 +448,16 @@ export default function StateDashboardPage() {
 
             {/* Dropdown panel */}
             {dropdownOpen && (
-              <div className="absolute z-9999 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden anim-fade">
-                {/* "All" option */}
+              <div className="absolute z-[9999] mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden anim-fade">
                 <button
                   className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-50 transition-colors border-b border-slate-100 font-medium"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedFilter(null);
-                    setSearch("");
-                    setDropdownOpen(false);
-                    setPage(1);
-                  }}
+                  onClick={(e) => { e.stopPropagation(); setSelectedFilter(null); setSearch(""); setDropdownOpen(false); setPage(1); }}
                 >
                   All Regions
                 </button>
-
                 <div className="max-h-60 overflow-y-auto">
                   {filteredOptions.length === 0 ? (
-                    <div className="px-4 py-4 text-sm text-slate-400 text-center">
-                      No results found
-                    </div>
+                    <div className="px-4 py-4 text-sm text-slate-400 text-center">No results found</div>
                   ) : (
                     filteredOptions.map((opt, i) => (
                       <button
@@ -452,16 +470,14 @@ export default function StateDashboardPage() {
                           ${selectedFilter?.label === opt.value.label ? "bg-blue-50 text-blue-600" : ""}
                         `}
                         onClick={(e) => {
-                          e.stopPropagation(); // CHANGE 2: stop propagation so mousedown handler doesn't fire
+                          e.stopPropagation();
                           setSelectedFilter(opt.value);
                           setSearch("");
                           setDropdownOpen(false);
                           setPage(1);
                         }}
                       >
-                        {!opt.isPrantHeader && (
-                          <span className="text-slate-300 mr-1.5">└</span>
-                        )}
+                        {!opt.isPrantHeader && <span className="text-slate-300 mr-1.5">└</span>}
                         {opt.label}
                       </button>
                     ))
@@ -473,14 +489,11 @@ export default function StateDashboardPage() {
 
           {/* Active filter badge */}
           {selectedFilter && (
-            <div className="mt-2 flex items-center gap-2 anim-fade">
+            <div className="flex items-center gap-2 anim-fade">
               <span className="text-xs text-slate-400">Showing:</span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium">
                 {selectedFilter.type === "district" ? "District" : "Region"}: {selectedFilter.label}
-                <button
-                  onClick={() => { setSelectedFilter(null); setPage(1); }}
-                  className="hover:text-blue-800 transition-colors"
-                >
+                <button onClick={() => { setSelectedFilter(null); setPage(1); }} className="hover:text-blue-800 transition-colors">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
@@ -488,55 +501,32 @@ export default function StateDashboardPage() {
               </span>
             </div>
           )}
-        </div>
 
-        {/* ── Stat Cards ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
-          {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5
-                          flex items-center gap-3 sm:gap-4 border-l-4 ${s.accent}
-                          hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up`}
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
-                {s.icon}
-              </div>
-              <div className="min-w-0">
-                <p className="text-slate-400 text-[11px] sm:text-xs font-medium mb-0.5 truncate">
-                  {s.label}
-                </p>
-                <p className="text-blue-600 font-bold text-sm sm:text-base leading-tight break-words">
-                  {s.value}
-                </p>
-              </div>
-            </div>
-          ))}
+          {/* Export button — blue, top right, outside table card */}
+          <button
+            onClick={handleExport}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600
+                       text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow-md
+                       transition-all duration-200 active:scale-95 whitespace-nowrap ml-auto"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export
+          </button>
         </div>
 
         {/* ── Table Card ── */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden anim-up" style={{ animationDelay: "200ms" }}>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden anim-up"
+          style={{ animationDelay: "200ms" }}>
 
-          {/* Toolbar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-5 py-4 border-b border-slate-100">
+          {/* Table card header — title only, no export button here */}
+          <div className="px-4 sm:px-5 py-4 border-b border-slate-100">
             <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
               Student &amp; School Details
             </h2>
-            <button
-              onClick={() => handleExport("submitted")}
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2
-                         bg-blue-500 hover:bg-blue-600 active:scale-95
-                         text-white text-sm font-semibold rounded-xl shadow-sm
-                         transition-all duration-150 w-full sm:w-auto"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Export
-            </button>
           </div>
 
           {/* Table */}
@@ -547,14 +537,14 @@ export default function StateDashboardPage() {
                   {[
                     ["SR. NO.", "sr"],
                     ["STATE NAME", "state"],
-                    ["SCHOOLS", "schools"],
+                    ["SCHOOLS REGISTERED", "schools"],
                     ["INDIVIDUAL STUDENTS", "ind"],
                     ["TOTAL STUDENTS", "total"],
-                    ["TOTAL PAID", "paid"],
-                    ["LVL-1 ATTEMPTED", "att"],
-                    ["LVL-1 SUBMITTED", "sub"],
-                    ["EXPORT SUBMITTED", "exp1"],
-                    ["EXPORT LEVEL 2", "exp2"],
+                    ["TOTAL PAID STUDENTS", "paid"],
+                    ["LEVEL-1 ATTEMPTED STUDENTS", "att"],
+                    ["LEVEL-1 SUBMITTED STUDENTS", "sub"],
+                    ["EXPORT SUBMITTED STUDENTS", "exp1"],
+                    ["EXPORT LEVEL 2 SUBMITTED STUDENTS", "exp2"],
                   ].map(([h]) => (
                     <th
                       key={h}
@@ -600,7 +590,7 @@ export default function StateDashboardPage() {
                       <td className="px-3 sm:px-4 py-3 text-slate-700 font-semibold whitespace-nowrap" data-label="STATE NAME">
                         {row.state_name}
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS">
+                      <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS REGISTERED">
                         <Badge value={row.total_school ?? 0} />
                       </td>
                       <td className="px-3 sm:px-4 py-3" data-label="INDIVIDUAL STUDENTS">
@@ -609,20 +599,22 @@ export default function StateDashboardPage() {
                       <td className="px-3 sm:px-4 py-3" data-label="TOTAL STUDENTS">
                         <Badge value={row.total_student ?? 0} />
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID">
+                      <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID STUDENTS">
                         <Badge value={row.total_paid_student ?? 0} />
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="LVL-1 ATTEMPTED">
+                      <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 ATTEMPTED STUDENTS">
                         <Badge value={row.total_attempted_level1_students ?? 0} />
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="LVL-1 SUBMITTED">
+                      <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 SUBMITTED STUDENTS">
                         <Badge value={row.total_submitted_level1_students ?? 0} />
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT SUBMITTED">
-                        <ExportBtn onClick={() => handleExport("submitted")} />
+                      {/* ✅ Export Submitted — uncommented */}
+                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT SUBMITTED STUDENTS">
+                        <ExportBtn onClick={handleExport} />
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT LEVEL 2">
-                        <ExportBtn onClick={() => handleExport("level2")} />
+                      {/* ✅ Export Level 2 — uncommented */}
+                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT LEVEL 2 SUBMITTED STUDENTS">
+                        <ExportBtn onClick={handleExport} />
                       </td>
                     </tr>
                   ))

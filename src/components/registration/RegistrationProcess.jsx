@@ -56,11 +56,11 @@ export default function RegistrationProcess() {
               </div>
 
               {/* INTRO */}
-              <p className="text-[15px] text-[#4f6480] leading-7 mb-5">
+              {/* <p className="text-[15px] text-[#4f6480] leading-7 mb-5">
                 <strong>Śāstra Pratibhā Contest</strong> is a national-level,
                 app-based science talent search examination conducted online.
                 Students can take the exam from mobile, laptop, or desktop.
-              </p>
+              </p> */}
 
               <div className="h-px bg-[#17395c1a] my-6"></div>
 

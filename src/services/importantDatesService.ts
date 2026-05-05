@@ -223,3 +223,23 @@ export const importStudents = async (file: File) => {
     }
   }
 };
+
+// Export State Summary API call
+export const exportStateSummary = async (payload: {
+  search: string;
+  filters: {
+    state_id: number[];
+    prant_id: number[];
+    district_id: number[];
+  };
+}) => {
+  try {
+    const response = await api.post("/export/states-summary", payload, {
+      responseType: "blob", // ✅ IMPORTANT for file download
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Export failed");
+  }
+};

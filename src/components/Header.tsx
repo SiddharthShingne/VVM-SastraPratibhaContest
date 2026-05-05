@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { FaSignOutAlt } from "react-icons/fa";
 const Header = () => {
   const router = useRouter();
-
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -50,15 +51,19 @@ const Header = () => {
 
 
 
-
   const handleLogout = () => {
     localStorage.removeItem("token");
 
-      setIsLoggedIn(false); // ✅ YAHI ADD KARNA HAI
-    window.dispatchEvent(new Event("auth-change"));
-    router.push("/Login");
-  };
+    setIsLoggedIn(false);
+    setShowLogoutDialog(false); // close confirm dialog
+    setLoggedOut(true); // show success dialog
 
+    window.dispatchEvent(new Event("auth-change"));
+
+    setTimeout(() => {
+      router.push("/Login");
+    }, 2000); // match your progress bar animation
+  };
   // ✅ hydration safe
   if (!mounted) return null;
 
@@ -83,11 +88,18 @@ const Header = () => {
           </button>
 
           <button
-            onClick={() =>
-              isLoggedIn
-                ? router.push("/studentDashboard")
-                : router.push("/registration/individual-student-registration")
-            }
+            onClick={() => {
+              if (!isLoggedIn) {
+                router.push("/registration/individual-student-registration");
+                return;
+              }
+              const role = localStorage.getItem("role");
+              if (role === "state-coordinator") {
+                router.push("/state-dashboard");
+              } else {
+                router.push("/studentDashboard");
+              }
+            }}
             className="bg-[#fff8dc] text-[#17395c] text-xs font-semibold px-4 py-2 rounded-full border border-[#e6d98c] shadow-sm hover:bg-[#f5e6a0] hover:shadow-md hover:-translate-y-px active:scale-95 transition-all duration-300"
           >
             {isLoggedIn ? "User Profile" : "Register"}

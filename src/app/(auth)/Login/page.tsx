@@ -84,18 +84,13 @@ export default function LoginPage() {
 
       // ✅ Prefer role from API response, fallback to username prefix check
       localStorage.setItem(
-        "username",
-        data.username || trimmedUsername
-      );
-      localStorage.setItem(
         "role",
-        data.role_name ||
+        data.role_name?.toLowerCase() ||
         (trimmedUsername.toUpperCase().startsWith("STC") ||
           trimmedUsername.toUpperCase().startsWith("ZOC")
-          ? "STATE"
-          : "STUDENT")
+          ? "state-coordinator"
+          : "student")
       );
-
       window.dispatchEvent(new Event("auth-change"));
 
       setDialog({
@@ -104,12 +99,14 @@ export default function LoginPage() {
       });
 
       setTimeout(() => {
-        const usernameUpper = trimmedUsername.toUpperCase();
+        const role =
+          data.role_name?.toLowerCase() ||
+          (trimmedUsername.toUpperCase().startsWith("STC") ||
+            trimmedUsername.toUpperCase().startsWith("ZOC")
+            ? "state-coordinator"
+            : "student");
 
-        if (
-          usernameUpper.startsWith("STC") ||
-          usernameUpper.startsWith("ZOC")
-        ) {
+        if (role === "state-coordinator") {
           router.replace("/state-dashboard");
         } else {
           router.replace("/studentDashboard");
