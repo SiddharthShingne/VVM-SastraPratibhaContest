@@ -228,14 +228,16 @@ export const importStudents = async (file: File) => {
 export const exportStateSummary = async (payload: {
   search: string;
   filters: {
-    state_id: number[];
-    prant_id: number[];
-    district_id: number[];
+    state_id?: number[]; // ✅ Optional
+    prant_id?: number[]; // ✅ Optional
+    district_id?: number[]; // ✅ Optional
+    start_date?: string; // ✅ Optional
+    end_date?: string; // ✅ Optional
   };
 }) => {
   try {
     const response = await api.post("/export/states-summary", payload, {
-      responseType: "blob", // ✅ IMPORTANT for file download
+      responseType: "blob",
     });
 
     return response.data;
