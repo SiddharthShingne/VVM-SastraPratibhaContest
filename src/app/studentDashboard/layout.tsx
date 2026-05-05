@@ -11,17 +11,18 @@ import {
   FaKey,
   FaSignOutAlt,
   FaTimes,
+  FaClock,
 } from "react-icons/fa";
 
 import { logoutUser } from "@/services/authService";
 import axiosInstance from "@/services/axiosInstance";
-
+import { useSessionTimeout } from "@/components/shared/useSessionTimeout";
 function extractNameFromStorage(): string {
   try {
     const raw = localStorage.getItem("user");
     if (!raw) return "Student";
     const user = JSON.parse(raw);
-    return user?.user_detail?.name || "Student";
+    return user?.user?.user_detail?.name || user?.user_detail?.name || "Student";
   } catch (err) {
     console.error("extractNameFromStorage error:", err);
     return "Student";
@@ -59,9 +60,11 @@ export default function StudentDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const { showDialog, confirmLogout } = useSessionTimeout();
   const router = useRouter();
   const pathname = usePathname();
-
+  const [navbarHeight, setNavbarHeight] = useState(64);
   const [studentName, setStudentName] = useState(() => {
     if (typeof window !== "undefined") return extractNameFromStorage();
     return "Student";
@@ -112,6 +115,62 @@ export default function StudentDashboardLayout({
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+  
+  // In your dashboard layout, change the measure useEffect to this:
+  // useEffect(() => {
+  //   const measure = () => {
+  //     const navbar = document.getElementById("global-navbar");
+  //     const announcement = document.getElementById("announcement-bar");
+  //     const navH = navbar?.getBoundingClientRect().height ?? 64;
+  //     const annH = announcement?.getBoundingClientRect().height ?? 0;
+  //     setNavbarHeight(navH + annH);
+  //   };
+
+  //   measure();
+
+  //   // Run multiple times to catch late renders
+  //   const t1 = setTimeout(measure, 100);
+  //   const t2 = setTimeout(measure, 500);
+  //   const t3 = setTimeout(measure, 1000);
+
+  //   window.addEventListener("resize", measure);
+  //   return () => {
+  //     clearTimeout(t1);
+  //     clearTimeout(t2);
+  //     clearTimeout(t3);
+  //     window.removeEventListener("resize", measure);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const measure = () => {
+      const navbar = document.getElementById("global-navbar");
+      const announcement = document.getElementById("announcement-bar");
+
+      // getBoundingClientRect().bottom — scroll ke saath change hoti hai
+      // isliye dono ka current bottom lo (jo abhi viewport mein dikhta hai)
+      const navBottom = navbar?.getBoundingClientRect().bottom ?? 64;
+
+      // Agar negative ya zero ho (scroll ho gaya) toh 0 lo
+      const finalHeight = Math.max(0, navBottom);
+
+      setNavbarHeight(finalHeight);
+    };
+
+    measure();
+    const t1 = setTimeout(measure, 100);
+    const t2 = setTimeout(measure, 500);
+
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, { passive: true }); // ← YE ADD KAR
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure); // ← YE BHI
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -184,16 +243,16 @@ export default function StudentDashboardLayout({
       </nav>
 
       <NavDivider />
-      <SectionTitle label="Contact" />
+      {/* <SectionTitle label="Contact" />
       <Link
         href="/studentDashboard/contact"
         className={linkClass("/studentDashboard/contact")}
       >
         <FaPhone className={iconClass("/studentDashboard/contact")} />
         Contact Information
-      </Link>
+      </Link> */}
 
-      <NavDivider />
+      {/* <NavDivider /> */}
       <SectionTitle label="Profile" />
       <nav className="space-y-1">
         <Link
@@ -261,6 +320,44 @@ export default function StudentDashboardLayout({
         }
       `}</style>
 
+      {showDialog && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div
+            className="relative w-[90vw] max-w-sm mx-auto rounded-2xl p-6 shadow-2xl bg-white"
+            style={{ border: "1px solid rgba(23,57,92,0.12)" }}
+          >
+            {/* Top accent */}
+            <div
+              className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
+              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+            />
+
+            {/* Icon */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              <FaClock />
+            </div>
+
+            <h3 className="text-center text-[17px] font-extrabold text-[#17395c] mb-1">
+              Session Expired
+            </h3>
+            <p className="text-center text-[13px] text-[#7a90a8] mb-6 leading-relaxed">
+              You have been inactive for 1 hour and have been automatically logged out for security.
+            </p>
+
+            <button
+              onClick={confirmLogout}
+              className="w-full py-2.5 rounded-xl text-white text-[13.5px] font-semibold shadow-md transition-all hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              OK, Go to Login
+            </button>
+          </div>
+        </div>
+      )}
+      
       {/* ── Page shell ── */}
       <div className="min-h-screen ">
       <div
@@ -285,8 +382,10 @@ export default function StudentDashboardLayout({
         {/* ─────────────────────────────────────────────────
             MOBILE TOP HEADER — structured navbar
         ───────────────────────────────────────────────── */}
-        <header className="md:hidden fixed top-[154px] left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm">
-          {/* accent bar */}
+        <header
+         
+          className="md:hidden fixed left-0 w-full z-[60] bg-white border-b border-[#e6edf5] shadow-sm"
+          style={{ top: navbarHeight }}>
           <div
             className="absolute top-0 left-0 w-full h-0.5"
             style={{
@@ -319,7 +418,8 @@ export default function StudentDashboardLayout({
         ───────────────────────────────────────────────── */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed left-0 right-0 bottom-0 top-[210px] bg-black/40 z-40"
+            style={{ top: navbarHeight + 56 }}
+            className="fixed left-0 right-0 bottom-0 bg-black/40 z-40"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -330,14 +430,14 @@ export default function StudentDashboardLayout({
         <aside
           className={[
             "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
-            "top-[210px] h-[calc(100vh-210px)]",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
           style={{
+            top: navbarHeight + 56,  // navbar + dashboard header
+            height: `calc(100vh - ${navbarHeight + 56}px)`, 
             background: "#ffffff",
-            boxShadow:
-              "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+            boxShadow: "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
           }}
         >
           {/* accent bar */}
@@ -370,20 +470,27 @@ export default function StudentDashboardLayout({
             DESKTOP LAYOUT
             pt-16 on mobile clears fixed header; md:pt-6 = desktop
         ───────────────────────────────────────────────── */}
-        <div className="relative container mx-auto px-4 pt-[220px] md:pt-6 pb-10">
-          <div className="flex gap-5 items-start">
+        <div
+          className="relative w-full max-w-7xl mx-auto px-4 md:pt-6 pb-10"
+          style={{ paddingTop: isMobile ? `${navbarHeight + 56}px` : undefined }}        >
+          
+          <div className="flex gap-5 items-start ">
 
             {/* ── DESKTOP SIDEBAR — hidden on mobile, sticky in flex ── */}
             <aside
-              className="sidebar-animate hidden md:block sticky top-6 w-72 xl:w-75 shrink-0 overflow-y-auto rounded-3xl"
+              className="hidden md:block w-72 xl:w-75 shrink-0 rounded-3xl"
               style={{
-                height: "h-fit min-h-[60vh]",
+                position: "sticky",
+                top: `${navbarHeight + 16}px`,
+                maxHeight: `calc(100vh - ${navbarHeight + 32}px)`,
+                overflowY: "auto",
+                alignSelf: "flex-start",
                 background: "#ffffff",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
                 border: "1px solid rgba(255,255,255,0.55)",
                 boxShadow:
-                  "0 10px 30px rgba(23,57,92,0.10), 0 2px 8px rgba(23,57,92,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                  "0 10px 30px rgba(23,57,92,0.10), 0 2px 8px rgba(23,57,92,0.08)",
               }}
             >
               {/* accent bar */}
@@ -399,7 +506,7 @@ export default function StudentDashboardLayout({
 
             {/* ── MAIN CONTENT — flex-1 fills space after sidebar ── */}
             <main
-              className="content-animate flex-1 min-w-0 h-fit min-h-[60vh] rounded-3xl"
+              className="relative w-full px-4  md:pt-6 pb-10 content-animate rounded-3xl"
               style={{
                 background: "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
                 backdropFilter: "blur(18px)",

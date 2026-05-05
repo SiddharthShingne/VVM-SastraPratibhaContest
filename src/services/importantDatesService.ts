@@ -68,7 +68,7 @@ export const changePassword = async (
     }
   }
 };
-  
+
 // logout api call
 export const logoutUser = async () => {
   try {
@@ -82,6 +82,144 @@ export const logoutUser = async () => {
       throw new Error("No response from server");
     } else {
       throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// update coordinator profile
+export const updateCoordinatorProfile = async (profileData: {
+  name: string;
+  phone: string;
+  email: string;
+  // Add other fields as needed
+}) => {
+  try {
+    const response = await api.post("/coordinators/update", {
+      name: profileData.name,
+      username: "STC000167", // Should be dynamic from your user store
+      designation: "State Coordinator", // Should be dynamic
+      phone: profileData.phone,
+      email: profileData.email,
+      type: "state-coordinator", // Should be dynamic based on role
+      user_id: 167196, // Should be dynamic from your user store
+      location_id: 43, // Should be dynamic
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Profile update failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Dashboard Card Summary API call
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+interface DashboardPayload {
+  zone_id: number[];
+  state_id: number[];
+  prant_id: number[];
+  district_id: number[];
+}
+
+export const fetchDashboardCardSummary = async (payload: DashboardPayload) => {
+  try {
+    const response = await api.post("/admin/dashboard/card-summary", payload);
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || "Failed to fetch dashboard summary",
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Fetch Prant API call
+interface FetchPrantPayload {
+  state_ids: number[];
+}
+
+export const fetchPrants = async (payload: FetchPrantPayload) => {
+  try {
+    const response = await api.post("/fetchPrant", payload);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch prants");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Fetch State Summary API call
+
+interface StateSummaryPayload {
+  zone_id: number[];
+  state_id: number[];
+  prant_id: number[];
+  district_id: number[];
+}
+
+export const fetchStateSummary = async (payload: StateSummaryPayload) => {
+  try {
+    const response = await api.post("/admin/dashboard/state-summary", payload);
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || "Failed to fetch state summary",
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Bulk Student Upload API call
+export const importStudents = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append("student_file", file);
+
+    const response = await api.post("/sif/student/import", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    // ── throw full object when status is false ──
+    if (response.data.status === false) {
+      throw response.data; // throws { status, message, error_file, invalid_count }
+    }
+
+    return response.data;
+  } catch (error: any) {
+    if (error.status === false) {
+      // re-throw our own thrown object as-is
+      throw error;
+    }
+    if (error.response) {
+      throw error.response.data; // throws full backend object
+    } else if (error.request) {
+      throw { message: "No response from server" };
+    } else {
+      throw { message: error.message || "Unexpected error" };
     }
   }
 };

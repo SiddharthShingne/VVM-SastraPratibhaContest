@@ -330,11 +330,17 @@ export default function OmanForm({ countries }: Props) {
         { value: string; label: string }[]
     >([]);
 
+    // useEffect(() => {
+    //     fetchDistricts("41").then((data) => {
+    //         setDistricts(
+    //             data.map((d: any) => ({ value: String(d.id), label: d.name })),
+    //         );
+    //     });
+    // }, []);
+
     useEffect(() => {
-        fetchDistricts("41").then((data) => {
-            setDistricts(
-                data.map((d: any) => ({ value: String(d.id), label: d.name })),
-            );
+        fetchDistricts({ state_ids: [41], prant_ids: [] }).then((data) => {
+            setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
         });
     }, []);
 

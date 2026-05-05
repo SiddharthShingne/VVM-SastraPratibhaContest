@@ -1,7 +1,6 @@
 
 "use client";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 
 const methods = [
     {
@@ -69,18 +68,32 @@ const methods = [
 const WhatIsVVM = () => {
     return (
         <div>
+            {/* ================= Breadcrumb Header ================= */}
+            <div className="bg-[#162a4a] py-12.5">
+                <div className="max-w-6xl mx-auto px-4 text-white">
+                    <h1 className="text-[27px] font-medium mb-1">
+                        Structure Of  Śāstra Pratibhā Contest
+                    </h1>
 
+                    <p className="text-[12px] opacity-90">
+                        <Link href="/" className="hover:underline">
+                            Home
+                        </Link>{" "}
+                        {" > "} About {" > "} Structure Of  Śāstra Pratibhā Contest
+                    </p>
+                </div>
+            </div>
 
             {/* Section */}
             <div className="bg-gray-100 py-10">
                 <div className="max-w-6xl mx-auto px-4">
 
-                    <h2 className="text-[30px] font-extrabold uppercase tracking-[1.5px] text-[#1a1a2e] text-center mb-4">
-                        Structure Of Vidyarthi Vigyan Manthan
+                    <h2 className="text-[36px] font-extrabold uppercase tracking-[1.5px] text-[#1c51a7] text-center mb-4">
+                        Structure Of  Śāstra Pratibhā Contest
                     </h2>
 
-                    <p className="text-center text-[#064882] text-lg font-semibold max-w-2xl mx-auto mb-10">
-                        Students participating in VVM shall undergo the following multi-level testing procedures:
+                    <p className="text-center text-[black] text-base font-semibold max-w-2xl mx-auto mb-10">
+                        Students participating in  Śāstra Pratibhā Contest shall undergo the following multi-level testing procedures:
                     </p>
 
                     {/* Grid */}

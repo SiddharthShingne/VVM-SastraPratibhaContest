@@ -7,7 +7,7 @@ import { ChevronRight } from "lucide-react";
 
 // Organizer reusable section
 const OrganizerSection = ({ logo, name, title, description, qr }) => (
-    <div className="page-list bg-gray-50 mt-14 pb-14 px-4 sm:px-6 lg:px-8">
+    <div className="page-list  mt-14 pb-14 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
 
 
@@ -72,9 +72,23 @@ const OrganizerSection = ({ logo, name, title, description, qr }) => (
 
 const AboutOrganizers = () => {
     return (
-        <div>
+        <div className="bg-gray-50">
 
-       
+            {/* ================= Breadcrumb Header ================= */}
+            <div className="bg-[#162a4a] py-12.5">
+                <div className="max-w-6xl mx-auto px-4 text-white">
+                    <h1 className="text-[27px] font-medium mb-1">
+                       About Organizers
+                    </h1>
+
+                    <p className="text-[12px] opacity-90">
+                        <Link href="/" className="hover:underline">
+                            Home
+                        </Link>{" "}
+                        {" > "} About {" > "} About Organizers
+                    </p>
+                </div>
+            </div>
 
             {/* Sections */}
             <OrganizerSection

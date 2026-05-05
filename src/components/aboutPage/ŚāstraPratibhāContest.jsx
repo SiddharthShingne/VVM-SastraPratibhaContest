@@ -60,22 +60,22 @@ import { ChevronRight } from "lucide-react";
 const ŚāstraPratibhāContest = () => {
   return (
     <div>
-      {/* HERO SECTION */}
-      {/* <div className="bg-gradient-to-b from-[#f9faff] to-[#eef0ff] py-24 text-center">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-[#111d35] mb-4">
-          Śāstra Pratibhā Contest
-        </h1>
 
-        <div className="flex justify-center items-center space-x-1 text-sm font-medium text-gray-500">
-          <Link href="/" className="hover:text-purple-600 transition">
-            Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span>About</span>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-[#111d35]">About VVM</span>
+      {/* ================= Breadcrumb Header ================= */}
+      <div className="bg-[#162a4a] py-12.5">
+        <div className="max-w-6xl mx-auto px-4 text-white">
+          <h1 className="text-[27px] font-medium mb-1">
+            Śāstra Pratibhā Contest
+          </h1>
+
+          <p className="text-[12px] opacity-90">
+            <Link href="/" className="hover:underline">
+              Home
+            </Link>{" "}
+            {" > "} About {" > "} Śāstra Pratibhā Contest
+          </p>
         </div>
-      </div> */}
+      </div>
 
       {/* CONTENT SECTION */}
       <div className="bg-white mt-10 pb-16 px-4 sm:px-6 lg:px-10">
@@ -114,7 +114,7 @@ const ŚāstraPratibhāContest = () => {
               {/* BODY TEXT */}
               <p className="text-[#4f6480] text-justify mt-6 text-base leading-relaxed font-medium">
                 <strong className="text-[#17395c]">
-                  Vidyarthi Vigyan Manthan (International Edition of VVM)
+                Vidyarthi Vigyan Manthan (International Edition of VVM)
                 </strong>{" "}
                 is conducted in the Middle Eastern Countries namely Bahrain,
                 Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
@@ -168,7 +168,7 @@ const ŚāstraPratibhāContest = () => {
               </div>
 
               {/* BUTTONS */}
-              <div className="flex justify-center gap-4 mt-8 flex-wrap">
+              {/* <div className="flex justify-center gap-4 mt-8 flex-wrap">
                 <button className="px-6 py-2.5 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-sm font-extrabold shadow-lg hover:-translate-y-1 hover:text-white transition">
                   Learn More
                 </button>
@@ -176,7 +176,7 @@ const ŚāstraPratibhāContest = () => {
                 <button className="px-6 py-2.5 rounded-full bg-white border border-[#17395c]/20 text-[#17395c] text-sm font-extrabold hover:border-yellow-400 hover:bg-yellow-50 transition">
                   Explore VVM
                 </button>
-              </div>
+              </div> */}
 
             </div>
           </div>

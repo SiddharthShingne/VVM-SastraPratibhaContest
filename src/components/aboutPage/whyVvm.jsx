@@ -18,11 +18,6 @@ const WhyVVM = () => {
             content: ["011-49032436"],
         },
         {
-            icon: <MessageCircle className="w-10 h-10 text-[#2955c2]" />,
-            title: "WHATSAPP",
-            content: ["9899615277", "9266034649"],
-        },
-        {
             icon: <MapPin className="w-10 h-10 text-[#2955c2]" />,
             title: "OUR LOCATION",
             content: [
@@ -36,8 +31,21 @@ const WhyVVM = () => {
 
     return (
         <div>
-      
+                {/* ================= Breadcrumb Header ================= */}
+            <div className="bg-[#162a4a] py-12.5">
+                <div className="max-w-6xl mx-auto px-4 text-white">
+                    <h1 className="text-[27px] font-medium mb-1">
+                    Why Śāstra Pratibhā Contest
+                    </h1>
 
+                    <p className="text-[12px] opacity-90">
+                        <Link href="/" className="hover:underline">
+                            Home
+                        </Link>{" "}
+                        {" > "} About {" > "} Why Śāstra Pratibhā Contest
+                    </p>
+                </div>
+            </div>
             {/* Opportunities Section (Hero Card Style) */}
             <div className="relative mt-10 px-4 sm:px-6 lg:px-10">
                 <div className="max-w-5xl mx-auto">
@@ -52,7 +60,7 @@ const WhyVVM = () => {
                         <div className="p-8 flex flex-col justify-between h-full">
 
                             <h3 className="text-xl font-semibold text-[#111d35] mb-4">
-                                VVM offers unique opportunities for participants, including:
+                                Śāstra Pratibhā Contest offers unique opportunities for participants, including:
                             </h3>
 
                             <ul className="list-disc pl-5 text-[16px] leading-[1.85] text-[#4f6480] space-y-2">
@@ -75,9 +83,8 @@ const WhyVVM = () => {
             </div>
 
             {/* Contact Section */}
-            <div className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-12 mt-10">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
+            <div className="py-12 px-4 sm:px-6 lg:px-12 mt-10">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-items-stretch">
                     {contactItems.map((item, index) => (
                         <div
                             key={index}
