@@ -7,7 +7,36 @@ import { ChevronRight } from "lucide-react";
 const NationalCamp = () => {
   return (
     <div>
+  {/* Breadcrumb Section */}
+      <div className="bg-[#162a4a] py-[50px]">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col justify-center min-h-[65px]">
+            
+            <h6 className="text-white text-[27px] font-medium mb-1  pl-40 ">
+              National Camp (NC)
+            </h6>
 
+            <nav>
+              <ol className="flex items-center text-white text-[12px] whitespace-nowrap pl-40">
+                <li>
+                  <Link href="/" className="hover:underline">
+                    Home
+                  </Link>
+                </li>
+
+                <li className="mx-2">{">"}</li>
+
+                <li>Exam Details</li>
+
+                <li className="mx-2">{">"}</li>
+
+                <li className="text-white">National Camp (NC)</li>
+              </ol>
+            </nav>
+
+          </div>
+        </div>
+      </div>
       {/* Content Section */}
       <div className="max-w-5xl mx-auto px-4 py-12">
 

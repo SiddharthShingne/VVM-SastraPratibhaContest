@@ -158,17 +158,25 @@ export default function StateDashboardLayout({
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await logoutUser();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      localStorage.clear();
-      sessionStorage.clear();
-      delete axiosInstance.defaults.headers.common["Authorization"];
-      router.replace("/Login");
-    }
-  };
+  try {
+    await logoutUser();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    delete axiosInstance.defaults.headers.common["Authorization"];
+
+    setToken(null); // ✅ layout ko turant update karega
+
+    window.dispatchEvent(new Event("auth-change")); // ✅ header sync
+
+    router.replace("/Login");
+  }
+};
+
+  
 
   const isActive = (path: string) => pathname === path;
 

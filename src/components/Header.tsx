@@ -3,44 +3,64 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
 
 const Header = () => {
-  
-  
-  // localStorage.setItem("username", Response.username:any  );
   const router = useRouter();
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !!localStorage.getItem("token");
-    }
-    return false;
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [loggedOut, setLoggedOut] = useState(false); // success state
+  // useEffect(() => {
+  //   // ✅ run after render (no warning)
+  //   const timer = setTimeout(() => {
+  //     const token = localStorage.getItem("token");
+  //     setIsLoggedIn(!!token);
+  //     setMounted(true);
+  //   }, 0);
+
+  //   const syncAuth = () => {
+  //     setIsLoggedIn(!!localStorage.getItem("token"));
+  //   };
+
+  //   window.addEventListener("auth-change", syncAuth);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //     window.removeEventListener("auth-change", syncAuth);
+  //   };
+  // }, []);
+
 
   useEffect(() => {
-    const syncAuth = () => {
-      setIsLoggedIn(!!localStorage.getItem("token"));
-    };
-    window.addEventListener("auth-change", syncAuth);
-    return () => window.removeEventListener("auth-change", syncAuth);
-  }, []);
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+    setMounted(true);
+  };
+
+  checkAuth(); // initial run
+
+  window.addEventListener("auth-change", checkAuth);
+
+  return () => {
+    window.removeEventListener("auth-change", checkAuth);
+  };
+}, []);
+
+
+
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.dispatchEvent(new Event("auth-change"));
-    setShowLogoutDialog(false);
-    setLoggedOut(true); // show success dialog
 
-    // After 2s, redirect to login
-    setTimeout(() => {
-      setLoggedOut(false);
-      router.push("/Login");
-    }, 2000);
+      setIsLoggedIn(false); // ✅ YAHI ADD KARNA HAI
+    window.dispatchEvent(new Event("auth-change"));
+    router.push("/Login");
   };
+
+  // ✅ hydration safe
+  if (!mounted) return null;
 
   return (
     <div id="announcement-bar">

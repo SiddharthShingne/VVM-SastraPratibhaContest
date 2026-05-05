@@ -2,134 +2,173 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getSchools } from "@/services/uaeService";
 
 type School = {
   id: number;
-  schoolName: string;
-  regionCode: string;
-  schoolCode: string;
-  totalStudents: number;
+  school_name: string;
+  region_code: string;
+  school_code: string;
+  students_count: number;
+  paid_students_count: number;
+  unpaid_students_count: number;
 };
 
 export default function SchoolsPage() {
-  const [data, setData] = useState<School[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(false);
-  const [country, setCountry] = useState("");
 
-  // ===== FETCH DATA =====
-  const fetchSchools = async () => {
-    setLoading(true);
-    try {
-      // Replace with your API
-      // const res = await fetch(`/api/schools?country=${country}`);
-      // const json = await res.json();
-      // setData(json.data);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
-      // dummy
-      setData([
-        {
-          id: 1,
-          schoolName: "Abu Dhabi Indian School Muroor",
-          regionCode: "ARE-AD",
-          schoolCode: "AEAD-0001",
-          totalStudents: 18,
-        },
-      ]);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // ✅ FETCH API
   useEffect(() => {
+    const fetchSchools = async () => {
+      setLoading(true);
+      try {
+        const res = await getSchools(page, perPage);
+
+        console.log("API RESPONSE:", res);
+
+        const data = res?.data;
+
+        setSchools(data?.data || []);
+        setTotalPages(data?.last_page || 1);
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSchools();
-  }, [country]);
+  }, [page, perPage]);
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-[#eef3f9] p-6">
 
-      {/* ===== HEADER ===== */}
-      <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-800">
-          Schools Overview
-        </h1>
+      <div className="bg-white rounded-3xl shadow-xl p-6">
 
-        <select
-          onChange={(e) => setCountry(e.target.value)}
-          className="border px-4 py-2 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
-        >
-          <option value="">Select Country</option>
-          <option value="uae">UAE</option>
-          <option value="india">India</option>
-        </select>
-      </div>
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-[#17395c]">
+            Schools List
+          </h2>
 
-      {/* ===== CARD TABLE ===== */}
-      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
-
-        {/* TABLE HEADER */}
-        <div className="grid grid-cols-5 px-6 py-4 text-sm font-semibold text-gray-500 border-b bg-gray-50">
-          <span>SR NO.</span>
-          <span>SCHOOL NAME</span>
-          <span>REGION CODE</span>
-          <span>SCHOOL CODE</span>
-          <span className="text-right">TOTAL STUDENTS</span>
+          {/* PER PAGE SELECT */}
+          <select
+            value={perPage}
+            onChange={(e) => {
+              setPerPage(Number(e.target.value));
+              setPage(1);
+            }}
+            className="border px-3 py-2 rounded-lg"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+          </select>
         </div>
 
-        {/* TABLE BODY */}
-        {loading ? (
-          <div className="p-6 text-center text-gray-500">Loading...</div>
-        ) : data.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">
-            No data found
-          </div>
-        ) : (
-          data.map((item, index) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-5 px-6 py-4 text-sm items-center border-b hover:bg-gray-50 transition"
-            >
-              <span className="font-medium text-gray-700">
-                {index + 1}
-              </span>
+        {/* TABLE */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
 
-              <span className="text-blue-600 font-medium">
-                {item.schoolName}
-              </span>
+            <thead className="bg-gray-100 text-gray-600 text-xs uppercase">
+              <tr>
+                <th className="px-3 py-3">#</th>
+                <th>School Name</th>
+                <th>Region</th>
+                <th>Code</th>
+                <th>Total Students</th>
+                <th>Paid</th>
+                <th>Unpaid</th>
+              </tr>
+            </thead>
 
-              <span className="text-gray-600">
-                {item.regionCode}
-              </span>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-6">
+                    Loading...
+                  </td>
+                </tr>
+              ) : schools.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-6">
+                    No data found
+                  </td>
+                </tr>
+              ) : (
+                schools.map((s, index) => (
+                  <tr key={s.id} className="border-b hover:bg-gray-50">
 
-              <span className="text-gray-600">
-                {item.schoolCode}
-              </span>
+                    <td className="px-3 py-3">
+                      {(page - 1) * perPage + index + 1}
+                    </td>
 
-              <span className="text-right font-semibold text-gray-800">
-                {item.totalStudents}
-              </span>
-            </div>
-          ))
-        )}
+                    <td className="font-medium text-[#17395c]">
+                      {s.school_name}
+                    </td>
 
-        {/* ===== FOOTER / PAGINATION ===== */}
-        <div className="flex justify-between items-center px-6 py-4 text-sm text-gray-500 bg-gray-50">
+                    <td>{s.region_code}</td>
 
-          <div>
-            Items per page:
-            <select className="ml-2 border rounded px-2 py-1">
-              <option>10</option>
-              <option>25</option>
-            </select>
-          </div>
+                    <td>{s.school_code}</td>
 
-          <div className="flex items-center gap-4">
-            <span>1 – 10 of 96</span>
-            <button className="px-2 py-1 rounded hover:bg-gray-200">◀</button>
-            <button className="px-2 py-1 rounded hover:bg-gray-200">▶</button>
-          </div>
+                    <td>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded">
+                        {s.students_count}
+                      </span>
+                    </td>
+
+                    <td>
+                      <span className="px-2 py-1 bg-green-100 text-green-600 rounded">
+                        {s.paid_students_count}
+                      </span>
+                    </td>
+
+                    <td>
+                      <span className="px-2 py-1 bg-red-100 text-red-500 rounded">
+                        {s.unpaid_students_count}
+                      </span>
+                    </td>
+
+                  </tr>
+                ))
+              )}
+            </tbody>
+
+          </table>
         </div>
+
+        {/* PAGINATION */}
+        <div className="flex justify-center items-center gap-4 mt-6">
+
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          <span className="font-medium">
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+
+        </div>
+
       </div>
     </div>
   );

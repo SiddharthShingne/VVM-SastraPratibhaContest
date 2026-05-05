@@ -118,7 +118,7 @@ const ExamRequirements = () => {
               <div className="h-[1px] bg-[#17395c1a]" />
 
               {/* Level II */}
-              <h4 className="text-[20px] font-extrabold text-[#17395c]">
+              {/* <h4 className="text-[20px] font-extrabold text-[#17395c]">
                 School Level Online Examination : Level-II
               </h4>
 
@@ -139,7 +139,7 @@ const ExamRequirements = () => {
                 <li>30 minutes – 35 questions</li>
               </ul>
 
-              <div className="h-[1px] bg-[#17395c1a]" />
+              <div className="h-[1px] bg-[#17395c1a]" /> */}
 
               {/* Submission */}
               <h4 className="text-[20px] font-extrabold text-[#17395c]">

@@ -55,7 +55,7 @@ const Disputes = () => {
               {/* Content */}
               <p className="text-[17px] leading-[1.8] text-[#4f6480] mt-2">
                 In the event of any dispute, grievance, or RTI (Right to Information)
-                complaint, the decision made by the VVM Core Committee shall be final
+                complaint, the decision made by the Core Committee shall be final
                 and binding.
               </p>
 
