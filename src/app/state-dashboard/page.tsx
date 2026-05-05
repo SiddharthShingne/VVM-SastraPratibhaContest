@@ -59,18 +59,12 @@ interface StateSummaryRow {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
 
-/** Strip the API's trailing "totals" wrapper — keep only real data rows */
 const isDataRow = (row: StateSummaryRow): boolean =>
   !row.totals && !!row.state_name;
 
-/**
- * Read the logged-in user from localStorage and extract their assigned state ID.
- * The user object stores assignments like:
- *   user.user_detail.assignments[0].coordinatable_id  (when type === "State")
- */
 function getStateIdFromStorage(): number | null {
   try {
-    const raw = localStorage.getItem("user"); // adjust key if yours differs
+    const raw = localStorage.getItem("user");
     if (!raw) return null;
     const parsed: StoredUser = JSON.parse(raw);
     const assignments = parsed?.user?.user_detail?.assignments ?? [];
@@ -106,21 +100,8 @@ function ExportBtn({ onClick }: { onClick: () => void }) {
   );
 }
 
-function ChevronDown() {
-  return (
-    <svg
-      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
-      width="14" height="14" viewBox="0 0 24 24"
-      fill="none" stroke="currentColor" strokeWidth="2.5"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function StateDashboardPage() {
-  // ── Derive state ID from logged-in user (not hardcoded) ──────────────────
   const [stateId, setStateId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -128,11 +109,9 @@ export default function StateDashboardPage() {
     setStateId(id);
   }, []);
 
-  // ── Region / District data ────────────────────────────────────────────────
   const [prants, setPrants] = useState<Prant[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
 
-  // Combined filter: { type: "prant"|"district", id: number } or null = all
   const [selectedFilter, setSelectedFilter] = useState<{
     type: "prant" | "district";
     prantId: number;
@@ -140,12 +119,10 @@ export default function StateDashboardPage() {
     label: string;
   } | null>(null);
 
-  // ── Dashboard data ────────────────────────────────────────────────────────
   const [summary, setSummary] = useState<CardSummary | null>(null);
   const [stateSummaryRows, setStateSummaryRows] = useState<StateSummaryRow[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // ── Table controls ────────────────────────────────────────────────────────
   const [search, setSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -159,7 +136,6 @@ export default function StateDashboardPage() {
         const prantList: Prant[] = res.data ?? [];
         setPrants(prantList);
 
-        // Fetch districts for all prants at once
         if (prantList.length > 0) {
           const allDistricts: District[] = [];
           await Promise.all(
@@ -192,12 +168,10 @@ export default function StateDashboardPage() {
       district_id: districtId ? [districtId] : [],
     };
 
-    // Card summary
     fetchDashboardCardSummary(payload)
       .then((res: any) => setSummary(res.data?.[0] ?? null))
       .catch(console.error);
 
-    // Table rows
     setLoading(true);
     fetchStateSummary(payload)
       .then((res: any) => {
@@ -208,8 +182,20 @@ export default function StateDashboardPage() {
       .finally(() => setLoading(false));
   }, [stateId, selectedFilter]);
 
+  // ── FIXED: Close dropdown on outside click — checks containment ──────────
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handler = (e: MouseEvent) => {
+      const dropdown = document.getElementById("region-dropdown-wrapper");
+      if (dropdown && !dropdown.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [dropdownOpen]);
+
   // ── Build the combined dropdown options ───────────────────────────────────
-  // Structure: Prant header → District items under it
   const dropdownOptions = useMemo(() => {
     const options: Array<{
       label: string;
@@ -224,7 +210,6 @@ export default function StateDashboardPage() {
     }> = [];
 
     prants.forEach((p) => {
-      // Prant-level option
       options.push({
         label: p.name,
         isPrantHeader: true,
@@ -236,7 +221,6 @@ export default function StateDashboardPage() {
         },
       });
 
-      // District options under this prant
       const prantDistricts = districts.filter((d) => d.prant_id === p.id);
       prantDistricts.forEach((d) => {
         options.push({
@@ -256,7 +240,6 @@ export default function StateDashboardPage() {
     return options;
   }, [prants, districts]);
 
-  // Filter dropdown options by search text
   const filteredOptions = useMemo(() => {
     if (!search.trim()) return dropdownOptions;
     return dropdownOptions.filter((o) =>
@@ -264,14 +247,12 @@ export default function StateDashboardPage() {
     );
   }, [dropdownOptions, search]);
 
-  // ── Paginate table rows ───────────────────────────────────────────────────
   const totalPages = Math.max(1, Math.ceil(stateSummaryRows.length / itemsPerPage));
   const paginated = stateSummaryRows.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
 
-  // ── Totals ────────────────────────────────────────────────────────────────
   const totals = useMemo(() => {
     const schools = stateSummaryRows.reduce((s, r) => s + (r.total_school ?? 0), 0);
     const individual = stateSummaryRows.reduce((s, r) => s + (r.individual_student ?? 0), 0);
@@ -286,7 +267,6 @@ export default function StateDashboardPage() {
     console.log("Export", type);
   };
 
-  // ── Stat cards ────────────────────────────────────────────────────────────
   const stats = [
     {
       label: "Student Count",
@@ -311,14 +291,6 @@ export default function StateDashboardPage() {
     },
   ];
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    if (!dropdownOpen) return;
-    const handler = () => setDropdownOpen(false);
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [dropdownOpen]);
-
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
@@ -339,7 +311,6 @@ export default function StateDashboardPage() {
         .anim-up    { animation: fadeSlideUp 0.4s ease both; }
         .anim-fade  { animation: fadeIn 0.25s ease both; }
 
-        /* Responsive table: on mobile, collapse to card layout */
         @media (max-width: 640px) {
           .resp-table thead { display: none; }
           .resp-table tbody tr {
@@ -378,7 +349,7 @@ export default function StateDashboardPage() {
         }
       `}</style>
 
-      <div className="min-h-screen  p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen p-3 sm:p-5 lg:p-8">
 
         {/* ── Page Title ── */}
         <div className="mb-5 anim-down">
@@ -392,7 +363,9 @@ export default function StateDashboardPage() {
 
         {/* ── Single Combined Region/District Dropdown ── */}
         <div className="mb-5 anim-down relative z-50" style={{ animationDelay: "60ms" }}>
+          {/* CHANGE 1: added id="region-dropdown-wrapper" */}
           <div
+            id="region-dropdown-wrapper"
             className="relative w-full sm:w-72"
             onMouseDown={(e) => e.stopPropagation()}
           >
@@ -451,7 +424,8 @@ export default function StateDashboardPage() {
                 {/* "All" option */}
                 <button
                   className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-50 transition-colors border-b border-slate-100 font-medium"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setSelectedFilter(null);
                     setSearch("");
                     setDropdownOpen(false);
@@ -477,7 +451,8 @@ export default function StateDashboardPage() {
                           }
                           ${selectedFilter?.label === opt.value.label ? "bg-blue-50 text-blue-600" : ""}
                         `}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation(); // CHANGE 2: stop propagation so mousedown handler doesn't fire
                           setSelectedFilter(opt.value);
                           setSearch("");
                           setDropdownOpen(false);

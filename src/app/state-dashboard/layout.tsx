@@ -12,8 +12,9 @@ import {
   FaUser,
   FaSignOutAlt,
   FaTimes,
+  FaClock,
 } from "react-icons/fa";
-
+import { useSessionTimeout } from "@/components/shared/useSessionTimeout";
 import { logoutUser } from "@/services/authService";
 import axiosInstance from "@/services/axiosInstance";
 
@@ -61,11 +62,14 @@ function NavDivider() {
 }
 
 /* ---------------- MAIN LAYOUT ---------------- */
-export default function StateDashboardLayout({
+export default function StateDashboardLayout({ 
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+
+  const { showDialog, confirmLogout } = useSessionTimeout(); // ← destructure
   const router = useRouter();
   const pathname = usePathname();
 
@@ -132,7 +136,10 @@ export default function StateDashboardLayout({
       const navbar = document.getElementById("global-navbar");
       const navBottom = navbar?.getBoundingClientRect().bottom ?? 64;
       const finalHeight = Math.max(0, navBottom);
-      setNavbarHeight(finalHeight);
+
+      // ── CHANGED: write to CSS var directly, no setState ──
+      document.documentElement.style.setProperty("--navbar-h", `${finalHeight}px`);
+      setNavbarHeight(finalHeight); // keep for initial layout only
     };
 
     measure();
@@ -256,6 +263,12 @@ export default function StateDashboardLayout({
               >
                 Total Students
               </Link>
+              <Link
+                href="/state-dashboard/student/total-student"
+                className={linkClass("/state-dashboard/student/student-payment")}
+              >
+                Students Payment
+              </Link>
             </div>
           )}
         </div>
@@ -364,7 +377,43 @@ export default function StateDashboardLayout({
           animation: shine 4s linear infinite;
         }
       `}</style>
+      {showDialog && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div
+            className="relative w-[90vw] max-w-sm mx-auto rounded-2xl p-6 shadow-2xl bg-white"
+            style={{ border: "1px solid rgba(23,57,92,0.12)" }}
+          >
+            {/* Top accent */}
+            <div
+              className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
+              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+            />
 
+            {/* Icon */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              <FaClock />
+            </div>
+
+            <h3 className="text-center text-[17px] font-extrabold text-[#17395c] mb-1">
+              Session Expired
+            </h3>
+            <p className="text-center text-[13px] text-[#7a90a8] mb-6 leading-relaxed">
+              You have been inactive for 1 hour and have been automatically logged out for security.
+            </p>
+
+            <button
+              onClick={confirmLogout}
+              className="w-full py-2.5 rounded-xl text-white text-[13.5px] font-semibold shadow-md transition-all hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              OK, Go to Login
+            </button>
+          </div>
+        </div>
+      )}
       {/* ── Page shell ── */}
       <div className="min-h-screen">
         <div
@@ -390,7 +439,7 @@ export default function StateDashboardLayout({
         {/* MOBILE TOP HEADER — now uses navbarHeight */}
         <header
           className="md:hidden fixed left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm"
-          style={{ top: navbarHeight }}
+          style={{ top: "var(--navbar-h)" }}
         >
           <div
             className="absolute top-0 left-0 w-full h-0.5"
@@ -418,7 +467,7 @@ export default function StateDashboardLayout({
         {isMobile && sidebarOpen && (
           <div
             className="fixed left-0 right-0 bottom-0 bg-black/40 z-40"
-            style={{ top: navbarHeight + 56 }}
+            style={{ top: "calc(var(--navbar-h) + 56px)" }}
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -431,8 +480,8 @@ export default function StateDashboardLayout({
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
           style={{
-            top: navbarHeight + 56,
-            height: `calc(100vh - ${navbarHeight + 56}px)`,
+            top: "calc(var(--navbar-h) + 56px)",
+            height: "calc(100vh - var(--navbar-h) - 56px)",
             background: "#ffffff",
             boxShadow:
               "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
@@ -467,8 +516,7 @@ export default function StateDashboardLayout({
         {/* DESKTOP LAYOUT — now uses navbarHeight for content padding */}
         <div
           className="relative container mx-auto px-4 md:pt-6 pb-10"
-          style={{ paddingTop: isMobile ? `${navbarHeight + 56}px` : undefined }}
-        >
+          style={{ paddingTop: isMobile ? "calc(var(--navbar-h) + 56px)" : undefined }}        >
           <div className="flex gap-5 items-start">
 
             {/* DESKTOP SIDEBAR */}
@@ -476,8 +524,8 @@ export default function StateDashboardLayout({
               className="sidebar-animate hidden md:block w-72 xl:w-75 shrink-0 rounded-3xl"
               style={{
                 position: "sticky",
-                top: `${navbarHeight + 16}px`,
-                maxHeight: `calc(100vh - ${navbarHeight + 32}px)`,
+                top: "calc(var(--navbar-h) + 16px)",
+                maxHeight: "calc(100vh - var(--navbar-h) - 32px)",
                 overflowY: "auto",
                 alignSelf: "flex-start",
                 background: "#ffffff",

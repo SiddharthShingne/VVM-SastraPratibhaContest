@@ -11,11 +11,12 @@ import {
   FaKey,
   FaSignOutAlt,
   FaTimes,
+  FaClock,
 } from "react-icons/fa";
 
 import { logoutUser } from "@/services/authService";
 import axiosInstance from "@/services/axiosInstance";
-
+import { useSessionTimeout } from "@/components/shared/useSessionTimeout";
 function extractNameFromStorage(): string {
   try {
     const raw = localStorage.getItem("user");
@@ -59,6 +60,8 @@ export default function StudentDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const { showDialog, confirmLogout } = useSessionTimeout();
   const router = useRouter();
   const pathname = usePathname();
   const [navbarHeight, setNavbarHeight] = useState(64);
@@ -317,6 +320,44 @@ export default function StudentDashboardLayout({
         }
       `}</style>
 
+      {showDialog && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div
+            className="relative w-[90vw] max-w-sm mx-auto rounded-2xl p-6 shadow-2xl bg-white"
+            style={{ border: "1px solid rgba(23,57,92,0.12)" }}
+          >
+            {/* Top accent */}
+            <div
+              className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
+              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+            />
+
+            {/* Icon */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              <FaClock />
+            </div>
+
+            <h3 className="text-center text-[17px] font-extrabold text-[#17395c] mb-1">
+              Session Expired
+            </h3>
+            <p className="text-center text-[13px] text-[#7a90a8] mb-6 leading-relaxed">
+              You have been inactive for 1 hour and have been automatically logged out for security.
+            </p>
+
+            <button
+              onClick={confirmLogout}
+              className="w-full py-2.5 rounded-xl text-white text-[13.5px] font-semibold shadow-md transition-all hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+            >
+              OK, Go to Login
+            </button>
+          </div>
+        </div>
+      )}
+      
       {/* ── Page shell ── */}
       <div className="min-h-screen ">
       <div

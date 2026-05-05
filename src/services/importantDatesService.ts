@@ -168,7 +168,6 @@ export const fetchPrants = async (payload: FetchPrantPayload) => {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Fetch State Summary API call
 
-
 interface StateSummaryPayload {
   zone_id: number[];
   state_id: number[];
@@ -176,21 +175,15 @@ interface StateSummaryPayload {
   district_id: number[];
 }
 
-export const fetchStateSummary = async (
-  payload: StateSummaryPayload
-) => {
+export const fetchStateSummary = async (payload: StateSummaryPayload) => {
   try {
-    const response = await api.post(
-      "/admin/dashboard/state-summary",
-      payload
-    );
+    const response = await api.post("/admin/dashboard/state-summary", payload);
 
     return response.data;
   } catch (error: any) {
     if (error.response) {
       throw new Error(
-        error.response.data?.message ||
-          "Failed to fetch state summary"
+        error.response.data?.message || "Failed to fetch state summary",
       );
     } else if (error.request) {
       throw new Error("No response from server");
@@ -200,29 +193,33 @@ export const fetchStateSummary = async (
   }
 };
 
-
 // Bulk Student Upload API call
 export const importStudents = async (file: File) => {
   try {
     const formData = new FormData();
-    formData.append("file", file); // backend usually expects "file"
+    formData.append("student_file", file);
 
     const response = await api.post("/sif/student/import", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
+
+    // ── throw full object when status is false ──
+    if (response.data.status === false) {
+      throw response.data; // throws { status, message, error_file, invalid_count }
+    }
 
     return response.data;
   } catch (error: any) {
+    if (error.status === false) {
+      // re-throw our own thrown object as-is
+      throw error;
+    }
     if (error.response) {
-      throw new Error(
-        error.response.data?.message || "Failed to import students",
-      );
+      throw error.response.data; // throws full backend object
     } else if (error.request) {
-      throw new Error("No response from server");
+      throw { message: "No response from server" };
     } else {
-      throw new Error(error.message || "Unexpected error");
+      throw { message: error.message || "Unexpected error" };
     }
   }
 };
