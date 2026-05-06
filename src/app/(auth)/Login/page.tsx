@@ -174,7 +174,7 @@ export default function LoginPage() {
             </h3>
 
             <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-              This site is accessible only for <strong>SIF Students</strong>.
+              <strong>    This site is accessible only for SIF Students Not Indian Students</strong>.
                         </p>
 
             <button

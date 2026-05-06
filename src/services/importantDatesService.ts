@@ -245,3 +245,120 @@ export const exportStateSummary = async (payload: {
     throw new Error(error.response?.data?.message || "Export failed");
   }
 };
+
+// types
+interface School {
+  id: number;
+  school_name: string;
+  region_code: string;
+  school_code: string;
+}
+
+interface SchoolsResponse {
+  status: boolean;
+  message: string;
+  data: {
+    current_page: number;
+    data: School[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: Array<{
+      url: string | null;
+      label: string;
+      active: boolean;
+    }>;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+  };
+}
+
+//SIF SChools API
+export const fetchSchoolsByRegion = async (
+  countryCode: string, // e.g. "SA"
+  regionCode: string, // e.g. "KSA-CENTRAL"
+  page: number = 1,
+  perPage: number = 100, // high number to load all schools at once
+) => {
+  try {
+    const response = await api.get(
+      `/sif/list/schools/${countryCode}/${regionCode}`,
+      {
+        params: { page, per_page: perPage },
+      },
+    );
+
+    if (response.data.status === false) {
+      throw response.data;
+    }
+
+    return response.data;
+  } catch (error: any) {
+    if (error.status === false) {
+      throw error;
+    }
+    if (error.response) {
+      throw error.response.data;
+    } else if (error.request) {
+      throw { message: "No response from server" };
+    } else {
+      throw { message: error.message || "Unexpected error" };
+    }
+  }
+};
+
+//Fetch Regions with Cities API
+export const fetchRegionsWithCities = async (countryCode: string) => {
+  try {
+    const response = await api.get(`/fetch/regions/${countryCode}`, {
+      params: { city: true },
+    });
+    if (response.data.status === false) throw response.data;
+    return response.data;
+  } catch (error: any) {
+    if (error.status === false) throw error;
+    if (error.response) throw error.response.data;
+    else if (error.request) throw { message: "No response from server" };
+    else throw { message: error.message || "Unexpected error" };
+  }
+};
+
+//  Student export APIs
+// types for export students payload
+interface ExportStudentsPayload {
+  zone_id: number[];
+  state_id: number[];
+  prant_id: number[];
+  district_id: number[];
+  class_id: number[];
+  school_id: number[];
+  created_at_from: string;
+  created_at_to: string;
+  email: string;
+  school_student: boolean;
+}
+
+// API service function
+export const exportStudents = async (payload: ExportStudentsPayload) => {
+  try {
+    const response = await api.post("/export/students", payload, {
+      responseType: "json", // Since response is JSON, not blob
+    });
+
+    if (response.data.status === false) {
+      throw new Error(response.data.message || "Export failed");
+    }
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error(error.message || "Export failed. Please try again.");
+  }
+};

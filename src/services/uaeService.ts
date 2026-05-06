@@ -68,23 +68,36 @@ export const registerUaeStudent = async (payload: RegistrationFormPayload) => {
 
 
 
-export const getSchools = async (page = 1, perPage = 10) => {
+export const getSchools = async (
+  page = 1,
+  perPage = 10,
+  filters?: { search?: string; region_code?: string },
+) => {
   try {
-    const countryCode =
-      typeof window !== "undefined"
-        ? localStorage.getItem("countryCode") || "AE"
-        : "AE";
-
-    const res = await axiosInstance.get(
-      `/sif/list/schools/${countryCode}`,
-      {
-        params: {
-          page,
-          per_page: perPage,
-          students: 1,
-        },
+    // ✅ Read from nested user object, same as getCountryCode() in your other pages
+    const countryCode = (() => {
+      try {
+        if (typeof window === "undefined") return "AE";
+        const raw = localStorage.getItem("user");
+        if (!raw) return "AE";
+        const parsed = JSON.parse(raw);
+        return parsed?.user?.country_code || parsed?.country_code || "AE";
+      } catch {
+        return "AE";
       }
-    );
+    })();
+
+    console.log("Schools countryCode:", countryCode); // ✅ add this to verify
+
+    const res = await axiosInstance.get(`/sif/list/schools/${countryCode}`, {
+      params: {
+        page,
+        per_page: perPage,
+        students: 1,
+        search: filters?.search || undefined,
+        region_code: filters?.region_code || undefined,
+      },
+    });
 
     return res.data;
   } catch (error) {

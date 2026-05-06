@@ -4,7 +4,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axiosInstance from "@/services/axiosInstance";
-import { exportStateSummary } from "@/services/importantDatesService";
+import { exportStudents } from "@/services/importantDatesService";
 import { createPortal } from "react-dom";
 interface Student {
   id: number;
@@ -38,7 +38,7 @@ type DialogState =
   | null;
 
 const ITEMS_PER_PAGE_OPTIONS = [10, 20, 30, 50];
-
+ 
 export default function ViewStudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,7 +93,15 @@ export default function ViewStudentsPage() {
     };
     fetchStudents();
   }, [page, perPage]);
-
+  const CLASS_MAP: Record<number, string> = {
+    1: "6",
+    2: "7",
+    3: "8",
+    4: "9",
+    5: "10",
+    6: "11",
+    
+  };
   // ── Client-side filtering ─────────────────────────────────────────────────
   const filtered = useMemo(() => {
     return students.filter((s) => {
@@ -116,13 +124,28 @@ export default function ViewStudentsPage() {
     if (!exportStart || !exportEnd) return;
     setExporting(true);
     try {
-      await exportStateSummary({
-        search: "",
-        filters: {
-          start_date: exportStart,
-          end_date: exportEnd,
-        },
+      const raw = localStorage.getItem("user");
+      const parsed = raw ? JSON.parse(raw) : null;
+      const assignments = parsed?.user?.user_detail?.assignments || [];
+      const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+      const stateId = stateAssignment?.coordinatable_id;
+      const prantId = stateAssignment?.extras?.prant_id;
+
+      await exportStudents({
+        zone_id: [],
+        state_id: stateId ? [stateId] : [],
+        prant_id: prantId ? [prantId] : [],
+        district_id: [],
+        class_id: [],
+        school_id: [],
+        school_student: true,
+        // email: userEmail || "shingnesid@gmail.com", // ✅ uses userEmail from useMemo above
+        email: userEmail || "shingnesid@gmail.com", // ✅ uses userEmail from useMemo above
+
+        created_at_from: exportStart,
+        created_at_to: exportEnd,
       });
+
       setDialog({ type: "success", email: userEmail });
     } catch (err: any) {
       setDialog({
@@ -481,8 +504,15 @@ export default function ViewStudentsPage() {
             style={{ ...inputStyle, appearance: "none", paddingRight: 36, cursor: "pointer" }}
           >
             <option value="">Select Class</option>
-            {[6, 7, 8, 9, 10, 11].map((c) => (
-              <option key={c} value={String(c)}>Class {c}</option>
+            {[
+              { id: 1, label: "Class 6" },
+              { id: 2, label: "Class 7" },
+              { id: 3, label: "Class 8" },
+              { id: 4, label: "Class 9" },
+              { id: 5, label: "Class 10" },
+              { id: 6, label: "Class 11" },
+                    ].map((c) => (
+              <option key={c.id} value={String(c.id)}>{c.label}</option>
             ))}
           </select>
           <svg style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
@@ -612,8 +642,20 @@ export default function ViewStudentsPage() {
                     <td style={tdStyle}>{s.national_id || "-"}</td>
 
                     <td style={{ ...tdStyle, maxWidth: 160 }}>{s.school_name || "-"}</td>
-                    <td style={tdStyle}>{s.class_id || "-"}</td>
-                    <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
+                    <td style={tdStyle}>
+                      {(() => {
+                        const classMap: Record<number, string> = {
+                          1: " 6",
+                          2: " 7",
+                          3: " 8",
+                          4: " 9",
+                          5: " 10",
+                          6: " 11",
+                          7: " 12",
+                        };
+                        return classMap[s.class_id] || s.class_id || "-";
+                      })()}
+                    </td>                    <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                       {s.date_of_birth
                         ? new Date(s.date_of_birth).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
                         : "-"}

@@ -272,7 +272,7 @@ export default function StateDashboardLayout({
                 Total Students
               </Link>
               <Link
-                href="/state-dashboard/student/total-student"
+                href="/state-dashboard/student/student-payment"
                 className={linkClass("/state-dashboard/student/student-payment")}
               >
                 Students Payment
