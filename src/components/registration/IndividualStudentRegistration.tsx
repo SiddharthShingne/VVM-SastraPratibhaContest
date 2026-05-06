@@ -152,15 +152,16 @@ const steps = [
     img: "/student-registration-images/login_details.svg",
   },
   {
+    title: "School Details",
+    desc: "Enter Your School Name, Select School Board, School Address, City.",
+    img: "/student-registration-images/school1.svg",
+  },
+  {
     title: "Parent / Guardian Details",
     desc: "Enter Parent/Guardian Name, Mobile Number, Email ID. Click “Send OTP” and enter OTP received on email to “Verify OTP”.",
     img: "/student-registration-images/login_details.svg",
   },
-  {
-    title: "School Details",
-    desc: "Enter Your School Name, Select School Board, School Address, State, District, City and School PIN Code.",
-    img: "/student-registration-images/school1.svg",
-  },
+ 
   {
     title: "Submit Registration",
     desc: "Click on “Submit Registration” and your Registration will be completed. Login credentials will be sent to your registered email id.",
@@ -176,9 +177,9 @@ const steps = [
     desc: "After login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
     img: "/student-registration-images/confirmation.svg",
   },
-  {
-    title: "Payment",
-    desc: "Click on the Payment button and choose your preferred payment option (QR Code or Credit Card) and complete the payment process.After successful payment: You will get full access to your profile.",
-    img: "/student-registration-images/payment.svg",
-  },
+  // {
+  //   title: "Payment",
+  //   desc: "Click on the Payment button and choose your preferred payment option (QR Code or Credit Card) and complete the payment process.After successful payment: You will get full access to your profile.",
+  //   img: "/student-registration-images/payment.svg",
+  // },
 ];

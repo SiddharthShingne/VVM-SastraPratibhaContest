@@ -15,13 +15,14 @@ const Footer = () => {
 
                         {/* 🔹 SECTION 1 */}
                     <div className="lg:-ml-4">
-                        <div className="inline-block bg-white text-left p-2 rounded-xl shadow-md mb-4">
+                        
+                        <div className="w-28 h-28 rounded-full overflow-hidden bg-white flex items-center justify-center shadow-md">
                             <Image
-                                src="/nav-logo.png"
+                                src="/logo-footer.png"
                                 alt="Logo"
-                                width={200}
-                                height={55}
-                                className="w-30 h-auto object-contain"
+                                width={112}
+                                height={112}
+                                className="w-full h-full object-cover"
                             />
                         </div>
 

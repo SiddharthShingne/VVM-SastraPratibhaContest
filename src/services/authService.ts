@@ -3,6 +3,7 @@
 import axios from "axios";
 import api from "./axiosInstance";
 import { ApertureIcon } from "lucide-react";
+import axiosInstance from "./axiosInstance";
 
 /* ================= LOGIN ================= */
 
@@ -323,4 +324,337 @@ export const forgotPassword = async (username: string) => {
   );
 
   return res.data;
+};
+
+
+
+// NEW API
+// src/services/schoolApi.ts
+
+
+// Types
+export interface State {
+  id: number;
+  name: string;
+}
+
+export interface District {
+  id: number;
+  name: string;
+  state_id: number;
+}
+
+export interface City {
+  id: number;
+  name: string;
+  district_id: number;
+}
+
+export interface SubBoard {
+  id: number;
+  name: string;
+  board_id: number;
+}
+
+export interface SchoolFormData {
+  state_id: string;
+  district_id: string;
+  sub_district_id?: string;
+  sub_board_id?: string;
+  school_board_id: string;
+  name: string;
+  address: string;
+  pincode: string;
+  principal_salutation: string;
+  principal_name: string;
+  exam_coordinator_salutation: string;
+  exam_coordinator_name: string;
+  phone_number: string;
+  email: string;
+  username: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export interface BulkUploadResponse {
+  status: boolean;
+  invalid_count?: number;
+  error_file?: string;
+  message?: string;
+}
+
+// Get all states
+export const getStates = async (): Promise<State[]> => {
+  try {
+    const response = await api.get("/states/filter");
+    return response.data?.data || [];
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch states");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Get districts by state ID
+export const getDistricts = async (stateId: string): Promise<District[]> => {
+  try {
+    const response = await api.get("/districts", {
+      params: { state_id: stateId }
+    });
+    return response.data?.data || [];
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch districts");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Get cities by district ID
+export const getCities = async (districtId: string): Promise<City[]> => {
+  try {
+    const response = await api.get("/cities", {
+      params: { dist_id: districtId }
+    });
+    return response.data?.data || [];
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch cities");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Get sub-boards by board ID
+export const getSubBoards = async (boardId: string): Promise<SubBoard[]> => {
+  try {
+    const response = await api.get("/sub-boards", {
+      params: { board_id: boardId }
+    });
+    return response.data?.data || [];
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch sub boards");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Check username availability
+export const checkUsername = async (username: string): Promise<string> => {
+  try {
+    const response = await api.post("/check-username", { username });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Username check failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Create single school
+export const createSchool = async (formData: FormData): Promise<any> => {
+  try {
+    const response = await api.post("/schools/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "School creation failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Bulk upload schools
+export const uploadBulkSchool = async (formData: FormData): Promise<BulkUploadResponse> => {
+  try {
+    const response = await api.post("/schools/bulk-upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      // Return error response with potential error_file
+      return error.response.data;
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Calculate amount for payment
+export const calculateAmount = async (data: {
+  quantity: number;
+  type: string;
+}): Promise<{ total_amount: number }> => {
+  try {
+    const response = await api.post("/calculate-amount", data);
+    return response.data?.data || { total_amount: 0 };
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Amount calculation failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Get school list (for admin)
+export const getSchoolList = async (
+  page: number = 1,
+  pageSize: number = 10,
+  searchText: string = ""
+): Promise<any> => {
+  try {
+    const response = await api.get("/schools", {
+      params: {
+        page,
+        page_size: pageSize,
+        search: searchText,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch schools");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Get single school by ID
+export const getSchool = async (id: number): Promise<any> => {
+  try {
+    const response = await api.get(`/schools/${id}`);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to fetch school");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Update school
+export const updateSchool = async (id: number, formData: FormData): Promise<any> => {
+  try {
+    const response = await api.post(`/schools/update/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "School update failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Delete school
+export const deleteSchool = async (id: number): Promise<any> => {
+  try {
+    const response = await api.delete(`/schools/${id}`);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "School deletion failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+// Create school for institute (role 17 specific)
+export const createSchoolForInstitute = async (schoolData: any): Promise<any> => {
+  try {
+    const response = await api.post("/institute/schools/create", schoolData);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "School creation failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+
+// payment
+export const makePayment = async (data: any): Promise<any> => {
+  try {
+    const isFormData = data instanceof FormData;
+
+    const response = await api.post("/payment-new", data, {
+      headers: isFormData
+        ? { "Content-Type": "multipart/form-data" }
+        : undefined,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Payment failed");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
+export const makePaymentTwo = async (data: any) => {
+  try {
+    const response = await axiosInstance.post(
+      "https://vvm.org.in/backend/api/payment-new",
+      data
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Payment failed");
+  }
 };

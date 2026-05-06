@@ -70,10 +70,10 @@ export default function StudentAwards() {
                         LEVEL – I
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        SELECTION FOR LEVEL-II
+                        SELECTION FOR NEXT LEVEL
                       </td>
                       <td className="p-4">
-                        All successful participants will be eligible for School Level Online Examination (Level-II).
+                        All successful participants will be eligible for State Level  Examination.
                       </td>
                       {/* <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
@@ -108,10 +108,10 @@ export default function StudentAwards() {
                         LEVEL – II
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        DISTRICT TOPPERS
+                        STATE LEVEL
                       </td>
                       <td className="p-4">
-                        Top 3 rankers per class (18 per district). All schools in district included.
+                          All successful participants will be eligible for National Level Examination.
                       </td>
                       {/* <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
@@ -128,7 +128,7 @@ export default function StudentAwards() {
                         LEVEL – III
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        STATE LEVEL WINNERS
+                        NATIONAL LEVEL WINNERS
                       </td>
                       <td className="p-4">
                         Top 25 qualify for camp. Top 3 per class become winners.
@@ -145,7 +145,7 @@ export default function StudentAwards() {
                     </tr>
 
                     <tr className="border-b hover:bg-yellow-50">
-                      <td className="p-4 font-extrabold text-[#17395c] text-center">
+                      {/* <td className="p-4 font-extrabold text-[#17395c] text-center">
                         LEVEL – IV
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
@@ -153,7 +153,7 @@ export default function StudentAwards() {
                       </td>
                       <td className="p-4">
                         Top 2 per state qualify. Top 3 per class become national winners.
-                      </td>
+                      </td> */}
                       {/* <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-600 mb-1">
                           National Rewards
@@ -165,14 +165,14 @@ export default function StudentAwards() {
                       </td> */}
                     </tr>
 
-                    <tr>
+                    {/* <tr>
                       <td className="p-4 font-extrabold text-[#17395c] text-center">
                         Schools
                       </td>
                       <td colSpan="3" className="p-4">
                         Schools with 100+ registrations can access special NCSM activities.
                       </td>
-                    </tr>
+                    </tr> */}
 
                   </tbody>
                   </table>
@@ -184,7 +184,7 @@ export default function StudentAwards() {
 
               {/* Info Cards */}
               <div className="space-y-5">
-
+{/* 
                 <div className="p-5 rounded-[18px] bg-linear-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
                   <h5 className="font-extrabold text-[#17395c] mb-2">
                     SRIJAN
@@ -193,7 +193,7 @@ export default function StudentAwards() {
                     National and Zonal winners will get internship opportunities
                     (1–3 weeks) in institutions like DRDO, ISRO, CSIR, BARC, etc.
                   </p>
-                </div>
+                </div> */}
 
                 <div className="p-5 rounded-[18px] bg-linear-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
                   <h5 className="font-extrabold text-[#17395c] mb-2">

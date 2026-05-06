@@ -1416,11 +1416,11 @@ export default function TotalStudentsPage() {
                           onClick={() => handleEdit(s_row)}
                           title="Edit"
                         />
-                        <FaTrash
+                        {/* <FaTrash
                           style={{ cursor: "pointer", color: "#ef4444", fontSize: 13 }}
                           onClick={() => handleDelete(s_row.id)}
                           title="Delete"
-                        />
+                        /> */}
                       </div>
                     </td>
                   </tr>

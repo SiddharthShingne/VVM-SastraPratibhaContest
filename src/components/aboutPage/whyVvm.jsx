@@ -83,7 +83,7 @@ const WhyVVM = () => {
             </div>
 
             {/* Contact Section */}
-            <div className="py-12 px-4 sm:px-6 lg:px-12 mt-10">
+            {/* <div className="py-12 px-4 sm:px-6 lg:px-12 mt-10">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-items-stretch">
                     {contactItems.map((item, index) => (
                         <div
@@ -94,7 +94,7 @@ const WhyVVM = () => {
                             hover:shadow-[0_22px_44px_rgba(23,57,92,0.14)]
                             transition-all duration-300 hover:-translate-y-1"
                         >
-                            {/* Top Gradient Border */}
+                           
                             <div className="absolute top-0 left-0 w-full h-1 
                                 bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
@@ -113,7 +113,7 @@ const WhyVVM = () => {
                     ))}
 
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

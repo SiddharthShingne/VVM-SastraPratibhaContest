@@ -138,6 +138,7 @@ export default function ViewStudentsPage() {
         district_id: [],
         class_id: [],
         school_id: [],
+        // individual_student: true, 
         school_student: true,
         // email: userEmail || "shingnesid@gmail.com", // ✅ uses userEmail from useMemo above
         email: userEmail || "shingnesid@gmail.com", // ✅ uses userEmail from useMemo above
@@ -596,7 +597,8 @@ export default function ViewStudentsPage() {
                   "SCHOOL NAME", "CLASS", "DOB", "GENDER", "EXAM LANGUAGE",
                   "ADDRESS", "PINCODE", "PARENT NAME", "PARENT MOBILE NO.",
                   "PARENT EMAIL", "STUDENT MOBILE", "STUDENT EMAIL",
-                  "MOCK EXAM", "FINAL EXAM", "PAYMENT", "ACTION",
+                  "MOCK EXAM", "FINAL EXAM", "PAYMENT",
+                  // "ACTION",
                 ].map((h) => (
                   <th key={h} style={thStyle}>{h}</th>
                 ))}
@@ -706,7 +708,7 @@ export default function ViewStudentsPage() {
                     </td>
 
                     {/* Action */}
-                    <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
+                    {/* <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                         <FaEdit
                           style={{ cursor: "pointer", color: "#2563EB", fontSize: 15 }}
@@ -717,7 +719,7 @@ export default function ViewStudentsPage() {
                           title="Delete"
                         />
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               )}

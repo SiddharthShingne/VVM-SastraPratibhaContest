@@ -277,7 +277,11 @@ export default function StateDashboardPage() {
       alert("Export failed");
     }
   };
+  const upgradedMatch = summary?.upgrade_summary?.match(/(\d+)\s*\(Upgraded\)/);
+  const nonUpgradedMatch = summary?.upgrade_summary?.match(/(\d+)\s*\(Non-?Upgraded\)/);
 
+  const upgraded = upgradedMatch ? upgradedMatch[1] : "0";
+  const nonUpgraded = nonUpgradedMatch ? nonUpgradedMatch[1] : "0";
   // ── Stat cards — NO left accent border, rounded-square icon ──────────────
   const stats = [
     {
@@ -292,12 +296,27 @@ export default function StateDashboardPage() {
       icon: <FaSchool size={20} />,
       iconBg: "bg-amber-50 text-amber-500",
     },
+    // {
+    //   label: "Upgraded Students",
+    //   value: summary?.upgrade_summary ?? "0 (Upgraded) / 0 (Non-Upgraded)",
+    //   icon: <FaArrowUp size={20} />,
+    //   iconBg: "bg-sky-50 text-sky-500",
+    // },
     {
       label: "Upgraded Students",
-      value: summary?.upgrade_summary ?? "0 (Upgraded) / 0 (Non-Upgraded)",
+      value: (
+        <div className="flex items-baseline flex-wrap gap-x-1">
+          <span>{upgraded}</span>
+          <span className="text-[11px] text-slate-400">(Upgraded)</span>
+          <span className="mx-1 text-slate-300">/</span>
+          <span>{nonUpgraded}</span>
+          <span className="text-[11px] text-slate-400">(Non-Upgraded)</span>
+        </div>
+      ),
       icon: <FaArrowUp size={20} />,
       iconBg: "bg-sky-50 text-sky-500",
     },
+    
   ];
 
   // ─── Render ─────────────────────────────────────────────────────────────────
@@ -388,9 +407,9 @@ export default function StateDashboardPage() {
                 <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-0.5 truncate">
                   {s.label}
                 </p>
-                <p className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">
+                <div className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">
                   {s.value}
-                </p>
+                </div>
               </div>
             </div>
           ))}
@@ -543,8 +562,8 @@ export default function StateDashboardPage() {
                     ["TOTAL PAID STUDENTS", "paid"],
                     ["LEVEL-1 ATTEMPTED STUDENTS", "att"],
                     ["LEVEL-1 SUBMITTED STUDENTS", "sub"],
-                    ["EXPORT SUBMITTED STUDENTS", "exp1"],
-                    ["EXPORT LEVEL 2 SUBMITTED STUDENTS", "exp2"],
+                    // ["EXPORT SUBMITTED STUDENTS", "exp1"],
+                    // ["EXPORT LEVEL 2 SUBMITTED STUDENTS", "exp2"],
                   ].map(([h]) => (
                     <th
                       key={h}
@@ -609,13 +628,13 @@ export default function StateDashboardPage() {
                         <Badge value={row.total_submitted_level1_students ?? 0} />
                       </td>
                       {/* ✅ Export Submitted — uncommented */}
-                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT SUBMITTED STUDENTS">
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="EXPORT SUBMITTED STUDENTS">
                         <ExportBtn onClick={handleExport} />
-                      </td>
+                      </td> */}
                       {/* ✅ Export Level 2 — uncommented */}
-                      <td className="px-3 sm:px-4 py-3" data-label="EXPORT LEVEL 2 SUBMITTED STUDENTS">
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="EXPORT LEVEL 2 SUBMITTED STUDENTS">
                         <ExportBtn onClick={handleExport} />
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 )}

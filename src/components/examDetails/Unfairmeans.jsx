@@ -58,7 +58,7 @@ const UnfairMeans = () => {
               {/* Intro */}
               <p className="text-[17px] leading-[1.8] text-[#4f6480] mt-2">
                 To prevent the use of unfair means during School Level Online
-                Examinations (Level-I), the following measures will be implemented:
+                Examinations, the following measures will be implemented:
               </p>
 
               {/* List */}

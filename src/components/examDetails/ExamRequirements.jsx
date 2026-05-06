@@ -99,7 +99,7 @@ const ExamRequirements = () => {
 
               {/* Level I */}
               <h4 className="text-[20px] font-extrabold text-[#17395c]">
-                School Level Online Examination : Level-I
+                School Level Online Examination : 
               </h4>
 
               <p className="font-semibold text-[#4f6480]">Section-A</p>
@@ -147,7 +147,7 @@ const ExamRequirements = () => {
               </h4>
 
               <ul className="list-disc pl-5 space-y-2 text-[#4f6480]">
-                <li>Click "Go to Exam"</li>
+                <li>Click &#34;Go to Exam&#34;</li>
                 <li>Read and accept instructions</li>
                 <li>Submit using SUBMIT button</li>
                 <li>Auto-save on connection failure</li>

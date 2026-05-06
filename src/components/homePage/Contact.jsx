@@ -1,7 +1,7 @@
 
 
 "use client";
-
+import { User } from "lucide-react";
 import Image from "next/image";
 import { Contact, MapPin } from "lucide-react";
 export default function VVMContactSection() {
@@ -76,22 +76,19 @@ export default function VVMContactSection() {
             {/* Person Card */}
             <div className="flex flex-col sm:flex-row gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-4 sm:p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
 
-              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden mx-auto sm:mx-0">
-                <Image
-                  src="/head-office/raj.jpeg"
-                  alt="Raj Kumar"
-                  width={150}
-                  height={150}
-                  className="rounded-full object-cover"
-                />
+              
+              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-[3px] bg-gradient-to-br from-[#17395c] to-[#f4df17] mx-auto sm:mx-0">
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                  <User className="w-8 h-8 sm:w-12 sm:h-12 text-gray-500" />
+                </div>
               </div>
 
               <div className="flex flex-col gap-2">
                 <h4 className="font-extrabold text-[#17395c]">
-                  Sh. Raj Kumar
+                  Coordinator
                 </h4>
                 <span className="text-[#b88d00] font-bold text-sm">
-                  Project Coordinator - VVM
+                  Project Coordinator
                 </span>
 
 
@@ -104,7 +101,7 @@ export default function VVMContactSection() {
                   📞 +91-11-49032436
                 </a>
                 <a href="mailto:raj@vvm.org.in" className="text-[#17395c] font-semibold">
-                  ✉️ raj@vvm.org.in
+                  ✉️ test@vvm.org.in
                 </a>
               </div>
             </div>
@@ -112,19 +109,15 @@ export default function VVMContactSection() {
             {/* Person 2 */}
             <div className="flex flex-col sm:flex-row gap-4 bg-white/95 border border-[#17395c]/10 rounded-3xl p-4 sm:p-5 shadow-md transition hover:-translate-y-1 hover:shadow-lg">
 
-              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-1 bg-linear-to-br from-[#17395c] to-[#f4df17] overflow-hidden mx-auto sm:mx-0">
-                <Image
-                  src="/head-office/praveen.jpg"
-                  alt="Praveen"
-                  width={150}
-                  height={150}
-                  className="rounded-full object-cover"
-                />
-              </div>
+                <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full p-[3px] bg-gradient-to-br from-[#17395c] to-[#f4df17] mx-auto sm:mx-0">
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                    <User className="w-8 h-8 sm:w-12 sm:h-12 text-gray-500" />
+                  </div>
+                </div>
 
               <div className="flex flex-col gap-2">
                 <h4 className="font-extrabold text-[#17395c]">
-                  Sh. TV Praveen
+                  Coordinator
                 </h4>
                 <span className="text-[#b88d00] font-bold text-sm">
                   Project Associate
@@ -140,16 +133,16 @@ export default function VVMContactSection() {
                   📞 +91-11-49032436
                 </a>
                 <a href="mailto:praveen@vvm.org.in" className="text-[#17395c] font-semibold">
-                  ✉️ praveen@vvm.org.in
+                  ✉️ test@vvm.org.in
                 </a>
               </div>
             </div>
           </div>
 
           {/* Bottom CTA */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-6 bg-linear-to-r from-[#f4df17]/10 to-[#17395c]/10 p-5 rounded-xl border border-[#17395c]/10">
+          {/* <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-6 bg-linear-to-r from-[#f4df17]/10 to-[#17395c]/10 p-5 rounded-xl border border-[#17395c]/10">
 
-            <div>
+            {/* <div>
               <span className="text-xs font-extrabold tracking-widest text-[#b88d00] uppercase">
                 Explore
               </span>
@@ -159,15 +152,15 @@ export default function VVMContactSection() {
               <p className="text-sm text-[#5d7087]">
                 Quick access to state-level coordination contacts.
               </p>
-            </div>
+            </div> */}
 
-            <a
+            {/* <a
               href="/state-coordinators"
               className="px-5 py-3 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] font-bold flex items-center gap-2 shadow-md hover:scale-105 transition"
             >
               State Coordinator →
-            </a>
-          </div>
+            </a> 
+          </div> */}
         </div>
       </div>
 

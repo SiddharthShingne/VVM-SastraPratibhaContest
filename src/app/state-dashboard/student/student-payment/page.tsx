@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
-import { useState, useRef } from "react";
-import { FaUniversity, FaWifi, FaUpload, FaFilePdf, FaImage, FaTimes, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
-
+import { useState, useRef, useEffect } from "react";
+import { FaUniversity, FaWifi, FaUpload, FaFilePdf, FaImage, FaTimes, FaInfoCircle, FaCheckCircle ,FaTimesCircle} from "react-icons/fa";
+import { makePayment } from "@/services/authService";
 /* ── Constants ── */
 const UNIT_PRICE = 100; // ← change this when API is ready
 
@@ -27,11 +27,36 @@ export default function PaymentForm() {
     const [receiptError, setReceiptError] = useState("");
     const [countError, setCountError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+   
     const fileRef = useRef<HTMLInputElement>(null);
+    const auth = typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("user") || "null")
+        : null;
 
+    const userId = auth?.user?.id;
+
+  
     const count = parseInt(studentCount) || 0;
     const subTotal = count * UNIT_PRICE;
+
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        type: "success" as "success" | "error",
+        title: "",
+        message: "",
+    });
+    const showDialog = (type: "success" | "error", title: string, message: string) => {
+        setDialog({
+            isOpen: true,
+            type,
+            title,
+            message,
+        });
+    };
+
+    const closeDialog = () => {
+        setDialog({ ...dialog, isOpen: false });
+    };
 
     /* ── File pick ── */
     const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,66 +80,136 @@ export default function PaymentForm() {
     /* ── Submit ── */
     const handleSubmit = async () => {
         let valid = true;
+
         if (!studentCount || count <= 0) {
             setCountError("Number of Students is required");
             valid = false;
         } else {
             setCountError("");
         }
+
         if (mode === "offline" && !receipt) {
             setReceiptError("Payment Receipt is required");
             valid = false;
         } else if (mode === "online") {
             setReceiptError("");
         }
+
         if (!valid) return;
 
-        setLoading(true);
-        // TODO: wire to actual API
-        await new Promise((r) => setTimeout(r, 1800));
-        setLoading(false);
-        setSuccess(true);
-    };
+        try {
+            setLoading(true);
 
+
+            let res;
+
+            if (mode === "offline" && receipt) {
+                const formData = new FormData();
+                formData.append("user_id", String(userId));
+                formData.append("student_count", String(count));
+                formData.append("amount", String(subTotal));
+                formData.append("payment_mode", "offline");
+                formData.append("receipt", receipt);
+
+                res = await makePayment(formData);
+
+                showDialog(
+                    "success",
+                    "Payment Submitted",
+                    res?.message || "Offline payment submitted successfully."
+                );
+
+            } else {
+                res = await makePayment({
+                    user_id: userId,
+                    student_count: count,
+                    amount: subTotal,
+                    payment_mode: "online",
+                });
+
+                if (res?.payment_url) {
+                    window.location.href = res.payment_url;
+                    return;
+                }
+
+                showDialog(
+                    res?.status ? "success" : "error",
+                    res?.status ? "Payment Successful" : "Payment Failed",
+                    res?.message || "Something went wrong"
+                );
+            }
+
+        } catch (err: any) {
+            showDialog(
+                "error",
+                "Payment Failed",
+                err?.message || "Server error occurred"
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
     const handleDiscard = () => {
         setMode("online");
         setStudentCount("");
         setReceipt(null);
         setReceiptError("");
         setCountError("");
-        setSuccess(false);
+        
     };
 
+    const isSubmitDisabled =
+        loading ||
+        !studentCount ||
+        count <= 0 ||
+        (mode === "offline" && !receipt) ||
+        mode === "online"; // disables submit for online mode
     /* ── Success screen ── */
-    if (success) {
-        return (
-            <div className="min-h-screen flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-white rounded-[28px] shadow-xl relative overflow-hidden p-10 text-center">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
-                    <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
-                        <FaCheckCircle className="text-4xl text-emerald-500" />
-                    </div>
-                    <h3 className="text-xl font-extrabold text-[#17395c] mb-2">Payment Submitted!</h3>
-                    <p className="text-sm text-[#4a6278] mb-6">
-                        {mode === "offline"
-                            ? "Your offline payment is under review. Login credentials will be activated within 48 hours."
-                            : "Your online payment has been processed successfully."}
-                    </p>
-                    <button
-                        onClick={handleDiscard}
-                        className="px-8 py-2.5 rounded-xl text-white font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow hover:scale-105 transition text-sm"
-                    >
-                        Done
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    useEffect(() => {
+        if (!userId) {
+            showDialog(
+                "error",
+                "Authentication Error",
+                "User not found. Please login again."
+            );
+            setLoading(false);
+        }
+    }, [userId]);
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-2xl bg-white rounded-[30px] shadow-xl relative overflow-hidden">
 
+                {dialog.isOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                        <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full px-8 py-10 text-center">
+
+                            <div className={`mx-auto mb-5 w-16 h-16 rounded-full flex items-center justify-center
+        ${dialog.type === "success" ? "bg-emerald-50" : "bg-red-50"}`}>
+
+                                {dialog.type === "success"
+                                    ? <FaCheckCircle className="text-emerald-500 text-3xl" />
+                                    : <FaTimesCircle className="text-red-500 text-3xl" />}
+                            </div>
+
+                            <h3 className="text-xl font-semibold mb-2">{dialog.title}</h3>
+
+                            <p className="text-sm text-gray-500 mb-6">
+                                {dialog.message}
+                            </p>
+
+                            <button
+                                onClick={closeDialog}
+                                className={`px-6 py-2 rounded-lg text-white
+          ${dialog.type === "success"
+                                        ? "bg-blue-600 hover:bg-blue-700"
+                                        : "bg-red-500 hover:bg-red-600"}`}
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {/* TOP GRADIENT BORDER */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
@@ -258,12 +353,12 @@ export default function PaymentForm() {
                                 <FaInfoCircle className="text-amber-500 shrink-0 mt-0.5" />
                                 <div className="text-xs text-amber-800 leading-relaxed space-y-1">
                                     <p>It may take up to <b>48 hours</b> for student Login Credentials to activate after offline payment.</p>
-                                    <p>If payment status is not updated within the due time, contact <b>9899615277</b>. Please be ready with:</p>
-                                    <ul className="list-disc ml-4 mt-1 space-y-0.5">
+                                    {/* <p>If payment status is not updated within the due time, contact <b>9899615277</b>. Please be ready with:</p> */}
+                                    {/* <ul className="list-disc ml-4 mt-1 space-y-0.5">
                                         <li>School Name &amp; Username</li>
                                         <li>State &amp; City</li>
                                         <li>Payment Amount</li>
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
                         </>
@@ -280,7 +375,7 @@ export default function PaymentForm() {
                         </button>
                         <button
                             onClick={handleSubmit}
-                            disabled={loading}
+                            // disabled={isSubmitDisabled}
                             className="px-8 py-2.5 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-[#17395c] to-[#2c5b84] shadow-lg hover:scale-105 transition disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
                         >
                             {loading ? (

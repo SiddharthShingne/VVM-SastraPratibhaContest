@@ -90,7 +90,7 @@ const ŚāstraPratibhāContest = () => {
             <div className="text-center">
 
               {/* BADGES */}
-              <div className="flex justify-center gap-3 mb-5 flex-wrap">
+              {/* <div className="flex justify-center gap-3 mb-5 flex-wrap">
                 <span className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-[10px] font-extrabold tracking-widest uppercase">
                   International Edition
                 </span>
@@ -98,7 +98,7 @@ const ŚāstraPratibhāContest = () => {
                 <span className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#f4df17] to-[#b88d00] border border-[#b88d00] text-[#17395c] text-[10px] font-extrabold uppercase">
                   Middle East Zone
                 </span>
-              </div>
+              </div> */}
 
               {/* TITLE */}
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#17395c] leading-tight">
@@ -138,7 +138,7 @@ const ŚāstraPratibhāContest = () => {
               </div>
 
               {/* STATS */}
-              <div className="flex flex-wrap gap-4 mt-6">
+              {/* <div className="flex flex-wrap gap-4 mt-6">
                 <div className="flex-1 min-w-30 bg-linear-to-r from-[#17395c] to-[#244d79] rounded-xl p-4 text-center shadow-md">
                   <span className="block text-lg font-extrabold text-[#f4df17]">
                     6+
@@ -165,7 +165,7 @@ const ŚāstraPratibhāContest = () => {
                     International
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* BUTTONS */}
               {/* <div className="flex justify-center gap-4 mt-8 flex-wrap">

@@ -1,6 +1,7 @@
 
 "use client";
 
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function FeeStructure() {
@@ -59,10 +60,14 @@ export default function FeeStructure() {
             <div className="p-8">
 
               {/* Title */}
-              <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
-                FEE STRUCTURE
+              <h2 className="flex items-center justify-center gap-3 text-[32px] font-extrabold text-[#17395c] mb-6">
+                <span className="bg-red-100 p-2 rounded-full flex items-center justify-center">
+                  <AlertCircle size={28} className="text-red-500" />
+                </span>
+                <span className="tracking-wide uppercase">
+                  Fee Structure 
+                </span>
               </h2>
-
               {/* List */}
               <ul className="mt-2 pl-5 list-disc marker:text-[#17395c]">
 
@@ -95,14 +100,14 @@ export default function FeeStructure() {
               <div className="h-px bg-[#17395c]/10 my-8"></div>
 
               {/* Subtitle */}
-              <h4 className="text-[20px] font-extrabold text-[#17395c] mt-6">
+              {/* <h4 className="text-[20px] font-extrabold text-[#17395c] mt-6">
                 Modes of Fee Payment
               </h4>
 
               <p className="text-[17px] leading-8 text-[#4f6480] mt-2">
                 Fee can be paid through payment gateway, ONLINE (RTGS/NEFT), or
                 Challan payment only.
-              </p>
+              </p> */}
 
             </div>
           </div>
