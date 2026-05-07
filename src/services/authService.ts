@@ -14,15 +14,16 @@ interface RawLoginApiResponse {
     user: {
       id: number;
       username: string;
-      role_name?: string;
+      role_id?: string;
       [key: string]: unknown;
+      
     };
   };
 }
 
 export interface LoginResponse {
   username: string;
-  role_name: string;
+  role_id: string;
   token: string;
   user: any;
 }
@@ -50,7 +51,7 @@ export const loginUser = async (
 
     return {
       username: data.data.user?.username || "",
-      role_name: data.data.user?.role_name || "",
+      role_id: data.data.user?.role_id || "",
       token: data.data.token,
       user: data.data.user,
     };

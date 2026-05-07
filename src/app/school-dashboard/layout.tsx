@@ -62,7 +62,7 @@ function NavDivider() {
 }
 
 /* ---------------- MAIN LAYOUT ---------------- */
-export default function StateDashboardLayout({ 
+export default function SchoolDashboardLayout({ 
   children,
 }: {
   children: React.ReactNode;
@@ -220,8 +220,8 @@ export default function StateDashboardLayout({
 
       {/* NAV */}
       <nav className="space-y-1">
-        <Link href="/school-dashboard" className={linkClass("/school-dashboard")}>
-          <FaHome className={iconClass("/school-dashboard")} />
+        <Link href="/state-dashboard" className={linkClass("/state-dashboard")}>
+          <FaHome className={iconClass("/state-dashboard")} />
           Dashboard
         </Link>
 

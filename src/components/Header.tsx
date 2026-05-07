@@ -3,13 +3,14 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { FaSignOutAlt } from "react-icons/fa";
 const Header = () => {
   const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mounted, setMounted] = useState(false);
-
+const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+const [loggedOut, setLoggedOut] = useState(false);
   // useEffect(() => {
   //   // ✅ run after render (no warning)
   //   const timer = setTimeout(() => {

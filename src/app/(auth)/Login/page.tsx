@@ -29,7 +29,7 @@ export default function LoginPage() {
       return "Username is required.";
     }
 
-    const regex = /^[a-zA-Z0-9_]{3,20}$/;
+    const regex = /^[a-zA-Z0-9_@.]{3,20}$/;
 
     if (!regex.test(value)) {
       return "Username must be 3–20 characters and can contain letters, numbers, symbols and underscore only.";
@@ -56,87 +56,174 @@ export default function LoginPage() {
 
   /* ---------------- LOGIN ---------------- */
 
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const trimmedUsername = username.trim();
+  //   const trimmedPassword = password.trim();
+
+  //   const userErr = validateUsername(trimmedUsername);
+  //   const passErr = validatePassword(trimmedPassword);
+
+  //   setUsernameError(userErr);
+  //   setPasswordError(passErr);
+
+  //   if (userErr || passErr) return;
+
+  //   setLoading(true);
+
+  //   try {
+  //     const data = await loginUser(trimmedUsername, trimmedPassword);
+
+  //     // ✅ Store full user object — this fixes name, profile, dashboard data
+  //     localStorage.setItem("user", JSON.stringify(data));
+
+  //     // ✅ Store token only if backend returns one
+  //     if (data.token) {
+  //       localStorage.setItem("token", data.token);
+  //       localStorage.setItem("role", data.user.role_id);
+  //     }
+
+  //     // ✅ Prefer role from API response, fallback to username prefix check
+  //     localStorage.setItem(
+  //       "username",
+  //       data.username || trimmedUsername
+  //     );
+  //     localStorage.setItem(
+  //       "role",
+  //       data.user.role_name ||
+  //       (trimmedUsername.toUpperCase().startsWith("9") ||
+  //         trimmedUsername.toUpperCase().startsWith("ZOC")
+  //         ? "STATE"
+  //         : "STUDENT")
+  //     );
+
+  //     window.dispatchEvent(new Event("auth-change"));
+
+  //     setDialog({
+  //       type: "success",
+  //       message: "Login successful. Redirecting to dashboard...",
+  //     });
+
+  //     setTimeout(() => {
+  //       const usernameUpper = trimmedUsername.toUpperCase();
+
+  //       if (
+  //         usernameUpper.startsWith("STC") ||
+  //         usernameUpper.startsWith("ZOC")
+  //       ) {
+  //         router.replace("/state-dashboard");
+  //       } else {
+  //         router.replace("/studentDashboard");
+  //       }
+  //     }, 1500);
+  //   } catch (err) {
+  //     setDialog({
+  //       type: "error",
+  //       message:
+  //         err instanceof Error
+  //           ? err.message
+  //           : "Invalid username or password. Please try again.",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   setUsername("");
+  //   setPassword("");
+
+  //   // Force clear in case browser bypasses React state
+  //   const inputs = document.querySelectorAll("input");
+  //   inputs.forEach((input) => (input.value = ""));
+  // }, []);
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const trimmedUsername = username.trim();
-    const trimmedPassword = password.trim();
+  e.preventDefault();
 
-    const userErr = validateUsername(trimmedUsername);
-    const passErr = validatePassword(trimmedPassword);
+  const trimmedUsername = username.trim();
+  const trimmedPassword = password.trim();
 
-    setUsernameError(userErr);
-    setPasswordError(passErr);
+  const userErr = validateUsername(trimmedUsername);
+  const passErr = validatePassword(trimmedPassword);
 
-    if (userErr || passErr) return;
+  setUsernameError(userErr);
+  setPasswordError(passErr);
 
-    setLoading(true);
+  if (userErr || passErr) return;
 
-    try {
-      const data = await loginUser(trimmedUsername, trimmedPassword);
+  setLoading(true);
 
-      // ✅ Store full user object — this fixes name, profile, dashboard data
-      localStorage.setItem("user", JSON.stringify(data));
+  try {
+    const data = await loginUser(trimmedUsername, trimmedPassword);
 
-      // ✅ Store token only if backend returns one
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
+    console.log("LOGIN RESPONSE:", data);
 
-      // ✅ Prefer role from API response, fallback to username prefix check
-      localStorage.setItem(
-        "username",
-        data.username || trimmedUsername
-      );
-      localStorage.setItem(
-        "role",
-        data.role_name ||
-        (trimmedUsername.toUpperCase().startsWith("STC") ||
-          trimmedUsername.toUpperCase().startsWith("ZOC")
-          ? "STATE"
-          : "STUDENT")
-      );
+    // ✅ ROLE CONSTANTS (easy for any developer)
+    const ROLE = {
+      STUDENT: 1,
+      SCHOOL: 2,
+      STATE: 9,
+    };
 
-      window.dispatchEvent(new Event("auth-change"));
+    // ✅ Store full user
+    localStorage.setItem("user", JSON.stringify(data));
 
-      setDialog({
-        type: "success",
-        message: "Login successful. Redirecting to dashboard...",
-      });
-
-      setTimeout(() => {
-        const usernameUpper = trimmedUsername.toUpperCase();
-
-        if (
-          usernameUpper.startsWith("STC") ||
-          usernameUpper.startsWith("ZOC")
-        ) {
-          router.replace("/state-dashboard");
-        } else {
-          router.replace("/studentDashboard");
-        }
-      }, 1500);
-    } catch (err) {
-      setDialog({
-        type: "error",
-        message:
-          err instanceof Error
-            ? err.message
-            : "Invalid username or password. Please try again.",
-      });
-    } finally {
-      setLoading(false);
+    // ✅ Store token
+    if (data?.token) {
+      localStorage.setItem("token", data.token);
     }
-  };
 
-  useEffect(() => {
-    setUsername("");
-    setPassword("");
+    // ✅ Safe role extraction (handles backend changes)
+    const roleId = data?.user?.role_id ?? data?.role_id;
 
-    // Force clear in case browser bypasses React state
-    const inputs = document.querySelectorAll("input");
-    inputs.forEach((input) => (input.value = ""));
-  }, []);
+    if (roleId !== undefined && roleId !== null) {
+      localStorage.setItem("role", String(roleId));
+    }
 
+    // optional
+    localStorage.setItem("username", data?.username || trimmedUsername);
+
+    window.dispatchEvent(new Event("auth-change"));
+
+    setDialog({
+      type: "success",
+      message: "Login successful. Redirecting to dashboard...",
+    });
+
+    // ✅ CLEAN ROLE-BASED REDIRECT
+    setTimeout(() => {
+      switch (roleId) {
+        case ROLE.SCHOOL:
+          router.replace("/school-dashboard");
+          break;
+
+        case ROLE.STATE:
+          router.replace("/state-dashboard");
+          break;
+
+        case ROLE.STUDENT:
+          router.replace("/studentDashboard");
+          break;
+
+        default:
+          console.warn("Unknown role_id:", roleId);
+          router.replace("/login");
+      }
+    }, 1500);
+
+  } catch (err) {
+    setDialog({
+      type: "error",
+      message:
+        err instanceof Error
+          ? err.message
+          : "Invalid username or password. Please try again.",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-linear-to-br from-[#e8eef5] to-[#f5f0d0] relative">
       {/* ---------------- MODAL ---------------- */}
