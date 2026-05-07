@@ -8,7 +8,7 @@ import axiosInstance from "@/services/axiosInstance";
 import { exportStateSummary } from "@/services/importantDatesService";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { createPortal } from "react-dom";
-import { fetchSchoolsByRegion, fetchRegionsWithCities, exportStudents } from "@/services/importantDatesService";
+import { fetchSchoolsByRegion, fetchRegionsWithCities, exportStudents, addGccStudent } from "@/services/importantDatesService";
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Student = {
   id: number;
@@ -47,12 +47,12 @@ type DialogState =
 
 // ─── Class map (backend key → label) ─────────────────────────────────────────
 const CLASS_MAP: Record<number, string> = {
-  1: " 6",
-  2: " 7",
-  3: " 8",
-  4: " 9",
-  5: " 10",
-  6: " 11",
+  6: " 6",
+  7: " 7",
+  8: " 8",
+  9: " 9",
+  10: " 10",
+  11: " 11",
 };
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
@@ -201,6 +201,22 @@ const COUNTRY_NAME_MAP: Record<string, string> = {
   QA: "Qatar",
 };
 
+const COUNTRY_NATIONAL_ID_LENGTH: Record<string, number> = {
+  AE: 15,  // UAE
+  SA: 10,  // Saudi Arabia
+  KW: 12,  // Kuwait
+  BH: 9,   // Bahrain
+  QA: 11,  // Qatar
+  OM: 8,   // Oman
+};
+const COUNTRY_MOBILE_LENGTH: Record<string, number> = {
+  AE: 9,   // UAE
+  SA: 10,  // Saudi Arabia
+  KW: 8,   // Kuwait
+  BH: 8,   // Bahrain
+  QA: 8,   // Qatar
+  OM: 8,   // Oman
+};
 
 // ✅ Move this ABOVE AddStudentDialog, at module level
 const Field = ({
@@ -238,6 +254,8 @@ const inputStyle: React.CSSProperties = {
   outline: "none",
   boxSizing: "border-box",
 };
+
+
 // ─── Add Student Dialog ───────────────────────────────────────────────────────
 function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData?: Student | null }) {
 
@@ -300,6 +318,7 @@ console.log("REGIONS API:", data);
     parentSalutation: "",
     parentName: "",
     parentEmail: "",
+    parentMobile: "", 
   });
   useEffect(() => {
     setForm((prev) => ({
@@ -327,11 +346,14 @@ console.log("REGIONS API:", data);
         parentSalutation: "",
         parentName: editData.parentName || "",
         parentEmail: editData.parentEmail || "",
+        parentMobile: editData.parentMobile || "",
       });
     }
   }, [editData]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");        // ✅ moved inside
+  const [apiErrorDetail, setApiErrorDetail] = useState<any>(null);  // ✅ moved inside
   const [schools, setSchools] = useState<{ id: number; school_name: string }[]>([]);
   const [schoolsLoading, setSchoolsLoading] = useState(false);
 
@@ -361,7 +383,11 @@ console.log("REGIONS API:", data);
     setForm((prev) => ({ ...prev, city: "", school: "" })); // ✅ single update
   }, [form.region, regions]);
 
-
+  const raw = localStorage.getItem("user");
+  const parsed = raw ? JSON.parse(raw) : null;
+  const assignments = parsed?.user?.user_detail?.assignments || [];
+  const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+  const stateId = stateAssignment?.coordinatable_id || "";
   useEffect(() => {
     const loadSchools = async () => {
       if (!form.region) { setSchools([]); return; }
@@ -391,9 +417,23 @@ console.log("REGIONS API:", data);
   };
 
   const handleSubmit = async () => {
+
+    console.log("ALL ASSIGNMENTS:", assignments);       // 👈 yahan
+    console.log("STATE ASSIGNMENT:", stateAssignment);  // 👈 yahan  
+    console.log("STATE ID:", stateId);  
+    let finalCountryCode = countryCode;
+    console.log("countryCode state:", countryCode);           // check this
+    console.log("getCountryCode() fresh:", getCountryCode()); // check this
+    if (!finalCountryCode) {
+      finalCountryCode = getCountryCode(); // Try to get it again
+      if (!finalCountryCode) {
+        setError("Country code not found. Please refresh the page or log in again.");
+        return;
+      }
+    }
     const required = editData
-      ? ["nationalId", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentEmail"]
-      : ["nationalId", "region", "city", "school", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentEmail"];
+      ? ["nationalId", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentMobile", "parentEmail"]
+      : ["nationalId", "region", "city", "school", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentMobile", "parentEmail"];
     
     const missing = required.filter((k) => !(form as any)[k]);
     if (missing.length) {
@@ -405,7 +445,7 @@ console.log("REGIONS API:", data);
     setError("");
     try {
       const payload = {
-        country: form.country,
+        country_code: finalCountryCode,
         national_id: form.nationalId,
         nationality: form.nationality,
         region: form.region,
@@ -439,12 +479,36 @@ console.log("REGIONS API:", data);
         };
         await axiosInstance.post(`/students/update/${editData.id}`, editPayload);
       } else {
-        // Create new student
-        await axiosInstance.post("/admin/student/create", payload);
+        await addGccStudent({
+          country_code: finalCountryCode,
+          emirate_id: form.nationalId,       // ✅ was national_id
+          nationality: form.nationality,
+          dist_id: form.region,   
+          school_name: form.school,
+          division: form.division,
+          fullName: form.fullName,           // ✅ was name
+          dob: form.dob,                     // ✅ was date_of_birth
+          gender: form.gender === "Male" ? 1 : 2,
+          grade: Number(form.classGrade),         // ✅ was class
+          exam_language: form.examLanguage,
+          state_id: String(stateId),   // ✅ from localStorage
+          hear: "1",                         // ✅ required by backend, hardcode for now
+          parent_full_name: form.parentName, // ✅ was parent_name
+          parent_mobile: form.parentMobile || "", // ✅ required by backend
+          parent_salutation: form.parentSalutation,
+          parent_email: form.parentEmail,
+          password: "vvm2026",
+          password_confirmation: "vvm2026",
+          
+        });
+        console.log("FINAL PAYLOAD:", payload);  
       }
-      onClose();
+      
+      setSuccessMsg("Student added successfully!");
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to save student.");
+      const msg = err?.message || err?.response?.data?.message || "Failed to save student.";
+      setError(msg);
+      setApiErrorDetail(err?.response?.data || null);
     } finally {
       setLoading(false);
     }
@@ -524,10 +588,26 @@ console.log("REGIONS API:", data);
             type="text"
             placeholder="Student's National Id"
             value={form.nationalId}
+            maxLength={
+              countryCode === "AE" ? 15 :
+                countryCode === "SA" ? 10 :
+                  countryCode === "KW" ? 12 :
+                    countryCode === "BH" ? 9 :
+                      countryCode === "QA" ? 11 :
+                        countryCode === "OM" ? 8 : 20
+            }
             onChange={(e) => handleChange("nationalId", e.target.value)}
             style={inputStyle}
           />
-        </Field>
+          <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
+            {countryCode === "AE" ? "Max 15 digits" :
+              countryCode === "SA" ? "Max 10 digits" :
+                countryCode === "KW" ? "Max 12 digits" :
+                  countryCode === "BH" ? "Max 9 digits" :
+                    countryCode === "QA" ? "Max 11 digits" :
+                      countryCode === "OM" ? "Max 8 digits" : ""}
+          </span>
+            </Field>
 
         <Field label="Student's Nationality">
           <input
@@ -760,9 +840,28 @@ console.log("REGIONS API:", data);
             style={inputStyle}
           />
         </Field>
+
+        <Field label="Parent Mobile" required>
+          <input
+            type="text"
+            placeholder={`Parent Mobile (${COUNTRY_MOBILE_LENGTH[countryCode] || 10} digits)`}
+            value={form.parentMobile}
+            maxLength={COUNTRY_MOBILE_LENGTH[countryCode] || 10}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, ""); // only digits
+              handleChange("parentMobile", val);
+            }}
+            style={inputStyle}
+          />
+          <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
+            {COUNTRY_MOBILE_LENGTH[countryCode]
+              ? `Must be ${COUNTRY_MOBILE_LENGTH[countryCode]} digits`
+              : ""}
+          </span>
+        </Field>
       </div>
 
-      {error && (
+      {/* {error && (
         <p
           style={{
             color: "#ef4444",
@@ -773,16 +872,68 @@ console.log("REGIONS API:", data);
         >
           {error}
         </p>
+      )} */}
+
+      {/* ── Success banner — OUTSIDE flex ── */}
+      {successMsg && (
+        <div style={{
+          background: "#f0fdf4",
+          border: "1px solid #bbf7d0",
+          borderRadius: 10,
+          padding: "14px 18px",
+          marginTop: 20,
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+        }}>
+          <p style={{ color: "#15803d", fontWeight: 700, fontSize: 14, margin: 0 }}>
+            ✅ Student added successfully!
+          </p>
+          <button
+            onClick={onClose}
+            style={{
+              alignSelf: "flex-end",
+              padding: "6px 20px",
+              borderRadius: 8,
+              border: "none",
+              background: "#15803d",
+              color: "#fff",
+              fontSize: 13,
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+          >
+            OK
+          </button>
+        </div>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 16,
-          marginTop: 32,
-        }}
-      >
+      {/* ── Error banner — OUTSIDE flex ── */}
+      {error && (
+        <div style={{
+          background: "#fff1f2",
+          border: "1px solid #fecaca",
+          borderRadius: 10,
+          padding: "12px 16px",
+          marginTop: 16,
+        }}>
+          <p style={{ color: "#dc2626", fontWeight: 600, fontSize: 13, margin: "0 0 4px 0" }}>
+            ❌ {error}
+          </p>
+          {apiErrorDetail?.errors && (
+            <ul style={{ margin: 0, paddingLeft: 16 }}>
+              {Object.entries(apiErrorDetail.errors).map(([field, msgs]: any) => (
+                <li key={field} style={{ fontSize: 11, color: "#ef4444", marginBottom: 2 }}>
+                  <strong>{field}:</strong> {Array.isArray(msgs) ? msgs[0] : msgs}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {/* ── Buttons only in flex ── */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 20 }}>
         <button
           onClick={onClose}
           style={{
@@ -963,8 +1114,10 @@ export default function TotalStudentsPage() {
       const raw = localStorage.getItem("user");
       const parsed = raw ? JSON.parse(raw) : null;
       const assignments = parsed?.user?.user_detail?.assignments || [];
+      console.log("ALL ASSIGNMENTS:", assignments);  // 👈 see what's actually there
       const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
       const stateId = stateAssignment?.coordinatable_id;
+      console.log("STATE ID:", stateId);  // 👈 if this is "" that's the problem
       const prantId = stateAssignment?.extras?.prant_id;  
       // const userEmail = parsed?.user?.user_detail?.email || "shingnesid@gmail.com"; // 🔴 fallback only
       const userEmail = "shingnesid@gmail.com";
