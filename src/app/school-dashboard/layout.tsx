@@ -13,7 +13,6 @@ import {
   FaSignOutAlt,
   FaTimes,
   FaClock,
-  FaInfoCircle,
 } from "react-icons/fa";
 import { useSessionTimeout } from "@/components/shared/useSessionTimeout";
 import { logoutUser } from "@/services/authService";
@@ -63,7 +62,7 @@ function NavDivider() {
 }
 
 /* ---------------- MAIN LAYOUT ---------------- */
-export default function StateDashboardLayout({ 
+export default function SchoolDashboardLayout({ 
   children,
 }: {
   children: React.ReactNode;
@@ -88,14 +87,10 @@ export default function StateDashboardLayout({
 
   // ── ADDED: dynamic navbar height ──
   const [navbarHeight, setNavbarHeight] = useState(64);
-  const [showNotice, setShowNotice] = useState(true);
+
   const isSchoolActive = pathname.startsWith("/state-dashboard/school");
   const isStudentActive = pathname.startsWith("/state-dashboard/student");
 
-  const handleDismissNotice = () => {
-    setShowNotice(false);  // Only hides until next refresh
-    // No localStorage - so it will show again after refresh
-  };
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -225,8 +220,8 @@ export default function StateDashboardLayout({
 
       {/* NAV */}
       <nav className="space-y-1">
-        <Link href="/school-dashboard" className={linkClass("/school-dashboard")}>
-          <FaHome className={iconClass("/school-dashboard")} />
+        <Link href="/state-dashboard" className={linkClass("/state-dashboard")}>
+          <FaHome className={iconClass("/state-dashboard")} />
           Dashboard
         </Link>
 
@@ -277,7 +272,7 @@ export default function StateDashboardLayout({
                 Total Students
               </Link>
               <Link
-                href="/state-dashboard/student/student-payment"
+                href="/state-dashboard/student/total-student"
                 className={linkClass("/state-dashboard/student/student-payment")}
               >
                 Students Payment
@@ -427,45 +422,6 @@ export default function StateDashboardLayout({
           </div>
         </div>
       )}
-      {showNotice && (
-              <div
-                id="payment-notice-banner"
-                className="notice-slide-down fixed left-0 right-0 z-[70] bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-b border-amber-200 shadow-sm"
-                style={{
-                  top: `${navbarHeight}px`,
-                }}
-              >
-                <div className="relative max-w-7xl mx-auto px-4 py-3 md:py-3.5">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 flex-shrink-0">
-                        <FaInfoCircle className="text-amber-600 text-sm" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-amber-800 text-sm md:text-base font-medium leading-tight">
-                          <span className="font-bold">Payment Notice:</span>{' '}
-                          <span className="text-amber-700">
-                            Payment functionality is currently unavailable. We are working on enabling this feature and will notify you once it&#39;s ready.
-                          </span>
-                        </p>
-                        <p className="text-amber-600 text-xs md:text-sm mt-0.5 hidden sm:block">
-                          Thank you for your patience and understanding.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <button
-                        onClick={handleDismissNotice}
-                        className="px-3 py-1.5 text-xs md:text-sm font-medium text-amber-700 hover:text-amber-900 bg-amber-100 hover:bg-amber-200 rounded-lg transition-all duration-200 whitespace-nowrap"
-                        aria-label="Dismiss notice"
-                      >
-                        Dismiss
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
       {/* ── Page shell ── */}
       <div className="min-h-screen">
         <div

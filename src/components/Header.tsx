@@ -10,7 +10,8 @@ const Header = () => {
   const [loggedOut, setLoggedOut] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mounted, setMounted] = useState(false);
-
+const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+const [loggedOut, setLoggedOut] = useState(false);
   // useEffect(() => {
   //   // ✅ run after render (no warning)
   //   const timer = setTimeout(() => {
