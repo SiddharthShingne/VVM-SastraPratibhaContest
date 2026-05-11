@@ -37,9 +37,9 @@ export default function StudentAwards() {
 
               {/* Header */}
               <div className="text-center mb-6">
-                <span className="text-[20px] font-semibold">
+                {/* <span className="text-[20px] font-semibold">
                   Awards & Recognition
-                </span>
+                </span> */}
 
                 <h6 className="text-[35px] font-extrabold text-[#17395c] mt-2">
                   STUDENT AWARDS
@@ -57,7 +57,7 @@ export default function StudentAwards() {
                       <th className="p-4 font-extrabold text-center">Level</th>
                       <th className="p-4 font-extrabold text-center">Name</th>
                       <th className="p-4 font-extrabold text-center">Selection Criteria</th>
-                      {/* <th className="p-4 font-extrabold text-center">Reward</th> */}
+                      <th className="p-4 font-extrabold text-center">Reward</th>
                     </tr>
                   </thead>
 
@@ -73,16 +73,16 @@ export default function StudentAwards() {
                         ONLINE EXAMINATION
                       </td>
                       <td className="p-4">
-                          The top 3 rankers per class will be shortlisted for Next Level.
+                          All successful participants will be eligible for State Level Examination.
                           
                       </td>
-                      {/* <td className="p-4">
+                      <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
                           Participation Certificate
                         </span>
                         <br />
                         Certificates will be available online via student dashboard.
-                      </td> */}
+                      </td>
                     </tr>
 
                     {/* <tr className="border-b hover:bg-yellow-50">
@@ -109,19 +109,19 @@ export default function StudentAwards() {
                         LEVEL – II
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        STATE LEVEL
+                        STATE LEVEL CAMP
                       </td>
                       <td className="p-4">
-                          All successful participants will be eligible for National Level Examination.
+                          Top 25 qualify for camp. Top 3 per class become winners.
                       </td>
-                      {/* <td className="p-4">
+                      <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
-                          Merit Certificate
+                            State Rewards
                         </span>
                         <br />
-                        • Fee waiver (Class 6–10) <br />
-                        • Science India e-magazine (Class 11)
-                      </td> */}
+                        {/* • Fee waiver (Class 6–10) <br />
+                        • Science India e-magazine (Class 11) */}
+                      </td>
                     </tr>
 
                     <tr className="border-b hover:bg-yellow-50">
@@ -129,20 +129,20 @@ export default function StudentAwards() {
                         LEVEL – III
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        NATIONAL LEVEL WINNERS
+                        NATIONAL LEVEL CAMP
                       </td>
                       <td className="p-4">
-                        Top 25 qualify for camp. Top 3 per class become winners.
+                          Top 2 per state qualify. Top 3 per class become national winners.
                       </td>
-                      {/* <td className="p-4">
+                      <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 mb-1">
-                          State Rewards
+                            National Rewards
                         </span>
                         <br />
-                        • Certificate & Memento <br />
+                        {/* • Certificate & Memento <br />
                         • ₹5000 / ₹3000 / ₹2000 prizes <br />
-                        • NCSM visit
-                      </td> */}
+                        • NCSM visit */}
+                      </td>
                     </tr>
 
                     <tr className="border-b hover:bg-yellow-50">
