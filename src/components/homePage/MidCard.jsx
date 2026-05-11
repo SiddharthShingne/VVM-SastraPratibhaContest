@@ -57,9 +57,9 @@ const VVMHeroAbout = () => {
               </span>
 
               <h1 className="text-4xl md:text-6xl font-extrabold text-[#17395c] leading-tight">
-                Śāstra Pratibhā Contest
+                Śāstra Pratibhā Contest (SPC)
               </h1>
-
+             
               <p className="text-gray-600 max-w-xl">
                 A digital-based and one of the largest science talent search examination
               </p>
@@ -128,7 +128,7 @@ const VVMHeroAbout = () => {
             </h4>
 
             <p className="text-gray-600 mb-6">
-              VVM is a national program by <strong>VIBHA</strong> with NCERT & NCSM.
+              Vidyarthi Vigyan Manthan (VVM) is an initiative of Vijnana Bharati (VIBHA), in collaboration with NCERT and NCSM under Government of India.
             </p>
 
             {/* STATS */}

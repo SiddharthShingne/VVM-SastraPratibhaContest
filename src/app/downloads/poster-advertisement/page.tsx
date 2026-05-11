@@ -71,20 +71,19 @@ const PostersAdvertisements: React.FC = () => {
 
               {/* Downloads */}
               <ul className="space-y-4 text-[16px]">
-
-                <li>
-                  <strong>Trifold Brochure (English):</strong>
+             <li>
+                  <strong>Brochure 2026-27:</strong>
                   <a
-                    href="/assets/pdf/TRIFOLD BROCHURE English.pdf"
+                    href="/pdf/Brochure2026-27.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
+                    download
                     className="ml-2 font-bold text-[#17395c] hover:text-[#b88d00] hover:underline"
                   >
-                    Download Here
+                    View / Download
                   </a>
                 </li>
-
-                <li>
+                {/* <li>
                   <strong>Trifold Brochure (Hindi):</strong>
                   <a
                     href="/assets/pdf/TRIFOLD BROCHURE Hindi.pdf"
@@ -94,7 +93,7 @@ const PostersAdvertisements: React.FC = () => {
                   >
                     Download Here
                   </a>
-                </li>
+                </li> */}
 
               </ul>
 

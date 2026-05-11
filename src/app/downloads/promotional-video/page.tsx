@@ -98,7 +98,7 @@ const PromotionalVideo: React.FC = () => {
               <div className="h-[1px] bg-[#17395c]/10 my-8"></div>
 
               {/* 📥 Downloads */}
-              <ul className="text-center space-y-3">
+              {/* <ul className="text-center space-y-3">
 
                 <li className="text-[16px]">
                   <strong>Mobile Video:</strong>
@@ -133,7 +133,7 @@ const PromotionalVideo: React.FC = () => {
                   </a>
                 </li>
 
-              </ul>
+              </ul> */}
 
             </div>
           </div>

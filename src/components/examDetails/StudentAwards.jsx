@@ -56,7 +56,7 @@ export default function StudentAwards() {
                     <tr>
                       <th className="p-4 font-extrabold text-center">Level</th>
                       <th className="p-4 font-extrabold text-center">Name</th>
-                      <th className="p-4 font-extrabold text-center">Selection</th>
+                      <th className="p-4 font-extrabold text-center">Selection Criteria</th>
                       {/* <th className="p-4 font-extrabold text-center">Reward</th> */}
                     </tr>
                   </thead>
@@ -70,10 +70,11 @@ export default function StudentAwards() {
                         LEVEL – I
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
-                        SELECTION FOR NEXT LEVEL
+                        ONLINE EXAMINATION
                       </td>
                       <td className="p-4">
-                        All successful participants will be eligible for State Level  Examination.
+                          The top 3 rankers per class will be shortlisted for Next Level.
+                          
                       </td>
                       {/* <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">

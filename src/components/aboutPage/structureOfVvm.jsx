@@ -93,7 +93,7 @@ const WhatIsVVM = () => {
                     </h2>
 
                     <p className="text-center text-[black] text-base font-semibold max-w-2xl mx-auto mb-10">
-                        Students participating in  Śāstra Pratibhā Contest shall undergo the following multi-level testing procedures:
+                        Students participating in the Śāstra Pratibhā Contest will undergo the following multi-level assessments.
                     </p>
 
                     {/* Grid */}

@@ -421,7 +421,7 @@ export default function EditProfile() {
         grade: String(d.class_id || ""),
         howDidYouGetToKnowAboutVVM: String(d.know_about_vvm_id || ""),
         state: String(d.state_id || ""),
-        district:"",
+        district: "",
         city: String(d.city_id || ""),
         pinCode: d.pin_code || d.pincode || "",  // ← your data uses "pincode" not "pin_code"
         aadharNumber: d.aadhar_number || "",
@@ -642,12 +642,20 @@ export default function EditProfile() {
 
             {/* ── Personal ── */}
             <div className="vvm-section-label">Personal Information</div>
-
-            <VvmInput label="Full Name" required>
-              <VvmTextInput placeholder="Enter full name" {...register("name")} />
+            <VvmInput label="Full Name" required error={errors.name?.message}>
+              <VvmTextInput placeholder="Enter full name"
+                onKeyPress={(e) => { if (!/[a-zA-Z\s.'-]/.test(e.key)) e.preventDefault(); }}
+                {...register("name", {
+                  required: "Name is required",
+                  pattern: {
+                    value: /^[a-zA-Z\s.'-]+$/,
+                    message: "Name can only contain letters, spaces, dots, hyphens"
+                  },
+                  minLength: { value: 2, message: "Name must be at least 2 characters" }
+                })} />
             </VvmInput>
 
-            <VvmInput label="Date Of Birth" required >
+            <VvmInput label="Date Of Birth" required error={errors.dob?.message}>
               <VvmTextInput
                 type="date"
                 min="2008-01-01"
@@ -691,22 +699,26 @@ export default function EditProfile() {
                 placeholder="Student mobile number"
                 {...register("studentMobile", {
                   validate: (value) => {
-                    if (!value) return true; // optional field
-                    const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
-                    if (digitsOnly.length < 7 || digitsOnly.length > 10)
-                      return "Enter a valid mobile number (7-10 digits)";
+                    if (!value) return true;
+                    if (!/^\d+$/.test(value)) return "Only digits allowed";
+                    if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
                     return true;
                   }
                 })}
+                onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
               />
             </VvmInput>
 
-            <VvmInput label="Student Email">
+            <VvmInput label="Student Email" error={errors.studentEmail?.message}>
               <VvmTextInput
                 type="email"
                 placeholder="Student email address"
-                {...register("studentEmail")}
-              />
+                {...register("studentEmail", {
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address"
+                  }
+                })} />
             </VvmInput>
 
             {/* ── Parent / Contact ── */}
@@ -733,16 +745,15 @@ export default function EditProfile() {
             <VvmInput label="Parent Mobile No." required error={errors.parentMobile?.message}>
               <div className="vvm-otp-row">
                 <VvmTextInput
-                  placeholder="Enter mobile number"
                   {...register("parentMobile", {
                     required: "Parent mobile number is required",
                     validate: (value) => {
-                      const digitsOnly = value.replace(/\D/g, "").replace(/^0+/, "");
-                      if (digitsOnly.length < 7 || digitsOnly.length > 10)
-                        return "Enter a valid mobile number (7-10 digits)";
+                      if (!/^\d+$/.test(value)) return "Only digits allowed";
+                      if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
                       return true;
                     }
                   })}
+                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                 />
                 <button
                   type="button"
@@ -767,6 +778,7 @@ export default function EditProfile() {
                   maxLength={6}
                   value={verifyParentMobileOtp}
                   onChange={(e) => setVerifyParentMobileOtp(e.target.value)}
+                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                   disabled={!parentMobileOtpSent || parentMobileVerified}
                 />
                 <button
@@ -788,12 +800,17 @@ export default function EditProfile() {
               )}
             </VvmInput>
 
-            <VvmInput label="Parent Email">
+            <VvmInput label="Parent Email" error={errors.parentEmail?.message}>
               <div className="vvm-otp-row">
                 <VvmTextInput
                   type="email"
                   placeholder="Enter parent email"
-                  {...register("parentEmail")}
+                  {...register("parentEmail", {
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Enter a valid email address"
+                    }
+                  })}
                 />
                 <button
                   type="button"
@@ -822,6 +839,7 @@ export default function EditProfile() {
                   maxLength={6}
                   value={verifyParentEmailOtp}
                   onChange={(e) => setVerifyParentEmailOtp(e.target.value)}
+                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                   disabled={!parentEmailOtpSent || parentEmailVerified}
                 />
                 <button
@@ -855,8 +873,17 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="Parent / Guardian Full Name">
-              <VvmTextInput placeholder="Enter parent name" {...register("parentName")} />
+            <VvmInput label="Parent / Guardian Full Name" error={errors.parentName?.message}>
+              <VvmTextInput placeholder="Enter parent name"
+                onKeyPress={(e) => { if (!/[a-zA-Z\s.'-]/.test(e.key)) e.preventDefault(); }}
+                {...register("parentName", {
+                  required: "Parent name is required",
+                  pattern: {
+                    value: /^[a-zA-Z\s.'-]+$/,
+                    message: "Name can only contain letters, spaces, dots, hyphens"
+                  },
+                  minLength: { value: 2, message: "Minimum 2 characters" }
+                })} />
             </VvmInput>
 
 
@@ -871,8 +898,15 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="School Name" required>
-              <VvmTextInput placeholder="Enter school name" {...register("schoolName")} />
+            <VvmInput label="School Name" required error={errors.schoolName?.message}>              <VvmTextInput placeholder="Enter school name"{...register("schoolName", {
+              required: "School name is required",
+              minLength: { value: 3, message: "Minimum 3 characters" },
+              pattern: {
+                value: /^[a-zA-Z0-9\s.,'()&-]+$/,
+                message: "School name contains invalid characters"
+              }
+            })}
+            />
             </VvmInput>
 
             <VvmInput label="School Board">
@@ -894,8 +928,11 @@ export default function EditProfile() {
             {/* ── Address ── */}
             <div className="vvm-section-label">Address</div>
 
-            <VvmInput label="Address" required>
-              <VvmTextInput placeholder="Enter address" {...register("address")} />
+            <VvmInput label="Address" required error={errors.address?.message}>              <VvmTextInput placeholder="Enter address" {...register("address", {
+              required: "Address is required",
+              minLength: { value: 10, message: "Address too short (min 10 chars)" },
+              maxLength: { value: 200, message: "Address too long (max 200 chars)" }
+            })} />
             </VvmInput>
 
             {/* <VvmInput label="State">
@@ -936,12 +973,18 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="Pin Code" required>
+            <VvmInput label="Pin Code" required error={errors.pinCode?.message}>
               <VvmTextInput
                 placeholder="Enter Pin Code"
                 maxLength={6}
-                {...register("pinCode")}
-              />
+                onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
+                {...register("pinCode", {
+                  required: "Pin code is required",
+                  pattern: {
+                    value: /^\d{4,10}$/,
+                    message: "Pin code must be 4-10 digits only"
+                  }
+                })} />
             </VvmInput>
 
             {/* ── VVM ── */}

@@ -10,8 +10,8 @@ const [activeVideo, setActiveVideo] = useState(null);
       id: "video1",
       img: "/images/video1.jpg",
       embed: "az4LDoONNj0",
-      title: "VVM Introduction",
-      desc: "Know more about the mission, vision, and spirit of Vidyarthi Vigyan Manthan.",
+      title: "SPC-VVM Introduction",
+      desc: "Know more about the mission, vision, and spirit of Śāstra Pratibhā Contest.",
       badge: "Featured",
     },
     {
@@ -19,7 +19,7 @@ const [activeVideo, setActiveVideo] = useState(null);
       img: "/images/video2.jpg",
       embed: "W7uYZm4su6o",
       title: "Student Participation",
-      desc: "See how students engage with VVM through activities.",
+      desc: "See how students engage with SPC-VVM through activities.",
       badge: "Popular",
     },
     {
@@ -34,16 +34,16 @@ const [activeVideo, setActiveVideo] = useState(null);
   id: "video4",
   img: "https://img.youtube.com/vi/m6e30MqTbdE/hqdefault.jpg",
   embed: "m6e30MqTbdE",
-  title: "VVM Video",
-  desc: "Watch this informative VVM video and explore more insights.",
+  title: "SPC-VVM Video",
+  desc: "Watch this informative SPC-VVM video and explore more insights.",
   badge: "New",
 },
 {
   id: "video5",
   img: "https://img.youtube.com/vi/INSRUPCn7Tw/hqdefault.jpg",
   embed: "INSRUPCn7Tw",
-  title: "VVM Event Video",
-  desc: "Watch this engaging VVM session and explore key highlights.",
+  title: "SPC-VVM Event Video",
+  desc: "Watch this engaging SPC-VVM session and explore key highlights.",
   badge: "New",
 }
   ];
@@ -70,7 +70,7 @@ const [activeVideo, setActiveVideo] = useState(null);
           </h2>
 
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Explore inspiring VVM highlights, events and student participation.
+            Explore inspiring SPC highlights, events and student participation.
           </p>
         </div>
 
@@ -108,7 +108,7 @@ const [activeVideo, setActiveVideo] = useState(null);
 
   {/* Description */}
   <p className="text-gray-200 text-sm leading-relaxed mb-6">
-    Visit the official VVM video collection and stay connected with inspiring updates.
+    Visit the official SPC video collection and stay connected with inspiring updates.
   </p>
 
   {/* Button */}

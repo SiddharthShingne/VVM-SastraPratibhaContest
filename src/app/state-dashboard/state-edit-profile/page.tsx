@@ -134,7 +134,11 @@ export default function UpdateProfilePage() {
     const selected = e.target.files?.[0];
     if (selected) {
       setFile(selected);
-      setPreview(URL.createObjectURL(selected));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string); // base64 — survives refresh
+      };
+      reader.readAsDataURL(selected);
     }
   };
 
@@ -143,27 +147,35 @@ export default function UpdateProfilePage() {
       setLoading(true);
 
       // Prepare payload for coordinator update API
-      const payload = {
-        name: formData.name,
-        username: formData.username,
-        designation: formData.designation,
-        phone: formData.mobile,
-        email: formData.email,
-        type: formData.type,
-        user_id: formData.user_id,
-        location_id: String(formData.location_id),
-      };
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("username", formData.username);
+      payload.append("designation", formData.designation);
+      payload.append("phone", formData.mobile);
+      payload.append("email", formData.email);
+      payload.append("type", formData.type);
+      payload.append("user_id", String(formData.user_id));
+      payload.append("location_id", String(formData.location_id));
+      if (file) payload.append("profile_photo", file);
+
+      const response = await axiosInstance.post("/coordinators/update", payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("Updating profile with payload:", payload);
 
       // Call the coordinator update API
-      const response = await axiosInstance.post("/coordinators/update", payload);
+      // const response = await axiosInstance.post("/coordinators/update", payload);
 
       if (response.data.status === true) {
         // Update localStorage with new data
         const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
         const root = storedUser?.user || storedUser;
         const userDetail = root?.user_detail || root?.student || {};
+        // get photo URL from API response if returned, else keep current preview
+        const photoUrl = response.data?.data?.profile_photo ||
+          response.data?.profile_photo ||
+          (file ? preview : userDetail.profile_photo || null);
 
         const updatedUserDetail = {
           ...userDetail,
@@ -174,6 +186,7 @@ export default function UpdateProfilePage() {
           student_email: formData.email,
           parent_email: formData.email,
           email: formData.email,
+          profile_photo: photoUrl,   // ← save photo here
         };
 
         const updatedRoot = {
@@ -301,6 +314,7 @@ export default function UpdateProfilePage() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                onKeyPress={(e) => { if (!/[a-zA-Z\s]/.test(e.key)) e.preventDefault(); }}
                 placeholder="Enter your full name"
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-700 text-base transition-all duration-300 focus:outline-none focus:border-[#1f4e7a] focus:bg-white focus:ring-2 focus:ring-[#1f4e7a]/20 hover:border-gray-300"
               />

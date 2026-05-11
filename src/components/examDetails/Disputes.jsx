@@ -49,14 +49,12 @@ const Disputes = () => {
 
               {/* Title */}
               <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
-                Disputes, If Any
+                Disputes
               </h2>
 
               {/* Content */}
-              <p className="text-[17px] leading-[1.8] text-[#4f6480] mt-2">
-                In the event of any dispute, grievance, or RTI (Right to Information)
-                complaint, the decision made by the Core Committee shall be final
-                and binding.
+              <p className="text-[17px] leading-[1.8] text-center text-[#4f6480] mt-2">
+                Any dispute will be resolved by the SPC Committee and will be final.
               </p>
 
             </div>

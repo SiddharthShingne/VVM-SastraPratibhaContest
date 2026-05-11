@@ -416,6 +416,7 @@ console.log("REGIONS API:", data);
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+ 
   const handleSubmit = async () => {
 
     console.log("ALL ASSIGNMENTS:", assignments);       // 👈 yahan
@@ -781,6 +782,7 @@ console.log("REGIONS API:", data);
             <option value="">Select Option</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
+             <option value="Other">Other</option>
           </select>
         </Field>
 
@@ -806,19 +808,23 @@ console.log("REGIONS API:", data);
             style={inputStyle}
           >
             <option value="English">English</option>
-            <option value="Hindi">Hindi</option>
-          </select>
+                      </select>
         </Field>
 
         {/* Row 5 */}
         <Field label="Parent Salutation" required>
-          <input
-            type="text"
-            placeholder="Parent salutation"
+          <select
             value={form.parentSalutation}
             onChange={(e) => handleChange("parentSalutation", e.target.value)}
             style={inputStyle}
-          />
+          >
+            <option value="">Select Salutation</option>
+            <option value="Mr">Mr.</option>
+            <option value="Mrs">Mrs.</option>
+            <option value="Ms">Ms.</option>
+            <option value="Dr">Dr.</option>
+            <option value="Prof">Prof.</option>
+          </select>
         </Field>
 
         <Field label="Parent Full Name" required>
@@ -1027,6 +1033,19 @@ export default function TotalStudentsPage() {
     return () => clearTimeout(t);
   }, [search]);
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
+
   // Fetch students
   const fetchStudents = async () => {
     setLoading(true);
@@ -1067,8 +1086,8 @@ export default function TotalStudentsPage() {
         isMock: !!s.is_mock,
         isFinal: !!s.is_final,
         paymentStatus: s.payment_status === 1 ? "Paid" : "Pending",
-        lastLogin: s.last_login_at || "-",
-        createdAt: s.created_at || "-",
+        lastLogin: s.last_login_at ? formatDate(s.last_login_at) : "-",
+        createdAt: s.created_at ? formatDate(s.created_at) : "-",
       }));
 
             // ... (formatted mapping same as before)
@@ -1473,7 +1492,10 @@ export default function TotalStudentsPage() {
                   "GENDER", "EXAM LANGUAGE", "ADDRESS", "PINCODE",
                   "PARENT NAME", "PARENT MOBILE NO.", "PARENT EMAIL",
                   "STUDENT MOBILE NO.", "STUDENT EMAIL", "LAST LOGIN AT",
-                  "MOCK EXAM", "FINAL EXAM", "CREATED AT", "PAYMENT STATUS", "ACTION",
+                  // "MOCK EXAM", "FINAL EXAM", 
+                  "CREATED AT",
+                  // "PAYMENT STATUS",
+                  "ACTION",
                 ].map((h) => (
                   <th key={h} style={s.th}>{h}</th>
                 ))}
@@ -1527,7 +1549,7 @@ export default function TotalStudentsPage() {
                     <td style={s.td}>{s_row.studentEmail || "-"}</td>                   {/* ✅ Add */}
                     <td style={s.td}>{s_row.lastLogin || "-"}</td>                      {/* ✅ Add */}
                     {/* Mock Exam */}
-                    <td style={s.td}>
+                    {/* <td style={s.td}>
                       <span style={{
                         padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600,
                         background: s_row.isMock ? "#bbf7d0" : "#fecaca",
@@ -1535,10 +1557,10 @@ export default function TotalStudentsPage() {
                       }}>
                         {s_row.isMock ? "Yes" : "No"}
                       </span>
-                    </td>
+                    </td> */}
 
                     {/* Final Exam */}
-                    <td style={s.td}>
+                    {/* <td style={s.td}>
                       <span style={{
                         padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600,
                         background: s_row.isFinal ? "#bbf7d0" : "#fecaca",
@@ -1546,12 +1568,11 @@ export default function TotalStudentsPage() {
                       }}>
                         {s_row.isFinal ? "Yes" : "No"}
                       </span>
-                    </td>
+                    </td> */}
 
-                    <td style={s.td}>{s_row.createdAt || "-"}</td>                      {/* ✅ Add */}
-
+                    <td style={s.td}>{formatDate(s_row.createdAt || "")}</td>
                     {/* Payment Status */}
-                    <td style={s.td}>
+                    {/* <td style={s.td}>
                       <span style={{
                         padding: "2px 8px", borderRadius: 12, fontSize: 11, fontWeight: 600,
                         background: s_row.isPaid ? "#bbf7d0" : "#fecaca",
@@ -1559,7 +1580,7 @@ export default function TotalStudentsPage() {
                       }}>
                         {s_row.isPaid ? "Paid" : "Pending"}
                       </span>
-                    </td>
+                    </td> */}
 
                     {/* Action Buttons */}
                     <td style={s.td}>

@@ -29,6 +29,16 @@ export default function UpdateProfile() {
       newErrors.newPassword = "Please enter a new password.";
     } else if (newPassword.length < 6) {
       newErrors.newPassword = "Password must be at least 6 characters.";
+    } else if (newPassword.length > 10) {
+      newErrors.newPassword = "Password cannot exceed 10 characters.";
+    } else if (!/[A-Z]/.test(newPassword)) {
+      newErrors.newPassword = "Password must contain at least one uppercase letter.";
+    } else if (!/[a-z]/.test(newPassword)) {
+      newErrors.newPassword = "Password must contain at least one lowercase letter.";
+    } else if (!/[0-9]/.test(newPassword)) {
+      newErrors.newPassword = "Password must contain at least one number.";
+    } else if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword)) {
+      newErrors.newPassword = "Password must contain at least one special character.";
     }
 
     if (!confirmPassword) {
@@ -57,149 +67,20 @@ export default function UpdateProfile() {
       setNewPassword("");
       setConfirmPassword("");
       setErrors({});
-    } catch (err) {
-      setErrors({
-        api: err instanceof Error ? err.message : "Something went wrong",
-      });
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Something went wrong";
+      setErrors({ api: msg });
+    
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    // <div className=" min-h-screen flex items-center justify-center p-4">
-    //   <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md border border-gray-200 p-10">
-
-    //     <h2 className="text-xl font-semibold text-gray-800 mb-6">
-    //       Update Student Password
-    //     </h2>
-
-    //     {/* Success */}
-    //     {message && (
-    //       <div className="mb-4 p-3 rounded-lg bg-green-100 text-green-800 text-sm">
-    //         {message}
-    //       </div>
-    //     )}
-
-    //     {/* API Error */}
-    //     {errors.api && (
-    //       <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-800 text-sm">
-    //         {errors.api}
-    //       </div>
-    //     )}
-
-    //     <div className="space-y-6">
-
-    //       {/* OLD PASSWORD */}
-    //       <div>
-    //         <label className="block text-sm font-medium text-gray-700 mb-1">
-    //           Old Password
-    //         </label>
-
-    //         <div className="relative">
-    //           <input
-    //             type={showOld ? "text" : "password"}
-    //             value={oldPassword}
-    //             onChange={(e) => setOldPassword(e.target.value)}
-    //             className={`w-full border rounded-lg px-4 py-3 pr-12 focus:ring-2 outline-none ${errors.oldPassword
-    //                 ? "border-red-500 focus:ring-red-300"
-    //                 : "border-gray-300 focus:ring-indigo-400"
-    //               }`}
-    //           />
-
-    //           <button
-    //             type="button"
-    //             onClick={() => setShowOld(!showOld)}
-    //             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-    //           >
-    //             {showOld ? <EyeOff size={18} /> : <Eye size={18} />}
-    //           </button>
-    //         </div>
-
-    //         {errors.oldPassword && (
-    //           <p className="text-red-600 text-sm mt-1">
-    //             {errors.oldPassword}
-    //           </p>
-    //         )}
-    //       </div>
-
-    //       {/* NEW PASSWORD */}
-    //       <div>
-    //         <label className="block text-sm font-medium text-gray-700 mb-1">
-    //           New Password
-    //         </label>
-
-    //         <div className="relative">
-    //           <input
-    //             type={showNew ? "text" : "password"}
-    //             value={newPassword}
-    //             onChange={(e) => setNewPassword(e.target.value)}
-    //             className={`w-full border rounded-lg px-4 py-3 pr-12 focus:ring-2 outline-none ${errors.newPassword
-    //                 ? "border-red-500 focus:ring-red-300"
-    //                 : "border-gray-300 focus:ring-indigo-400"
-    //               }`}
-    //           />
-
-    //           <button
-    //             type="button"
-    //             onClick={() => setShowNew(!showNew)}
-    //             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-    //           >
-    //             {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
-    //           </button>
-    //         </div>
-
-    //         {errors.newPassword && (
-    //           <p className="text-red-600 text-sm mt-1">
-    //             {errors.newPassword}
-    //           </p>
-    //         )}
-    //       </div>
-
-    //       {/* CONFIRM PASSWORD */}
-    //       <div>
-    //         <label className="block text-sm font-medium text-gray-700 mb-1">
-    //           Confirm Password
-    //         </label>
-
-    //         <div className="relative">
-    //           <input
-    //             type={showConfirm ? "text" : "password"}
-    //             value={confirmPassword}
-    //             onChange={(e) => setConfirmPassword(e.target.value)}
-    //             className={`w-full border rounded-lg px-4 py-3 pr-12 focus:ring-2 outline-none ${errors.confirmPassword
-    //                 ? "border-red-500 focus:ring-red-300"
-    //                 : "border-gray-300 focus:ring-indigo-400"
-    //               }`}
-    //           />
-
-    //           <button
-    //             type="button"
-    //             onClick={() => setShowConfirm(!showConfirm)}
-    //             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-    //           >
-    //             {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-    //           </button>
-    //         </div>
-
-    //         {errors.confirmPassword && (
-    //           <p className="text-red-600 text-sm mt-1">
-    //             {errors.confirmPassword}
-    //           </p>
-    //         )}
-    //       </div>
-
-    //       {/* BUTTON */}
-    //       <button
-    //         onClick={handleSubmit}
-    //         disabled={loading}
-    //         className="w-40 bg-linear-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold shadow-md hover:opacity-90 transition disabled:opacity-50"
-    //       >
-    //         {loading ? "Updating..." : "Submit"}
-    //       </button>
-    //     </div>
-    //   </div>
-    // </div>
+    
     <div className="min-h-screen flex items-center justify-center px-4 py-10 ">
 
   <div
@@ -284,7 +165,8 @@ export default function UpdateProfile() {
           <div className="relative">
             <input
               type={showNew ? "text" : "password"}
-              value={newPassword}
+                  value={newPassword}
+                  maxLength={10}
               onChange={(e) => setNewPassword(e.target.value)}
               className={`w-full rounded-lg px-4 py-3 pr-12 outline-none border transition-all ${
                 errors.newPassword
@@ -306,7 +188,13 @@ export default function UpdateProfile() {
             <p className="text-red-600 text-sm mt-1">
               {errors.newPassword}
             </p>
-          )}
+              )}
+              {/* ADD THIS hint below */}
+              {!errors.newPassword && (
+                <p className="text-[11px] text-[#9fb0c2] mt-1">
+                  6–10 characters · uppercase · lowercase · number · special character (!@#$%...)
+                </p>
+              )}
         </div>
 
         {/* CONFIRM PASSWORD */}

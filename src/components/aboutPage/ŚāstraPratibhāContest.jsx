@@ -103,7 +103,7 @@ const ŚāstraPratibhāContest = () => {
               {/* TITLE */}
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#17395c] leading-tight">
                 Śāstra Pratibhā Contest{" "}
-                <span className="text-[#d13b2f]">(VVM International)</span>
+                <span className="text-[#d13b2f]">(SPC-VVM International)</span>
               </h2>
 
               {/* TAGLINE */}
@@ -114,12 +114,12 @@ const ŚāstraPratibhāContest = () => {
               {/* BODY TEXT */}
               <p className="text-[#4f6480] text-justify mt-6 text-base leading-relaxed font-medium">
                 <strong className="text-[#17395c]">
-                Vidyarthi Vigyan Manthan (International Edition of VVM)
+                Vidyarthi Vigyan Manthan (International Edition of SPC-VVM)
                 </strong>{" "}
                 is conducted in the Middle Eastern Countries namely Bahrain,
                 Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
-                with the name of Śāstra Pratibhā Contest by Science India Forum,
-                an overseas unit of Vijnana Bharati. This year onwards, top 2
+                with the name of Śāstra Pratibhā Contest (SPC) by Science India Forum,
+                an overseas unit of Vijnana Bharati. The top 2
                 rankers (Class VI - XI) of the Śāstra Pratibhā Contest will also
                 participate in the National Level Camp Examination. These
                 students will be considered eligible for National Level Winners

@@ -54,90 +54,6 @@ export default function LoginPage() {
     return "";
   };
 
-  /* ---------------- LOGIN ---------------- */
-
-  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const trimmedUsername = username.trim();
-  //   const trimmedPassword = password.trim();
-
-  //   const userErr = validateUsername(trimmedUsername);
-  //   const passErr = validatePassword(trimmedPassword);
-
-  //   setUsernameError(userErr);
-  //   setPasswordError(passErr);
-
-  //   if (userErr || passErr) return;
-
-  //   setLoading(true);
-
-  //   try {
-  //     const data = await loginUser(trimmedUsername, trimmedPassword);
-
-  //     // ✅ Store full user object — this fixes name, profile, dashboard data
-  //     localStorage.setItem("user", JSON.stringify(data));
-
-  //     // ✅ Store token only if backend returns one
-  //     if (data.token) {
-  //       localStorage.setItem("token", data.token);
-  //       localStorage.setItem("role", data.user.role_id);
-  //     }
-
-  //     // ✅ Prefer role from API response, fallback to username prefix check
-  //     localStorage.setItem(
-  //       "username",
-  //       data.username || trimmedUsername
-  //     );
-  //     localStorage.setItem(
-  //       "role",
-  //       data.user.role_name ||
-  //       (trimmedUsername.toUpperCase().startsWith("9") ||
-  //         trimmedUsername.toUpperCase().startsWith("ZOC")
-  //         ? "STATE"
-  //         : "STUDENT")
-  //     );
-
-  //     window.dispatchEvent(new Event("auth-change"));
-
-  //     setDialog({
-  //       type: "success",
-  //       message: "Login successful. Redirecting to dashboard...",
-  //     });
-
-  //     setTimeout(() => {
-  //       const usernameUpper = trimmedUsername.toUpperCase();
-
-  //       if (
-  //         usernameUpper.startsWith("STC") ||
-  //         usernameUpper.startsWith("ZOC")
-  //       ) {
-  //         router.replace("/state-dashboard");
-  //       } else {
-  //         router.replace("/studentDashboard");
-  //       }
-  //     }, 1500);
-  //   } catch (err) {
-  //     setDialog({
-  //       type: "error",
-  //       message:
-  //         err instanceof Error
-  //           ? err.message
-  //           : "Invalid username or password. Please try again.",
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setUsername("");
-  //   setPassword("");
-
-  //   // Force clear in case browser bypasses React state
-  //   const inputs = document.querySelectorAll("input");
-  //   inputs.forEach((input) => (input.value = ""));
-  // }, []);
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
@@ -254,7 +170,7 @@ export default function LoginPage() {
         </div>
       )}
       {/* ---------------- SIF NOTICE DIALOG ---------------- */}
-      {showNotice && (
+      {/* {showNotice && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-2xl p-8 text-center">
             <div className="text-5xl mb-4">⚠️</div>
@@ -264,7 +180,7 @@ export default function LoginPage() {
             </h3>
 
             <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-              <strong>    This site is accessible only for SIF Students Not Indian Students</strong>.
+              <strong>    This site is accessible exclusively to SIF students wishing to participate in the Śāstra Pratibhā Contest.</strong>.
                         </p>
 
             <button
@@ -272,6 +188,30 @@ export default function LoginPage() {
               className="px-6 py-2.5 bg-[#17395c] text-white rounded-lg text-sm font-semibold hover:bg-[#0f2742] transition"
             >
             OK 
+            </button>
+          </div>
+        </div>
+      )} */}
+      
+      
+      {showNotice && (
+        <div className="w-full bg-[#dede4e] border-b border-[#f4df17]/20 shadow-sm">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+
+            {/* Left Content */}
+            <div className="flex items-center gap-3 text-sm sm:text-base">
+              <p className="text-[#052968] font-bold leading-relaxed">
+                Important Notice – This site is accessible exclusively to SIF students wishing to participate in the Śāstra Pratibhā Contest.
+              </p>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowNotice(false)}
+              className="text-white/70 hover:text-white text-xl leading-none transition"
+              aria-label="Close notice"
+            >
+              ×
             </button>
           </div>
         </div>
@@ -409,24 +349,63 @@ export default function LoginPage() {
           </div>
 
           {/* ================= RIGHT: HERO ================= */}
-          <div className="hidden md:flex items-center justify-center relative bg-linear-to-br from-[#162a4a] via-[#1f4e7a] to-[#2f6fa3] p-10">
+          {/* ================= RIGHT: HERO ================= */}
+          <div className="hidden md:flex items-center justify-center relative bg-gradient-to-br from-[#162a4a] via-[#1f4e7a] to-[#2f6fa3] p-10 overflow-hidden">
+
             {/* decorative blobs */}
             <div className="absolute w-64 h-64 bg-white/10 rounded-full -top-16 -right-16" />
             <div className="absolute w-40 h-40 bg-white/10 rounded-full -bottom-10 -left-10" />
 
-            {/* logo */}
-            <div
-              className="relative w-44 h-44 rounded-full 
-  border-4 border-white/40 bg-white/10 backdrop-blur-md 
-  flex items-center justify-center shadow-2xl animate-[float_4s_ease-in-out_infinite]"
-            >
-              <Image
-                src="/gcc/logo.png"
-                alt="VVM Logo"
-                width={180}
-                height={180}
-                className="w-full h-full object-cover rounded-full"
-              />
+            {/* content wrapper */}
+            <div className="relative z-10 flex flex-col items-center">
+
+              {/* MAIN LOGO */}
+              <div
+                className="relative w-44 h-44 rounded-full 
+      border-4 border-white/40 bg-white/10 backdrop-blur-md 
+      flex items-center justify-center shadow-2xl 
+      animate-[float_4s_ease-in-out_infinite]"
+              >
+                <Image
+                  src="/gcc/logo.png"
+                  alt="VVM Logo"
+                  width={130}
+                  height={130}
+                  className="w-full h-full object-cover  rounded-full"
+                />
+              </div>
+
+              {/* COUNTRY LOGOS */}
+              <div className="mt-8  grid grid-cols-3 gap-4">
+                {[
+                  "/gcc/uae.png",
+                  "/gcc/oman.png",
+                  "/gcc/kuwait.png",
+                  "/gcc/qatar.png",
+                  "/gcc/saudi-arab.png",
+                  "/gcc/bahrain.png",
+                ].map((flag, index) => (
+                  <div
+                    key={index}
+                    className="w-16  h-16 rounded-full bg-white backdrop-blur-md 
+          border border-white/30 shadow-lg flex items-center justify-center
+          hover:scale-110 transition duration-300"
+                  >
+                    <Image
+                      src={flag}
+                      alt="Country"
+                      width={70}
+                      height={70}
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* optional text */}
+              <p className="mt-6 text-white text-2xl  tracking-wide font-bold">
+                Śāstra Pratibhā Contest
+              </p>
             </div>
           </div>
         </div>

@@ -159,7 +159,7 @@ const Header = () => {
       )}
 
       {/* ── LOGGED OUT SUCCESS DIALOG ── */}
-      {loggedOut && (
+      {/* {loggedOut && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div
@@ -175,7 +175,6 @@ const Header = () => {
                 background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
               }}
             />
-            {/* Animated checkmark */}
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-3xl shadow-md"
               style={{ background: "linear-gradient(135deg, #17395c, #1f6fa3)" }}
@@ -188,7 +187,6 @@ const Header = () => {
             <p className="text-[13px] text-[#7a90a8]">
               You have been successfully logged out. Redirecting to login…
             </p>
-            {/* Progress bar */}
             <div className="mt-5 h-1 rounded-full bg-[#e8eef6] overflow-hidden">
               <div
                 className="h-full rounded-full"
@@ -206,7 +204,7 @@ const Header = () => {
             `}</style>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

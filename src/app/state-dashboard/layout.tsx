@@ -216,7 +216,7 @@ export default function StateDashboardLayout({
           {name.charAt(0).toUpperCase()}
         </div>
         <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
-          Welcome back
+          State Coordinator
         </p>
         <h6 className="shine-name text-[17px] font-extrabold">
           {name}
@@ -225,8 +225,8 @@ export default function StateDashboardLayout({
 
       {/* NAV */}
       <nav className="space-y-1">
-        <Link href="/school-dashboard" className={linkClass("/school-dashboard")}>
-          <FaHome className={iconClass("/school-dashboard")} />
+        <Link href="/state-dashboard" className={linkClass("/state-dashboard")}>
+          <FaHome className={iconClass("/state-dashboard")} />
           Dashboard
         </Link>
 

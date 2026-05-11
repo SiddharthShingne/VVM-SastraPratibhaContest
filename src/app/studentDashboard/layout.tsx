@@ -272,13 +272,13 @@ export default function StudentDashboardLayout({
           <FaHome className={iconClass("/studentDashboard")} />
           Dashboard
         </Link>
-        <Link
+        {/* <Link
           href="/studentDashboard/download-app"
           className={linkClass("/studentDashboard/download-app")}
         >
           <FaDownload className={iconClass("/studentDashboard/download-app")} />
           Download Apps
-        </Link>
+        </Link> */}
       </nav>
 
       <NavDivider />
@@ -316,6 +316,7 @@ export default function StudentDashboardLayout({
           <FaSignOutAlt />
           Logout
         </button> */}
+        <NavDivider />
         <button
           onClick={() => setShowLogoutDialog(true)}
           className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"

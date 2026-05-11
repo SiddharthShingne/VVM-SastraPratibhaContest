@@ -1,157 +1,149 @@
-
 "use client";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, User, Contact, PhoneCall, Phone } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
 export default function ContactPage() {
+  const countries = [
+    {
+      name: "United Arab Emirates (UAE)", flag: "/gcc/uae.png", coords: [
+        { name: "UAE Coordinator", phone: "+971-XXXX-XXXX", email: "uae1@spc.org" },
+        { name: "UAE Coordinator", phone: "+971-XXXX-XXXX", email: "uae2@spc.org" },
+      ]
+    },
+    {
+      name: "Oman", flag: "/gcc/oman.png", coords: [
+        { name: "Oman Coordinator", phone: "+968-XXXX-XXXX", email: "oman1@spc.org" },
+        { name: "Oman Coordinator", phone: "+968-XXXX-XXXX", email: "oman2@spc.org" },
+      ]
+    },
+    {
+      name: "Kuwait", flag: "/gcc/kuwait.png", coords: [
+        { name: "Kuwait Coordinator", phone: "+965-XXXX-XXXX", email: "kuwait1@spc.org" },
+        { name: "Kuwait Coordinator", phone: "+965-XXXX-XXXX", email: "kuwait2@spc.org" },
+      ]
+    },
+    {
+      name: "Qatar", flag: "/gcc/qatar.png", coords: [
+        { name: "Qatar Coordinator", phone: "+974-XXXX-XXXX", email: "qatar1@spc.org" },
+        { name: "Qatar Coordinator", phone: "+974-XXXX-XXXX", email: "qatar2@spc.org" },
+      ]
+    },
+    {
+      name: "Saudi Arabia", flag: "/gcc/saudi-arab.png", coords: [
+        { name: "Saudi Arabia Coordinator", phone: "+966-XXXX-XXXX", email: "saudi1@spc.org" },
+        { name: "Saudi Arabia Coordinator", phone: "+966-XXXX-XXXX", email: "saudi2@spc.org" },
+      ]
+    },
+    {
+      name: "Bahrain", flag: "/gcc/bahrain.png", coords: [
+        { name: "Bahrain Coordinator", phone: "+973-XXXX-XXXX", email: "bahrain1@spc.org" },
+        { name: "Bahrain Coordinator", phone: "+973-XXXX-XXXX", email: "bahrain2@spc.org" },
+      ]
+    },
+  ];
+
   return (
     <div>
-      {/* ================= Breadcrumb ================= */}
-      <div className="bg-[#162a4a] py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col justify-center min-h-16.25">
-            <h6 className="text-white text-[27px] font-medium mb-1">
-              Contact Us
-            </h6>
-
-            <nav>
-              <ol className="flex text-white text-xs space-x-2">
-                <li>
-                  <Link href="/" className="hover:underline">
-                    Home
-                  </Link>
-                </li>
-                <li>{">"}</li>
-                <li className="text-white">Contact Us</li>
-              </ol>
-            </nav>
-          </div>
+      {/* Breadcrumb */}
+      <div className="bg-[#162a4a] py-10 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-white text-2xl font-medium mb-1">Contact Us</h1>
+          <nav className="flex items-center gap-2 text-xs text-white/70">
+            <Link href="/" className="hover:text-[#f4df17]">Home</Link>
+            <span>›</span>
+            <span className="text-white">Contact Us</span>
+          </nav>
         </div>
       </div>
 
-      {/* ================= Contact Cards ================= */}
-      <div className="relative py-16 bg-linear-to-br from-[#edf2f7] via-[#e8eef5] to-[#f7f9fc]">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-wrap gap-6">
-            
-            {/* EMAIL */}
-            <div className="w-full md:w-[48%] lg:w-[31%] flex">
-              <div className="w-full rounded-[26px] bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-                
-                {/* Top Gradient Line */}
-                <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-[#17395c] via-yellow-400 to-[#17395c]" />
+      {/* Main Card */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className=" rounded-[34px] border border-gray-200 shadow-xl overflow-hidden">
+          {/* Top accent bar */}
+          <div className="h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
-                <div className="p-6 flex flex-col h-full">
-                  
-                  {/* Icon */}
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-linear-to-br from-[#17395c] to-[#244d79] flex items-center justify-center shadow-lg">
-                    <Mail size={16} className="text-[#f4df17]" />
-                  </div>
-
-                  <h4 className="text-xl font-bold text-[#17395c] text-center mb-4">
-                    E-MAIL ID
-                  </h4>
-
-                  <div className="flex flex-col gap-3 grow">
-                    <div className="flex justify-between border-b pb-2 text-sm">
-                      <span className="font-bold text-[#17395c]">Office</span>
-                      <a
-                        href="mailto:office@vvm.org.in"
-                        className="font-semibold text-[#17395c] hover:text-yellow-600"
-                      >
-                        office@vvm.org.in
-                      </a>
-                    </div>
-                  </div>
-                </div>
+          <div className="p-5 sm:p-8 lg:p-10">
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-xl bg-[#17395c] flex items-center justify-center">
+                <PhoneCall size={22} className="text-[#f4df17]" />
               </div>
+              <h2 className="text-4xl font-extrabold text-[#17395c] tracking-tight">
+                Country Coordinators
+              </h2>
             </div>
 
-            {/* SUPPORT */}
-            <div className="w-full md:w-[48%] lg:w-[31%] flex">
-              <div className="w-full rounded-[26px] bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-                
-                <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-[#17395c] via-yellow-400 to-[#17395c]" />
+            {/* Country Sections */}
+            {countries.map((country) => (
+              <div key={country.name} className="mb-8 last:mb-0">
+                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+                  <img
+                    src={country.flag}
+                    alt={country.name}
+                    className="w-9 h-9 rounded-full object-cover border-2 border-[#17395c]"
+                  />
+                  <h3 className="text-[2rem] font-extrabold text-[#17395c] tracking-tight">
+                    {country.name}
+                  </h3>
+                </div>
 
-                <div className="p-6 flex flex-col h-full">
+                <div className="grid lg:grid-cols-2 gap-6">
+                  {country.coords.map((coord, i) => (
+                    <div
+                      key={i}
+                      className="group flex flex-col sm:flex-row items-center sm:items-start gap-5 bg-white rounded-[28px] border border-gray-200 px-6 py-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                    >
+                      {/* Avatar */}
+                      <div className="w-28 h-28 rounded-full p-[3px] bg-gradient-to-br from-[#17395c] via-[#4c6f75] to-[#d0bf2e] flex-shrink-0">
+                        <div className="w-full h-full rounded-full bg-[#f7f7f7] flex items-center justify-center">
+                          <User
+                            size={52}
+                            strokeWidth={1.8}
+                            className="text-gray-500"
+                          />
+                        </div>
+                      </div>
 
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-linear-to-br from-[#17395c] to-[#244d79] flex items-center justify-center shadow-lg">
-                    <span className="text-yellow-400 text-2xl">🎧</span>
-                  </div>
+                      {/* Content */}
+                      <div className="flex flex-col justify-center text-center sm:text-left min-w-0 flex-1">
+                        <h4 className="text-[1.7rem] leading-tight font-extrabold text-[#17395c] mb-1">
+                          {coord.name}
+                        </h4>
 
-                  <h4 className="text-xl font-bold text-[#17395c] text-center mb-4">
-                    SUPPORT
-                  </h4>
+                        <p className="text-[#b88d00] font-bold text-lg mb-4">
+                          Coordinator - SPC
+                        </p>
 
-                  <div className="flex flex-col gap-3 grow">
-                    <div className="flex justify-between border-b pb-2 text-sm">
-                      <span className="font-bold text-[#17395c]">Mobile</span>
-                      <a
-                        href="https://wa.me/8767611690"
-                        target="_blank"
-                        className="font-semibold text-[#17395c] hover:text-yellow-600"
-                      >
-                        +91 8767611690
-                      </a>
+                        <a
+                          href={`tel:${coord.phone}`}
+                          className="flex items-center justify-center sm:justify-start gap-3 text-[#17395c] font-bold text-[1.35rem] hover:text-[#0f2742] transition mb-2"
+                        >
+                          <PhoneCall
+                            size={22}
+                            className="text-pink-500"
+                          />
+                          {coord.phone}
+                        </a>
+
+                        <a
+                          href={`mailto:${coord.email}`}
+                          className="flex items-center justify-center sm:justify-start gap-3 text-[#17395c] font-bold text-[1.3rem] hover:text-[#0f2742] transition break-all"
+                        >
+                          <Mail
+                            size={22}
+                            className="text-purple-400"
+                          />
+                          {coord.email}
+                        </a>
+                      </div>
                     </div>
-
-                    <div className="flex justify-between text-sm">
-                      <span className="font-bold text-[#17395c]">Mobile</span>
-                      <a
-                        href="https://wa.me/8329396612"
-                        target="_blank"
-                        className="font-semibold text-[#17395c] hover:text-yellow-600"
-                      >
-                        +91 8329396612
-                      </a>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            </div>
-
-            {/* LOCATION */}
-            <div className="w-full lg:w-[31%] flex">
-              <div className="w-full rounded-[26px] bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
-
-                <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-[#17395c] via-yellow-400 to-[#17395c]" />
-
-                <div className="p-6 flex flex-col items-center text-center h-full">
-
-                  <div className="w-16 h-16 mb-4 rounded-xl bg-linear-to-br from-[#17395c] to-[#244d79] flex items-center justify-center shadow-lg">
-                    <span className="text-yellow-400 text-2xl"> <MapPin size={25} className="text-[white]" /></span>
-                  </div>
-
-                  <h4 className="text-xl font-bold text-[#17395c] mb-4">
-                    OUR LOCATION
-                  </h4>
-
-                  <p className="text-sm leading-7 text-[#4f6480]">
-                    VVM Secretariat,<br />
-                    Vijnana Bharati (VIBHA),<br />
-                    D-12, South Extension-I,<br />
-                    New Delhi - 110049
-                  </p>
-                </div>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* ================= Google Map ================= */}
-      <div className="bg-white pt-12">
-        <iframe
-          className="w-full h-150 border-0"
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7008.815977880848!2d77.212586!3d28.557509!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce26b9e4b6b03%3A0xa250e95f2101e485!2sGulmohar%20Park%2C%20New%20Delhi%2C%20Delhi%20110049!5e0!3m2!1sen!2sin!4v1743432244533!5m2!1sen!2sin"
-          loading="lazy"
-        />
-      </div>
-
-      {/* Separator */}
-      <div className="max-w-6xl mx-auto px-4">
-        <hr className="my-8" />
       </div>
     </div>
   );
