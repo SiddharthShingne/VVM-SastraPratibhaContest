@@ -645,7 +645,7 @@ export default function ViewStudentsPage() {
                   "SCHOOL NAME", "CLASS", "DOB", "GENDER", "EXAM LANGUAGE",
                   "ADDRESS", "PINCODE", "PARENT NAME", "PARENT MOBILE NO.",
                   "PARENT EMAIL", "STUDENT MOBILE", "STUDENT EMAIL",
-                  "MOCK EXAM", "FINAL EXAM", "PAYMENT",
+                  // "MOCK EXAM", "FINAL EXAM", "PAYMENT",
                   // "ACTION",
                 ].map((h) => (
                   <th key={h} style={thStyle}>{h}</th>
@@ -722,7 +722,7 @@ export default function ViewStudentsPage() {
                     <td style={tdStyle}>{s.student_email || "-"}</td>
 
                     {/* Mock Exam */}
-                    <td style={tdStyle}>
+                    {/* <td style={tdStyle}>
                       <span style={{
                         padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600,
                         background: s.is_mock ? "#D1FAE5" : "#FEE2E2",
@@ -730,10 +730,10 @@ export default function ViewStudentsPage() {
                       }}>
                         {s.is_mock ? "Yes" : "No"}
                       </span>
-                    </td>
+                    </td> */}
 
                     {/* Final Exam */}
-                    <td style={tdStyle}>
+                    {/* <td style={tdStyle}>
                       <span style={{
                         padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600,
                         background: s.is_final ? "#D1FAE5" : "#FEE2E2",
@@ -741,10 +741,10 @@ export default function ViewStudentsPage() {
                       }}>
                         {s.is_final ? "Yes" : "No"}
                       </span>
-                    </td>
+                    </td> */}
 
                     {/* Payment */}
-                    <td style={tdStyle}>
+                    {/* <td style={tdStyle}>
                       <span style={{
                         padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600,
                         background: s.payment_status === 1 ? "#D1FAE5" : "#FEE2E2",
@@ -752,7 +752,7 @@ export default function ViewStudentsPage() {
                       }}>
                         {s.payment_status === 1 ? "Paid" : "Pending"}
                       </span>
-                    </td>
+                    </td> */}
 
                     {/* Action */}
                     {/* <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>

@@ -324,7 +324,9 @@ export default function SchoolsPage() {
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
             <thead>
               <tr>
-                {["SR. NO.", "SCHOOL NAME", "REGION CODE", "SCHOOL CODE", "TOTAL STUDENTS", "PAID", "UNPAID"].map((h) => (
+                {["SR. NO.", "SCHOOL NAME", "REGION CODE", "SCHOOL CODE", "TOTAL STUDENTS",
+                  // "PAID", "UNPAID"
+                ].map((h) => (
                   <th key={h} style={s.th}>{h}</th>
                 ))}
               </tr>
@@ -370,12 +372,12 @@ export default function SchoolsPage() {
                     <td style={s.td}>
                       <span style={s.badge("blue")}>{school.students_count ?? 0}</span>
                     </td>
-                    <td style={s.td}>
+                    {/* <td style={s.td}>
                       <span style={s.badge("green")}>{school.paid_students_count ?? 0}</span>
                     </td>
                     <td style={s.td}>
                       <span style={s.badge("red")}>{school.unpaid_students_count ?? 0}</span>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               )}
