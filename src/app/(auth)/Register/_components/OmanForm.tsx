@@ -566,7 +566,7 @@ export default function OmanForm({ countries }: Props) {
                         /> */}
 
                         <InputField
-                            label="Emirates ID"
+                            label="Civil ID / Emirates ID"
                             required
                             maxLength={8}
                             placeholder="Enter Emirates ID"

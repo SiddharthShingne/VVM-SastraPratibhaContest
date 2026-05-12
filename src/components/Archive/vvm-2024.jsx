@@ -67,7 +67,7 @@ export default function VVMArchivePage2024() {
 
                 {/* Login Button */}
                 <a
-                  href="https://vvm-2425.cloud/Login/"
+                  href="https://vvm-2425.cloud/login/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative inline-flex items-center justify-center 

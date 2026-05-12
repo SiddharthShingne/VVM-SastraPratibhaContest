@@ -143,7 +143,7 @@ export default function StudentRegistrationInstructions() {
 const steps = [
   {
     title: "Fill Registration Form",
-    desc: "Enter student details carefully and ensure all required fields are completed..",
+    desc: "Enter student details carefully and ensure all required fields are completed.",
     img: "/student-registration-images/student.svg",
   },
   {
@@ -174,7 +174,7 @@ const steps = [
   },
   {
     title: "Update Profile",
-    desc: "After login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
+    desc: "After successful login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
     img: "/student-registration-images/confirmation.svg",
   },
   // {

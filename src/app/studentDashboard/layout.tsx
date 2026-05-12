@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { BookOpen } from "lucide-react";
 import {
   FaHome,
   FaDownload,
@@ -14,6 +15,7 @@ import {
   FaTimes,
   FaClock,
   FaInfoCircle,  // ← ADD THIS LINE
+  FaBook,  // ← ADD THIS LINE
 } from "react-icons/fa";
 
 import { logoutUser } from "@/services/authService";
@@ -218,10 +220,20 @@ export default function StudentDashboardLayout({
     } catch (error) {
       console.error("Logout API failed, forcing logout", error);
     } finally {
+      // Clear all auth data
       localStorage.clear();
       sessionStorage.clear();
       delete axiosInstance.defaults.headers.common["Authorization"];
-      router.replace("/Login");
+
+      // Clear the token state
+      setToken(null);
+
+      // Use setTimeout to ensure state updates are processed
+      setTimeout(() => {
+        window.dispatchEvent(new Event("auth-change"));
+        router.replace("/Login");
+        router.refresh(); // Force refresh in Next.js 13+
+      }, 100);
     }
   };
 
@@ -272,14 +284,18 @@ export default function StudentDashboardLayout({
           <FaHome className={iconClass("/studentDashboard")} />
           Dashboard
         </Link>
-        {/* <Link
+        <Link
           href="/studentDashboard/download-app"
           className={linkClass("/studentDashboard/download-app")}
         >
           <FaDownload className={iconClass("/studentDashboard/download-app")} />
           Download Apps
-        </Link> */}
+        </Link>
+
+        
       </nav>
+
+      
 
       <NavDivider />
       {/* <SectionTitle label="Contact" />
@@ -290,7 +306,23 @@ export default function StudentDashboardLayout({
         <FaPhone className={iconClass("/studentDashboard/contact")} />
         Contact Information
       </Link> */}
+      <SectionTitle label="Syllabus & Study Material" />
 
+      <Link
+        href="/studentDashboard/syllabus"
+        className={linkClass("/studentDashboard/syllabus")}
+      >
+        <FaBook className={iconClass("/studentDashboard/syllabus")} />
+        Syllabus
+      </Link>
+      <Link
+        href="/studentDashboard/Study-Material"
+        className={linkClass("/studentDashboard/Study-Material")}
+      >
+        <BookOpen size={17} className={iconClass("/studentDashboard/Study-Material")} />
+        Study Material
+      </Link>
+      
       {/* <NavDivider /> */}
       <SectionTitle label="Profile" />
       <nav className="space-y-1">

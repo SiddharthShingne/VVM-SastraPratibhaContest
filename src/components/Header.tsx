@@ -67,6 +67,7 @@ const Header = () => {
   // ✅ hydration safe
   if (!mounted) return null;
 
+
   return (
     <div id="announcement-bar">
       <div className="flex items-center justify-between flex-wrap px-3 bg-[#111d35] text-[#ffffffa2] text-xs font-medium py-3">
@@ -93,10 +94,22 @@ const Header = () => {
                 router.push("/registration/individual-student-registration");
                 return;
               }
-              const role = localStorage.getItem("role");
-              if (role === "state-coordinator") {
-                router.push("/state-dashboard");
-              } else {
+
+              try {
+                const raw = localStorage.getItem("user");
+                const parsed = JSON.parse(raw || "{}");
+                const roleName =
+                  parsed?.user?.role?.name ||
+                  parsed?.user?.role_name ||
+                  parsed?.role_name ||
+                  "";
+
+                if (roleName === "state-coordinator") {
+                  router.push("/state-dashboard");
+                } else {
+                  router.push("/studentDashboard");
+                }
+              } catch {
                 router.push("/studentDashboard");
               }
             }}

@@ -24,159 +24,221 @@ export default function FAQ() {
         setOpenItem(openItem === index ? null : index);
     };
 
+
     const faqGroups: FAQGroup[] = [
         {
-            title: "General Support",
+            title: "Support – Frequently Asked Questions (FAQ)",
             items: [
                 {
-                    question: "1. Login Issues",
-                    answer: (
-                        <>
-                            {/* <p>
-                                Login Page:{" "}
-                                <a
-                                    href="https://vvm.org.in/Login"
-                                    target="_blank"
-                                    className="text-blue-600 underline"
-                                >
-                                    https://vvm.org.in/Login
-                                </a>
-                            </p> */}
-                            <p>Use your registered ID and password to log in.</p>
-                        </>
-                    ),
-                },
-                {
-                    question: "2. Finding Your Username and Password",
+                    question: "1. Registration FAQs",
                     answer: (
                         <>
                             <p>
-                                Credentials are sent to your registered email ID during
-                                registration.
+                                <strong>Where can I get full info?</strong>
+                                <br />
+                                {/* <a
+                                    href="https://vvm.org.in"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline"
+                                >
+                                    sif official website
+                                </a> */}
+                                Visit official website
                             </p>
-                            <p>Please check your Spam/Junk folder if not found.</p>
+
+                            <p>
+                                <strong>How to register?</strong>
+                                <br />
+                                Go to website → Register → Fill details
+                            </p>
+
+                            {/* <p>
+              <strong>Already registered last year?</strong>
+              <br />
+              Use previous credentials → Update profile → Payment
+            </p> */}
+
+                            <p>
+                                <strong>OTP not received?</strong>
+                                <br />
+                                Check spam / try again later
+                            </p>
+
+
+                          
                         </>
                     ),
                 },
-                // {
-                //     question: "3. Invalid ID or Password Error",
-                //     answer: (
-                //         <>
-                //             <p>
-                //                 Ensure you are registered on{" "}
-                //                 <a
-                //                     href="https://vvm.org.in"
-                //                     target="_blank"
-                //                     className="text-blue-600 underline"
-                //                 >
-                //                     https://vvm.org.in
-                //                 </a>
-                //             </p>
-                //             <p>
-                //                 If registered on vvmuat, please register again on official site.
-                //             </p>
-                //             <p>
-                //                 Need help?{" "}
-                //                 <a
-                //                     href="https://vvm.org.in/contact-us"
-                //                     target="_blank"
-                //                     className="text-blue-600 underline"
-                //                 >
-                //                     Contact support
-                //                 </a>
-                //             </p>
-                //         </>
-                //     ),
-                // },
+
                 {
-                    question: "3. Forgot Password",
-                    answer: (
-                        <p>
-                            Visit the login page{" "}
-                            {/* <a
-                                href="https://vvm.org.in/Login"
-                                target="_blank"
-                                className="text-blue-600 underline"
-                            >
-                                https://vvm.org.in/Login
-                            </a>{" "} */}
-                            and click “Forgot Password”.
-                        </p>
-                    ),
-                },
-                // {
-                //     question: "5. Important Dates",
-                //     answer: (
-                //         <p>
-                //             All important dates are available{" "}
-                //             <Link
-                //                 href="/#important-dates"
-                //                 className="text-blue-600 underline"
-                //             >
-                //                 here
-                //             </Link>
-                //             .
-                //         </p>
-                //     ),
-                // },
-                {
-                    question: "4. Question Bank Availability",
-                    answer: <p>Currently unavailable.</p>,
-                },
-                {
-                    question: "5. Study Material Availability",
+                    question: "2. Login & Password FAQs",
                     answer: (
                         <>
-                            {/* <p>Available on both portals:</p> */}
-                            <ul className="list-disc ml-5">
-                                {/* <li>School Portal → Study Material → Download</li> */}
-                                <li>Student Portal → Study Material → Download</li>
+                            <p>
+                                <strong>Login:</strong> Enter username & password
+                            </p>
+
+                            <p>
+                                <strong>Forgot Password:</strong> Reset via email
+                            </p>
+
+                            <p>
+                                <strong>Issues:</strong>
+                            </p>
+
+                            <ul className="list-disc pl-5">
+                                <li>Wrong credentials</li>
+                                <li>Case-sensitive password</li>
+                                <li>Not registered</li>
                             </ul>
+
+                            {/* <p>
+              <strong>Support:</strong> vvmsupport2627@gmail.com
+            </p> */}
                         </>
                     ),
                 },
-                // {
-                //     question: "8. Student Bulk Upload Issues",
-                //     answer: (
-                //         <>
-                //             <p>Ensure your data matches the sample Excel format.</p>
-                //             <p>
-                //                 Path: School Portal → Student → Add Student → Download Sample
-                //                 File
-                //             </p>
-                //         </>
-                //     ),
-                // },
+
                 {
-                    question: "System Requirements & Support",
-                    answer: (
-                        <ul className="list-disc ml-5">
-                            <li>Windows 10+</li>
-                            <li>macOS Big Sur+</li>
-                            <li>Linux Ubuntu 20.04+</li>
-                        </ul>
-                    ),
-                },
-                {
-                    question: "Supported Browsers",
+                    question: "3. Student Profile & Dashboard",
                     answer: (
                         <>
-                            <table className="w-full border text-sm mt-2">
-                                <thead className="bg-gray-100">
-                                    <tr>
-                                        <th className="p-2 border">Browser</th>
-                                        <th className="p-2 border">Version</th>
-                                        <th className="p-2 border">OS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className="p-2 border">Chrome</td>
-                                        <td className="p-2 border">v138+</td>
-                                        <td className="p-2 border">All</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <p>
+                                <strong>After login:</strong> Complete profile 
+                            </p>
+
+                            <p>
+                                <strong>Why update?</strong> Ensure correct information
+                            </p>
+
+                            <p>
+                                <strong>Dashboard:</strong> Profile, Password, Syllabus , Study Material, Logout
+                            </p>
+                        </>
+                    ),
+                },
+
+                {
+                    question: "4. Student Registration & Data",
+                    answer: (
+                        <>
+                            <p>
+                                <strong>Required:</strong> Name, DOB, Class, School Name, Email,
+                                Mobile , all those which are mentioned in the form
+                            </p>
+
+                            <p>
+                                <strong>Edit allowed?</strong> Yes (before exam phase)
+                            </p>
+
+                            <p>
+                                <strong>Wrong details?</strong> May affect exam/results
+                            </p>
+                        </>
+                    ),
+                },
+
+                //   {
+                //     question: "5. Payment FAQs",
+                //     answer: (
+                //       <>
+                //         <p>
+                //           <strong>Payment:</strong> UPI / QR / Card
+                //         </p>
+
+                //         <p>
+                //           <strong>Who pays?</strong> School or Student
+                //         </p>
+
+                //         <p>
+                //           <strong>Not updated?</strong> Wait 48 hours
+                //         </p>
+
+                //         <p>
+                //           <strong>Unpaid?</strong> Cannot give exam
+                //         </p>
+                //       </>
+                //     ),
+                //   },
+
+                {
+                    question: "6. Study Material",
+                    answer: (
+                        <>
+                            <p>Available in Dashboard → Study Material</p>
+                            <p>Languages: English</p>
+                            <p>Uploading soon if not visible</p>
+                        </>
+                    ),
+                },
+
+                //   {
+                //     question: "7. Exam & Mock Test",
+                //     answer: (
+                //       <>
+                //         <p>Mock test available</p>
+                //         <p>Duration: 45 minutes</p>
+                //         <p>Negative marking: 0.5</p>
+                //         <p>Mock not compulsory but recommended</p>
+                //       </>
+                //     ),
+                //   },
+
+                {
+                    question: "8. Results",
+                    answer: (
+                        <>
+                            <p>Check Dashboard → Results</p>
+                            <p>Includes subject-wise & overall performance</p>
+                            <p>Date as per Important Dates section</p>
+                        </>
+                    ),
+                },
+
+                //       {
+                //         question: "9. School FAQs",
+                //         answer: (
+                //           <>
+                //             <p>
+                //               <strong>Who logs in?</strong> Coordinator / Principal / Staff
+                //             </p>
+
+                //             <p>
+                //               <strong>Add students:</strong>
+                //             </p>
+
+                //             <ul className="list-disc pl-5">
+                //               <li>Single entry</li>
+                //               <li>Bulk upload (Excel)</li>
+                //             </ul>
+                // {/* 
+                //             <p>
+                //               <strong>Referral student:</strong> Share Unique Code
+                //             </p> */}
+
+                //             <p>
+                //               <strong>Tracking:</strong> Payment, Exam status, Results
+                //             </p>
+                //           </>
+                //         ),
+                //       },
+
+                {
+                    question: "10. Support & Help",
+                    answer: (
+                        <>
+                            <p>
+                                <strong>Contact:</strong>
+                            </p>
+
+                            <p>State cordinators → Support Team</p>
+
+                            <p>
+                                <strong>Where to find?</strong>
+                            </p>
+
+                            <p>In home page →  choose Contact Us option in Navbar </p>
                         </>
                     ),
                 },
@@ -304,3 +366,5 @@ export default function FAQ() {
         </div>
     );
 }
+
+

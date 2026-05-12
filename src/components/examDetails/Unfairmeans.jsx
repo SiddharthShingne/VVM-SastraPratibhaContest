@@ -57,7 +57,7 @@ const UnfairMeans = () => {
 
               {/* Intro */}
               <p className="text-[17px] leading-[1.8] text-[#4f6480] mt-2">
-                To prevent the use of unfair means during School Level Online
+                To prevent the use of unfair means during  Online
                 Examinations, the following measures will be implemented:
               </p>
 
@@ -70,8 +70,9 @@ const UnfairMeans = () => {
                 </li>
 
                 <li>
-                  <strong>Online Proctoring:</strong> The examination will be
-                  continuously monitored through online proctoring systems.
+                  <strong>Tab Switching and Unfair Activities :</strong>  If a user switches tabs more than 5 times,
+                  the exam will be automatically submitted. Additionally, attempting to access the internet, enable Wi-Fi, or perform
+                  any unfair activity during the exam may lead to automatic submission of the exam.
                 </li>
               </ul>
 
@@ -80,7 +81,7 @@ const UnfairMeans = () => {
 
               {/* Note */}
               <p className="text-[#d13b2f] text-[14px] font-semibold">
-                Schools and students are expected to cooperate with invigilators
+                Schools and Students are expected to cooperate with invigilators
                 and follow all guidelines to ensure a fair examination process.
               </p>
 

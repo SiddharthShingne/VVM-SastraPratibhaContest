@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import { FaUserGraduate, FaSchool, FaArrowUp } from "react-icons/fa";
 import {
@@ -289,12 +290,14 @@ export default function StateDashboardPage() {
       value: (summary?.total_student ?? 0).toLocaleString(),
       icon: <FaUserGraduate size={20} />,
       iconBg: "bg-emerald-50 text-emerald-500",
+      href: "/state-dashboard/student/total-student",
     },
     {
       label: "School Count",
       value: (summary?.total_school ?? 0).toLocaleString(),
       icon: <FaSchool size={20} />,
       iconBg: "bg-amber-50 text-amber-500",
+      href: "/state-dashboard/school/total-school",
     },
     // {
     //   label: "Upgraded Students",
@@ -315,6 +318,7 @@ export default function StateDashboardPage() {
       ),
       icon: <FaArrowUp size={20} />,
       iconBg: "bg-sky-50 text-sky-500",
+      href: null,
     },
     
   ];
@@ -391,7 +395,7 @@ export default function StateDashboardPage() {
 
         {/* ── Stat Cards — no left accent border ── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
-          {stats.map((s, i) => (
+          {/* {stats.map((s, i) => (
             <div
               key={s.label}
               className="bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-3
@@ -399,7 +403,7 @@ export default function StateDashboardPage() {
                          hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up"
               style={{ animationDelay: `${i * 80}ms` }}
             >
-              {/* Rounded-square icon (borderRadius 10px, NOT circle) */}
+              
               <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
                 {s.icon}
               </div>
@@ -412,7 +416,35 @@ export default function StateDashboardPage() {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
+          {stats.map((s, i) => {
+            const card = (
+              <div
+                key={s.label}
+                className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-3
+                 flex items-center gap-3 sm:gap-4
+                 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up
+                 ${s.href ? "cursor-pointer" : ""}`}
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
+                  {s.icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-0.5 truncate">{s.label}</p>
+                  <div className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">{s.value}</div>
+                </div>
+              </div>
+            );
+
+            return s.href ? (
+              <Link key={s.label} href={s.href} className="block">
+                {card}
+              </Link>
+            ) : (
+              <div key={s.label}>{card}</div>  // remove key from inner div since it's on outer
+            );
+          })}
         </div>
 
         {/* ── Search + Export row — OUTSIDE the table card, above it ── */}
@@ -559,9 +591,9 @@ export default function StateDashboardPage() {
                     ["SCHOOLS REGISTERED", "schools"],
                     ["INDIVIDUAL STUDENTS", "ind"],
                     ["TOTAL STUDENTS", "total"],
-                    ["TOTAL PAID STUDENTS", "paid"],
-                    ["LEVEL-1 ATTEMPTED STUDENTS", "att"],
-                    ["LEVEL-1 SUBMITTED STUDENTS", "sub"],
+                    // ["TOTAL PAID STUDENTS", "paid"],
+                    // ["LEVEL-1 ATTEMPTED STUDENTS", "att"],
+                    // ["LEVEL-1 SUBMITTED STUDENTS", "sub"],
                     // ["EXPORT SUBMITTED STUDENTS", "exp1"],
                     // ["EXPORT LEVEL 2 SUBMITTED STUDENTS", "exp2"],
                   ].map(([h]) => (
@@ -610,23 +642,35 @@ export default function StateDashboardPage() {
                         {row.state_name}
                       </td>
                       <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS REGISTERED">
-                        <Badge value={row.total_school ?? 0} />
+                        <Link href="/state-dashboard/school/total-school">
+                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
+                            {row.total_school ?? 0}
+                          </span>
+                        </Link>
                       </td>
                       <td className="px-3 sm:px-4 py-3" data-label="INDIVIDUAL STUDENTS">
-                        <Badge value={row.individual_student ?? 0} />
+                        <Link href="/state-dashboard/student/view-indivisual-student">
+                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
+                            {row.individual_student ?? 0}
+                          </span>
+                        </Link>
                       </td>
                       <td className="px-3 sm:px-4 py-3" data-label="TOTAL STUDENTS">
-                        <Badge value={row.total_student ?? 0} />
+                        <Link href="/state-dashboard/student/total-student">
+                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
+                            {row.total_student ?? 0}
+                          </span>
+                        </Link>
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID STUDENTS">
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID STUDENTS">
                         <Badge value={row.total_paid_student ?? 0} />
-                      </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 ATTEMPTED STUDENTS">
+                      </td> */}
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 ATTEMPTED STUDENTS">
                         <Badge value={row.total_attempted_level1_students ?? 0} />
-                      </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 SUBMITTED STUDENTS">
+                      </td> */}
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="LEVEL-1 SUBMITTED STUDENTS">
                         <Badge value={row.total_submitted_level1_students ?? 0} />
-                      </td>
+                      </td> */}
                       {/* ✅ Export Submitted — uncommented */}
                       {/* <td className="px-3 sm:px-4 py-3" data-label="EXPORT SUBMITTED STUDENTS">
                         <ExportBtn onClick={handleExport} />
@@ -650,9 +694,9 @@ export default function StateDashboardPage() {
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.schools}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.individual}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.total}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
+                    {/* <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Attempted}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td>
+                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td> */}
                     <td colSpan={2} />
                   </tr>
                 </tfoot>

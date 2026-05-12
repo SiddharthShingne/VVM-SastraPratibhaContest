@@ -449,8 +449,8 @@ export default function QatarForm({ countries = [] }: Props) {
               })}
               error={errors.dob}
             />
-            <InputField label="Emirates ID" required maxLength={11} placeholder="Enter Emirates ID"
-              registration={register("emiratesId", { required: "Emirates ID is required", minLength: { value: 11, message: "Emirates ID must be 11 characters" }, maxLength: { value: 11, message: "Emirates ID must be 11 characters" } })}
+            <InputField label=" QID (Emirates ID / National ID)" required maxLength={11} placeholder="Enter QID"
+              registration={register("emiratesId", { required: "QID is required", minLength: { value: 11, message: "QID must be 11 characters" }, maxLength: { value: 11, message: "QID must be 11 characters" } })}
               error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
             />
             <SelectField label="Gender" required options={genders}

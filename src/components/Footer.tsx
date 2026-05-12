@@ -78,7 +78,8 @@ const Footer = () => {
 
                         <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-none mx-auto">
                             <h3 className="text-base font-bold text-white mb-2 tracking-wide text-center lg:text-left">
-                                GCC-SIF Countries
+                                {/* GCC-SIF */}
+                                Countries
                             </h3>
                             <div className="h-[1.5px] bg-gradient-to-r from-[#7f00ff] via-[#7f00ff]/40 to-transparent mb-6 rounded-full" />
 

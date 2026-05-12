@@ -64,7 +64,7 @@ export default function TermsConditions() {
                                     <ul className="list-disc pl-5 space-y-1">
                                         <li>Students must follow all instructions provided in the app.</li>
                                         <li>Cheating, switching apps, screenshots, or unfair means may lead to disqualification.</li>
-                                        <li>Camera, microphone, and internet usage may be monitored.</li>
+                                        {/* <li>Camera, microphone, and internet usage may be monitored.</li> */}
                                     </ul>
                                 </Section>
 
@@ -104,7 +104,7 @@ export default function TermsConditions() {
                                     For any queries regarding these terms:
                                     <br />
                                     <span className="font-semibold text-[#17395c]">
-                                        Email: admin@vvm.org.in
+                                        Email:
                                     </span>
                                 </Section>
 
@@ -134,3 +134,4 @@ function Section({ title, children }: any) {
         </div>
     );
 }
+

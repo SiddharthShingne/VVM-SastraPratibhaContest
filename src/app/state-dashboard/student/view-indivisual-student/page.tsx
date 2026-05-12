@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -37,7 +38,7 @@ type DialogState =
   | { type: "error"; message: string }
   | null;
 
-const ITEMS_PER_PAGE_OPTIONS = [10, 20, 30, 50];
+const ITEMS_PER_PAGE_OPTIONS = [10, 50, 100, 250];
  
 export default function ViewStudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -50,6 +51,34 @@ export default function ViewStudentsPage() {
   const [regionFilter, setRegionFilter] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const [filterRegions, setFilterRegions] = useState<{ district_id: number; name: string }[]>([]);
+
+  useEffect(() => {
+    const cc = (() => {
+      try {
+        const raw = localStorage.getItem("user");
+        const parsed = JSON.parse(raw || "{}");
+        return parsed?.user?.country_code || "";
+      } catch { return ""; }
+    })();
+
+    import("@/services/importantDatesService").then(({ fetchRegionsWithCities }) => {
+      fetchRegionsWithCities(cc)
+        .then((data: any) => setFilterRegions(data?.data || []))
+        .catch(() => setFilterRegions([]));
+    });
+  }, []);
+
+  // Debounce search
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchText), 500);
+    return () => clearTimeout(t);
+  }, [searchText]);
 
   // ── Export dialog ─────────────────────────────────────────────────────────
   const [dialog, setDialog] = useState<DialogState>(null);
@@ -74,17 +103,56 @@ export default function ViewStudentsPage() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   const fetchStudents = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const res = await axiosInstance.post("/admin/students", {
+  //         page,
+  //         per_page: perPage,
+  //       });
+  //       const response = res.data?.data;
+  //       setStudents(response?.data || []);
+  //       setTotalPages(response?.last_page || 1);
+  //     } catch (err) {
+  //       console.error("API Error:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchStudents();
+  // }, [page, perPage]);
+
+  
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
+      setStudents([]);
+      setTotalRecords(0);
       try {
         const res = await axiosInstance.post("/admin/students", {
           page,
           per_page: perPage,
+          district_id: regionFilter ? Number(regionFilter) : undefined,
+          class_id: classFilter ? Number(classFilter) : undefined,
+          search: debouncedSearch || undefined,
+          created_at_from: filterStartDate || undefined,
+          created_at_to: filterEndDate || undefined,
         });
         const response = res.data?.data;
-        setStudents(response?.data || []);
+        const raw = response?.data || [];
+
+        // Map user fields from nested objects
+        const mapped = raw.map((s: any) => ({
+          ...s,
+          username: s.user?.username,
+          password: s.user?.temp_password,
+          exam_language: s.exam_lang_id === 14 ? "English" : "Hindi",
+        }));
+
+        setStudents(mapped);
         setTotalPages(response?.last_page || 1);
+        setTotalRecords(response?.total || 0);
       } catch (err) {
         console.error("API Error:", err);
       } finally {
@@ -92,7 +160,9 @@ export default function ViewStudentsPage() {
       }
     };
     fetchStudents();
-  }, [page, perPage]);
+  }, [page, perPage, regionFilter, classFilter, debouncedSearch, filterStartDate, filterEndDate]);
+
+
   const CLASS_MAP: Record<number, string> = {
     1: "6",
     2: "7",
@@ -103,21 +173,21 @@ export default function ViewStudentsPage() {
     
   };
   // ── Client-side filtering ─────────────────────────────────────────────────
-  const filtered = useMemo(() => {
-    return students.filter((s) => {
-      const matchRegion = regionFilter
-        ? s.address?.toLowerCase().includes(regionFilter.toLowerCase())
-        : true;
-      const matchClass = classFilter
-        ? String(s.class_id) === classFilter
-        : true;
-      const matchSearch = searchText
-        ? [s.name, s.username, s.school_name, s.parent_name, s.national_id]
-          .some((f) => f?.toLowerCase().includes(searchText.toLowerCase()))
-        : true;
-      return matchRegion && matchClass && matchSearch;
-    });
-  }, [students, regionFilter, classFilter, searchText]);
+  // const filtered = useMemo(() => {
+  //   return students.filter((s) => {
+  //     const matchRegion = regionFilter
+  //       ? s.address?.toLowerCase().includes(regionFilter.toLowerCase())
+  //       : true;
+  //     const matchClass = classFilter
+  //       ? String(s.class_id) === classFilter
+  //       : true;
+  //     const matchSearch = searchText
+  //       ? [s.name, s.username, s.school_name, s.parent_name, s.national_id]
+  //         .some((f) => f?.toLowerCase().includes(searchText.toLowerCase()))
+  //       : true;
+  //     return matchRegion && matchClass && matchSearch;
+  //   });
+  // }, [students, regionFilter, classFilter, searchText]);
 
   // ── Export handler ────────────────────────────────────────────────────────
   const handleExportSubmit = async () => {
@@ -439,66 +509,62 @@ export default function ViewStudentsPage() {
       )}
 
       {/* ── Page Title ── */}
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 700, color: "#1E293F", margin: 0 }}>
-          View Individual Students
-        </h1>
-        <p style={{ fontSize: 16, color: "#94A3B8", marginTop: 4 }}>
-          Browse, filter and export student records
-        </p>
-      </div>
 
       {/* ── Filter Row 1: Region + Date range ── */}
       <div style={{ display: "flex", gap: 16, marginBottom: 12 }}>
         {/* Select Region */}
-        <div style={{ position: "relative", width: 280 }}>
+        {/* <div style={{ position: "relative", width: 280 }}>
           <select
             value={regionFilter}
             onChange={(e) => { setRegionFilter(e.target.value); setPage(1); }}
             style={{ ...inputStyle, appearance: "none", paddingRight: 36, cursor: "pointer" }}
           >
             <option value="">Select Region</option>
-            <option value="central-region">Central Region</option>
-            <option value="eastern-region">Eastern Region</option>
-            <option value="western-region">Western Region</option>
+            {filterRegions.map((r) => (
+              <option key={r.district_id} value={String(r.district_id)}>
+                {r.name}
+              </option>
+            ))}
           </select>
           <svg style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
             width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2.5">
             <path d="m6 9 6 6 6-6" />
           </svg>
-        </div>
+        </div> */}
 
         {/* Date range — matches image exactly */}
-        <div style={{
+        {/* <div style={{
           display: "flex", alignItems: "center", gap: 8,
           border: "1.5px solid #E2E8F0", borderRadius: 10,
           padding: "8px 14px", background: "#F8FAFC", flex: 1, maxWidth: 420,
         }}>
           <input
             type="date"
-            style={{ border: "none", outline: "none", background: "transparent", fontSize: 13, color: "#334155", flex: 1 }}
+            value={filterStartDate}
+            onChange={(e) => { setFilterStartDate(e.target.value); setPage(1); }}
             min="2016-01-01"
-            max={new Date().toISOString().split("T")[0]}
-            placeholder="Start date"
+            max={filterEndDate || new Date().toISOString().split("T")[0]}
+            style={{ border: "none", outline: "none", background: "transparent", fontSize: 13, color: "#334155", flex: 1 }}
           />
           <span style={{ color: "#94A3B8", fontSize: 12 }}>–</span>
           <input
             type="date"
-            style={{ border: "none", outline: "none", background: "transparent", fontSize: 13, color: "#334155", flex: 1 }}
-            min="2016-01-01"
+            value={filterEndDate}
+            onChange={(e) => { setFilterEndDate(e.target.value); setPage(1); }}
+            min={filterStartDate || "2016-01-01"}
             max={new Date().toISOString().split("T")[0]}
-            placeholder="End date"
+            style={{ border: "none", outline: "none", background: "transparent", fontSize: 13, color: "#334155", flex: 1 }}
           />
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
           </svg>
-        </div>
+        </div> */}
       </div>
 
       {/* ── Filter Row 2: Class + Search + Export ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
         {/* Select Class */}
-        <div style={{ position: "relative", width: 280 }}>
+        {/* <div style={{ position: "relative", width: 280 }}>
           <select
             value={classFilter}
             onChange={(e) => { setClassFilter(e.target.value); setPage(1); }}
@@ -520,7 +586,7 @@ export default function ViewStudentsPage() {
             width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="2.5">
             <path d="m6 9 6 6 6-6" />
           </svg>
-        </div>
+        </div> */}
 
         {/* Search box */}
         <div style={{ position: "relative", flex: 1, maxWidth: 420 }}>
@@ -541,7 +607,7 @@ export default function ViewStudentsPage() {
         <div style={{ flex: 1 }} />
 
         {/* Export button */}
-        <button
+        {/* <button
           onClick={() => { setExportStart(""); setExportEnd(""); setDialog({ type: "export" }); }}
           style={{
             display: "inline-flex", alignItems: "center", gap: 8,
@@ -559,7 +625,7 @@ export default function ViewStudentsPage() {
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
           Export
-        </button>
+        </button> */}
       </div>
 
       {/* ── Table Card ── */}
@@ -568,25 +634,7 @@ export default function ViewStudentsPage() {
         boxShadow: "0 1px 4px rgba(0,0,0,0.06)", overflow: "hidden",
       }}>
 
-        {/* Items per page inside card top-right */}
-        <div style={{
-          display: "flex", justifyContent: "flex-end", alignItems: "center",
-          padding: "12px 20px", borderBottom: "1px solid #F1F5F9", gap: 8,
-        }}>
-          <span style={{ fontSize: 12, color: "#94A3B8" }}>Items per page:</span>
-          <select
-            value={perPage}
-            onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }}
-            style={{
-              border: "1.5px solid #E2E8F0", borderRadius: 8, padding: "4px 10px",
-              fontSize: 12, color: "#334155", background: "#fff", cursor: "pointer", outline: "none",
-            }}
-          >
-            {ITEMS_PER_PAGE_OPTIONS.map((n) => (
-              <option key={n} value={n}>{n}</option>
-            ))}
-          </select>
-        </div>
+       
 
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -616,15 +664,15 @@ export default function ViewStudentsPage() {
                     ))}
                   </tr>
                 ))
-              ) : filtered.length === 0 ? (
+              ) : students.length === 0 ? (
                 <tr>
                   <td colSpan={21} style={{ ...tdStyle, textAlign: "center", padding: "48px 0", color: "#94A3B8" }}>
                     No records found
                   </td>
                 </tr>
               ) : (
-                filtered.map((s, index) => (
-                  <tr
+                    students.map((s: Student, index: number) => (
+                      <tr
                     key={s.id}
                     onMouseEnter={(e) => (e.currentTarget.style.background = "#F8FAFC")}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
@@ -652,8 +700,7 @@ export default function ViewStudentsPage() {
                           3: " 8",
                           4: " 9",
                           5: " 10",
-                          6: " 11",
-                          7: " 12",
+                          6: " 11",                       
                         };
                         return classMap[s.class_id] || s.class_id || "-";
                       })()}
@@ -728,15 +775,35 @@ export default function ViewStudentsPage() {
         </div>
 
         {/* ── Pagination ── */}
+        {/* Items per page inside card top-right */}
+        <div style={{
+          display: "flex", justifyContent: "flex-end", alignItems: "center",
+          padding: "12px 20px", borderBottom: "1px solid #F1F5F9", gap: 8,
+        }}>
+          <span style={{ fontSize: 12, color: "#94A3B8" }}>Items per page:</span>
+          <select
+            value={perPage}
+            onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }}
+            style={{
+              border: "1.5px solid #E2E8F0", borderRadius: 8, padding: "4px 10px",
+              fontSize: 12, color: "#334155", background: "#fff", cursor: "pointer", outline: "none",
+            }}
+          >
+            {ITEMS_PER_PAGE_OPTIONS.map((n) => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
+        </div>
+
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "flex-end",
           padding: "14px 20px", borderTop: "1px solid #F1F5F9", gap: 8,
           fontSize: 13, color: "#64748B",
         }}>
           <span>
-            {filtered.length === 0
+            {totalRecords === 0
               ? "0 – 0 of 0"
-              : `${(page - 1) * perPage + 1} – ${Math.min(page * perPage, filtered.length)} of ${filtered.length}`}
+              : `${(page - 1) * perPage + 1} – ${Math.min(page * perPage, totalRecords)} of ${totalRecords}`}
           </span>
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}

@@ -142,7 +142,7 @@ const WhatIsVVM = () => {
                     <div className="text-center mt-10 space-y-4">
                         <p className="text-[16px] text-[#555] max-w-4xl mx-auto leading-relaxed font-medium">
                             For the winners of VVM, the program also includes visits to National Science Laboratories,
-                            centres of repute and interaction with renowned scientists of the nation.
+                            centres of repute and interaction with renowned scientists.
                         </p>
 
                         <p className="text-[16px] text-[#555] max-w-4xl mx-auto leading-relaxed font-medium">

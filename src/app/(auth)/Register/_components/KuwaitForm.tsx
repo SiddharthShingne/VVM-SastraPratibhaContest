@@ -365,7 +365,7 @@ export default function KuwaitForm({ countries }: Props) {
         try {
             setLoading(true);
 
-            const payload = {
+            const payload = { 
                 fullName: data.fullName,
                 dob: data.dob,
                 gender: Number(data.gender),
@@ -457,7 +457,7 @@ export default function KuwaitForm({ countries }: Props) {
 
 
                         <InputField
-                            label="Emirates ID"
+                            label="Civil ID (Emirates ID / National ID)"
                             required
                             maxLength={12}
                             placeholder="Enter ID"

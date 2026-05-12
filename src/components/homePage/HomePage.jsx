@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
     function shouldShowNotice() {
         if (typeof window === "undefined") return false; // SSR safe
         const lastShown = localStorage.getItem("sif_notice_time");
-        const THIRTY_MINUTES = 10 * 60 * 1000;
+        const THIRTY_MINUTES = 60 * 60 * 1000;
         return !lastShown || Date.now() - Number(lastShown) > THIRTY_MINUTES;
     }
 

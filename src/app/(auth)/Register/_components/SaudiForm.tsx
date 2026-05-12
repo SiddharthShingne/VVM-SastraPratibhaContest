@@ -457,7 +457,7 @@ export default function SaudiForm({ countries }: Props) {
                         /> */}
 
                         <InputField
-                            label="National ID / Iqama"
+                            label="National ID /  Iqama ID"
                             required
                             maxLength={10}
                             placeholder="Enter ID"

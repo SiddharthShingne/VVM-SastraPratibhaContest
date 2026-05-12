@@ -77,9 +77,7 @@ export default function PrivacyPolicy() {
 
                                 <Section title="3. Permissions Required">
                                     <ul className="list-disc pl-5 space-y-1">
-                                        <li>
-                                            Camera Permission for identity verification and monitoring
-                                        </li>
+
                                         <li>Storage Permission for saving exam data</li>
                                         <li>
                                             No screenshots or screen recording allowed during exams
@@ -119,7 +117,7 @@ export default function PrivacyPolicy() {
                                     deletion of personal data by contacting:
                                     <br />
                                     <span className="font-semibold text-[#17395c]">
-                                        admin@vvm.org.in
+                                        Email:
                                     </span>
                                 </Section>
 
@@ -132,7 +130,7 @@ export default function PrivacyPolicy() {
                                     For any questions regarding privacy:
                                     <br />
                                     <span className="font-semibold text-[#17395c]">
-                                        Email: admin@vvm.org.in
+                                        Email:
                                     </span>
                                 </Section>
                             </div>
@@ -158,3 +156,5 @@ function Section({ title, children }: any) {
         </div>
     );
 }
+
+

@@ -47,12 +47,12 @@ type DialogState =
 
 // ─── Class map (backend key → label) ─────────────────────────────────────────
 const CLASS_MAP: Record<number, string> = {
-  6: " 6",
-  7: " 7",
-  8: " 8",
-  9: " 9",
-  10: " 10",
-  11: " 11",
+  1: " 6",
+  2: " 7",
+  3: " 8",
+  4: " 9",
+  5: " 10",
+  6: " 11",
 };
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
@@ -484,13 +484,14 @@ console.log("REGIONS API:", data);
           country_code: finalCountryCode,
           emirate_id: form.nationalId,       // ✅ was national_id
           nationality: form.nationality,
-          dist_id: form.region,   
+          dist_id: form.region ? parseInt(form.region, 10) : undefined,  
           school_name: form.school,
-          division: form.division,
+           division: form.division || "A",  
           fullName: form.fullName,           // ✅ was name
           dob: form.dob,                     // ✅ was date_of_birth
           gender: form.gender === "Male" ? 1 : 2,
-          grade: Number(form.classGrade),         // ✅ was class
+grade: parseInt(form.classGrade, 10),
+          class_id: parseInt(form.classGrade, 10),
           exam_language: form.examLanguage,
           state_id: String(stateId),   // ✅ from localStorage
           hear: "1",                         // ✅ required by backend, hardcode for now
@@ -500,7 +501,7 @@ console.log("REGIONS API:", data);
           parent_email: form.parentEmail,
           password: "vvm2026",
           password_confirmation: "vvm2026",
-          
+          city_id: form.city ? parseInt(form.city, 10) : undefined,      
         });
         console.log("FINAL PAYLOAD:", payload);  
       }
@@ -765,8 +766,8 @@ console.log("REGIONS API:", data);
           <input
             type="date"
             value={form.dob}
-            min="1990-01-01"
-            max={TODAY}
+            min="2008-01-01"
+            max="2016-12-31"
             onChange={(e) => handleChange("dob", e.target.value)}
             style={inputStyle}
           />
@@ -1049,17 +1050,19 @@ export default function TotalStudentsPage() {
   // Fetch students
   const fetchStudents = async () => {
     setLoading(true);
+    setStudents([]);        // ← ADD THIS
+    setTotalRecords(0); 
     try {
       const res = await axiosInstance.post("/admin/students", {
         page: currentPage,
         per_page: perPage,
         status: 1,
-        district_id: region || undefined,    // ✅ Region = district_id
-        class: classFilter,
+        district_id: region ? Number(region) : undefined,
+        class: classFilter || undefined,
         search: debouncedSearch,
         name: debouncedNameSearch || undefined,   // 
-        start_date: filterStartDate || undefined,
-        end_date: filterEndDate || undefined,
+        created_at_from: filterStartDate || undefined,
+        created_at_to: filterEndDate || undefined,
       });
 
       const raw = res.data?.data?.data || [];
@@ -1071,7 +1074,7 @@ export default function TotalStudentsPage() {
         password: s.user?.temp_password,
         nationalId: s.national_id,
         school: s.school_name,
-        classId: s.class?.id ?? s.class_id,
+        classId: s.class_id,
         dob: s.date_of_birth,
         gender: s.gender === 1 ? "Male" : s.gender === 2 ? "Female" : "-",
         examLanguage: s.exam_language || "English",
@@ -1354,7 +1357,7 @@ export default function TotalStudentsPage() {
 
         {/* Row 1: Region + Class */}
         <div style={s.filterGrid}>
-          <select
+          {/* <select
             value={region}
             onChange={(e) => { setRegion(e.target.value); setCurrentPage(1); }}
             style={s.select}
@@ -1365,28 +1368,28 @@ export default function TotalStudentsPage() {
                 {r.name}
               </option>
             ))}
-          </select>
+          </select> */}
 
-          <select
+          {/* <select
             value={classFilter}
-            onChange={(e) => setClassFilter(e.target.value)}
+            onChange={(e) => { setClassFilter(e.target.value); setCurrentPage(1); }}
             style={s.select}
           >
             <option value="">Select Class</option>
             {Object.entries(CLASS_MAP).map(([key, label]) => (
-              <option key={key} value={key}>{label}</option>
+              <option key={key} value={label.trim()}>{label.trim()}</option>
             ))}
-          </select>
+          </select> */}
 
           {/* Date Range Picker */}
-          <div style={{ gridColumn: "span 2" }}>
+          {/* <div style={{ gridColumn: "span 2" }}>
             <DateRangePicker
               startDate={filterStartDate}
               endDate={filterEndDate}
-              onStartChange={setFilterStartDate}
-              onEndChange={setFilterEndDate}
+              onStartChange={(v) => { setFilterStartDate(v); setCurrentPage(1); }}
+              onEndChange={(v) => { setFilterEndDate(v); setCurrentPage(1); }}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Row 2: Search + Buttons */}
@@ -1456,7 +1459,7 @@ export default function TotalStudentsPage() {
               Add Student
             </button>
 
-            <button
+            {/* <button
               style={{
                 ...s.btnPrimary,
                 background: "#3B82F6",
@@ -1466,7 +1469,7 @@ export default function TotalStudentsPage() {
               onClick={() => setDialog({ type: "export" })}
             >
               Export
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -1478,7 +1481,7 @@ export default function TotalStudentsPage() {
             Students
           </h2>
           <span style={{ fontSize: 12, color: "#6b7280" }}>
-            Total: {total || students.length}
+            Total: {totalRecords}
           </span>
         </div>
 
@@ -1634,7 +1637,7 @@ export default function TotalStudentsPage() {
               outline: "none",
             }}
           >
-            {[10, 20, 30, 50].map((n) => (
+            {[10,50,100,250].map((n) => (
               <option key={n} value={n}>{n}</option>
             ))}
           </select>

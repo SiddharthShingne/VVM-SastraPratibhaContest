@@ -56,7 +56,8 @@ const NationalCamp = () => {
             {/* Content */}
             <p className="text-[17px] text-[#4f6480] leading-[1.8]">
               
-
+              Top two students from each class (a total of 12 students) will be invited to participate in a two-day National Camp.
+            <br /> <br />
               The <strong>National Camp (NC)</strong> will comprise of presentations
               and activities to test{" "}
               <strong>
@@ -80,7 +81,7 @@ const NationalCamp = () => {
               {/* <strong>Marks Display</strong> – Students can check their marks on the dashboard
               after one week of result declaration. */}
                           <strong>Tiebreaker</strong> – In case of a tie, students will appear for{" "}
-              <strong>Viva-Voce</strong>. The highest scorer will be declared winner.
+              <strong>Viva-Voce</strong>.  The student scoring the highest marks will be declared the winner.
             </p>
 
           </div>

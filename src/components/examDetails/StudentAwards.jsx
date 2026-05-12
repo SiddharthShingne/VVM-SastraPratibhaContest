@@ -67,13 +67,13 @@ export default function StudentAwards() {
                     {/* Row */}
                     <tr className="border-b hover:bg-yellow-50">
                       <td className="p-4 font-extrabold text-[#17395c] text-center">
-                        LEVEL – I
+                        LEVEL I
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
                         ONLINE EXAMINATION
                       </td>
                       <td className="p-4">
-                          All successful participants will be eligible for State Level Examination.
+                          All paid students will be eligible for the Online Examnination. 
                           
                       </td>
                       <td className="p-4">
@@ -81,6 +81,7 @@ export default function StudentAwards() {
                           Participation Certificate
                         </span>
                         <br />
+                        All participants will get participation certificate. <br />
                         Certificates will be available online via student dashboard.
                       </td>
                     </tr>
@@ -105,44 +106,48 @@ export default function StudentAwards() {
                     {/* </tr> */}
 
                     <tr className="border-b hover:bg-yellow-50">
-                      <td className="p-4 font-extrabold text-[#17395c] text-center">
-                        LEVEL – II
+                      <td className="p-6 font-extrabold text-[#17395c] text-center">
+                        LEVEL II
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
                         STATE LEVEL CAMP
                       </td>
                       <td className="p-4">
-                          Top 25 qualify for camp. Top 3 per class become winners.
+                          The top 25 rankers from each class
+                          will qualify to participate
+                          in the State Level Camp.                         
                       </td>
                       <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600 mb-1">
                             State Rewards
+                            
                         </span>
                         <br />
-                        {/* • Fee waiver (Class 6–10) <br />
-                        • Science India e-magazine (Class 11) */}
+                        {/* • Fee waiver (Class 6–10) <br /> */}
+                        All participants will get participation certificate <br />
+                          Top 3 Winners of each class would get Certificate & Memento
                       </td>
                     </tr>
 
                     <tr className="border-b hover:bg-yellow-50">
                       <td className="p-4 font-extrabold text-[#17395c] text-center">
-                        LEVEL – III
+                        LEVEL III
                       </td>
                       <td className="p-4 font-bold text-[#17395c]">
                         NATIONAL LEVEL CAMP
                       </td>
                       <td className="p-4">
-                          Top 2 per state qualify. Top 3 per class become national winners.
+                          The top 2 winners from each class at the state level,
+                          will qualify to
+                          participate in the National Camp.
                       </td>
                       <td className="p-4">
                         <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 mb-1">
-                            National Rewards
-                        </span>
+                            National Rewards                                                   </span>
                         <br />
-                        {/* • Certificate & Memento <br />
-                        • ₹5000 / ₹3000 / ₹2000 prizes <br />
-                        • NCSM visit */}
-                      </td>
+                          All participants will get participation certificate <br />
+                          Winners would get Certificate & Memento                        
+                        </td>
                     </tr>
 
                     <tr className="border-b hover:bg-yellow-50">

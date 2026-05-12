@@ -448,8 +448,8 @@ export default function BahraiinForm({ countries = [] }: Props) {
               })}
               error={errors.dob}
             />
-            <InputField label="Emirates ID" required maxLength={9} placeholder="Enter Emirates ID"
-              registration={register("emiratesId", { required: "Emirates ID is required", minLength: { value: 9, message: "Emirates ID must be 9 characters" }, maxLength: { value: 9, message: "Emirates ID must be 9 characters" } })}
+            <InputField label="CPR (Emirates ID / National ID)" required maxLength={9} placeholder="Enter CPR"
+              registration={register("emiratesId", { required: "CPR is required", minLength: { value: 9, message: "CPR must be 9 characters" }, maxLength: { value: 9, message: "CPR must be 9 characters" } })}
               error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
             />
             <SelectField label="Gender" required options={genders}

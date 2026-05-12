@@ -176,7 +176,6 @@ export default function StateDashboardLayout({
     setToken(null); // ✅ layout ko turant update karega
 
     window.dispatchEvent(new Event("auth-change")); // ✅ header sync
-
     router.replace("/Login");
   }
 };
@@ -427,7 +426,7 @@ export default function StateDashboardLayout({
           </div>
         </div>
       )}
-      {showNotice && (
+      {/* {showNotice && (
               <div
                 id="payment-notice-banner"
                 className="notice-slide-down fixed left-0 right-0 z-[70] bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-b border-amber-200 shadow-sm"
@@ -465,7 +464,7 @@ export default function StateDashboardLayout({
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
       {/* ── Page shell ── */}
       <div className="min-h-screen">
         <div

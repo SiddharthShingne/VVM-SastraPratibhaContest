@@ -469,7 +469,7 @@ export default function UAEForm({ countries }: Props) {
               })}
               error={errors.dob}
             />
-            <InputField label="Emirates ID" required maxLength={15} placeholder="Enter Emirates ID"
+            <InputField label="Emirates ID (EID)" required maxLength={15} placeholder="Enter Emirates ID"
               registration={register("emiratesId", { required: "Emirates ID is required", minLength: { value: 15, message: "Emirates ID must be 15 characters" }, maxLength: { value: 15, message: "Emirates ID must be 15 characters" } })}
               error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
             />

@@ -103,7 +103,7 @@ const ŚāstraPratibhāContest = () => {
               {/* TITLE */}
               <h2 className="text-3xl sm:text-4xl font-extrabold text-[#17395c] leading-tight">
                 Śāstra Pratibhā Contest{" "}
-                <span className="text-[#d13b2f]">(SPC-VVM International)</span>
+                <span className="text-[#d13b2f] ">(International Edition of VVM-SPC)</span>
               </h2>
 
               {/* TAGLINE */}
@@ -114,7 +114,7 @@ const ŚāstraPratibhāContest = () => {
               {/* BODY TEXT */}
               <p className="text-[#4f6480] text-justify mt-6 text-base leading-relaxed font-medium">
                 <strong className="text-[#17395c]">
-                Vidyarthi Vigyan Manthan (International Edition of SPC-VVM)
+                Vidyarthi Vigyan Manthan (International Edition of VVM-SPC)
                 </strong>{" "}
                 is conducted in the Middle Eastern Countries namely Bahrain,
                 Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
