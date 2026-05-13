@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
+import axiosInstance from "@/services/axiosInstance"; // adjust path
+import { logoutUser } from "@/services/authService"; // adjust path
 const Header = () => {
   const router = useRouter();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -51,18 +53,27 @@ const Header = () => {
 
 
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.error("Logout API failed, forcing logout", error);
+    } finally {
+      // Clear all auth data
+      localStorage.clear();
+      sessionStorage.clear();
+      delete axiosInstance.defaults.headers.common["Authorization"];
 
-    setIsLoggedIn(false);
-    setShowLogoutDialog(false); // close confirm dialog
-    setLoggedOut(true); // show success dialog
+      // Update state
+      setIsLoggedIn(false);
+      setShowLogoutDialog(false);
 
-    window.dispatchEvent(new Event("auth-change"));
-
-    setTimeout(() => {
-      router.push("/Login");
-    }, 2000); // match your progress bar animation
+      setTimeout(() => {
+        window.dispatchEvent(new Event("auth-change"));
+        router.replace("/Login");
+        router.refresh();
+      }, 100);
+    }
   };
   // ✅ hydration safe
   if (!mounted) return null;

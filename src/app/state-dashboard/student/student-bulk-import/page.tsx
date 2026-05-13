@@ -26,7 +26,7 @@ export default function BulkUploadPage() {
   };
 
   /* ── download sample ── */
-  const handleDownload = () => window.open("/gcc/sif_student_sample_data.csv");
+  const handleDownload = () => window.open("/gcc/sif_student_sample_file.xlsx");
 
   /* ── submit ── */
   const handleSubmit = async () => {
@@ -92,7 +92,7 @@ export default function BulkUploadPage() {
 
         {/* INSTRUCTIONS */}
         <div className="bg-[#f4f7fb] border border-dashed border-[#c9d6e4] rounded-xl p-5 text-[14px] text-[#4a6278] space-y-2 mb-6">
-          <p>1. Click the "Download Sample File" button below to download the sample Excel (.csv) file.</p>
+          <p>1. Click the "Download Sample File" button below to download the sample Excel (.xlsx) file.</p>
           <p>2.Add student details according to the column headers in the downloaded Excel file. Remove the sample data, as it is for reference only.</p>
           <p>3. To upload the Excel file, click the "Upload Excel File" button below and select your file. After uploading, click Submit to add the students.</p>
           <p>4. After the upload, a message will appear if any records are rejected due to an invalid format.</p>

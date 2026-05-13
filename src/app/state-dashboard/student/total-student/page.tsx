@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { Search } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "@/services/axiosInstance";
 import { exportStateSummary } from "@/services/importantDatesService";
@@ -357,7 +358,12 @@ console.log("REGIONS API:", data);
   const [schools, setSchools] = useState<{ id: number; school_name: string }[]>([]);
   const [schoolsLoading, setSchoolsLoading] = useState(false);
 
-
+  const [fieldErrors, setFieldErrors] = useState({
+    fullName: "",
+    parentName: "",
+    parentMobile: "",
+    parentEmail: "",
+  });
   type RegionData = {
     code: string;
     name: string;
@@ -416,7 +422,28 @@ console.log("REGIONS API:", data);
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
- 
+  const validateName = (name: string) => /^[A-Za-z\s\.\-']{2,50}$/.test(name.trim());
+
+  const validateMobile = (mobile: string) => {
+    const required = COUNTRY_MOBILE_LENGTH[countryCode] || 10;
+    return mobile.replace(/\D/g, "").length === required
+      ? { isValid: true, message: "" }
+      : { isValid: false, message: `Mobile must be exactly ${required} digits` };
+  };
+
+  const validateEmail = (email: string) => {
+    const ok = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email) && !email.includes("..");
+    return ok ? { isValid: true, message: "" } : { isValid: false, message: "Enter a valid email (e.g. name@example.com)" };
+  };
+
+  const validateNationalId = (id: string) => {
+    const required = COUNTRY_NATIONAL_ID_LENGTH[countryCode];
+    if (!required) return { isValid: true, message: "" };
+    return id.replace(/\D/g, "").length === required
+      ? { isValid: true, message: "" }
+      : { isValid: false, message: `National ID must be exactly ${required} digits` };
+  };
+
   const handleSubmit = async () => {
 
     console.log("ALL ASSIGNMENTS:", assignments);       // 👈 yahan
@@ -441,7 +468,25 @@ console.log("REGIONS API:", data);
       setError("Please fill all required fields.");
       return;
     }
+    if (!validateName(form.fullName)) {
+      setError("Student name: letters, spaces, hyphens or dots only (2–50 chars).");
+      return;
+    }
+    if (!validateName(form.parentName)) {
+      setError("Parent name: letters, spaces, hyphens or dots only (2–50 chars).");
+      return;
+    }
+    const mobileCheck = validateMobile(form.parentMobile);
+    if (!mobileCheck.isValid) { setError(mobileCheck.message); return; }
 
+    const emailCheck = validateEmail(form.parentEmail);
+    if (!emailCheck.isValid) { setError(emailCheck.message); return; }
+
+    if (!editData) {
+      const idCheck = validateNationalId(form.nationalId);
+      if (!idCheck.isValid) { setError(idCheck.message); return; }
+    }
+    setFieldErrors({ fullName: "", parentName: "", parentMobile: "", parentEmail: "" });
     setLoading(true);
     setError("");
     try {
@@ -757,9 +802,19 @@ grade: parseInt(form.classGrade, 10),
             type="text"
             placeholder="Student's Full Name"
             value={form.fullName}
-            onChange={(e) => handleChange("fullName", e.target.value)}
-            style={inputStyle}
+            onChange={(e) => {
+              handleChange("fullName", e.target.value);
+              setFieldErrors((prev) => ({ ...prev, fullName: "" }));
+            }}
+            onBlur={() => {
+              if (form.fullName && !validateName(form.fullName))
+                setFieldErrors((prev) => ({ ...prev, fullName: "Only alphabetical characters are allowed" }));
+            }}
+            style={{ ...inputStyle, borderColor: fieldErrors.fullName ? "#ef4444" : "#e5e7eb" }}
           />
+          {fieldErrors.fullName && (
+            <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.fullName}</span>
+          )}
         </Field>
 
         <Field label="DOB" required>
@@ -829,13 +884,23 @@ grade: parseInt(form.classGrade, 10),
         </Field>
 
         <Field label="Parent Full Name" required>
-          <input
-            type="text"
-            placeholder="Parent full name"
-            value={form.parentName}
-            onChange={(e) => handleChange("parentName", e.target.value)}
-            style={inputStyle}
-          />
+            <input
+              type="text"
+              placeholder="Parent full name"
+              value={form.parentName}
+              onChange={(e) => {
+                handleChange("parentName", e.target.value);
+                setFieldErrors((prev) => ({ ...prev, parentName: "" }));
+              }}
+              onBlur={() => {
+                if (form.parentName && !validateName(form.parentName))
+                  setFieldErrors((prev) => ({ ...prev, parentName: "Only alphabetical characters are allowed" }));
+              }}
+              style={{ ...inputStyle, borderColor: fieldErrors.parentName ? "#ef4444" : "#e5e7eb" }}
+            />
+            {fieldErrors.parentName && (
+              <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentName}</span>
+            )}
         </Field>
 
         <Field label="Parent Email-id" required>
@@ -843,29 +908,46 @@ grade: parseInt(form.classGrade, 10),
             type="email"
             placeholder="Parent Email-id"
             value={form.parentEmail}
-            onChange={(e) => handleChange("parentEmail", e.target.value)}
-            style={inputStyle}
+            onChange={(e) => {
+              handleChange("parentEmail", e.target.value);
+              setFieldErrors((prev) => ({ ...prev, parentEmail: "" }));
+            }}
+            onBlur={() => {
+              if (form.parentEmail && !validateEmail(form.parentEmail).isValid)
+                setFieldErrors((prev) => ({ ...prev, parentEmail: "Enter a valid email (e.g. name@example.com)" }));
+            }}
+            style={{ ...inputStyle, borderColor: fieldErrors.parentEmail ? "#ef4444" : "#e5e7eb" }}
           />
+          {fieldErrors.parentEmail && (
+            <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentEmail}</span>
+          )}
         </Field>
 
         <Field label="Parent Mobile" required>
-          <input
-            type="text"
-            placeholder={`Parent Mobile (${COUNTRY_MOBILE_LENGTH[countryCode] || 10} digits)`}
-            value={form.parentMobile}
-            maxLength={COUNTRY_MOBILE_LENGTH[countryCode] || 10}
-            onChange={(e) => {
-              const val = e.target.value.replace(/\D/g, ""); // only digits
-              handleChange("parentMobile", val);
-            }}
-            style={inputStyle}
-          />
-          <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
-            {COUNTRY_MOBILE_LENGTH[countryCode]
-              ? `Must be ${COUNTRY_MOBILE_LENGTH[countryCode]} digits`
-              : ""}
-          </span>
-        </Field>
+        <input
+    type="text"
+    placeholder={`Parent Mobile (${COUNTRY_MOBILE_LENGTH[countryCode] || 10} digits)`}
+    value={form.parentMobile}
+    maxLength={COUNTRY_MOBILE_LENGTH[countryCode] || 10}
+    onChange={(e) => {
+      const val = e.target.value.replace(/\D/g, "");
+      handleChange("parentMobile", val);
+      setFieldErrors((prev) => ({ ...prev, parentMobile: "" }));
+    }}
+    onBlur={() => {
+      if (form.parentMobile && !validateMobile(form.parentMobile).isValid)
+        setFieldErrors((prev) => ({ ...prev, parentMobile: validateMobile(form.parentMobile).message }));
+    }}
+    style={{ ...inputStyle, borderColor: fieldErrors.parentMobile ? "#ef4444" : "#e5e7eb" }}
+  />
+  {fieldErrors.parentMobile ? (
+    <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentMobile}</span>
+  ) : (
+    <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
+      {COUNTRY_MOBILE_LENGTH[countryCode] ? `Must be ${COUNTRY_MOBILE_LENGTH[countryCode]} digits` : ""}
+    </span>
+  )}
+                </Field>
       </div>
 
       {/* {error && (
@@ -1085,7 +1167,7 @@ export default function TotalStudentsPage() {
         parentEmail: s.parent_email,
         studentMobile: s.student_mobile_number,
         studentEmail: s.student_email,
-        isPaid: !!s.is_paid,
+        isPaid: s.payment_status === 1,
         isMock: !!s.is_mock,
         isFinal: !!s.is_final,
         paymentStatus: s.payment_status === 1 ? "Paid" : "Pending",
@@ -1403,19 +1485,18 @@ export default function TotalStudentsPage() {
           }}
         >
           {/* Search */}
-          <div style={{ position: "relative", flex: "1 1 240px", maxWidth: 320 }}>
-            {/* <span
-              style={{
-                position: "absolute",
-                left: 12,
-                top: "50%",
-                transform: "translateY(-50%)",
-                fontSize: 14,
-                color: "#9ca3af",
-              }}
-            >
-              🔍
-            </span> */}
+            <div style={{ position: "relative", display: "inline-block", width: "50%" }}>
+              <Search
+                size={18}
+                style={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#999",
+                  pointerEvents: "none"
+                }}
+              />
             <input
               type="text"
               placeholder="Search Records"

@@ -160,12 +160,12 @@ export default function LoginPage() {
               {dialog.message}
             </p>
 
-            {/* <button
+            <button
               onClick={() => setDialog(null)}
               className="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
             >
               OK
-            </button> */}
+            </button>
           </div>
         </div>
       )}
