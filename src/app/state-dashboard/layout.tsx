@@ -489,7 +489,7 @@ export default function StateDashboardLayout({
 
         {/* MOBILE TOP HEADER — now uses navbarHeight */}
         <header
-          className="md:hidden fixed left-0 w-full z-60 bg-white border-b border-[#e6edf5] shadow-sm"
+          className="md:hidden fixed left-0 w-full z-[80] bg-white border-b border-[#e6edf5] shadow-sm"
           style={{ top: "var(--navbar-h)" }}
         >
           <div
@@ -517,7 +517,7 @@ export default function StateDashboardLayout({
         {/* OVERLAY — now uses navbarHeight */}
         {isMobile && sidebarOpen && (
           <div
-            className="fixed left-0 right-0 bottom-0 bg-black/40 z-40"
+            className="fixed left-0 right-0 bottom-0 bg-black/40 z-[75]"
             style={{ top: "calc(var(--navbar-h) + 56px)" }}
             onClick={() => setSidebarOpen(false)}
           />
@@ -526,7 +526,7 @@ export default function StateDashboardLayout({
         {/* MOBILE SIDEBAR — now uses navbarHeight */}
         <aside
           className={[
-            "md:hidden fixed left-0 w-72 z-50 overflow-y-auto",
+            "md:hidden fixed left-0 w-72 z-[90] overflow-y-auto",
             "transition-transform duration-300 ease-in-out",
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
@@ -615,7 +615,7 @@ export default function StateDashboardLayout({
 
       {/* ── LOGOUT CONFIRMATION DIALOG ── */}
       {showLogoutDialog && (
-        <div className="fixed inset-0 z-200 flex items-center justify-center">
+        <div className="fixed inset-0 z-[999] flex items-center justify-center">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50"

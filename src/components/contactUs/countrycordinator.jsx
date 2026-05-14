@@ -79,7 +79,7 @@ const CoordinatorCard = ({ coordinator }) => (
 
         {/* Content */}
         <div className="flex flex-col justify-center text-center sm:text-left min-w-0 flex-1">
-            <h4 className="text-[1.7rem] leading-tight font-extrabold text-[#17395c] mb-1">
+            <h4 className="text-[1.3rem] leading-tight font-extrabold text-[#17395c] mb-1">
                 {coordinator.name}
             </h4>
 

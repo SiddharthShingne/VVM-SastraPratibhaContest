@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
+import api from "./axiosInstance";
 
 export type RegistrationFormPayload = {
   fullName: string;
@@ -63,10 +64,6 @@ export const registerUaeStudent = async (payload: RegistrationFormPayload) => {
     throw new Error("Registration failed");
   }
 };
-
-
-
-
 
 export const getSchools = async (
   page = 1,
@@ -140,5 +137,19 @@ export const fetchStudents = async (page = 1, perPage = 10) => {
   } catch (error) {
     console.error("Student API Error:", error);
     throw error;
+  }
+};
+
+// username check API for school add button in total schools
+export const checkUsername = async (username: string) => {
+  try {
+    const res = await api.post("/check-username", { username });
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Error checking username";
+    }
+    return "Error checking username";
   }
 };

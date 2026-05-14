@@ -308,12 +308,12 @@ export default function StateDashboardPage() {
     {
       label: "Upgraded Students",
       value: (
-        <div className="flex items-baseline flex-wrap gap-x-1">
-          <span>{upgraded}</span>
-          <span className="text-[11px] text-slate-400">(Upgraded)</span>
-          <span className="mx-1 text-slate-300">/</span>
-          <span>{nonUpgraded}</span>
-          <span className="text-[11px] text-slate-400">(Non-Upgraded)</span>
+        <div className="flex items-baseline flex-wrap gap-x-0.5 text-xs sm:text-sm">
+          <span className="font-extrabold">{upgraded}</span>
+          <span className="text-[9px] sm:text-[11px] text-slate-400">(Upgraded)</span>
+          <span className="mx-0.5 text-slate-300">/</span>
+          <span className="font-extrabold">{nonUpgraded}</span>
+          <span className="text-[9px] sm:text-[11px] text-slate-400">(Non-Upgraded)</span>
         </div>
       ),
       icon: <FaArrowUp size={20} />,
@@ -384,7 +384,7 @@ export default function StateDashboardPage() {
       <div className="min-h-screen p-3 sm:p-5 lg:p-8">
 
         {/* ── Page Title ── */}
-        <div className="mb-5 anim-down">
+        <div className="mb-3 sm:mb-5 anim-down">
           <h1 className="text-lg sm:text-2xl font-bold text-slate-800 tracking-tight">
             State Coordinator Dashboard
           </h1>
@@ -394,7 +394,7 @@ export default function StateDashboardPage() {
         </div>
 
         {/* ── Stat Cards — no left accent border ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mb-5">
           {/* {stats.map((s, i) => (
             <div
               key={s.label}
@@ -427,12 +427,12 @@ export default function StateDashboardPage() {
                  ${s.href ? "cursor-pointer" : ""}`}
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
+                <div className={`w-8 h-8 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
                   {s.icon}
                 </div>
-                <div className="min-w-0">
-                  <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-0.5 truncate">{s.label}</p>
-                  <div className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">{s.value}</div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-slate-400 text-[10px] sm:text-xs font-bold mb-0.5 truncate">{s.label}</p>
+                  <div className="text-blue-600 font-extrabold text-xs sm:text-sm leading-tight">{s.value}</div>
                 </div>
               </div>
             );
@@ -448,13 +448,13 @@ export default function StateDashboardPage() {
         </div>
 
         {/* ── Search + Export row — OUTSIDE the table card, above it ── */}
-        <div className="mb-4 flex items-center justify-between gap-3 relative z-50 anim-down"
+        <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3 relative z-50 anim-down"
           style={{ animationDelay: "60ms" }}>
 
           {/* Region / District dropdown */}
           <div
             id="region-dropdown-wrapper"
-            className="relative w-full sm:w-72"
+            className="relative w-full sm:w-72 min-w-0"
             onMouseDown={(e) => e.stopPropagation()}
           >
             <div
@@ -540,7 +540,7 @@ export default function StateDashboardPage() {
 
           {/* Active filter badge */}
           {selectedFilter && (
-            <div className="flex items-center gap-2 anim-fade">
+            <div className="flex items-center gap-2 anim-fade w-full sm:w-auto flex-wrap">
               <span className="text-xs text-slate-400">Showing:</span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium">
                 {selectedFilter.type === "district" ? "District" : "Region"}: {selectedFilter.label}
@@ -556,9 +556,9 @@ export default function StateDashboardPage() {
           {/* Export button — blue, top right, outside table card */}
           <button
             onClick={handleExport}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-600
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-700
                        text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow-md
-                       transition-all duration-200 active:scale-95 whitespace-nowrap ml-auto"
+                       transition-all duration-200 active:scale-95  w-full sm:w-auto whitespace-nowrap sm:ml-auto"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -581,8 +581,8 @@ export default function StateDashboardPage() {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm resp-table">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+            <table className="w-full min-w-[500px] text-sm resp-table">
               <thead>
                 <tr className="bg-slate-50 border-y border-slate-100">
                   {[
@@ -688,12 +688,10 @@ export default function StateDashboardPage() {
               {!loading && paginated.length > 0 && (
                 <tfoot>
                   <tr className="bg-slate-50 font-bold text-slate-700 border-t-2 border-slate-200">
-                    <td className="px-3 sm:px-4 py-3 text-xs text-slate-500" colSpan={2}>
-                      Total
-                    </td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.schools}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.individual}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.total}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs text-slate-500" colSpan={2}>Total</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.schools}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.individual}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.total}</td>
                     {/* <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Attempted}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td> */}
@@ -705,7 +703,8 @@ export default function StateDashboardPage() {
           </div>
 
           {/* ── Pagination ── */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-4 border-t border-slate-100">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 
+           px-3 sm:px-5 py-3 sm:py-4">
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <span>Items per page:</span>
               <select
