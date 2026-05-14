@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";          // ← ADD
+import LoaderWrapper from "@/components/LoadWrapper";
 
 import { Geist,Geist_Mono } from "next/font/google";
 import MainLayout from "@/components/layout/page";
@@ -30,6 +32,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
       >
+        <Suspense>                          {/* ← ADD */}
+          <LoaderWrapper />                 {/* ← ADD */}
+        </Suspense>
         <MainLayout>
           {children}
         </MainLayout>

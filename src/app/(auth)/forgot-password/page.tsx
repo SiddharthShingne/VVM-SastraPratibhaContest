@@ -29,13 +29,16 @@ export default function ForgotPassword() {
         }
         try {
             setLoading(true);
-            const res = await forgotPassword(username.trim());
+            // Pass the full reset password URL
+            const resetUrl = `${window.location.origin}/reset-password`;
+            const res = await forgotPassword(username.trim(), resetUrl);
+
             if (!res?.status || !res?.data?.email) {
                 throw new Error(res?.message || "Something went wrong");
             }
             setDialog({
                 type: "success",
-                message: `Reset link sent to ${maskEmail(res.data.email)}`,
+                message: `Reset link sent to ${res.data.email}`,
             });
         } catch (err: any) {
             setDialog({

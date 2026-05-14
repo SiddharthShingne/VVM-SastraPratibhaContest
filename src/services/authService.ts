@@ -310,12 +310,15 @@ export const registerStudentV2 = async (formData: Record<string, unknown>) => {
 
 //   return res.data;
 // };
-export const forgotPassword = async (username: string) => {
+// In your authService.ts file
+export const forgotPassword = async (username: string, frontendUrl?: string) => {
+  const resetUrl = frontendUrl || `${window.location.origin}/reset-password`;
+  
   const res = await api.post(
     "/forgot-password",
     {
       username,
-      frontend_url: window.location.origin, // dynamic like a real app
+      frontend_url: resetUrl,
     },
     {
       headers: {
@@ -327,8 +330,32 @@ export const forgotPassword = async (username: string) => {
   return res.data;
 };
 
+// ================= RESET PASSWORD ========== //
+export const resetPassword = async (data: {
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  username: string;
+}) => {
+  const res = await api.post(
+    "/reset-password",
+    {
+      email: data.email,
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+      token: data.token,
+      username: data.username,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
 
-
+  return res.data;
+};
 // NEW API
 // src/services/schoolApi.ts
 
