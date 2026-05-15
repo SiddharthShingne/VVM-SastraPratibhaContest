@@ -21,13 +21,14 @@ export default function RegisterPage() {
     { value: "oman", label: "Oman", code: "6" },
   ];
 
+  // flagCards — sab contain
   const flagCards = [
-    { name: "UAE", logo: "/gcc/uae.png", value: "uae" },
-    { name: "Saudi Arabia", logo: "/gcc/saudi-arab.png", value: "saudi" },
-    { name: "Kuwait", logo: "/gcc/kuwait.png", value: "kuwait" },
-    { name: "Bahrain", logo: "/gcc/bahrain.png", value: "bahrain" },
-    { name: "Qatar", logo: "/gcc/qatar.png", value: "qatar" },
-    { name: "Oman", logo: "/gcc/oman.png", value: "oman" },
+    { name: "UAE", logo: "/gcc/uae.png", value: "uae", fit: "contain" },
+    { name: "Saudi Arabia", logo: "/gcc/saudi-arab.png", value: "saudi", fit: "contain" },
+    { name: "Kuwait", logo: "/gcc/kuwait.png", value: "kuwait", fit: "contain" },
+    { name: "Bahrain", logo: "/gcc/bahrain.png", value: "bahrain", fit: "contain" },
+    { name: "Qatar", logo: "/gcc/qatar.png", value: "qatar", fit: "contain" },
+    { name: "Oman", logo: "/gcc/oman.png", value: "oman", fit: "contain" },
   ];
 
   const selectedCountryData = countries.find((c) => c.value === selectedCountry);
@@ -134,11 +135,11 @@ export default function RegisterPage() {
                     key={country.name}
                     onClick={() => setSelectedCountry(country.value)}
                     className="group flex flex-col items-center gap-2 py-3 px-2 rounded-2xl transition-all duration-250 cursor-pointer"
-                    style={{
-                      background: "white",
-                      border: "1.5px solid rgba(23,57,92,0.1)",
-                      boxShadow: "0 2px 8px rgba(23,57,92,0.07)",
-                    }}
+                    // style={{
+                    //   background: "white",
+                    //   border: "1.5px solid rgba(23,57,92,0.1)",
+                    //   boxShadow: "0 2px 8px rgba(23,57,92,0.07)",
+                    // }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLButtonElement).style.border = "1.5px solid rgba(23,57,92,0.35)";
                       (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 20px rgba(23,57,92,0.14)";
@@ -152,16 +153,14 @@ export default function RegisterPage() {
                   >
                     {/* Flag image on pure white */}
                     <div
-                      className="w-11 h-8 relative overflow-hidden rounded-lg"
-                      style={{
-                        boxShadow: "0 1px 4px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)",
-                      }}
+                      className="w-12 h-12 relative rounded-xl bg-white p-1"
+                      style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)" }}
                     >
                       <Image
                         src={country.logo}
                         alt={`${country.name} flag`}
                         fill
-                        className="object-cover"
+                        style={{ objectFit: "contain", padding: "4px" }}
                       />
                     </div>
                     <span

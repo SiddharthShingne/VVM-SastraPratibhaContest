@@ -212,7 +212,7 @@ const COUNTRY_NATIONAL_ID_LENGTH: Record<string, number> = {
 };
 const COUNTRY_MOBILE_LENGTH: Record<string, number> = {
   AE: 9,   // UAE
-  SA: 10,  // Saudi Arabia
+  SA: 9,  // Saudi Arabia
   KW: 8,   // Kuwait
   BH: 8,   // Bahrain
   QA: 8,   // Qatar
@@ -535,7 +535,7 @@ console.log("REGIONS API:", data);
           fullName: form.fullName,           // ✅ was name
           dob: form.dob,                     // ✅ was date_of_birth
           gender: form.gender === "Male" ? 1 : 2,
-grade: parseInt(form.classGrade, 10),
+          grade: parseInt(CLASS_MAP[parseInt(form.classGrade, 10)]?.trim() || "0", 10),
           class_id: parseInt(form.classGrade, 10),
           exam_language: form.examLanguage,
           state_id: String(stateId),   // ✅ from localStorage

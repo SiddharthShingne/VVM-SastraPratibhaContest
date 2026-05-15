@@ -77,14 +77,13 @@ const navItems: NavItem[] = [
         ],
     },
 ];
-
 const gccFlags = [
-    { src: "/gcc/oman.png", alt: "Oman" },
-    { src: "/gcc/qatar.png", alt: "Qatar" },
-    { src: "/gcc/kuwait.png", alt: "Kuwait" },
-    { src: "/gcc/saudi-arab.png", alt: "Saudi Arabia" },
-    { src: "/gcc/uae.png", alt: "UAE" },
-    { src: "/gcc/bahrain.png", alt: "Bahrain" },
+    { src: "/gcc/oman.png", alt: "Oman", fit: "cover" },
+    { src: "/gcc/qatar.png", alt: "Qatar", fit: "contain" },
+    { src: "/gcc/kuwait.png", alt: "Kuwait", fit: "cover" },
+    { src: "/gcc/saudi-arab.png", alt: "Saudi Arabia", fit: "cover" },
+    { src: "/gcc/uae.png", alt: "UAE", fit: "cover" },
+    { src: "/gcc/bahrain.png", alt: "Bahrain", fit: "cover" },
 ];
 
 const Navbar = () => {
@@ -178,14 +177,15 @@ const Navbar = () => {
                             </Link>
                             {/* Flags — visible sm and above */}
                             <div className="hidden sm:flex items-center gap-1.5 flex-wrap">
-                                {gccFlags.map(({ src, alt }) => (
+                                {gccFlags.map(({ src, alt, fit }) => (
                                     <Image
                                         key={alt}
                                         src={src}
                                         alt={alt}
                                         width={36}
                                         height={36}
-                                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full object-cover border border-gray-100 shadow-sm"
+                                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full border border-gray-100 shadow-sm bg-white"
+                                        style={{ objectFit: fit as "cover" | "contain" }}
                                     />
                                 ))}
                             </div>
@@ -338,14 +338,15 @@ const Navbar = () => {
 
                 {/* GCC Flags row in drawer */}
                 <div className="flex items-center gap-2 px-5 py-3 border-b border-gray-100 bg-gray-50/60">
-                    {gccFlags.map(({ src, alt }) => (
+                    {gccFlags.map(({ src, alt, fit }) => (
                         <Image
                             key={alt}
                             src={src}
                             alt={alt}
                             width={36}
                             height={36}
-                            className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm"
+                            className="w-8 h-8 rounded-full border border-gray-100 shadow-sm bg-white"
+                            style={{ objectFit: fit as "cover" | "contain" }}
                         />
                     ))}
                 </div>
