@@ -192,7 +192,7 @@ export default function BulkUploadPage() {
             <h3 className="text-xl font-extrabold text-center text-[#243f5c] mb-2">
               {dialog.type === "success"
                 ? "Upload Successful"
-                : "Bulk upload completed with errors."}
+                : "Bulk upload errors."}
             </h3>
 
             {/* Message */}
