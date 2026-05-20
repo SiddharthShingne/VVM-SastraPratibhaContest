@@ -5,6 +5,7 @@
 import { useEffect, useState, useRef } from "react";
 import { getSchools } from "@/services/uaeService";
 import { fetchRegionsWithCities } from "@/services/importantDatesService";
+import AddSchoolModal from "@/app/state-dashboard/school/total-school/add-school/AddSchoolModal";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type School = {
@@ -62,6 +63,7 @@ export default function SchoolsPage() {
   const [regionFilter, setRegionFilter] = useState("");
   const [regions, setRegions] = useState<RegionData[]>([]);
   const [regionsLoading, setRegionsLoading] = useState(false);
+  const [addSchoolOpen, setAddSchoolOpen] = useState(false);
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -303,7 +305,29 @@ export default function SchoolsPage() {
               ✕ Clear
             </button>
           )}
+          {/* ✅ ADD — Add School button at end of filter row */}
+          <button
+            onClick={() => setAddSchoolOpen(true)}
+            style={{
+              marginLeft: "auto",
+              padding: "9px 20px",
+              borderRadius: 10,
+              border: "none",
+              background: "#2563eb",
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              whiteSpace: "nowrap" as const,
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            + Add School
+          </button>
         </div>
+
       </div>
 
       {/* ── Table Card ───────────────────────────────────────────────────── */}
@@ -400,7 +424,7 @@ export default function SchoolsPage() {
                 background: "#fff", cursor: "pointer", outline: "none",
               }}
             >
-              {[10, 20, 30, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+              {[10, 20, 30, 50, 100].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
 
@@ -485,6 +509,14 @@ export default function SchoolsPage() {
         </div>
 
       </div>
+      {/* ✅ ADD — Add School Modal */}
+      <AddSchoolModal
+        open={addSchoolOpen}
+        setOpen={setAddSchoolOpen}
+        onSuccess={() => {
+          fetchSchools(); // refresh the list after adding
+        }}
+      />
     </div>
   );
 }

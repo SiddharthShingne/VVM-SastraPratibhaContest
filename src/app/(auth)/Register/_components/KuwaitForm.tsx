@@ -13,6 +13,9 @@ import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
 import Link from "next/link";
+import {getSchools} from "@/services/uaeService"
+import { fetchRegionsWithCities } from "@/services/importantDatesService";
+
 type RegistrationForm = {
     fullName: string;
     dob: string;
@@ -34,7 +37,8 @@ type RegistrationForm = {
     hear: string;
     emirate_id: string;
     dist_id: string;
-    district: string;
+    region: string;
+    city: string;
 };
 const genders = [
     { label: "Male", value: "1" },
@@ -258,6 +262,9 @@ export default function KuwaitForm({ countries }: Props) {
     const [showPopup, setShowPopup] = useState(false);
     const [userData, setUserData] = useState({ email: "", username: "" });
     const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+    const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+    const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+    const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
 
     // useEffect(() => {
     //     fetchDistricts("40").then((data) => {
@@ -268,6 +275,24 @@ export default function KuwaitForm({ countries }: Props) {
         fetchDistricts({ state_ids: [40], prant_ids: [] }).then((data) => {
             setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
         });
+    }, []);
+
+    // ✅ Add this block after the districts useEffect
+    useEffect(() => {
+        const loadSchools = async () => {
+            try {
+                const res = await getSchools(1, 500, undefined, "KW");
+                const formattedSchools =
+                    res?.data?.data?.map((school: any) => ({
+                        value: String(school.id),
+                        label: school.school_name,
+                    })) || [];
+                setSchools(formattedSchools);
+            } catch (err) {
+                console.error("School fetch failed", err);
+            }
+        };
+        loadSchools();
     }, []);
 
     // Cooldown
@@ -289,10 +314,54 @@ export default function KuwaitForm({ countries }: Props) {
         handleSubmit,
         getValues,
         setError,
+        watch,
         reset,
         formState: { errors, touchedFields },
     } = useForm<RegistrationForm>({ mode: "all" });
 
+
+
+    useEffect(() => {
+        fetchRegionsWithCities("KW").then((res: any) => {  // ← change "QA" per form
+            const formatted = res?.data?.map((region: any) => ({
+                value: String(region.id),
+                label: region.name,
+                cities: region.cities || [],
+            })) || [];
+            setRegions(formatted);
+        }).catch(() => console.error("Failed to load regions"));
+    }, []);
+
+    // ✅ ADD schools useEffect (change country code per form):
+    useEffect(() => {
+        const loadSchools = async () => {
+            try {
+                const res = await getSchools(1, 500, undefined, "KW"); // ← change "QA" per form
+                const formattedSchools = res?.data?.data?.map((school: any) => ({
+                    value: String(school.id),
+                    label: school.school_name,
+                })) || [];
+                setSchools(formattedSchools);
+            } catch (err) {
+                console.error("School fetch failed", err);
+            }
+        };
+        loadSchools();
+    }, []);
+
+    // ✅ ADD cities useEffect (same for all forms, no change needed):
+    const watchRegion = watch("region");
+    useEffect(() => {
+        if (!watchRegion) return;
+        const selected = regions.find((r) => r.value === watchRegion);
+        const formattedCities = selected?.cities?.map((c: any) => ({
+            value: String(c.id),
+            label: c.name,
+        })) || [];
+        setCities(formattedCities);
+    }, [watchRegion, regions]);
+
+    
     // ── Send OTP ──────────────────────────────────────────────────────────────
     const _sendOtp = async () => {
         const email = getValues("parentEmail");
@@ -381,7 +450,8 @@ export default function KuwaitForm({ countries }: Props) {
 
             //  pincode: data.pincode,
                 address: data.schoolAddress,
-                dist_id: data.district,
+                region_id: data.region,
+                dist_id: data.city,
 
                 parent_full_name: data.parentName,
                 parent_mobile: data.parentMobile,
@@ -523,9 +593,12 @@ export default function KuwaitForm({ countries }: Props) {
 
                     {/* School Details */}
                     <Section title="School Details">
-                        <InputField label="School Name" required placeholder="Enter school name"
-                            registration={register("schoolName", { required: "School Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
-                            error={errors.schoolName}
+                        <SelectField
+                            label="School Name"
+                            required
+                            options={schools}
+                            registration={register("schoolName", { required: "School Name is required" })}
+                            error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
                         />
                         <SelectField label="Board" required options={boards}
                             registration={register("board", { required: "Board is required" })}
@@ -545,11 +618,20 @@ export default function KuwaitForm({ countries }: Props) {
                             error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
                         /> */}
                         <SelectField
-                            label="City / District"
+                            label="Region"
                             required
-                            options={districts}
-                            registration={register("district", { required: "District is required" })}
-                            error={touchedFields?.district && errors?.district ? errors.district : undefined}
+                            options={regions}
+                            registration={register("region", { required: "Region is required" })}
+                            error={touchedFields?.region && errors?.region ? errors.region : undefined}
+                        />
+
+                        {/* ✅ ADD City SelectField */}
+                        <SelectField
+                            label="City"
+                            required
+                            options={cities}
+                            registration={register("city", { required: "City is required" })}
+                            error={touchedFields?.city && errors?.city ? errors.city : undefined}
                         />
                         <div className="md:col-span-2">
                             <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"

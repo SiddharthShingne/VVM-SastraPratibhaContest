@@ -43,7 +43,7 @@ const methods = [
         ),
     },
     {
-        title: "Practical Examination",
+        title: "Guess Word Examination",
         icon: (
             <svg viewBox="0 0 64 64" fill="none" stroke="#f4df17" strokeWidth="2">
                 <path d="M26 10v14l-10 18a6 6 0 006 8h20a6 6 0 006-8l-10-18V10" />
@@ -113,12 +113,12 @@ const WhatIsVVM = () => {
 
                                     {/* Gradient Top Border */}
                                     <div className="absolute top-0 left-0 w-full h-[4px] 
-                                        bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
+                                        bg-linear-to-r from-[#17395c] via-[#f4df17] to-[#17395c]" />
 
                                     {/* ICON BOX */}
                                     <div className="
                                         w-[70px] h-[70px] mx-auto mb-4 rounded-[18px]
-                                        bg-gradient-to-br from-[#17395c] to-[#244d79]
+                                        bg-linear-to-br from-[#17395c] to-[#244d79]
                                         flex items-center justify-center
                                         shadow-[0_10px_25px_rgba(23,57,92,0.25)]
                                     ">

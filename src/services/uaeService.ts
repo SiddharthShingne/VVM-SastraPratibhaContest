@@ -69,24 +69,24 @@ export const getSchools = async (
   page = 1,
   perPage = 10,
   filters?: { search?: string; region_code?: string },
+  countryCode?: string, // ← ADD THIS PARAMETER
 ) => {
   try {
-    // ✅ Read from nested user object, same as getCountryCode() in your other pages
-    const countryCode = (() => {
-      try {
-        if (typeof window === "undefined") return "AE";
-        const raw = localStorage.getItem("user");
-        if (!raw) return "AE";
-        const parsed = JSON.parse(raw);
-        return parsed?.user?.country_code || parsed?.country_code || "AE";
-      } catch {
-        return "AE";
-      }
-    })();
+    const resolvedCode =
+      countryCode ||
+      (() => {
+        try {
+          if (typeof window === "undefined") return "AE";
+          const raw = localStorage.getItem("user");
+          if (!raw) return "AE";
+          const parsed = JSON.parse(raw);
+          return parsed?.user?.country_code || parsed?.country_code || "AE";
+        } catch {
+          return "AE";
+        }
+      })();
 
-    console.log("Schools countryCode:", countryCode); // ✅ add this to verify
-
-    const res = await axiosInstance.get(`/sif/list/schools/${countryCode}`, {
+    const res = await axiosInstance.get(`/sif/list/schools/${resolvedCode}`, {
       params: {
         page,
         per_page: perPage,
@@ -151,5 +151,47 @@ export const checkUsername = async (username: string) => {
       return err.response?.data || "Error checking username";
     }
     return "Error checking username";
+  }
+};
+
+// School register for State cordiantor
+export const registerSchool = async (payload: {
+  sch_name: string;
+  name_1: string;
+  principal: string;
+  name_2: string;
+  exam_cordinator: string;
+  school_type: number;
+  board_id: number;
+  sub_board_id: number | null;
+  username: string;
+  password: string;
+  email: string;
+  parent_mobile: string;
+  hear: number;
+  state_id: number;
+  dist_id: number;
+  city_id: number;
+  address: string;
+  pincode: string;
+  exam_coordinator_designation: string;
+  country_id: string;
+}) => {
+  try {
+    const res = await api.post("/schools/school-register", payload);
+
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as {
+        response?: {
+          data?: unknown;
+        };
+      };
+
+      return err.response?.data || "School registration failed";
+    }
+
+    return "School registration failed";
   }
 };

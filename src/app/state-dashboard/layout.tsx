@@ -63,7 +63,7 @@ function NavDivider() {
 }
 
 /* ---------------- MAIN LAYOUT ---------------- */
-export default function StateDashboardLayout({ 
+export default function StateDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -75,10 +75,11 @@ export default function StateDashboardLayout({
   const pathname = usePathname();
 
   const [name, setName] = useState(() => {
+
     if (typeof window !== "undefined") return extractNameFromStorage();
     return "State Coordinator";
   });
-
+  const [countryCode, setCountryCode] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -98,8 +99,20 @@ export default function StateDashboardLayout({
   };
   useEffect(() => {
     setToken(localStorage.getItem("token"));
-  }, []);
 
+    const raw = localStorage.getItem("user");
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+
+      // YOUR COUNTRY CODE
+      const code = parsed?.user?.country_code || "";
+
+      setCountryCode(code);
+
+      console.log("Coordinator Country:", code);
+    }
+  }, []);
   useEffect(() => {
     if (token === null) return;
     if (!token) router.replace("/Login");
@@ -163,24 +176,32 @@ export default function StateDashboardLayout({
   }, []);
 
   const handleLogout = async () => {
-  try {
-    await logoutUser();
-  } catch (error) {
-    console.error(error);
-  } finally {
-    localStorage.clear();
-    sessionStorage.clear();
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      localStorage.clear();
+      sessionStorage.clear();
 
-    delete axiosInstance.defaults.headers.common["Authorization"];
+      delete axiosInstance.defaults.headers.common["Authorization"];
 
-    setToken(null); // ✅ layout ko turant update karega
+      setToken(null); // ✅ layout ko turant update karega
 
-    window.dispatchEvent(new Event("auth-change")); // ✅ header sync
-    router.replace("/Login");
-  }
-};
+      window.dispatchEvent(new Event("auth-change")); // ✅ header sync
+      router.replace("/Login");
+    }
+  };
 
-  
+  const permissions = {
+    canViewPayments: ["AE", "SA", "OM", "KW", "BH"].includes(countryCode),
+
+    canBulkImport: ["AE", "SA", "OM", "KW", "BH"].includes(countryCode),
+
+    canViewSchools: ["AE", "SA", "OM", "QA", "KW", "BH"].includes(countryCode),
+
+    canViewStudents: true,
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -257,12 +278,13 @@ export default function StateDashboardLayout({
 
           {studentOpen && (
             <div className="ml-8 mt-1 space-y-1">
-              <Link
-                href="/state-dashboard/student/student-bulk-import"
-                className={linkClass("/state-dashboard/student/student-bulk-import")}
-              >
-                Students Bulk Import
-              </Link>
+              {permissions.canBulkImport && (
+                <Link
+                  href="/state-dashboard/student/student-bulk-import"
+                  className={linkClass("/state-dashboard/student/student-bulk-import")}
+                >
+                  Students Bulk Import
+                </Link>)}
               <Link
                 href="/state-dashboard/student/view-indivisual-student"
                 className={linkClass("/state-dashboard/student/view-indivisual-student")}
@@ -275,12 +297,13 @@ export default function StateDashboardLayout({
               >
                 Total Students
               </Link>
-              <Link
-                href="/state-dashboard/student/student-payment"
-                className={linkClass("/state-dashboard/student/student-payment")}
-              >
-                Students Payment
-              </Link>
+              {permissions.canViewPayments && (
+                <Link
+                  href="/state-dashboard/student/student-payment"
+                  className={linkClass("/state-dashboard/student/student-payment")}
+                >
+                  Students Payment
+                </Link>)}
             </div>
           )}
         </div>

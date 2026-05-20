@@ -12,7 +12,8 @@ import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
 import Link from "next/link";
-
+import { getSchools } from "@/services/uaeService";
+import { fetchRegionsWithCities } from "@/services/importantDatesService";
 type RegistrationForm = {
   fullName: string;
   dob: string;
@@ -34,7 +35,8 @@ type RegistrationForm = {
   hear: string;
   emirate_id: string;
   dist_id: string;
-  district: string;
+  region: string;
+  city: string;
 };
 const genders = [
   { label: "Male", value: "1" },
@@ -258,7 +260,9 @@ export default function QatarForm({ countries = [] }: Props) {
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
-
+  const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+  const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
   // useEffect(() => {
   //   fetchDistricts("42").then((data) => {
   //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
@@ -266,11 +270,46 @@ export default function QatarForm({ countries = [] }: Props) {
   // }, []);
 
   useEffect(() => {
-    fetchDistricts({ state_ids: [42], prant_ids: [] }).then((data) => {
-      setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
+    fetchRegionsWithCities("QA").then((res: any) => {
+      const formatted = res?.data?.map((region: any) => ({
+        value: String(region.id),
+        label: region.name,
+        cities: region.cities || [],
+      })) || [];
+      setRegions(formatted);
+    }).catch(() => {
+      console.error("Failed to load regions");
     });
   }, []);
 
+ 
+  useEffect(() => {
+    const loadSchools = async () => {
+      try {
+
+        // TEMP set QA country for this form
+       
+
+        const res = await getSchools(1, 500, undefined, "QA");
+        console.log("Schools API:", res);
+        // ✅ CORRECT — res.data.data (double nested)
+        const formattedSchools =
+          res?.data?.data?.map((school: any) => ({
+            value: String(school.id),
+            label: school.school_name,
+          })) || [];
+
+        console.log("Formatted Schools:", formattedSchools);
+
+        setSchools(formattedSchools);
+
+      } catch (err) {
+        console.error("School fetch failed", err);
+      }
+    };
+
+    loadSchools();
+  }, []);
 
   // Cooldown
   const [cooldown, setCooldown] = useState(0);
@@ -381,7 +420,8 @@ export default function QatarForm({ countries = [] }: Props) {
 
         // pincode: data.pincode,
         address: data.schoolAddress,
-        dist_id: data.district,
+        region_id: data.region,
+        dist_id: data.city,
 
         parent_full_name: data.parentName,
         parent_mobile: data.parentMobile,
@@ -416,6 +456,15 @@ export default function QatarForm({ countries = [] }: Props) {
       setLoading(false);
     }
   };
+  const handleRegionChange = (regionId: string) => {
+    const selected = regions.find((r) => r.value === regionId);
+    const formattedCities = selected?.cities?.map((c: any) => ({
+      value: String(c.id),
+      label: c.name,
+    })) || [];
+    setCities(formattedCities);
+  };
+
   return (
     <div className="min-h-screen py-8 md:py-10">
       {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
@@ -449,8 +498,8 @@ export default function QatarForm({ countries = [] }: Props) {
               })}
               error={errors.dob}
             />
-            <InputField label=" QID (Emirates ID / National ID)" required maxLength={11} placeholder="Enter QID"
-              registration={register("emiratesId", { required: "QID is required", minLength: { value: 11, message: "QID must be 11 characters" }, maxLength: { value: 11, message: "QID must be 11 characters" } })}
+            <InputField label="Residential ID" required maxLength={11} placeholder="Residential ID"
+              registration={register("emiratesId", { required: "Residential ID is required", minLength: { value: 11, message: "Residential ID must be 11 characters" }, maxLength: { value: 11, message: "Residential ID must be 11 characters" } })}
               error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
             />
             <SelectField label="Gender" required options={genders}
@@ -489,9 +538,18 @@ export default function QatarForm({ countries = [] }: Props) {
 
           {/* School Details */}
           <Section title="School Details">
-            <InputField label="School Name" required placeholder="Enter school name"
-              registration={register("schoolName", { required: "School Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
-              error={errors.schoolName}
+            <SelectField
+              label="School Name"
+              required
+              options={schools}
+              registration={register("schoolName", {
+                required: "School Name is required",
+              })}
+              error={
+                touchedFields?.schoolName && errors?.schoolName
+                  ? errors.schoolName
+                  : undefined
+              }
             />
             <SelectField label="Board" required options={boards}
               registration={register("board", { required: "Board is required" })}
@@ -506,11 +564,19 @@ export default function QatarForm({ countries = [] }: Props) {
               error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
             /> */}
             <SelectField
-              label="City / District"
+              label="Region"
               required
-              options={districts}
-              registration={register("district", { required: "District is required" })}
-              error={touchedFields?.district && errors?.district ? errors.district : undefined}
+              options={regions}
+              registration={register("region", { required: "Region is required" })}
+              error={touchedFields?.region && errors?.region ? errors.region : undefined}
+              onChange={(e) => handleRegionChange(e.target.value)}
+            />
+            <SelectField
+              label="City"
+              required
+              options={cities}
+              registration={register("city", { required: "City is required" })}
+              error={touchedFields?.city && errors?.city ? errors.city : undefined}
             />
             <div className="md:col-span-2">
               <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
