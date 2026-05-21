@@ -39,6 +39,8 @@ interface MasterItem {
     name: string;
 }
 
+
+
 interface AddSchoolModalProps {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -90,11 +92,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 }
 
 // Result dialog component for success/error messages after form submission:
-function ResultDialog({
-    dialog,
-    onClose,
-}: {
-    dialog: { type: "success" | "error"; title: string; message: string };
+function ResultDialog({ dialog, onClose,}: {  dialog: { type: "success" | "error"; title: string; message: string };
     onClose: () => void;
 }) {
     return (
@@ -165,6 +163,17 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
     const countryCode: string = userData?.user?.country_code || userData?.country_code || "AE";
     const countryId: number = userData?.user?.country_id || 1;
     const countryName: string = COUNTRY_NAME_MAP[countryCode] || countryCode;
+
+
+    const resetForm = () => {
+        setForm(emptyForm);
+        setUsername("");
+        setUsernameMsg(null);
+        setErrors({});
+        setDistricts([]);
+        setCities([]);
+        setCitiesForRegion([]);
+    };
 
     // ── Referral options ───────────────────────────────────────────────────────
     const referralOptions = [
@@ -475,16 +484,9 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
     // ✅ REPLACE the entire handleSubmit with this:
 
     const handleDiscard = () => {
-        setForm(emptyForm);
-        setUsername("");
-        setUsernameMsg(null);
-        setErrors({});
-        setDistricts([]);
-        setCities([]);
-        setCitiesForRegion([]);
+        resetForm();
         setOpen(false);
     };
-
     const handleSubmit = async () => {
         if (!validate()) return;
         setSubmitting(true);
@@ -519,7 +521,7 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
             console.log("✅ Registered:", res);
 
             if (res?.status === true) {
-                handleDiscard();
+                resetForm();              // ← resets form but keeps modal open
                 setResultDialog({
                     type: "success",
                     title: "Success!",
@@ -947,7 +949,10 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
             {resultDialog && (
                 <ResultDialog
                     dialog={resultDialog}
-                    onClose={() => setResultDialog(null)}
+                    onClose={() => {
+                        if (resultDialog.type === "success") setOpen(false);
+                        setResultDialog(null);
+                    }}
                 />
             )}
         </div>
