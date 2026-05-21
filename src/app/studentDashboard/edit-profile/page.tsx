@@ -755,14 +755,14 @@ export default function EditProfile() {
                   })}
                   onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
                 />
-                <button
+                {/* <button
                   type="button"
                   className="vvm-btn vvm-btn--success"
                   onClick={() => handleSendOtp("parentMobile")}
                   disabled={otpLoading.parentMobile || parentMobileVerified}
                 >
                   {otpLoading.parentMobile ? "Sending…" : "Send OTP"}
-                </button>
+                </button> */}
               </div>
               {parentMobileVerified ? (
                 <p className="vvm-status vvm-status--ok">✓ Mobile Verified</p>
@@ -770,8 +770,10 @@ export default function EditProfile() {
                 <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
               )}
             </VvmInput>
-
-            <VvmInput label="Verify Mobile No." error={otpErrors.parentMobile}>
+            <VvmInput label=" " error={otpErrors.parentMobile}>
+              <></>
+            </VvmInput>
+            {/* <VvmInput label="Verify Mobile No." error={otpErrors.parentMobile}>
               <div className="vvm-otp-row">
                 <VvmTextInput
                   placeholder="Enter 6-digit OTP"
@@ -798,7 +800,7 @@ export default function EditProfile() {
               {!parentMobileOtpSent && !parentMobileVerified && (
                 <p className="vvm-status vvm-status--warn">OTP required or Not Verified</p>
               )}
-            </VvmInput>
+            </VvmInput> */}
 
             <VvmInput label="Parent Email" error={errors.parentEmail?.message}>
               <div className="vvm-otp-row">
