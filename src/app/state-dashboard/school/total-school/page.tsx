@@ -1,21 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import { FaEdit} from "react-icons/fa";
 import { useEffect, useState, useRef } from "react";
-import { getSchools } from "@/services/uaeService";
 import { fetchRegionsWithCities } from "@/services/importantDatesService";
 import AddSchoolModal from "@/app/state-dashboard/school/total-school/add-school/AddSchoolModal";
-
+import { getSchoolList, updateSchool, toggleSchoolStatus } from "@/services/uaeService"; // your new function
 // ─── Types ────────────────────────────────────────────────────────────────────
 type School = {
   id: number;
   school_name: string;
   region_code: string;
   school_code: string;
-  students_count: number;
-  paid_students_count: number;
-  unpaid_students_count: number;
+  students_count: number; status?: number; // 1 = active, 0 = inactive
+  // paid_students_count: number;
+  // unpaid_students_count: number;
 };
 
 type RegionData = {
@@ -65,6 +65,16 @@ export default function SchoolsPage() {
   const [regionsLoading, setRegionsLoading] = useState(false);
   const [addSchoolOpen, setAddSchoolOpen] = useState(false);
 
+
+  //  [addSchoolOpen, setAddSchoolOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editSchool, setEditSchool] = useState<School | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editRegion, setEditRegion] = useState("");
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [editErrors, setEditErrors] = useState<{ schoolName?: string; region?: string }>({});
+  const [togglingId, setTogglingId] = useState<number | null>(null);
+
   // Pagination
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
@@ -99,18 +109,46 @@ export default function SchoolsPage() {
   }, [countryCode]);
 
   // ── Fetch schools ─────────────────────────────────────────────────────────
+  // const fetchSchools = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const countryCode = getCountryCode(); // already have this
+  //     // derive state_code from country e.g. "SA" → "KSA" or just use countryCode
+  //     const res = await getSchoolList(countryCode, regionFilter || undefined);
+  //     const rawData = res?.data;
+  //     const schoolList = Array.isArray(rawData) ? rawData : (rawData?.data ?? []);
+  //     setSchools(schoolList);
+  //     setTotalRecords(schoolList.length);
+  //   } catch (err) {
+  //     console.error("Schools fetch error:", err);
+  //     setSchools([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchSchools = async () => {
     setLoading(true);
     try {
-      const res = await getSchools(page, perPage, {
-        search: debouncedSearch || undefined,
-        region_code: regionFilter || undefined,
-      });
+      console.log("▶️ countryCode:", countryCode);
+      console.log("▶️ regionFilter:", regionFilter);
+      const res = await getSchoolList(
+        countryCode,
+        regionFilter || undefined,
+        page,     // ← sends ?page=1, ?page=2 etc.
+        perPage
+      );
+      // const res = await getSchoolList(countryCode, regionFilter || undefined);
+      console.log("▶️ Full res:", JSON.stringify(res));
 
-      const data = res?.data;
-      setSchools(data?.data || []);
-      setTotalRecords(data?.total || 0);
-      setTotalPages(data?.last_page || 1);
+      const paginated = res?.data;
+      const schoolList = Array.isArray(paginated?.data) ? paginated.data : [];
+
+      console.log("▶️ schoolList:", schoolList);
+      console.log("▶️ total:", paginated?.total);
+
+      setSchools(schoolList);
+      setTotalRecords(paginated?.total ?? schoolList.length);
+      setTotalPages(paginated?.last_page ?? 1);
     } catch (err) {
       console.error("Schools fetch error:", err);
       setSchools([]);
@@ -118,11 +156,69 @@ export default function SchoolsPage() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchSchools();
   }, [page, perPage, debouncedSearch, regionFilter]);
 
+  //  ADD before return (
+  const handleEditOpen = (school: School) => {
+    setEditSchool(school);
+    setEditName(school.school_name);
+    setEditRegion(school.region_code);
+    setEditErrors({});
+    setEditOpen(true);
+  };
+
+  const handleEditSubmit = async () => {
+    const e: { schoolName?: string; region?: string } = {};
+    if (!editName.trim()) e.schoolName = "School name is required";
+    if (!editRegion) e.region = "Please select a region";
+    if (Object.keys(e).length > 0) { setEditErrors(e); return; }
+
+    if (!editSchool) return;
+    setEditSubmitting(true);
+    try {
+      await updateSchool(editSchool.id, {
+        state_id: getStateId(),
+        school_name: editName.trim(),
+        region_code: editRegion,
+      });
+      setEditOpen(false);
+      fetchSchools();
+    } catch {
+      alert("Failed to update school. Please try again.");
+    } finally {
+      setEditSubmitting(false);
+    }
+  };
+
+  const handleToggleStatus = async (school: School) => {
+    if (!confirm(`${school.status === 1 ? "Deactivate" : "Activate"} "${school.school_name}"?`)) return;
+    setTogglingId(school.id);
+    try {
+      await toggleSchoolStatus(school.id);
+      fetchSchools();
+    } catch {
+      alert("Failed to update status.");
+    } finally {
+      setTogglingId(null);
+    }
+  };
+  // ✅ Add this helper in both AddSchoolModal.tsx and page.tsx
+  const getStateId = (): number => {
+    try {
+      const raw = localStorage.getItem("user");
+      if (!raw) return 0;
+      const parsed = JSON.parse(raw);
+      const assignments = parsed?.user?.user_detail?.assignments;
+      if (Array.isArray(assignments) && assignments.length > 0) {
+        return assignments[0]?.coordinatable_id || 0;
+      }
+      return 0;
+    } catch {
+      return 0;
+    }
+  };
   // ── Styles ───────────────────────────────────────────────────────────────
   const s = {
     page: {
@@ -348,7 +444,7 @@ export default function SchoolsPage() {
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
             <thead>
               <tr>
-                {["SR. NO.", "SCHOOL NAME", "REGION CODE", "SCHOOL CODE", "TOTAL STUDENTS",
+                {["SR. NO.", "SCHOOL NAME", "REGION CODE", "SCHOOL CODE", "TOTAL STUDENTS", "ACTIONS"
                   // "PAID", "UNPAID"
                 ].map((h) => (
                   <th key={h} style={s.th}>{h}</th>
@@ -402,6 +498,37 @@ export default function SchoolsPage() {
                     <td style={s.td}>
                       <span style={s.badge("red")}>{school.unpaid_students_count ?? 0}</span>
                     </td> */}
+                    {/* ADD after the students_count <td> */}
+                      <td style={{ ...s.td, whiteSpace: "nowrap" }}>
+                        {/* Edit */}
+                        <button
+                          onClick={() => handleEditOpen(school)}
+                          title="Edit"
+                          style={{
+                            marginRight: 8, padding: "4px 10px", borderRadius: 6, fontSize: 12,
+                            border: "1px solid #d1d5db", background: "#f9fafb",
+                            color: "#374151", cursor: "pointer", fontWeight: 500,
+                          }}
+                        >
+                          ✏️ Edit
+                        </button>
+
+                        {/* Activate / Deactivate */}
+                        {/* <button
+                          onClick={() => handleToggleStatus(school)}
+                          disabled={togglingId === school.id}
+                          title={school.status === 1 ? "Deactivate" : "Activate"}
+                          style={{
+                            padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: 500,
+                            border: "none", cursor: togglingId === school.id ? "not-allowed" : "pointer",
+                            background: school.status === 1 ? "#fee2e2" : "#dcfce7",
+                            color: school.status === 1 ? "#dc2626" : "#15803d",
+                            opacity: togglingId === school.id ? 0.6 : 1,
+                          }}
+                        >
+                          {togglingId === school.id ? "..." : school.status === 1 ? "Deactivate" : "Activate"}
+                        </button> */}
+                      </td>
                   </tr>
                 ))
               )}
@@ -513,10 +640,104 @@ export default function SchoolsPage() {
       <AddSchoolModal
         open={addSchoolOpen}
         setOpen={setAddSchoolOpen}
+        // onSuccess={() => {
+        //   fetchSchools(); // refresh the list after adding
+        // }}
         onSuccess={() => {
-          fetchSchools(); // refresh the list after adding
+          setPage(1);       // ← go to page 1 to see the new school
+          fetchSchools();
         }}
       />
+      {/* ── Edit School Modal ─────────────────────────────────────── */}
+      {editOpen && editSchool && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-xl bg-white shadow-2xl overflow-hidden">
+
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+              <div>
+                <h2 className="text-lg font-bold text-[#0B1B4D]">Edit School</h2>
+                <p className="text-xs text-gray-400 mt-0.5">Update school name or region</p>
+              </div>
+              <button
+                onClick={() => setEditOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-4">
+
+              {/* School Name */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">
+                  School Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="Enter School Name"
+                  style={{
+                    height: 40, width: "100%", borderRadius: 8, border: editErrors.schoolName ? "1px solid #f87171" : "1px solid #d1d5db",
+                    padding: "0 12px", fontSize: 13, outline: "none", background: editErrors.schoolName ? "#fef2f2" : "#f9fafb",
+                  }}
+                />
+                {editErrors.schoolName && <p style={{ fontSize: 12, color: "#dc2626" }}>{editErrors.schoolName}</p>}
+              </div>
+
+              {/* Region */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">
+                  Region <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={editRegion}
+                  onChange={(e) => setEditRegion(e.target.value)}
+                  style={{
+                    height: 40, width: "100%", borderRadius: 8, border: editErrors.region ? "1px solid #f87171" : "1px solid #d1d5db",
+                    padding: "0 12px", fontSize: 13, outline: "none", background: editErrors.region ? "#fef2f2" : "#f9fafb", cursor: "pointer",
+                  }}
+                >
+                  <option value="">Select Region</option>
+                  {regions.map((r) => (
+                    <option key={r.district_id} value={r.code}>{r.name}</option>
+                  ))}
+                </select>
+                {editErrors.region && <p style={{ fontSize: 12, color: "#dc2626" }}>{editErrors.region}</p>}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex justify-center gap-4 border-t border-gray-200 bg-gray-50 px-6 py-4">
+              <button
+                onClick={() => setEditOpen(false)}
+                disabled={editSubmitting}
+                style={{
+                  padding: "8px 28px", borderRadius: 8, border: "1px solid #d1d5db",
+                  background: "#fff", color: "#6b7280", fontSize: 13, cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEditSubmit}
+                disabled={editSubmitting}
+                style={{
+                  padding: "8px 28px", borderRadius: 8, border: "none",
+                  background: "#2563eb", color: "#fff", fontSize: 13,
+                  fontWeight: 600, cursor: editSubmitting ? "not-allowed" : "pointer",
+                  opacity: editSubmitting ? 0.6 : 1,
+                }}
+              >
+                {editSubmitting ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

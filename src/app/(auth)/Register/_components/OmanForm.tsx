@@ -12,7 +12,7 @@ import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
 import Link from "next/link";
-import {getSchools} from "@/services/uaeService"
+import { getSchools } from "@/services/uaeService"
 import { fetchRegionsWithCities } from "@/services/importantDatesService";
 
 type RegistrationForm = {
@@ -330,12 +330,12 @@ export default function OmanForm({ countries }: Props) {
     const [dialog, setDialog] = useState<DialogType | null>(null);
     const [showPopup, setShowPopup] = useState(false);
     const [userData, setUserData] = useState({ email: "", username: "" });
-    const [districts, setDistricts] = useState< { value: string; label: string }[]   >([]);
+    const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
     const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
     const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
     const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
 
-   
+
 
     // ✅ Add this block after the districts useEffect
     useEffect(() => {
@@ -378,7 +378,7 @@ export default function OmanForm({ countries }: Props) {
         }, 1000);
     };
 
-    const { register, handleSubmit, getValues, watch,  setError, reset,  formState: { errors, touchedFields },
+    const { register, handleSubmit, getValues, watch, setError, reset, formState: { errors, touchedFields },
     } = useForm<RegistrationForm>({ mode: "all" });
 
 
@@ -434,7 +434,7 @@ export default function OmanForm({ countries }: Props) {
         }
         try {
             setOtpLoading(true);
-            await sendEmailOtp(email , "OM");
+            await sendEmailOtp(email, "OM");
             setOtpModalOpen(true);
             startCooldown();
             setDialog({
@@ -601,13 +601,13 @@ export default function OmanForm({ countries }: Props) {
                             type="date"
                             required
                             min="2008-01-01"
-                            max="2015-12-31"
+                            max="2017-12-31"
                             registration={register("dob", {
                                 required: "Date of Birth is required",
                                 validate: (value) => {
                                     const year = new Date(value).getFullYear();
                                     if (year < 2008) return "Date of Birth must be after 2008";
-                                    if (year > 2015) return "Date of Birth must be before 2015";
+                                    if (year > 2017) return "Date of Birth must be before 2017";
                                     return true;
                                 },
                             })}

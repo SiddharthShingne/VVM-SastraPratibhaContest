@@ -266,7 +266,7 @@ export default function SaudiForm({ countries }: Props) {
     const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
     const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
     const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
-    
+
 
     useEffect(() => {
         fetchDistricts({ state_ids: [43], prant_ids: [] }).then((data) => {
@@ -429,7 +429,7 @@ export default function SaudiForm({ countries }: Props) {
                 // pincode: data.pincode,
                 address: data.schoolAddress,
                 dist_id: data.region,      // district_id of the region
-                city_id: data.city,   
+                city_id: data.city,
 
                 parent_full_name: data.parentName,
                 parent_mobile: data.parentMobile,
@@ -485,13 +485,13 @@ export default function SaudiForm({ countries }: Props) {
                         />
                         <InputField label="Date of Birth" type="date" required
                             min="2008-01-01"
-                            max="2015-12-31"
+                            max="2017-12-31"
                             registration={register("dob", {
                                 required: "Date of Birth is required",
                                 validate: (value) => {
                                     const year = new Date(value).getFullYear();
                                     if (year < 2008) return "Date of Birth must be after 2008";
-                                    if (year > 2015) return "Date of Birth must be before 2015";
+                                    if (year > 2017) return "Date of Birth must be before 2017";
                                     return true;
                                 }
                             })}
@@ -579,7 +579,7 @@ export default function SaudiForm({ countries }: Props) {
                             registration={register("board", { required: "Board is required" })}
                             error={touchedFields?.board && errors?.board ? errors.board : undefined}
                         />
-                      
+
 
                         <InputField
                             label="Country"

@@ -659,7 +659,7 @@ export default function EditProfile() {
               <VvmTextInput
                 type="date"
                 min="2008-01-01"
-                max="2015-12-31"
+                max="2017-12-31"
                 {...register("dob", {
                   required: "Date of Birth is required",
                   validate: (value) => {
@@ -667,10 +667,10 @@ export default function EditProfile() {
 
                     const date = new Date(value);
                     const min = new Date("2008-01-01");
-                    const max = new Date("2015-12-31");
+                    const max = new Date("2017-12-31");
 
                     if (date < min) return "DOB must be after 1 Jan 2008";
-                    if (date > max) return "DOB must be before 31 Dec 2015";
+                    if (date > max) return "DOB must be before 31 Dec 2017";
 
                     return true;
                   },
@@ -764,11 +764,11 @@ export default function EditProfile() {
                   {otpLoading.parentMobile ? "Sending…" : "Send OTP"}
                 </button> */}
               </div>
-              {parentMobileVerified ? (
+              {/* {parentMobileVerified ? (
                 <p className="vvm-status vvm-status--ok">✓ Mobile Verified</p>
               ) : (
                 <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
-              )}
+              )} */}
             </VvmInput>
             <VvmInput label=" " error={otpErrors.parentMobile}>
               <></>

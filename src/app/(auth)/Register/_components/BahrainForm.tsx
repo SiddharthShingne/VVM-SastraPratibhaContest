@@ -268,7 +268,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
   //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
   //   });
   // }, []);
-  
+
   useEffect(() => {
     fetchRegionsWithCities("BH").then((res: any) => {  // ← change "QA" per form
       const formatted = res?.data?.map((region: any) => ({
@@ -488,13 +488,13 @@ export default function BahraiinForm({ countries = [] }: Props) {
             />
             <InputField label="Date of Birth" type="date" required
               min="2008-01-01"
-              max="2015-12-31"
+              max="2017-12-31"
               registration={register("dob", {
                 required: "Date of Birth is required",
                 validate: (value) => {
                   const year = new Date(value).getFullYear();
                   if (year < 2008) return "Date of Birth must be after 2008";
-                  if (year > 2015) return "Date of Birth must be before 2015";
+                  if (year > 2017) return "Date of Birth must be before 2017";
                   return true;
                 }
               })}

@@ -282,13 +282,13 @@ export default function QatarForm({ countries = [] }: Props) {
     });
   }, []);
 
- 
+
   useEffect(() => {
     const loadSchools = async () => {
       try {
 
         // TEMP set QA country for this form
-       
+
 
         const res = await getSchools(1, 500, undefined, "QA");
         console.log("Schools API:", res);
@@ -486,13 +486,13 @@ export default function QatarForm({ countries = [] }: Props) {
             />
             <InputField label="Date of Birth" type="date" required
               min="2008-01-01"
-              max="2015-12-31"
+              max="2017-12-31"
               registration={register("dob", {
                 required: "Date of Birth is required",
                 validate: (value) => {
                   const year = new Date(value).getFullYear();
                   if (year < 2008) return "Date of Birth must be after 2008";
-                  if (year > 2015) return "Date of Birth must be before 2015";
+                  if (year > 2017) return "Date of Birth must be before 2017";
                   return true;
                 }
               })}

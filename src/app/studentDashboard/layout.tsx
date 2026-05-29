@@ -268,13 +268,13 @@ export default function StudentDashboardLayout({
           className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[18px] shadow-md transition-transform duration-300 hover:scale-105"
           style={{ background: "linear-gradient(135deg, #17395c 0%, #1f4e7a 100%)" }}
         >
-          {studentName.charAt(0).toUpperCase()}
+          {studentName.charAt(2).toUpperCase()}
         </div>
         <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
           Welcome back
         </p>
         <h6 className="shine-name text-[17px] font-extrabold">
-          {studentName}
+          {studentName.toLocaleUpperCase()}
         </h6>
       </div>
 

@@ -195,3 +195,115 @@ export const registerSchool = async (payload: {
     return "School registration failed";
   }
 };
+
+//  State Cordinator Add school & get schools API
+// 1. ADD SCHOOL
+export const addSchool = async (payload: {
+  state_id: number;
+  school_name: string;
+  region_code: string;
+}) => {
+  try {
+    const res = await api.post("/sif/gcc-schools", payload);
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to add school";
+    }
+    return "Failed to add school";
+  }
+};
+
+// 2. GET SCHOOL DETAILS
+export const getSchoolDetails = async (id: number) => {
+  try {
+    const res = await api.get(`/sif/gcc-schools/${id}`);
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to fetch school details";
+    }
+    return "Failed to fetch school details";
+  }
+};
+
+// 3. UPDATE SCHOOL
+export const updateSchool = async (
+  id: number,
+  payload: {
+    state_id: number;
+    school_name: string;
+    region_code: string;
+  },
+) => {
+  try {
+    const res = await api.put(`/sif/gcc-schools/${id}`, payload);
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to update school";
+    }
+    return "Failed to update school";
+  }
+};
+
+// 4. ACTIVATE / DEACTIVATE SCHOOL
+export const toggleSchoolStatus = async (id: number) => {
+  try {
+    const res = await api.patch(`/sif/gcc-schools/${id}/status`, {});
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to toggle school status";
+    }
+    return "Failed to toggle school status";
+  }
+};
+
+// 5. GET SCHOOL LIST
+// export const getSchoolList = async (
+//   state_code?: string,
+//   region_code?: string
+// ) => {
+//   try {
+//     let url = "/sif/list/schools";
+//     if (state_code) url += `/${state_code}`;
+//     if (region_code) url += `/${region_code}`;
+
+//     const res = await api.get(url);
+//     return res.data;
+//   } catch (error: unknown) {
+//     if (error && typeof error === "object" && "response" in error) {
+//       const err = error as { response?: { data?: unknown } };
+//       return err.response?.data || "Failed to fetch school list";
+//     }
+//     return "Failed to fetch school list";
+//   }
+// };
+
+export const getSchoolList = async (
+  state_code?: string,
+  region_code?: string,
+  page: number = 1,
+  per_page: number = 10,
+) => {
+  try {
+    let url = "/sif/list/schools";
+    if (state_code) url += `/${state_code}`;
+    if (region_code) url += `/${region_code}`;
+    url += `?page=${page}&per_page=${per_page}`; // ← query params, not path
+
+    const res = await api.get(url);
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to fetch school list";
+    }
+    return "Failed to fetch school list";
+  }
+};

@@ -13,7 +13,7 @@ import Button from "@/components/ui/Button";
 import { sendEmailOtp, verifyEmailOtp } from "@/services/authService";
 import { registerStudentV2, fetchDistricts } from "@/services/authService"; // ← import your API
 import Link from "next/link";
-import {getSchools} from "@/services/uaeService"
+import { getSchools } from "@/services/uaeService"
 import { fetchRegionsWithCities } from "@/services/importantDatesService";
 
 type RegistrationForm = {
@@ -361,7 +361,7 @@ export default function KuwaitForm({ countries }: Props) {
         setCities(formattedCities);
     }, [watchRegion, regions]);
 
-    
+
     // ── Send OTP ──────────────────────────────────────────────────────────────
     const _sendOtp = async () => {
         const email = getValues("parentEmail");
@@ -371,7 +371,7 @@ export default function KuwaitForm({ countries }: Props) {
         }
         try {
             setOtpLoading(true);
-            await sendEmailOtp(email ,"KW");
+            await sendEmailOtp(email, "KW");
             setOtpModalOpen(true);
             startCooldown();
             setDialog({
@@ -434,7 +434,7 @@ export default function KuwaitForm({ countries }: Props) {
         try {
             setLoading(true);
 
-            const payload = { 
+            const payload = {
                 fullName: data.fullName,
                 dob: data.dob,
                 gender: Number(data.gender),
@@ -448,7 +448,7 @@ export default function KuwaitForm({ countries }: Props) {
                 sch_name: data.schoolName,
                 school_board_id: data.board,
 
-            //  pincode: data.pincode,
+                //  pincode: data.pincode,
                 address: data.schoolAddress,
                 region_id: data.region,
                 dist_id: data.city,
@@ -507,13 +507,13 @@ export default function KuwaitForm({ countries }: Props) {
                         />
                         <InputField label="Date of Birth" type="date" required
                             min="2008-01-01"
-                            max="2015-12-31"
+                            max="2017-12-31"
                             registration={register("dob", {
                                 required: "Date of Birth is required",
                                 validate: (value) => {
                                     const year = new Date(value).getFullYear();
                                     if (year < 2008) return "Date of Birth must be after 2008";
-                                    if (year > 2015) return "Date of Birth must be before 2015";
+                                    if (year > 2017) return "Date of Birth must be before 2017";
                                     return true;
                                 }
                             })}

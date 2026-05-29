@@ -2,15 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-
 import { useState, useEffect, useRef } from "react";
-import { Eye, EyeOff, X } from "lucide-react";
-import { checkUsername, registerSchool } from "@/services/uaeService";
-import { fetchDistricts } from "@/services/authService";
-import axiosInstance from "@/services/axiosInstance";
+// import { Eye, EyeOff, X } from "lucide-react";
+// import { fetchDistricts } from "@/services/authService";
 import { fetchRegionsWithCities } from "@/services/importantDatesService";
-
-
+import { addSchool } from "@/services/uaeService";
+import { X } from "lucide-react";
 const getUserFromStorage = () => {
     try {
         if (typeof window === "undefined") return null;
@@ -92,7 +89,8 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 }
 
 // Result dialog component for success/error messages after form submission:
-function ResultDialog({ dialog, onClose,}: {  dialog: { type: "success" | "error"; title: string; message: string };
+function ResultDialog({ dialog, onClose, }: {
+    dialog: { type: "success" | "error"; title: string; message: string };
     onClose: () => void;
 }) {
     return (
@@ -133,26 +131,26 @@ function ResultDialog({ dialog, onClose,}: {  dialog: { type: "success" | "error
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolModalProps) {
     // ── UI state ───────────────────────────────────────────────────────────────
-    const [showPwd, setShowPwd] = useState(false);
-    const [showCPwd, setShowCPwd] = useState(false);
+    // const [showPwd, setShowPwd] = useState(false);
+    // const [showCPwd, setShowCPwd] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [resultDialog, setResultDialog] = useState<{ type: "success" | "error"; title: string; message: string; } | null>(null);
     // ── Username ───────────────────────────────────────────────────────────────
-    const [username, setUsername] = useState("");
-    const [usernameMsg, setUsernameMsg] = useState<{
-        text: string;
-        ok: boolean;
-    } | null>(null);
-    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // const [username, setUsername] = useState("");
+    // const [usernameMsg, setUsernameMsg] = useState<{
+    //     text: string;
+    //     ok: boolean;
+    // } | null>(null);
+    // const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // ── Master data ────────────────────────────────────────────────────────────
-    const [states, setStates] = useState<MasterItem[]>([]);
-    const [districts, setDistricts] = useState<MasterItem[]>([]);
-    const [cities, setCities] = useState<MasterItem[]>([]);
-    const [boards, setBoards] = useState<MasterItem[]>([]);
+    // const [states, setStates] = useState<MasterItem[]>([]);
+    // const [districts, setDistricts] = useState<MasterItem[]>([]);
+    // const [cities, setCities] = useState<MasterItem[]>([]);
+    // const [boards, setBoards] = useState<MasterItem[]>([]);
     // const [schoolTypes, setSchoolTypes] = useState<MasterItem[]>([]);
-    const [loadingDist, setLoadingDist] = useState(false);
-    const [loadingCity, setLoadingCity] = useState(false);
+    // const [loadingDist, setLoadingDist] = useState(false);
+    // const [loadingCity, setLoadingCity] = useState(false);
 
     const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
     const [citiesForRegion, setCitiesForRegion] = useState<{ value: string; label: string }[]>([]);
@@ -165,14 +163,20 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
     const countryName: string = COUNTRY_NAME_MAP[countryCode] || countryCode;
 
 
+    // const resetForm = () => {
+    //     setForm(emptyForm);
+    //     // setUsername("");
+    //     // setUsernameMsg(null);
+    //     setErrors({});
+    //     // setDistricts([]);
+    //     // setCities([]);
+    //     setCitiesForRegion([]);
+    // };
+
+
     const resetForm = () => {
         setForm(emptyForm);
-        setUsername("");
-        setUsernameMsg(null);
         setErrors({});
-        setDistricts([]);
-        setCities([]);
-        setCitiesForRegion([]);
     };
 
     // ── Referral options ───────────────────────────────────────────────────────
@@ -187,36 +191,37 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
 
     // ✅ ADD after COUNTRY_NAME_MAP at top of file:
     const COUNTRY_STATE_MAP: Record<string, number> = {
-        QA: 42,
-        AE: 40,
-        OM: 41,
-        SA: 43,
-        BH: 39,
-        KW: 44,
+        IN: 1,
+        AE: 2,
+        OM: 3,
+        QA: 4,
+        SA: 5,
+        BH: 6,
+        KW: 7,
     };
 
     // ── Form ───────────────────────────────────────────────────────────────────
     const emptyForm = {
         schoolName: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-        principalSalutation: "",
-        principalName: "",
-        coordinatorSalutation: "",
-        coordinatorName: "",
-        coordinatorDesignation: "",
-        schoolType: "",
-        schoolBoard: "",
-        state: "",
-        district: "",
-        country: "",
+        // email: "",
+        // phone: "",
+        // password: "",
+        // confirmPassword: "",
+        // principalSalutation: "",
+        // principalName: "",
+        // coordinatorSalutation: "",
+        // coordinatorName: "",
+        // coordinatorDesignation: "",
+        // schoolType: "",
+        // schoolBoard: "",
+        // state: "",
+        // district: "",
+        // country: "",
         region: "",      // district_id from fetchRegionsWithCities
-        city: "",
-        address: "",
-        pincode: "",
-        referral: "",
+        // city: "",
+        // address: "",
+        // pincode: "",
+        // referral: "",
     };
 
     const [form, setForm] = useState(emptyForm);
@@ -244,114 +249,83 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
                     item[nameKeys.find((k) => item[k] !== undefined)!]) as string,
             }));
 
-        // axiosInstance
-        //     .get("/get-states")
-        //     .then((res) => {
-        //         const d: Record<string, unknown>[] =
-        //             res.data?.data ?? res.data ?? [];
-        //         console.log("✅ States:", res.data);
-        //         setStates(normalize(d, ["id", "state_id"], ["name", "state_name"]));
-        //     })
-        //     .catch(() => console.error("Failed to load states"));
-
-        // axiosInstance
-        //     .get("/get-boards")
-        //     .then((res) => {
-        //         const d: Record<string, unknown>[] =
-        //             res.data?.data ?? res.data ?? [];
-        //         console.log("✅ Boards:", res.data);
-        //         setBoards(normalize(d, ["id", "board_id"], ["name", "board_name"]));
-        //     })
-        //     .catch(() => console.error("Failed to load boards"));
-
-        // axiosInstance
-        //     .get("/get-school-types")
-        //     .then((res) => {
-        //         const d: Record<string, unknown>[] =
-        //             res.data?.data ?? res.data ?? [];
-        //         console.log("✅ School Types:", res.data);
-        //         setSchoolTypes(
-        //             normalize(d, ["id", "type_id"], ["name", "type_name"])
-        //         );
-        //     })
-        //     .catch(() => console.error("Failed to load school types"));
     }, [open]);
 
     // ── Fetch districts when state changes ────────────────────────────────────
-    useEffect(() => {
-        if (!form.state) {
-            setDistricts([]);
-            setCities([]);
-            set("district", "");
-            set("city", "");
-            return;
-        }
-        setLoadingDist(true);
-        setDistricts([]);
-        setCities([]);
-        set("district", "");
-        set("city", "");
+    // useEffect(() => {
+    //     if (!form.state) {
+    //         setDistricts([]);
+    //         setCities([]);
+    //         set("district", "");
+    //         set("city", "");
+    //         return;
+    //     }
+    //     setLoadingDist(true);
+    //     setDistricts([]);
+    //     setCities([]);
+    //     set("district", "");
+    //     set("city", "");
 
-        fetchDistricts({ state_ids: [Number(form.state)], prant_ids: [] })
-            .then((res) => {
-                console.log("✅ Districts:", res);
-                const d: Record<string, unknown>[] = res?.data ?? res ?? [];
-                setDistricts(
-                    d.map((item) => ({
-                        id: (item.id ?? item.dist_id ?? item.district_id) as
-                            | number
-                            | string,
-                        name: (item.name ??
-                            item.dist_name ??
-                            item.district_name) as string,
-                    }))
-                );
-            })
-            .catch(() => console.error("Failed to load districts"))
-            .finally(() => setLoadingDist(false));
-    }, [form.state]);
+    //     fetchDistricts({ state_ids: [Number(form.state)], prant_ids: [] })
+    //         .then((res) => {
+    //             console.log("✅ Districts:", res);
+    //             const d: Record<string, unknown>[] = res?.data ?? res ?? [];
+    //             setDistricts(
+    //                 d.map((item) => ({
+    //                     id: (item.id ?? item.dist_id ?? item.district_id) as
+    //                         | number
+    //                         | string,
+    //                     name: (item.name ??
+    //                         item.dist_name ??
+    //                         item.district_name) as string,
+    //                 }))
+    //             );
+    //         })
+    //         .catch(() => console.error("Failed to load districts"))
+    //         .finally(() => setLoadingDist(false));
+    // }, [form.state]);
 
     // ── Fetch cities when district changes ────────────────────────────────────
-    useEffect(() => {
-        if (!form.district) {
-            setCities([]);
-            set("city", "");
-            return;
-        }
-        setLoadingCity(true);
-        setCities([]);
-        set("city", "");
+    // useEffect(() => {
+    //     if (!form.district) {
+    //         setCities([]);
+    //         set("city", "");
+    //         return;
+    //     }
+    //     setLoadingCity(true);
+    //     setCities([]);
+    //     set("city", "");
 
-        axiosInstance
-            .get(`/get-cities/${form.district}`)
-            .then((res) => {
-                console.log("✅ Cities:", res.data);
-                const d: Record<string, unknown>[] =
-                    res.data?.data ?? res.data ?? [];
-                setCities(
-                    d.map((c) => ({
-                        id: (c.id ?? c.city_id) as number | string,
-                        name: (c.name ?? c.city_name) as string,
-                    }))
-                );
-            })
-            .catch(() => console.error("Failed to load cities"))
-            .finally(() => setLoadingCity(false));
-    }, [form.district]);
-    // ✅ ADD:
+    //     axiosInstance
+    //         .get(`/get-cities/${form.district}`)
+    //         .then((res) => {
+    //             console.log("✅ Cities:", res.data);
+    //             const d: Record<string, unknown>[] =
+    //                 res.data?.data ?? res.data ?? [];
+    //             setCities(
+    //                 d.map((c) => ({
+    //                     id: (c.id ?? c.city_id) as number | string,
+    //                     name: (c.name ?? c.city_name) as string,
+    //                 }))
+    //             );
+    //         })
+    //         .catch(() => console.error("Failed to load cities"))
+    //         .finally(() => setLoadingCity(false));
+    // }, [form.district]);
+
+    // Region Useffect:
     useEffect(() => {
         if (!open) return;
         setLoadingRegions(true);
         fetchRegionsWithCities(countryCode)
             .then((res: any) => {
                 const formatted = res?.data?.map((r: any) => ({
-                    value: String(r.district_id),
-                    label: r.name,
-                    cities: r.cities || [],
+                    value: r.code,    // ✅ "KSA-CENTRAL", "KSA-EAST" etc.
+                    label: r.name,    // ✅ "Central Region" etc.
                 })) || [];
                 setRegions(formatted);
             })
-            .catch(() => console.error("Failed to load regions"))
+            .catch(() => setRegions([]))
             .finally(() => setLoadingRegions(false));
     }, [open]);
 
@@ -370,182 +344,143 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
 
 
     // ── Username debounce check ───────────────────────────────────────────────
-    const handleUsernameChange = (val: string) => {
-        setUsername(val);
-        setUsernameMsg(null);
-        if (errors.username)
-            setErrors((prev) => ({ ...prev, username: "" }));
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        if (!val.trim()) return;
+    // const handleUsernameChange = (val: string) => {
+    //     setUsername(val);
+    //     setUsernameMsg(null);
+    //     if (errors.username)
+    //         setErrors((prev) => ({ ...prev, username: "" }));
+    //     if (debounceRef.current) clearTimeout(debounceRef.current);
+    //     if (!val.trim()) return;
 
-        debounceRef.current = setTimeout(async () => {
-            try {
-                const res = await checkUsername(val);
-                const resStr = typeof res === "string" ? res : JSON.stringify(res);
-                const isAvailable = resStr.toLowerCase().includes("available");
-                setUsernameMsg({
-                    text: isAvailable ? "Username is available!" : "Username is already taken",
-                    ok: isAvailable
-                });
-            } catch {
-                setUsernameMsg({ text: "Error checking username", ok: false });
-            }
-        }, 600);
-    };
+    //     debounceRef.current = setTimeout(async () => {
+    //         try {
+    //             const res = await checkUsername(val);
+    //             const resStr = typeof res === "string" ? res : JSON.stringify(res);
+    //             const isAvailable = resStr.toLowerCase().includes("available");
+    //             setUsernameMsg({
+    //                 text: isAvailable ? "Username is available!" : "Username is already taken",
+    //                 ok: isAvailable
+    //             });
+    //         } catch {
+    //             setUsernameMsg({ text: "Error checking username", ok: false });
+    //         }
+    //     }, 600);
+    // };
 
     // ── Validation ────────────────────────────────────────────────────────────
-    // ✅ REPLACE the entire validate() content with this improved version:
     const validate = () => {
         const e: Record<string, string> = {};
-        const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRx = /^[0-9]{8,10}$/;
-        const nameRx = /^[A-Za-z\s]+$/;
-
-        // School Info
         if (!form.schoolName.trim())
             e.schoolName = "School name is required";
         else if (form.schoolName.trim().length < 3)
             e.schoolName = "School name must be at least 3 characters";
-        else if (!nameRx.test(form.schoolName))
-            e.schoolName = "School name must contain only letters and spaces";
-
-        if (!form.email)
-            e.email = "Email address is required";
-        else if (!emailRx.test(form.email))
-            e.email = "Please enter a valid email (e.g. school@example.com)";
-
-        if (!form.phone)
-            e.phone = "Phone number is required";
-        else if (!phoneRx.test(form.phone))
-            e.phone = "Enter a valid 8–10 digit phone number";
-
-        // Username
-        if (!username.trim())
-            e.username = "Username is required";
-        else if (username.trim().length < 4)
-            e.username = "Username must be at least 4 characters";
-        else if (!usernameMsg)
-            e.username = "Please wait, checking username availability...";
-        else if (!usernameMsg.ok)
-            e.username = usernameMsg.text;
-        // Password
-        if (!form.password)
-            e.password = "Password is required";
-        else if (form.password.length < 6)
-            e.password = "Password must be at least 6 characters";
-        else if (!/(?=.*[A-Z])/.test(form.password))
-            e.password = "Password must contain at least one uppercase letter";
-        else if (!/(?=.*[0-9])/.test(form.password))
-            e.password = "Password must contain at least one number";
-
-        if (!form.confirmPassword)
-            e.confirmPassword = "Please confirm your password";
-        else if (form.password !== form.confirmPassword)
-            e.confirmPassword = "Passwords do not match";
-
-        // Principal
-        if (!form.principalSalutation)
-            e.principalSalutation = "Please select a salutation";
-        if (!form.principalName)
-            e.principalName = "Principal name is required";
-        else if (!nameRx.test(form.principalName))
-            e.principalName = "Name must contain only letters and spaces";
-
-        // Coordinator
-        if (!form.coordinatorSalutation)
-            e.coordinatorSalutation = "Please select a salutation";
-        if (!form.coordinatorName)
-            e.coordinatorName = "Coordinator name is required";
-        else if (!nameRx.test(form.coordinatorName))
-            e.coordinatorName = "Name must contain only letters and spaces";
-        if (!form.coordinatorDesignation)
-            e.coordinatorDesignation = "Designation is required";
-        else if (!nameRx.test(form.coordinatorDesignation))
-            e.coordinatorDesignation = "Designation must contain only letters and spaces";
-
-        // School details
-        // if (!form.schoolType) e.schoolType = "Please select a school type";
-        if (!form.schoolBoard) e.schoolBoard = "Please select a school board";
-
-        // Location
-        if (!form.region) e.region = "Please select a region";
-        if (!form.city) e.city = "Please select a city";
-        if (!form.address.trim()) e.address = "School address is required";
-
-        // Referral
-        if (!form.referral) e.referral = "Please select how you heard about VVM";
-
+        if (!form.region)
+            e.region = "Please select a region";
         setErrors(e);
         return Object.keys(e).length === 0;
     };
+
     // ── Submit ────────────────────────────────────────────────────────────────
-
-    // ❌ Your current handleSubmit ends without closing properly.
-    // ✅ REPLACE the entire handleSubmit with this:
-
     const handleDiscard = () => {
         resetForm();
         setOpen(false);
+    }
+    // ✅ Add this helper in both AddSchoolModal.tsx and page.tsx
+    const getStateId = (): number => {
+        try {
+            const raw = localStorage.getItem("user");
+            if (!raw) return 0;
+            const parsed = JSON.parse(raw);
+            const assignments = parsed?.user?.user_detail?.assignments;
+            if (Array.isArray(assignments) && assignments.length > 0) {
+                return assignments[0]?.coordinatable_id || 0;
+            }
+            return 0;
+        } catch {
+            return 0;
+        }
     };
     const handleSubmit = async () => {
         if (!validate()) return;
         setSubmitting(true);
         try {
             const payload = {
-                country_id: countryCode,
-                sch_name: form.schoolName,
-                name_1: form.principalSalutation,
-                name_2: form.coordinatorSalutation,
-                principal: form.principalName,
-                exam_cordinator: form.coordinatorName,
-                exam_coordinator_designation: form.coordinatorDesignation,
-                school_type: 3,                        // ✅ default, backend requires it
-                board_id: BOARD_ID_MAP[form.schoolBoard] || 0,              // was: form.schoolBoard
-                sub_board_id: null,
-                email: form.email,
-                parent_mobile: form.phone,
-                state_id: COUNTRY_STATE_MAP[countryCode] || 0,
-                dist_id: Number(form.region),
-                city_id: Number(form.city),
-                address: form.address,
-                pincode: "00000",
-                hear: Number(form.referral),
-                username,
-                password: form.password,
-                cpassword: form.confirmPassword,
-                from_admin: 1,
+                state_id: getStateId(),   // reads coordinatable_id: 41 from localStorage
+                school_name: form.schoolName.trim(),
+                region_code: form.region,
             };
 
-            console.log("📤 Payload:", JSON.stringify(payload, null, 2));
-            const res = await registerSchool(payload);
-            console.log("✅ Registered:", res);
+            console.log("📤 Payload:", payload);
+            const res = await addSchool(payload);
+            console.log("✅ Response:", res);
 
-            if (res?.status === true) {
-                resetForm();              // ← resets form but keeps modal open
+            // addSchool returns res.data directly, check for id or school_name
+            if (res?.id || res?.school_name || res?.status === true) {
+                resetForm();
                 setResultDialog({
                     type: "success",
-                    title: "Success!",
-                    message: res.message || "School registered successfully!",
+                    title: "School Added!",
+                    message: res?.message || "School has been registered successfully.",
                 });
                 onSuccess?.();
             } else {
                 setResultDialog({
                     type: "error",
-                    title: "Registration Failed",
+                    title: "Failed",
                     message: res?.message || "Something went wrong. Please try again.",
                 });
             }
-        } catch (error: unknown) {
-            const err = error as { response?: { data?: { message?: string } } };
+        } catch {
             setResultDialog({
                 type: "error",
                 title: "Error",
-                message: err?.response?.data?.message || "Something went wrong. Please try again.",
+                message: "Something went wrong. Please try again.",
             });
         } finally {
             setSubmitting(false);
         }
     };
+
+    // const handleSubmit = async () => {
+    //     if (!validate()) return;
+    //     setSubmitting(true);
+    //     try {
+    //         const stateIdMap: Record<string, number> = {
+    //             QA: 42, AE: 40, OM: 41, SA: 43, BH: 39, KW: 44,
+    //         };
+
+    //         const payload = {
+    //             state_id: stateIdMap[countryCode] || 0,
+    //             school_name: form.schoolName,
+    //             region_code: selectedRegionCode, // see note below
+    //         };
+    //         const res = await addSchool(payload);
+    //         if (res?.data || res?.id || res?.school_name) {
+    //             resetForm();              // ← resets form but keeps modal open
+    //             setResultDialog({
+    //                 type: "success",
+    //                 title: "Success!",
+    //                 message: res.message || "School registered successfully!",
+    //             });
+    //             onSuccess?.();
+    //         } else {
+    //             setResultDialog({
+    //                 type: "error",
+    //                 title: "Registration Failed",
+    //                 message: res?.message || "Something went wrong. Please try again.",
+    //             });
+    //         }
+    //     } catch (error: unknown) {
+    //         const err = error as { response?: { data?: { message?: string } } };
+    //         setResultDialog({
+    //             type: "error",
+    //             title: "Error",
+    //             message: err?.response?.data?.message || "Something went wrong. Please try again.",
+    //         });
+    //     } finally {
+    //         setSubmitting(false);
+    //     }
+    // };
 
 
     if (!open) return null;
@@ -579,268 +514,18 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
 
                 {/* ── Scrollable Body ───────────────────────────────────────────────── */}
                 <div className="flex-1 overflow-y-auto px-7 py-5 space-y-7">
-
-                    {/* ── School Information ─────────────────────────────────────────── */}
                     <div>
                         <SectionHeading>School Information</SectionHeading>
-                        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
 
+                            {/* School Name */}
                             <Field label="School Name" required error={errors.schoolName}>
                                 <input
                                     type="text"
-                                    placeholder="School Name"
+                                    placeholder="Enter School Name"
                                     value={form.schoolName}
-                                    onChange={(e) =>
-                                        set("schoolName", e.target.value.replace(/[^A-Za-z\s]/g, ""))
-                                    }
+                                    onChange={(e) => set("schoolName", e.target.value)}
                                     className={ic("schoolName")}
-                                />
-                            </Field>
-
-                            <Field label="School Email-id" required error={errors.email}>
-                                <input
-                                    type="email"
-                                    placeholder="School Email-id"
-                                    value={form.email}
-                                    onChange={(e) => set("email", e.target.value)}
-                                    className={ic("email")}
-                                />
-                            </Field>
-
-                            <Field
-                                label="Phone/Mobile Number"
-                                required
-                                error={errors.phone}
-                            >
-                                <input
-                                    type="text"
-                                    maxLength={10}
-                                    placeholder="Phone/Mobile Number"
-                                    value={form.phone}
-                                    onChange={(e) =>
-                                        set("phone", e.target.value.replace(/\D/g, ""))
-                                    }
-                                    className={ic("phone")}
-                                />
-                            </Field>
-
-                            {/* Username */}
-                            <Field label="Username" required error={errors.username}>
-                                <input
-                                    type="text"
-                                    placeholder="Select Username"
-                                    value={username}
-                                    onChange={(e) => handleUsernameChange(e.target.value)}
-                                    className={`${inputCls} ${(usernameMsg && !usernameMsg.ok) || errors.username
-                                        ? inputErrCls
-                                        : ""
-                                        }`}
-                                />
-                                {usernameMsg && (
-                                    <p
-                                        className={`text-xs ${usernameMsg.ok ? "text-green-600" : "text-red-500"
-                                            }`}
-                                    >
-                                        {usernameMsg.text}
-                                    </p>
-                                )}
-                            </Field>
-
-                            {/* Password */}
-                            <Field label="Password" required error={errors.password}>
-                                <div
-                                    className={`flex h-10 items-center overflow-hidden rounded-md border bg-gray-50 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 ${errors.password
-                                        ? "border-red-400 bg-red-50"
-                                        : "border-gray-300 focus-within:border-blue-500"
-                                        }`}
-                                >
-                                    <input
-                                        type={showPwd ? "text" : "password"}
-                                        placeholder="Password"
-                                        value={form.password}
-                                        onChange={(e) => set("password", e.target.value)}
-                                        className="h-full w-full bg-transparent px-3 text-sm text-gray-800 outline-none placeholder:text-gray-400"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPwd(!showPwd)}
-                                        className="shrink-0 px-3 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
-                                    </button>
-                                </div>
-                            </Field>
-
-                            {/* Confirm Password */}
-                            <Field
-                                label="Confirm Password"
-                                required
-                                error={errors.confirmPassword}
-                            >
-                                <div
-                                    className={`flex h-10 items-center overflow-hidden rounded-md border bg-gray-50 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 ${errors.confirmPassword
-                                        ? "border-red-400 bg-red-50"
-                                        : "border-gray-300 focus-within:border-blue-500"
-                                        }`}
-                                >
-                                    <input
-                                        type={showCPwd ? "text" : "password"}
-                                        placeholder="Confirm Password"
-                                        value={form.confirmPassword}
-                                        onChange={(e) => set("confirmPassword", e.target.value)}
-                                        className="h-full w-full bg-transparent px-3 text-sm text-gray-800 outline-none placeholder:text-gray-400"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCPwd(!showCPwd)}
-                                        className="shrink-0 px-3 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {showCPwd ? <EyeOff size={15} /> : <Eye size={15} />}
-                                    </button>
-                                </div>
-                            </Field>
-
-                            {/* School Type */}
-                            {/* <Field label="School Type" required error={errors.schoolType}>
-                                <select
-                                    value={form.schoolType}
-                                    onChange={(e) => set("schoolType", e.target.value)}
-                                    className={sc("schoolType")}
-                                >
-                                    <option value="">Select Option</option>
-                                    {schoolTypes.map((t) => (
-                                        <option key={t.id} value={t.id}>
-                                            {t.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </Field> */}
-
-                            {/* School Board */}
-                            <Field label="School Board" required error={errors.schoolBoard}>
-                                <select
-                                    value={form.schoolBoard}
-                                    onChange={(e) => set("schoolBoard", e.target.value)}
-                                    className={sc("schoolBoard")}
-                                >
-                                    <option value="">Select Board</option>
-                                    {boardOptions.map((b) => (
-                                        <option key={b} value={b}>{b}</option>
-                                    ))}
-                                </select>
-                            </Field>
-                        </div>
-                    </div>
-
-                    {/* ── Principal Details ──────────────────────────────────────────── */}
-                    <div>
-                        <SectionHeading>Principal Details</SectionHeading>
-                        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                            <Field label="Principal Salutation" required error={errors.principalSalutation}>
-                                <select
-                                    value={form.principalSalutation}
-                                    onChange={(e) => set("principalSalutation", e.target.value)}
-                                    className={sc("principalSalutation")}
-                                >
-                                    <option value="">Select</option>
-                                    {salutationOptions.map((s) => (
-                                        <option key={s} value={s}>{s}</option>
-                                    ))}
-                                </select>
-                            </Field>
-
-                            <Field
-                                label="Principal Name"
-                                required
-                                error={errors.principalName}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder="Principal name"
-                                    value={form.principalName}
-                                    onChange={(e) =>
-                                        set(
-                                            "principalName",
-                                            e.target.value.replace(/[^A-Za-z\s]/g, "")
-                                        )
-                                    }
-                                    className={ic("principalName")}
-                                />
-                            </Field>
-                        </div>
-                    </div>
-
-                    {/* ── Exam Coordinator Details ───────────────────────────────────── */}
-                    <div>
-                        <SectionHeading>Exam Coordinator Details</SectionHeading>
-                        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                            {/* Coordinator Salutation — same pattern */}
-                            <Field label="Exam Coordinator Salutation" required error={errors.coordinatorSalutation}>
-                                <select
-                                    value={form.coordinatorSalutation}
-                                    onChange={(e) => set("coordinatorSalutation", e.target.value)}
-                                    className={sc("coordinatorSalutation")}
-                                >
-                                    <option value="">Select</option>
-                                    {salutationOptions.map((s) => (
-                                        <option key={s} value={s}>{s}</option>
-                                    ))}
-                                </select>
-                            </Field>
-                            <Field
-                                label="Exam Coordinator Name"
-                                required
-                                error={errors.coordinatorName}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder="Exam Coordinator Name"
-                                    value={form.coordinatorName}
-                                    onChange={(e) =>
-                                        set(
-                                            "coordinatorName",
-                                            e.target.value.replace(/[^A-Za-z\s]/g, "")
-                                        )
-                                    }
-                                    className={ic("coordinatorName")}
-                                />
-                            </Field>
-
-                            <Field
-                                label="Exam Coordinator Designation"
-                                required
-                                error={errors.coordinatorDesignation}
-                            >
-                                <input
-                                    type="text"
-                                    placeholder="Exam Coordinator Designation"
-                                    value={form.coordinatorDesignation}
-                                    onChange={(e) =>
-                                        set(
-                                            "coordinatorDesignation",
-                                            e.target.value.replace(/[^A-Za-z\s]/g, "")
-                                        )
-                                    }
-                                    className={ic("coordinatorDesignation")}
-                                />
-                            </Field>
-                        </div>
-                    </div>
-
-                    {/* ── Location ──────────────────────────────────────────────────── */}
-                    <div>
-                        <SectionHeading>Location</SectionHeading>
-                        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                            {/* Country — read only */}
-                            <Field label="Country">
-                                <input
-                                    type="text"
-                                    value={countryName}
-                                    disabled
-                                    className={`${inputCls} opacity-70 cursor-not-allowed`}
                                 />
                             </Field>
 
@@ -856,73 +541,13 @@ export default function AddSchoolModal({ open, setOpen, onSuccess, }: AddSchoolM
                                         {loadingRegions ? "Loading regions..." : "Select Region"}
                                     </option>
                                     {regions.map((r) => (
-                                        <option key={r.value} value={r.value}>{r.label}</option>
+                                        <option key={r.value} value={r.value}>
+                                            {r.label}
+                                        </option>
                                     ))}
                                 </select>
                             </Field>
 
-                            {/* City */}
-                            <Field label="City" required error={errors.city}>
-                                <select
-                                    value={form.city}
-                                    onChange={(e) => set("city", e.target.value)}
-                                    disabled={!form.region || citiesForRegion.length === 0}
-                                    className={`${sc("city")} disabled:cursor-not-allowed disabled:opacity-50`}
-                                >
-                                    <option value="">
-                                        {!form.region ? "Select region first" : "Select City"}
-                                    </option>
-                                    {citiesForRegion.map((c) => (
-                                        <option key={c.value} value={c.value}>{c.label}</option>
-                                    ))}
-                                </select>
-                            </Field>
-
-                            {/* Address */}
-                            <Field label="Address" required error={errors.address}>
-                                <input
-                                    type="text"
-                                    placeholder="Enter Address"
-                                    value={form.address}
-                                    onChange={(e) => set("address", e.target.value)}
-                                    className={ic("address")}
-                                />
-                            </Field>
-
-                            {/* Pincode REMOVED — not shown to user */}
-
-                        </div>
-                    </div>
-
-                    {/* ── How did you hear ──────────────────────────────────────────── */}
-                    <div>
-                        <SectionHeading>Additional Information</SectionHeading>
-                        <div className="mt-4">
-                            <p className="mb-3 text-sm font-medium text-gray-700">
-                                How did you get to know about VVM?{" "}
-                                <span className="text-red-500">*</span>
-                            </p>
-                            <div className="grid grid-cols-1 gap-y-3 sm:grid-cols-2">
-                                {referralOptions.map((opt) => (
-                                    <label
-                                        key={opt.id}
-                                        className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-700 select-none"
-                                    >
-                                        <input
-                                            type="radio"
-                                            name="referral"
-                                            value={opt.id}
-                                            checked={form.referral === opt.id}
-                                            onChange={() => set("referral", opt.id)}
-                                            className="h-4 w-4 accent-blue-600"
-                                        />
-                                        {opt.name}
-                                    </label>
-                                ))}
-                            </div>
-                            {errors.referral && (
-                                <p className="mt-2 text-xs text-red-500">{errors.referral}</p>
-                            )}
                         </div>
                     </div>
                 </div>

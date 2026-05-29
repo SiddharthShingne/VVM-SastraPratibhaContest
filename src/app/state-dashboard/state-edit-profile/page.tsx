@@ -167,15 +167,18 @@ export default function UpdateProfilePage() {
       // Call the coordinator update API
       // const response = await axiosInstance.post("/coordinators/update", payload);
 
+      // ✅ In handleSubmit — replace the photo URL extraction + localStorage save block:
+
       if (response.data.status === true) {
-        // Update localStorage with new data
         const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
         const root = storedUser?.user || storedUser;
         const userDetail = root?.user_detail || root?.student || {};
-        // get photo URL from API response if returned, else keep current preview
-        const photoUrl = response.data?.data?.profile_photo ||
+
+        // ✅ Get photo URL from API response
+        const photoUrl =
+          response.data?.data?.profile_photo ||
           response.data?.profile_photo ||
-          (file ? preview : userDetail.profile_photo || null);
+          null;
 
         const updatedUserDetail = {
           ...userDetail,
@@ -186,7 +189,10 @@ export default function UpdateProfilePage() {
           student_email: formData.email,
           parent_email: formData.email,
           email: formData.email,
-          profile_photo: photoUrl,   // ← save photo here
+          profile_photo: photoUrl ?? userDetail.profile_photo ?? null,
+          // ✅ Clear student_profile so useEffect falls through to profile_photo
+          student_profile: null,
+          student_profile_url: null,
         };
 
         const updatedRoot = {
@@ -202,10 +208,14 @@ export default function UpdateProfilePage() {
           : updatedRoot;
 
         localStorage.setItem("user", JSON.stringify(updatedStored));
-        window.dispatchEvent(new Event("auth-change"));
 
+        // ✅ Update preview with API URL (not base64) so it persists
+        if (photoUrl) setPreview(photoUrl);
+
+        window.dispatchEvent(new Event("auth-change"));
         showDialog("success", "Success!", response.data.message || "Profile updated successfully!");
-      } else {
+      }
+      else {
         showDialog("error", "Update Failed", response.data.message || "Profile update failed");
       }
     } catch (err: any) {
