@@ -179,7 +179,7 @@ export default function UpdateProfilePage() {
           response.data?.data?.profile_photo ||
           response.data?.profile_photo ||
           null;
-
+// new changes
         const updatedUserDetail = {
           ...userDetail,
           name: formData.name,
