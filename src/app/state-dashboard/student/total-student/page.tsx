@@ -1223,8 +1223,7 @@ export default function TotalStudentsPage() {
       const stateId = stateAssignment?.coordinatable_id;
       console.log("STATE ID:", stateId);  // 👈 if this is "" that's the problem
       const prantId = stateAssignment?.extras?.prant_id;  
-      // const userEmail = parsed?.user?.user_detail?.email || "shingnesid@gmail.com"; // 🔴 fallback only
-      const userEmail = "shingnesid@gmail.com";
+      const userEmail = parsed?.user?.user_detail?.email || "";
 
       await exportStudents({
         zone_id: [],
@@ -1540,7 +1539,7 @@ export default function TotalStudentsPage() {
               Add Student
             </button>
 
-            {/* <button
+            <button
               style={{
                 ...s.btnPrimary,
                 background: "#3B82F6",
@@ -1550,7 +1549,7 @@ export default function TotalStudentsPage() {
               onClick={() => setDialog({ type: "export" })}
             >
               Export
-            </button> */}
+            </button>
           </div>
         </div>
       </div>
@@ -1800,22 +1799,18 @@ export default function TotalStudentsPage() {
             />
 
             {/* In the export dialog, replace the static text */}
-            {/* <p style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginTop: 16, marginBottom: 28 }}>
+            <p style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginTop: 16, marginBottom: 28 }}>
               Exported File will be sent to this Email:{" "}
               <strong style={{ color: "#111827" }}>
                 {(() => {
                   try {
                     const parsed = JSON.parse(localStorage.getItem("user") || "{}");
-                    return parsed?.user?.user_detail?.email || "shingnesid@gmail.com";
-                  } catch { return "shingnesid@gmail.com"; }
+                    return parsed?.user?.user_detail?.email || " ";
+                  } catch { return " "; }
                 })()}
               </strong>
-            </p> */}
-
-            <p style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginTop: 16, marginBottom: 28 }}>
-              Exported File will be sent to this Email:{" "}
-              <strong style={{ color: "#111827" }}>shingnesid@gmail.com</strong>
             </p>
+
             <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
               <button
                 onClick={() => setDialog(null)}
