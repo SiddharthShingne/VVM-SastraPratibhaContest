@@ -307,3 +307,33 @@ export const getSchoolList = async (
     return "Failed to fetch school list";
   }
 };
+
+// New students registration count API for state cordintor
+export const getNewRegistrations = async (
+  page: number = 1,
+  per_page: number = 10,
+) => {
+  try {
+    const res = await api.post("/admin/new-registrations", { page, per_page });
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to fetch new registrations";
+    }
+    return "Failed to fetch new registrations";
+  }
+};
+
+export const deleteStudent = async (userId: number) => {
+  try {
+    const res = await api.delete(`/sif/student/${userId}/delete`);
+    return res.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      const err = error as { response?: { data?: unknown } };
+      return err.response?.data || "Failed to delete student";
+    }
+    return "Failed to delete student";
+  }
+};

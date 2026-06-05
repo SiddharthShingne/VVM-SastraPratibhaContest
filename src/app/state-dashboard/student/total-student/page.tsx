@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -9,6 +10,7 @@ import axiosInstance from "@/services/axiosInstance";
 import { exportStateSummary } from "@/services/importantDatesService";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { createPortal } from "react-dom";
+import { deleteStudent } from "@/services/uaeService";
 import { fetchSchoolsByRegion, fetchRegionsWithCities, exportStudents, addGccStudent } from "@/services/importantDatesService";
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Student = {
@@ -36,15 +38,17 @@ type Student = {
   lastLogin?: string;             // ✅ Add
   createdAt?: string;      
   region?: string;        // ✅ ADD
-  city?: string;         // ✅ Add
+  city?: string;
+  userId?: number; // ✅ Add
 };
 
 type DialogState =
   | null
   | { type: "export" }
   | { type: "add" }
-  | { type: "success"; message: string }
-  | { type: "error"; message: string };
+  | { type: "success"; message: string; title?: string }
+  | { type: "error"; message: string }
+  | { type: "confirmDelete"; student: Student };  // ✅ ADD
 
 // ─── Class map (backend key → label) ─────────────────────────────────────────
 const CLASS_MAP: Record<number, string> = {
@@ -1170,6 +1174,7 @@ export default function TotalStudentsPage() {
         isPaid: s.payment_status === 1,
         isMock: !!s.is_mock,
         isFinal: !!s.is_final,
+        userId: s.user_id,  // ✅ ADD this line in the raw.map() block
         paymentStatus: s.payment_status === 1 ? "Paid" : "Pending",
         lastLogin: s.last_login_at ? formatDate(s.last_login_at) : "-",
         createdAt: s.created_at ? formatDate(s.created_at) : "-",
@@ -1238,7 +1243,7 @@ export default function TotalStudentsPage() {
         created_at_to: exportEndDate,
       });
 
-      setDialog({ type: "success", message: "Export started! You will receive an email once completed." });
+      setDialog({ type: "success", title: "Export Successful", message: "Export started! You will receive an email once completed." });
     } catch (err: any) {
       setDialog({ type: "error", message: err?.message || "Export failed. Please try again." });
     } finally {
@@ -1246,17 +1251,32 @@ export default function TotalStudentsPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this student?")) return;
-
-    try {
-      await axiosInstance.delete(`/admin/student/${id}`);
-      fetchStudents(); // Refresh list
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Failed to delete student.");
-    }
+  // Step 1: Open confirm dialog
+  const handleDeleteClick = (student: Student) => {
+    setDialog({ type: "confirmDelete", student });
   };
 
+  // Step 2: Actually delete after confirmation
+  const handleDeleteConfirm = async (student: Student) => {
+    const userId = student.userId;
+    if (!userId) {
+      setDialog({ type: "error", message: "Cannot delete: user ID not found." });
+      return;
+    }
+    setDialog(null);
+    try {
+      const res = await deleteStudent(userId);
+      // API returns: { status: true, message: "Student has been deleted successfully!", data: [] }
+      if (res?.status === true) {
+        setDialog({ type: "success", title: "Student Deleted", message: res?.message || "Student deleted successfully!" });
+        fetchStudents();
+      } else {
+        setDialog({ type: "error", message: res?.message || "Delete failed. Please try again." });
+      }
+    } catch (err: any) {
+      setDialog({ type: "error", message: err?.response?.data?.message || "Failed to delete student." });
+    }
+  };
   // ── Edit state ──────────────────────────────────────────────────────────
   const [editStudent, setEditStudent] = useState<Student | null>(null);
 
@@ -1673,11 +1693,11 @@ export default function TotalStudentsPage() {
                           onClick={() => handleEdit(s_row)}
                           title="Edit"
                         />
-                        {/* <FaTrash
+                        <FaTrash
                           style={{ cursor: "pointer", color: "#ef4444", fontSize: 13 }}
-                          onClick={() => handleDelete(s_row.id)}
+                          onClick={() => handleDeleteClick(s_row)}
                           title="Delete"
-                        /> */}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -1860,7 +1880,7 @@ export default function TotalStudentsPage() {
             <div style={{ textAlign: "center", padding: "12px 0" }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
               <h3 style={{ fontSize: 18, fontWeight: 700, color: "#15803d", marginBottom: 8 }}>
-                Export Successful
+                {(dialog as any).title || "Export Successful"}
               </h3>
               <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 24 }}>
                 {(dialog as any).message}
@@ -1912,6 +1932,50 @@ export default function TotalStudentsPage() {
               >
                 Close
               </button>
+            </div>
+          </Modal>
+        </ModalWrapper>
+      )}
+      {/* ── Confirm Delete Dialog ─────────────────────────────────────────────── */}
+      {dialog?.type === "confirmDelete" && (
+        <ModalWrapper onClose={() => setDialog(null)}>
+          <Modal onClose={() => setDialog(null)} width={400}>
+            <div style={{ textAlign: "center", padding: "12px 0" }}>
+              <div style={{ fontSize: 48, marginBottom: 12 }}>🗑️</div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: "#111827", marginBottom: 8 }}>
+                Delete Student
+              </h3>
+              <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 8 }}>
+                Are you sure you want to delete
+              </p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "#dc2626", marginBottom: 24 }}>
+                "{(dialog as any).student.name}"?
+              </p>
+              <p style={{ fontSize: 12, color: "#9ca3af", marginBottom: 24 }}>
+                This action cannot be undone.
+              </p>
+              <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+                <button
+                  onClick={() => setDialog(null)}
+                  style={{
+                    padding: "10px 28px", border: "1px solid #d1d5db",
+                    borderRadius: 8, background: "#fff", color: "#374151",
+                    fontSize: 14, cursor: "pointer", fontWeight: 500,
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteConfirm((dialog as any).student)}
+                  style={{
+                    padding: "10px 28px", border: "none",
+                    borderRadius: 8, background: "#dc2626", color: "#fff",
+                    fontSize: 14, cursor: "pointer", fontWeight: 600,
+                  }}
+                >
+                  Yes, Delete
+                </button>
+              </div>
             </div>
           </Modal>
         </ModalWrapper>

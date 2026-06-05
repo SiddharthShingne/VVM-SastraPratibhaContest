@@ -75,8 +75,8 @@ export default function UpdateProfilePage() {
       let locationId = "";
 
       // Check assignments first
-      if (root?.assignments && root.assignments.length > 0) {
-        locationId = String(root.assignments[0]?.coordinatable_id || "");
+      if (userDetail?.assignments && userDetail.assignments.length > 0) {
+        locationId = String(userDetail.assignments[0]?.coordinatable_id || "");
       }
       // For state coordinator, use country_id from user_detail
       else if (userType === "state-coordinator" && userDetail.country_id) {
