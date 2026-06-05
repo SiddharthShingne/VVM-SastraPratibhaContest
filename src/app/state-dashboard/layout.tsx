@@ -301,7 +301,7 @@ export default function StateDashboardLayout({
                 href="/state-dashboard/student/new-student-registrations"
                 className={linkClass("/state-dashboard/student/new-student-registrations")}
               >
-                New Student Registrations
+                New Student Registrations 2026-27
               </Link>
               {permissions.canViewPayments && (
                 <Link
