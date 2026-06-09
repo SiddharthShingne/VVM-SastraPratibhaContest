@@ -365,21 +365,6 @@ export const exportStudents = async (payload: ExportStudentsPayload) => {
 
 //  Add GCC Student API call
 export const addGccStudent = async (data: any) => {
-  try {
-    const response = await api.post("/sif/register/student", data);
-
-    if (response.data.status === false) {
-      throw new Error(response.data.message || "Registration failed");
-    }
-
-    return response.data;
-  } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
-    }
-
-    throw new Error(
-      error.message || "Unable to register student. Please try again.",
-    );
-  }
+  const response = await api.post("/sif/register/student", data);
+  return response.data; // always return, never throw
 };

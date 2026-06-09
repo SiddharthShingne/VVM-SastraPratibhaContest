@@ -445,6 +445,18 @@ export default function SaudiForm({ countries }: Props) {
             // ✅ Call registerStudentV2 — response: { status: true, message: "...", data: { username: "MH0458718" } }
             const res = await registerStudentV2(payload);
             console.log("REGISTER RESPONSE:", res);
+
+            // Handle duplicate registration
+            if (res && res.success === false && res.action === "LOGIN_REQUIRED") {
+                setDialog({
+                    type: "error",
+                    title: "Already Registered",
+                    message: `Student already registered.\n\nUsername: ${res.data?.username || "-"}\nEmail: ${res.data?.parent_email || "-"}`,
+                });
+                return;
+            }
+
+
             if (res && res.status === true) {
                 setUserData({
                     email: data.parentEmail,            // from form
@@ -456,9 +468,21 @@ export default function SaudiForm({ countries }: Props) {
                 throw new Error(res?.message || "Registration failed");
             }
         } catch (error: any) {
+            const errData = error?.response?.data;
+
+            // Duplicate registration comes as HTTP error but has action field
+            if (errData?.action === "LOGIN_REQUIRED") {
+                setDialog({
+                    type: "error",
+                    title: "Already Registered",
+                    message: `Student already registered.\n\nUsername: ${errData?.data?.username || "-"}\nParent Email: ${errData?.data?.parent_email || "-"}`,
+                });
+                return;
+            }
+
             setDialog({
                 type: "error",
-                message: error?.response?.data?.message || error?.message || "Registration failed"
+                message: errData?.message || error?.message || "Registration failed"
             });
         } finally {
             setLoading(false);

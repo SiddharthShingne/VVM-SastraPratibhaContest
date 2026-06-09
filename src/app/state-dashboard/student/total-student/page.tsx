@@ -535,7 +535,7 @@ console.log("REGIONS API:", data);
           nationality: form.nationality,
           dist_id: form.region ? parseInt(form.region, 10) : undefined,  
           school_name: form.school,
-           division: form.division || "A",  
+          division: form.division || "A",  
           fullName: form.fullName,           // ✅ was name
           dob: form.dob,                     // ✅ was date_of_birth
           gender: form.gender === "Male" ? 1 : 2,
@@ -553,18 +553,27 @@ console.log("REGIONS API:", data);
           city_id: form.city ? parseInt(form.city, 10) : undefined,      
         });
         console.log("FINAL PAYLOAD:", payload);  
+        setSuccessMsg("Student added successfully!");
       }
       
-      setSuccessMsg("Student added successfully!");
+     
     } catch (err: any) {
-      const msg = err?.message || err?.response?.data?.message || "Failed to save student.";
+      const errData = err?.response?.data;
+
+      if (errData?.action === "LOGIN_REQUIRED") {
+        setError(
+          `Student already registered. Username: ${errData?.data?.username || "-"} | Parent Email: ${errData?.data?.parent_email || "-"}`
+        );
+        return;
+      }
+
+      const msg = errData?.message || err?.message || "Failed to save student.";
       setError(msg);
-      setApiErrorDetail(err?.response?.data || null);
+      setApiErrorDetail(errData || null);
     } finally {
       setLoading(false);
     }
-  };
-
+  };  
 
   const inputStyle: React.CSSProperties = {
     width: "100%",

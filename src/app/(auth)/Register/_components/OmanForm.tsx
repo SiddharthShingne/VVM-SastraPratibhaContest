@@ -549,12 +549,20 @@ export default function OmanForm({ countries }: Props) {
                 throw new Error(res?.message || "Registration failed");
             }
         } catch (error: any) {
+            const errData = error?.response?.data;
+
+            if (errData?.action === "LOGIN_REQUIRED") {
+                setDialog({
+                    type: "error",
+                    title: "Already Registered",
+                    message: `Student already registered.\n\nUsername: ${errData?.data?.username || "-"}\nParent Email: ${errData?.data?.parent_email || "-"}`,
+                });
+                return;
+            }
+
             setDialog({
                 type: "error",
-                message:
-                    error?.response?.data?.message ||
-                    error?.message ||
-                    "Registration failed",
+                message: errData?.message || error?.message || "Registration failed"
             });
         } finally {
             setLoading(false);
