@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { BookOpen } from "lucide-react";
+import FeeStructure from "@/components/registration/FeeStructure";
+import StudentAwards from "@/components/examDetails/StudentAwards";
 import {
   FaHome,
   FaDownload,
@@ -14,8 +16,9 @@ import {
   FaSignOutAlt,
   FaTimes,
   FaClock,
-  FaInfoCircle,  // ← ADD THIS LINE
-  FaBook,  // ← ADD THIS LINE
+  FaMoneyBillWave,
+  FaInfoCircle, // ← ADD THIS LINE
+  FaBook, // ← ADD THIS LINE
 } from "react-icons/fa";
 
 import { logoutUser } from "@/services/authService";
@@ -26,7 +29,9 @@ function extractNameFromStorage(): string {
     const raw = localStorage.getItem("user");
     if (!raw) return "Student";
     const user = JSON.parse(raw);
-    return user?.user?.user_detail?.name || user?.user_detail?.name || "Student";
+    return (
+      user?.user?.user_detail?.name || user?.user_detail?.name || "Student"
+    );
   } catch (err) {
     console.error("extractNameFromStorage error:", err);
     return "Student";
@@ -64,7 +69,6 @@ export default function StudentDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const { showDialog, confirmLogout } = useSessionTimeout();
   const router = useRouter();
   const pathname = usePathname();
@@ -78,10 +82,10 @@ export default function StudentDashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   // Add this after your existing useState hooks
-  const [showNotice, setShowNotice] = useState(true);  // Always show on page load
+  const [showNotice, setShowNotice] = useState(true); // Always show on page load
 
   const handleDismissNotice = () => {
-    setShowNotice(false);  // Only hides until next refresh
+    setShowNotice(false); // Only hides until next refresh
     // No localStorage - so it will show again after refresh
   };
   // const handleDismissNotice = () => {
@@ -131,7 +135,7 @@ export default function StudentDashboardLayout({
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
-  
+
   // In your dashboard layout, change the measure useEffect to this:
   // useEffect(() => {
   //   const measure = () => {
@@ -172,7 +176,6 @@ export default function StudentDashboardLayout({
 
       setNavbarHeight(finalHeight);
     };
-    
 
     measure();
     const t1 = setTimeout(measure, 100);
@@ -188,8 +191,6 @@ export default function StudentDashboardLayout({
       window.removeEventListener("scroll", measure); // ← YE BHI
     };
   }, []);
-
-
 
   const [noticeHeight, setNoticeHeight] = useState(0);
 
@@ -266,9 +267,11 @@ export default function StudentDashboardLayout({
       <div className="text-center pb-5 mb-3 border-b border-[#eef2f7]">
         <div
           className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[18px] shadow-md transition-transform duration-300 hover:scale-105"
-          style={{ background: "linear-gradient(135deg, #17395c 0%, #1f4e7a 100%)" }}
+          style={{
+            background: "linear-gradient(135deg, #17395c 0%, #1f4e7a 100%)",
+          }}
         >
-          {studentName.charAt(2).toUpperCase()}
+          {studentName.charAt(0).toUpperCase()}
         </div>
         <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
           Welcome back
@@ -276,11 +279,17 @@ export default function StudentDashboardLayout({
         <h6 className="shine-name text-[17px] font-extrabold">
           {studentName.toLocaleUpperCase()}
         </h6>
+        {/* <h6 className="shine-name text-[17px] font-extrabold">
+          {username.toLocaleUpperCase()}
+        </h6> */}
       </div>
 
       {/* NAV */}
       <nav className="space-y-1">
-        <Link href="/studentDashboard" className={linkClass("/studentDashboard")}>
+        <Link
+          href="/studentDashboard"
+          className={linkClass("/studentDashboard")}
+        >
           <FaHome className={iconClass("/studentDashboard")} />
           Dashboard
         </Link>
@@ -291,11 +300,7 @@ export default function StudentDashboardLayout({
           <FaDownload className={iconClass("/studentDashboard/download-app")} />
           Download Apps
         </Link>
-
-        
       </nav>
-
-      
 
       <NavDivider />
       {/* <SectionTitle label="Contact" />
@@ -319,12 +324,34 @@ export default function StudentDashboardLayout({
         href="/studentDashboard/Study-Material"
         className={linkClass("/studentDashboard/Study-Material")}
       >
-        <BookOpen size={17} className={iconClass("/studentDashboard/Study-Material")} />
+        <BookOpen
+          size={17}
+          className={iconClass("/studentDashboard/Study-Material")}
+        />
         Study Material
       </Link>
+
+      <SectionTitle label="exam details" />
       
+      <Link
+        href="/studentDashboard/fee-structure"
+        className={linkClass("/studentDashboard/fee-structure")}
+      >
+        <FaMoneyBillWave className={iconClass("/studentDashboard/fee-structure")} />
+        Fee Structure
+      </Link>
+
+      <Link
+        href="/studentDashboard/student-awards"
+        className={linkClass("/studentDashboard/student-awards")}
+      >
+        <FaMoneyBillWave className={iconClass("/studentDashboard/student-awards")} />
+        Awards Section
+      </Link>
+
       {/* <NavDivider /> */}
       <SectionTitle label="Profile" />
+
       <nav className="space-y-1">
         <Link
           href="/studentDashboard/edit-profile"
@@ -401,13 +428,18 @@ export default function StudentDashboardLayout({
             {/* Top accent */}
             <div
               className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
-              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+              style={{
+                background:
+                  "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
+              }}
             />
 
             {/* Icon */}
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
-              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+              style={{
+                background: "linear-gradient(135deg, #17395c, #1f4e7a)",
+              }}
             >
               <FaClock />
             </div>
@@ -416,20 +448,22 @@ export default function StudentDashboardLayout({
               Session Expired
             </h3>
             <p className="text-center text-[13px] text-[#7a90a8] mb-6 leading-relaxed">
-              You have been inactive for 1 hour and have been automatically logged out for security.
+              You have been inactive for 1 hour and have been automatically
+              logged out for security.
             </p>
 
             <button
               onClick={confirmLogout}
               className="w-full py-2.5 rounded-xl text-white text-[13.5px] font-semibold shadow-md transition-all hover:opacity-90"
-              style={{ background: "linear-gradient(135deg, #17395c, #1f4e7a)" }}
+              style={{
+                background: "linear-gradient(135deg, #17395c, #1f4e7a)",
+              }}
             >
               OK, Go to Login
             </button>
           </div>
         </div>
       )}
-      
 
       {/* {showNotice && (
         <div
@@ -473,15 +507,15 @@ export default function StudentDashboardLayout({
 
       {/* ── Page shell ── */}
       <div className="min-h-screen ">
-      <div
+        <div
           className=" fixed inset-0 -z-10"
-        style={{
-          background:
-            "linear-gradient(135deg, #e8eef6 0%, #dce7f3 40%, #eaf0f8 70%, #d8e6f2 100%)",
-          backgroundSize: "300% 300%",
-          animation: "gradientShift 12s ease infinite",
-        }}
-      />
+          style={{
+            background:
+              "linear-gradient(135deg, #e8eef6 0%, #dce7f3 40%, #eaf0f8 70%, #d8e6f2 100%)",
+            backgroundSize: "300% 300%",
+            animation: "gradientShift 12s ease infinite",
+          }}
+        />
         {/* dot-grid texture */}
         <div
           className="fixed inset-0 pointer-events-none"
@@ -496,9 +530,9 @@ export default function StudentDashboardLayout({
             MOBILE TOP HEADER — structured navbar
         ───────────────────────────────────────────────── */}
         <header
-         
           className="md:hidden fixed left-0 w-full z-[60] bg-white border-b border-[#e6edf5] shadow-sm"
-          style={{ top: navbarHeight }}>
+          style={{ top: navbarHeight }}
+        >
           <div
             className="absolute top-0 left-0 w-full h-0.5"
             style={{
@@ -515,7 +549,8 @@ export default function StudentDashboardLayout({
             {/* RIGHT: profile avatar — opens sidebar */}
             <button
               onClick={() => setSidebarOpen((prev) => !prev)}
-              aria-label="Open menu" className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md 
+              aria-label="Open menu"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-[15px] shadow-md 
               transition-all duration-200 hover:scale-105 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, #17395c, #1f4e7a)",
@@ -547,10 +582,11 @@ export default function StudentDashboardLayout({
             sidebarOpen ? "translate-x-0" : "-translate-x-full",
           ].join(" ")}
           style={{
-            top: navbarHeight + 56,  // navbar + dashboard header
-            height: `calc(100vh - ${navbarHeight + 56}px)`, 
+            top: navbarHeight + 56, // navbar + dashboard header
+            height: `calc(100vh - ${navbarHeight + 56}px)`,
             background: "#ffffff",
-            boxShadow: "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+            boxShadow:
+              "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
           }}
         >
           {/* accent bar */}
@@ -585,10 +621,11 @@ export default function StudentDashboardLayout({
         ───────────────────────────────────────────────── */}
         <div
           className="relative w-full max-w-7xl mx-auto px-4 md:pt-6 pb-10"
-          style={{ paddingTop: isMobile ? `${navbarHeight + 56}px` : undefined }}        >
-          
+          style={{
+            paddingTop: isMobile ? `${navbarHeight + 56}px` : undefined,
+          }}
+        >
           <div className="flex gap-5 items-start ">
-
             {/* ── DESKTOP SIDEBAR — hidden on mobile, sticky in flex ── */}
             <aside
               className="hidden md:block w-72 xl:w-75 shrink-0 rounded-3xl"
@@ -621,7 +658,8 @@ export default function StudentDashboardLayout({
             <main
               className="relative w-full px-4  md:pt-6 pb-10 content-animate rounded-3xl"
               style={{
-                background: "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
+                background:
+                  "linear-gradient(145deg, #f9fbfd 0%, #ffffff 60%, #f4f8fc 100%)",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
                 border: "1px solid rgba(23,57,92,0.09)",
@@ -631,11 +669,9 @@ export default function StudentDashboardLayout({
             >
               <div className="p-8">{children}</div>
             </main>
-
           </div>
         </div>
       </div>
-      
 
       {/* ── LOGOUT CONFIRMATION DIALOG ── */}
       {showLogoutDialog && (
@@ -656,13 +692,18 @@ export default function StudentDashboardLayout({
             {/* Top accent */}
             <div
               className="absolute top-0 left-0 w-full h-1 rounded-t-2xl"
-              style={{ background: "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)" }}
+              style={{
+                background:
+                  "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
+              }}
             />
 
             {/* Icon */}
             <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl shadow-md"
-              style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+              style={{
+                background: "linear-gradient(135deg, #c0392b, #e74c3c)",
+              }}
             >
               <FaSignOutAlt />
             </div>
@@ -682,9 +723,14 @@ export default function StudentDashboardLayout({
                 Cancel
               </button>
               <button
-                onClick={() => { setShowLogoutDialog(false); handleLogout(); }}
+                onClick={() => {
+                  setShowLogoutDialog(false);
+                  handleLogout();
+                }}
                 className="flex-1 py-2.5 rounded-xl text-white text-[13.5px] font-semibold transition-all duration-200 hover:opacity-90 shadow-md"
-                style={{ background: "linear-gradient(135deg, #c0392b, #e74c3c)" }}
+                style={{
+                  background: "linear-gradient(135deg, #c0392b, #e74c3c)",
+                }}
               >
                 Yes, Logout
               </button>
@@ -693,7 +739,6 @@ export default function StudentDashboardLayout({
         </div>
       )}
       {/* ── PAYMENT NOTICE BANNER ── */}
-      
     </>
   );
 }

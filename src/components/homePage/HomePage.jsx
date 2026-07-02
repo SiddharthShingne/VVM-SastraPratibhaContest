@@ -32,7 +32,7 @@ import { useState, useEffect } from "react";
                         </h3>
                         <p className="text-gray-600 text-sm mb-6 leading-relaxed">
                             <strong>
-                                This site is accessible exclusively to SIF
+                                This site is accessible exclusively for GCC
                                 students wishing to participate in the
                                 Śāstra Pratibhā Contest.
                             </strong>

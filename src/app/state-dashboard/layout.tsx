@@ -303,13 +303,13 @@ export default function StateDashboardLayout({
               >
                 New Student Registrations 2026-27
               </Link>
-              {permissions.canViewPayments && (
+              {/* {permissions.canViewPayments && (
                 <Link
                   href="/state-dashboard/student/student-payment"
                   className={linkClass("/state-dashboard/student/student-payment")}
                 >
                   Students Payment
-                </Link>)}
+                </Link>)} */}
             </div>
           )}
         </div>

@@ -201,7 +201,7 @@ export default function LoginPage() {
             {/* Left Content */}
             <div className="flex items-center gap-3 text-sm sm:text-base">
               <p className="text-[#052968] font-bold leading-relaxed">
-                Important Notice – This site is accessible exclusively to SIF students wishing to participate in the Śāstra Pratibhā Contest.
+                Important Notice – This site is accessible exclusively for GCC students wishing to participate in the Śāstra Pratibhā Contest.
               </p>
             </div>
 

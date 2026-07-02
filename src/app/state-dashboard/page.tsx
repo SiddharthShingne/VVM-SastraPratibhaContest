@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -85,7 +86,7 @@ function getStateIdFromStorage(): number | null {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function Badge({ value }: { value: number }) {
   return (
-    <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs">
+    <span className="inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs">
       {value}
     </span>
   );

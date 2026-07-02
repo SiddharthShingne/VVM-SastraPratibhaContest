@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
         subLinks: [
             { label: "Individual Student Registration", href: "/registration/individual-student-registration" },
             // { label: "Registration Process", href: "/registration/registration-process" },
-            { label: "Fee Structure", href: "/registration/fee-structure" },
+            // { label: "Fee Structure", href: "/registration/fee-structure" },
         ],
     },
     {
@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
         href: "/exam-details",
         subLinks: [
             { label: "National Camp", href: "/exam-details/national-camp" },
-            { label: "Student Awards", href: "/exam-details/student-awards" },
+            // { label: "Student Awards", href: "/exam-details/student-awards" },
             { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
             // { label: "Important Dates", href: "/exam-details/important-dates" },
             { label: "Unfair Means", href: "/exam-details/unfair-means" },

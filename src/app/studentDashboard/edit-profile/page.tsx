@@ -549,14 +549,17 @@ export default function EditProfile() {
         school_id: d.school_id || "",               // preserved, can be empty
 
         // ── Address ─────────────────────────────────────────────
-        address: data.address || "",
+        // address: data.address || "",
+        address: data.address || d.address || "",
         state_id: data.state ? Number(data.state) : "",
         dist_id: data.district ? Number(data.district) : "",
         // city_id: data.district ? Number(data.district) : "",
-        city_name_2: "",     // ✅ text input — e.g. "Nagpur (Urban)"
-        // ✅ city_id NOT sent — backend uses city_name_2
-        pincode: data.pinCode || "",
-
+        // city_name_2: "",    
+        city_id: d.city_id || "",
+        city_name_2: "",
+        // pincode: data.pinCode || "",
+        pincode: data.pinCode || d.pincode || d.pin_code || "",
+        
         // ── VVM ─────────────────────────────────────────────────
         exam_lang_id: data.examLanguage ? Number(data.examLanguage) : 14,
         know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
@@ -770,9 +773,9 @@ export default function EditProfile() {
                 <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
               )} */}
             </VvmInput>
-            <VvmInput label=" " error={otpErrors.parentMobile}>
+            {/* <VvmInput label=" " error={otpErrors.parentMobile}>
               <></>
-            </VvmInput>
+            </VvmInput> */}
             {/* <VvmInput label="Verify Mobile No." error={otpErrors.parentMobile}>
               <div className="vvm-otp-row">
                 <VvmTextInput
@@ -930,12 +933,12 @@ export default function EditProfile() {
             {/* ── Address ── */}
             <div className="vvm-section-label">Address</div>
 
-            <VvmInput label="Address" required error={errors.address?.message}>              <VvmTextInput placeholder="Enter address" {...register("address", {
+            {/* <VvmInput label="Address" required error={errors.address?.message}>              <VvmTextInput placeholder="Enter address" {...register("address", {
               required: "Address is required",
               minLength: { value: 10, message: "Address too short (min 10 chars)" },
               maxLength: { value: 200, message: "Address too long (max 200 chars)" }
             })} />
-            </VvmInput>
+            </VvmInput> */}
 
             {/* <VvmInput label="State">
               <VvmSelect
@@ -975,7 +978,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="Pin Code" required error={errors.pinCode?.message}>
+            {/* <VvmInput label="Pin Code" required error={errors.pinCode?.message}>
               <VvmTextInput
                 placeholder="Enter Pin Code"
                 maxLength={6}
@@ -987,7 +990,7 @@ export default function EditProfile() {
                     message: "Pin code must be 4-10 digits only"
                   }
                 })} />
-            </VvmInput>
+            </VvmInput> */}
 
             {/* ── VVM ── */}
             <div className="vvm-section-label">About VVM</div>
