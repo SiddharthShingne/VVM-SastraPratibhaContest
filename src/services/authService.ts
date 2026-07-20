@@ -260,7 +260,7 @@ export const verifyMobileOtpWhileUpdating = async (
 // ================ COMPLETE STUDENT PROFILE ========== //
 export const completeStudentProfile = async (payload: Record<string, any>) => {
   const token = localStorage.getItem("token");
-  const res = await api.post("/student/complete-profile", payload, {
+  const res = await api.post("/student/complete-profile-sif", payload, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

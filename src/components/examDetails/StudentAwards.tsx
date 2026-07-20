@@ -22,8 +22,49 @@ type AwardRow = {
 };
 
 const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipNote: string }> = {
-  IND: {
-    title: "STUDENT AWARDS",
+  // IND: {
+  //   title: "STUDENT AWARDS",
+  //   rows: [
+  //     {
+  //       level: "LEVEL I",
+  //       name: "ONLINE EXAMINATION",
+  //       criteria: "All paid students will be eligible for the Online Examination.",
+  //       rewardTitle: "Participation Certificate",
+  //       rewardBadgeClass: "bg-green-100 text-green-600",
+  //       rewardDetails: [
+  //         "All participants will get participation certificate.",
+  //         "Certificates will be available online via student dashboard.",
+  //       ],
+  //     },
+  //     {
+  //       level: "LEVEL II",
+  //       name: "STATE LEVEL CAMP",
+  //       criteria: "The top 25 rankers from each class will qualify to participate in the State Level Camp.",
+  //       rewardTitle: "State Rewards",
+  //       rewardBadgeClass: "bg-green-100 text-green-600",
+  //       rewardDetails: [
+  //         "All participants will get participation certificate.",
+  //         "Top 3 Winners of each class would get Certificate & Memento.",
+  //       ],
+  //     },
+  //     {
+  //       level: "LEVEL III",
+  //       name: "NATIONAL LEVEL CAMP",
+  //       criteria: "The top 2 winners from each class at the state level will qualify to participate in the National Camp.",
+  //       rewardTitle: "National Rewards",
+  //       rewardBadgeClass: "bg-yellow-100 text-yellow-700",
+  //       rewardDetails: [
+  //         "All participants will get participation certificate.",
+  //         "Winners would get Certificate & Memento.",
+  //       ],
+  //     },
+  //   ],
+  //   scholarshipNote:
+  //     "₹2000/month scholarship for 1 year for National Winners, based on project evaluation and mentorship.",
+  // },
+
+  ARE: {
+    title: "STUDENT AWARDS — UAE",
     rows: [
       {
         level: "LEVEL I",
@@ -38,54 +79,13 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       },
       {
         level: "LEVEL II",
-        name: "STATE LEVEL CAMP",
-        criteria: "The top 25 rankers from each class will qualify to participate in the State Level Camp.",
-        rewardTitle: "State Rewards",
-        rewardBadgeClass: "bg-green-100 text-green-600",
-        rewardDetails: [
-          "All participants will get participation certificate.",
-          "Top 3 Winners of each class would get Certificate & Memento.",
-        ],
-      },
-      {
-        level: "LEVEL III",
-        name: "NATIONAL LEVEL CAMP",
-        criteria: "The top 2 winners from each class at the state level will qualify to participate in the National Camp.",
-        rewardTitle: "National Rewards",
-        rewardBadgeClass: "bg-yellow-100 text-yellow-700",
-        rewardDetails: [
-          "All participants will get participation certificate.",
-          "Winners would get Certificate & Memento.",
-        ],
-      },
-    ],
-    scholarshipNote:
-      "₹2000/month scholarship for 1 year for National Winners, based on project evaluation and mentorship.",
-  },
-
-  ARE: {
-    title: "STUDENT AWARDS — UAE",
-    rows: [
-      {
-        level: "LEVEL I",
-        name: "ONLINE EXAMINATION",
-        criteria: "All paid students in UAE will be eligible for the Online Examination.",
-        rewardTitle: "Participation Certificate",
-        rewardBadgeClass: "bg-green-100 text-green-600",
-        rewardDetails: [
-          "All participants will get participation certificate.",
-          "Certificates will be available online via student dashboard.",
-        ],
-      },
-      {
-        level: "LEVEL II",
         name: "REGIONAL LEVEL CAMP",
         criteria: "Top rankers per class will qualify for the Regional Level Camp.",
         rewardTitle: "Regional Rewards",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "All participants will get participation certificate.",
-          "Top winners would get Certificate & Memento.",
+          "COUNTRY LEVEL RECOGNITION DURING ANNUAL SCIENCE GALA.",
+          "TOP PERFORMERS GET EXCLUSIVE INTERACTION OPPORTUNITIES WITH CHIEF GUESTS AT ANNUAL SCIENCE GALA.",
         ],
       },
     ],
@@ -98,7 +98,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students in Oman will be eligible for the Online Examination.",
+        criteria: "All paid students will be eligible for the Online Examination.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -127,7 +127,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students in Qatar will be eligible for the Online Examination.",
+        criteria: "All paid students will be eligible for the Online Examination.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -156,12 +156,14 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students in Saudi Arabia will be eligible for the Online Examination.",
+        criteria: "All paid students will be eligible for the Online Examination.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "All participants will get participation certificate.",
-          "Certificates will be available online via student dashboard.",
+          "Students qualifying at Level 1 will be felicitated with an opportunity to participate in the Shastrayan(a visit to India’s premier research institutes).",
+          "Opportunity to participate in the India International Science Festival.",
+          "Honoured at the Science Gala with the Silver Honour Roll.",
+          "Opportunity to interact with top - notch scientists.",
         ],
       },
       {
@@ -171,8 +173,10 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
         rewardTitle: "Regional Rewards",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "All participants will get participation certificate.",
-          "Top winners would get Certificate & Memento.",
+          "Students qualifying at Level 2 will be recognized as SPC Winners at the Science Gala.",
+          "Opportunity to participate in the Shastrayan.",
+          "Opportunity to participate in the India International Science Festival.",
+          "Opportunity to interact with top - notch scientists.",
         ],
       },
     ],
@@ -185,7 +189,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students in Bahrain will be eligible for the Online Examination.",
+        criteria: "All paid students will be eligible for the Online Examination.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -214,7 +218,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students in Kuwait will be eligible for the Online Examination.",
+        criteria: "All paid students will be eligible for the Online Examination.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -229,8 +233,13 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
         rewardTitle: "Regional Rewards",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "All participants will get participation certificate.",
-          "Top winners would get Certificate & Memento.",
+          "Trophy & Certificate",
+          "Falicitation at Science Ghala",
+          "Exclusive opportunity to interact with Chief Guest at Science Ghala.",
+          "Opportunities to Participate in VVM National Camps.",
+          "Opportunities to Participate in India International Festivals",
+          "Participate in Sastrayaan Tours"
+
         ],
       },
     ],
@@ -336,16 +345,16 @@ export default function StudentAwards() {
                 </div>
               </div>
 
-              <div className="h-px bg-[#17395c1a] my-8"></div>
+              {/* <div className="h-px bg-[#17395c1a] my-8"></div> */}
 
-              <div className="space-y-5">
+              {/* <div className="space-y-5">
                 <div className="p-5 rounded-[18px] bg-linear-to-br from-[#17395c0d] to-[#f4df1714] border-l-4 border-[#f4df17]">
                   <h5 className="font-extrabold text-[#17395c] mb-2">
                     BHASKARA SCHOLARSHIP
                   </h5>
                   <p className="text-[15px] text-[#4f6480]">{awards.scholarshipNote}</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import axiosInstance from "@/services/axiosInstance";
-import { fetchStates, fetchDistricts, sendEmailOtpDashboard, verifyEmailOtp, sendMobileOtpWhileUpdating, verifyMobileOtpWhileUpdating, completeStudentProfile } from "@/services/authService";
+import { fetchStates, sendEmailOtpDashboard, verifyEmailOtp, completeStudentProfile } from "@/services/authService";
+import { fetchRegionsWithCities } from "@/services/importantDatesService"; 
+
 interface FormData {
   name: string;
   schoolName: string;
@@ -20,14 +22,14 @@ interface FormData {
   gender: string;
   howDidYouGetToKnowAboutVVM: string;
   state: string;
-  district: string;
+  region: string;
   city: string;
   pinCode: string;
   aadharNumber: string;
   examLanguage: string;
   parentSalutation: string;
 }
-type OtpTarget = "parentMobile" | "parentEmail";
+type OtpTarget = "parentEmail";
 
 interface DialogState {
   open: boolean;
@@ -331,27 +333,33 @@ const COUNTRY_MAP: Record<string, string> = {
   "5": "Saudi Arabia", "6": "Bahrain", "7": "Kuwait",
 };
 
+const COUNTRY_ID_TO_ALPHA3: Record<string, string> = {
+  "2": "ARE",
+  "3": "OMN",
+  "4": "QAT",
+  "5": "SAU",
+  "6": "BHR",
+  "7": "KWT",
+};
+
 const GRADE_MAP: Record<string, number> = {
   "1": 6, "2": 7, "3": 8, "4": 9, "5": 10, "6": 11,
 };
 /* ─── main component ─── */
 
 export default function EditProfile() {
-  const { register, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm<FormData>();
-  const [states, setStates] = useState<any[]>([]);
-  const [districts, setDistricts] = useState<any[]>([]);
+  const { register, handleSubmit, watch, reset, setValue, control, formState: { errors } } = useForm<FormData>();  const [states, setStates] = useState<any[]>([]);
+   const [regions, setRegions] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [verifyParentMobileOtp, setVerifyParentMobileOtp] = useState("");
   const [verifyParentEmailOtp, setVerifyParentEmailOtp] = useState("");
-  const [parentMobileOtpSent, setParentMobileOtpSent] = useState(false);
   const [parentEmailOtpSent, setParentEmailOtpSent] = useState(false);
-  const [parentMobileVerified, setParentMobileVerified] = useState(false);
   const [parentEmailVerified, setParentEmailVerified] = useState(false);
   const [otpLoading, setOtpLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [verifyLoading, setVerifyLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [otpErrors, setOtpErrors] = useState<Partial<Record<OtpTarget, string>>>({});
   const [countryName, setCountryName] = useState("");
-  /* ✅ FIX 1b: dialog state lives in EditProfile, passed down as props to DialogBox */
+  
   const [dialog, setDialog] = useState<DialogState>({ open: false, type: "success", message: "", });
   const genderOptions = useMemo(() => [
     { label: "Male", value: "1" },
@@ -398,6 +406,41 @@ export default function EditProfile() {
   }, []);
 
   useEffect(() => {
+    if (!countryId) return;
+
+    const alpha3Code = COUNTRY_ID_TO_ALPHA3[countryId];
+    if (!alpha3Code) return;
+
+    fetchRegionsWithCities(alpha3Code)
+      .then((res: any) => {
+        console.log("RAW regions response:", JSON.stringify(res?.data, null, 2));
+        const regionList = res?.data || [];
+        setRegions(regionList);
+
+        // Try to match the stored district/region name against the new list
+        // (old district_id won't match new region IDs, so match by name instead)
+        const raw = localStorage.getItem("user");
+        const user = raw ? JSON.parse(raw) : null;
+        const d = user?.user_detail || user?.user?.user_detail || user?.data?.user_detail;
+        const storedDistrictName = d?.district?.name;
+
+        const matchedRegion = storedDistrictName
+          ? regionList.find(
+            (r: any) => r.name?.toLowerCase() === storedDistrictName.toLowerCase()
+          )
+          : null;
+
+        if (matchedRegion) {
+          setValue("region", String(matchedRegion.district_id));
+          setCities(matchedRegion.cities || []);
+        }
+
+
+      })
+      .catch(() => setRegions([]));
+  }, [countryId, setValue]);
+
+  useEffect(() => {
 
     const init = async () => {
       const raw = localStorage.getItem("user");
@@ -421,7 +464,7 @@ export default function EditProfile() {
         grade: String(d.class_id || ""),
         howDidYouGetToKnowAboutVVM: String(d.know_about_vvm_id || ""),
         state: String(d.state_id || ""),
-        district: "",
+        region: String(d.region_id || d.district_id || ""),
         city: String(d.city_id || ""),
         pinCode: d.pin_code || d.pincode || "",  // ← your data uses "pincode" not "pin_code"
         aadharNumber: d.aadhar_number || "",
@@ -434,17 +477,16 @@ export default function EditProfile() {
       setCountryId(countryId);
       setCountryName(COUNTRY_MAP[countryId] || "");
 
-      setParentMobileVerified(!!user?.onboarding?.is_parent_phone_number_verified || !!d.is_parent_phone_number_verified);
       setParentEmailVerified(!!user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
 
-      if (d.state_id) {
-        const districtData = await fetchDistricts({
-          state_ids: [Number(d.state_id)],
-          prant_ids: []
-        });
-        setDistricts(districtData);
-        setValue("district", String(d.district_id || ""));
-      }
+      // if (d.state_id) {
+      //   const districtData = await fetchDistricts({
+      //     state_ids: [Number(d.state_id)],
+      //     prant_ids: []
+      //   });
+      //   setDistricts(districtData);
+      //   setValue("district", String(d.district_id || ""));
+      // }
     };
     init();
   }, [reset, setValue]);
@@ -452,20 +494,73 @@ export default function EditProfile() {
 
   /// new handle functions
 
+  // const handleSendOtp = useCallback(async (target: OtpTarget) => {
+  //   setOtpErrors((prev) => ({ ...prev, [target]: "" }));
+  //   setOtpLoading((prev) => ({ ...prev, [target]: true }));
+
+  //   try {
+  //     if (target === "parentEmail") {
+  //       await sendEmailOtpDashboard(watch("parentEmail"), "IN"); // ✅ FIXED
+  //       setParentEmailOtpSent(true);
+  //       showDialog("success", "OTP sent successfully to email.");
+  //     } else {
+  //       await sendMobileOtpWhileUpdating(watch("parentMobile")); // ✅ FIXED  
+  //       setParentMobileOtpSent(true);
+  //       showDialog("success", "OTP sent successfully to mobile.");
+  //     }
+  //   } catch (err: any) {
+  //     const message =
+  //       err?.message || err?.response?.data?.message || "Failed to send OTP.";
+
+  //     setOtpErrors((prev) => ({ ...prev, [target]: message }));
+  //     showDialog("error", message);
+  //   } finally {
+  //     setOtpLoading((prev) => ({ ...prev, [target]: false }));
+  //   }
+  // }, [watch, showDialog]);
+
+  // const handleVerifyOtp = useCallback(async (target: OtpTarget) => {
+  //   setOtpErrors((prev) => ({ ...prev, [target]: "" }));
+  //   setVerifyLoading((prev) => ({ ...prev, [target]: true }));
+
+  //   try {
+  //     const otp =
+  //       target === "parentMobile"
+  //         ? verifyParentMobileOtp
+  //         : verifyParentEmailOtp;
+
+  //     if (target === "parentEmail") {
+  //       await verifyEmailOtp(watch("parentEmail"), otp);
+  //       setParentEmailVerified(true);
+  //       showDialog("success", "Email verified successfully.");
+  //     } else {
+  //       await verifyMobileOtpWhileUpdating(
+  //         watch("parentMobile"),
+  //         otp
+  //       ); // ✅ FIXED
+  //       setParentMobileVerified(true);
+  //       showDialog("success", "Mobile verified successfully.");
+  //     }
+  //   } catch (err: any) {
+  //     const message =
+  //       err?.message || err?.response?.data?.message || "OTP verification failed.";
+
+  //     setOtpErrors((prev) => ({ ...prev, [target]: message }));
+  //     showDialog("error", message);
+  //   } finally {
+  //     setVerifyLoading((prev) => ({ ...prev, [target]: false }));
+  //   }
+  // }, [verifyParentMobileOtp, verifyParentEmailOtp, watch, showDialog]);
+
+
   const handleSendOtp = useCallback(async (target: OtpTarget) => {
     setOtpErrors((prev) => ({ ...prev, [target]: "" }));
     setOtpLoading((prev) => ({ ...prev, [target]: true }));
 
     try {
-      if (target === "parentEmail") {
-        await sendEmailOtpDashboard(watch("parentEmail"), "IN"); // ✅ FIXED
-        setParentEmailOtpSent(true);
-        showDialog("success", "OTP sent successfully to email.");
-      } else {
-        await sendMobileOtpWhileUpdating(watch("parentMobile")); // ✅ FIXED  
-        setParentMobileOtpSent(true);
-        showDialog("success", "OTP sent successfully to mobile.");
-      }
+      await sendEmailOtpDashboard(watch("parentEmail"), "IN");
+      setParentEmailOtpSent(true);
+      showDialog("success", "OTP sent successfully to email.");
     } catch (err: any) {
       const message =
         err?.message || err?.response?.data?.message || "Failed to send OTP.";
@@ -477,28 +572,15 @@ export default function EditProfile() {
     }
   }, [watch, showDialog]);
 
+  
   const handleVerifyOtp = useCallback(async (target: OtpTarget) => {
     setOtpErrors((prev) => ({ ...prev, [target]: "" }));
     setVerifyLoading((prev) => ({ ...prev, [target]: true }));
 
     try {
-      const otp =
-        target === "parentMobile"
-          ? verifyParentMobileOtp
-          : verifyParentEmailOtp;
-
-      if (target === "parentEmail") {
-        await verifyEmailOtp(watch("parentEmail"), otp);
-        setParentEmailVerified(true);
-        showDialog("success", "Email verified successfully.");
-      } else {
-        await verifyMobileOtpWhileUpdating(
-          watch("parentMobile"),
-          otp
-        ); // ✅ FIXED
-        setParentMobileVerified(true);
-        showDialog("success", "Mobile verified successfully.");
-      }
+      await verifyEmailOtp(watch("parentEmail"), verifyParentEmailOtp);
+      setParentEmailVerified(true);
+      showDialog("success", "Email verified successfully.");
     } catch (err: any) {
       const message =
         err?.message || err?.response?.data?.message || "OTP verification failed.";
@@ -508,12 +590,14 @@ export default function EditProfile() {
     } finally {
       setVerifyLoading((prev) => ({ ...prev, [target]: false }));
     }
-  }, [verifyParentMobileOtp, verifyParentEmailOtp, watch, showDialog]);
-
+  }, [verifyParentEmailOtp, watch, showDialog]);
+  
   const onSubmit = useCallback(async (data: FormData) => {
-
+    console.log("🟢 onSubmit FIRED with data:", data);
     try {
       // Pull stored user to get fields we don't collect in the form
+      // console.log("Selected region value:", data.region);
+      // console.log("Selected city value:", data.city);
       const raw = localStorage.getItem("user");
       const user = raw ? JSON.parse(raw) : {};
       const d = user?.user_detail ?? user?.user?.user_detail ?? {};
@@ -521,6 +605,9 @@ export default function EditProfile() {
         if (!num) return "";
         return num.replace(/\D/g, "").replace(/^0+/, "");
       };
+      console.log("d.parent_phone_number from localStorage:", d.parent_phone_number);
+      console.log("data.parentMobile from form:", data.parentMobile);
+      console.log("cleanMobile result:", cleanMobile(data.parentMobile || d.parent_phone_number || ""));
       const payload = {
         // ── Identity ────────────────────────────────────────────
         // user_id: user?.id ?? user?.user_id ?? "",
@@ -531,34 +618,27 @@ export default function EditProfile() {
         gender: data.gender ? Number(data.gender) : "",
         aadhar_number: data.aadharNumber || "",               // optional, can be empty
 
-        // ── Parent / Contact ────────────────────────────────────
         parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
-        parent_name: data.parentName || "",
-        parent_mobile: cleanMobile(data.parentMobile || ""),
-        parent_email: data.parentEmail || "",
-
+        parent_name: data.parentName || d.parent_name || "",
+        parent_phone_number: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
+        CORRECT_KEY_NAME: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
         // ── Student contact (optional) ──────────────────────────
-        student_mobile: cleanMobile(data.studentMobile || ""),
-        student_email: data.studentEmail || "",
+        student_mobile_number: cleanMobile(data.studentMobile || d.student_mobile_number || ""),
+        student_email: data.studentEmail || d.student_email || "",
 
         // ── Academic ────────────────────────────────────────────
         grade: data.grade
           ? String(GRADE_MAP[data.grade] ?? Number(data.grade))
-          : "", school_board_id: data.schoolBoard ? Number(data.schoolBoard) : "",
+          : "", school_board_id: data.schoolBoard ? Number(data.schoolBoard) : (d.school_board_id ? Number(d.school_board_id) : ""),
         sch_name: data.schoolName || "",
         school_id: d.school_id || "",               // preserved, can be empty
 
-        // ── Address ─────────────────────────────────────────────
-        // address: data.address || "",
+            // ── Address ─────────────────────────────────────────────
         address: data.address || d.address || "",
-        state_id: data.state ? Number(data.state) : "",
-        dist_id: data.district ? Number(data.district) : "",
-        // city_id: data.district ? Number(data.district) : "",
-        // city_name_2: "",    
-        city_id: d.city_id || "",
-        city_name_2: "",
-        // pincode: data.pinCode || "",
+        dist_id: data.region ? Number(data.region) : "",
+        city_id: data.city ? Number(data.city) : "",
         pincode: data.pinCode || d.pincode || d.pin_code || "",
+        state_id: d.state_id ? Number(d.state_id) : (d.state?.id ? Number(d.state.id) : ""), 
         
         // ── VVM ─────────────────────────────────────────────────
         exam_lang_id: data.examLanguage ? Number(data.examLanguage) : 14,
@@ -567,7 +647,7 @@ export default function EditProfile() {
           : "",
       };
 
-
+      console.log("🔵 FINAL PAYLOAD:", JSON.stringify(payload, null, 2));
       await completeStudentProfile(payload);
 
       if (raw) {
@@ -589,8 +669,7 @@ export default function EditProfile() {
           parent_phone_number: data.parentMobile,
           parent_email: data.parentEmail,
 
-          // ✅ VERY IMPORTANT
-          parent_mobile_verified: parentMobileVerified ? 1 : 0,
+      
           parent_email_verified: parentEmailVerified ? 1 : 0,
 
           student_mobile_number: data.studentMobile,
@@ -601,10 +680,8 @@ export default function EditProfile() {
           school_name: data.schoolName,
 
           address: data.address,
-          state_id: data.state,
-          district_id: data.district,
+          region_id: data.region,
           city_id: data.city,
-
           pin_code: data.pinCode,
           exam_language_id: data.examLanguage,
           know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
@@ -628,8 +705,7 @@ export default function EditProfile() {
         error?.response?.data?.message || "Profile update failed. Please try again.",
       );
     }
-  }, [parentMobileVerified, parentEmailVerified, showDialog]);
-
+  }, [parentEmailVerified, showDialog]);
   return (
     <>
       <style>{CSS}</style>
@@ -914,11 +990,19 @@ export default function EditProfile() {
             />
             </VvmInput>
 
-            <VvmInput label="School Board">
-              <VvmSelect
-                value={watch("schoolBoard") || ""}
-                onChange={(e) => setValue("schoolBoard", e.target.value)}
-                options={boardOptions}
+            <VvmInput label="School Board" required error={errors.schoolBoard?.message}>
+              <Controller
+                name="schoolBoard"
+                control={control}
+                defaultValue=""
+                rules={{ required: "School Board is required" }}
+                render={({ field }) => (
+                  <VvmSelect
+                    value={field.value || ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    options={boardOptions}
+                  />
+                )}
               />
             </VvmInput>
 
@@ -965,7 +1049,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="City/Region">
+            {/* <VvmInput label="City/Region">
               <VvmSelect
                 value={watch("district") || ""}
                 onChange={(e) => {
@@ -976,8 +1060,49 @@ export default function EditProfile() {
                 }}
                 options={districts.map((d: any) => ({ label: d.name, value: String(d.id) }))}
               />
+            </VvmInput> */}
+
+
+            <VvmInput label="Region">
+              <Controller
+                name="region"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <VvmSelect
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      const regionId = e.target.value;
+                      field.onChange(regionId);
+                      setValue("city", "");
+
+                      const selectedRegion = regions.find(
+                        (r: any) => String(r.district_id) === regionId
+                      );
+                      setCities(selectedRegion?.cities || []);
+                    }}
+                    options={regions.map((r: any) => ({ label: r.name, value: String(r.district_id) }))}
+                  />
+                )}
+              />
             </VvmInput>
 
+            <VvmInput label="City">
+              <Controller
+                name="city"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <VvmSelect
+                    value={field.value || ""}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    options={cities.map((c: any) => ({ label: c.name, value: String(c.id) }))}
+                  />
+                )}
+              />
+            </VvmInput>
+
+            
             {/* <VvmInput label="Pin Code" required error={errors.pinCode?.message}>
               <VvmTextInput
                 placeholder="Enter Pin Code"
@@ -1009,7 +1134,9 @@ export default function EditProfile() {
             <button
               type="button"
               className="vvm-btn vvm-btn--submit"
-              onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit(onSubmit, (validationErrors) => {
+                console.log("🔴 VALIDATION BLOCKED SUBMIT:", validationErrors);
+              })}
             >
               Update Profile
             </button>
