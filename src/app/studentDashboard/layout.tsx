@@ -40,14 +40,18 @@ function extractNameFromStorage(): string {
 
 function SectionTitle({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 mt-5 mb-1.5 ml-0.5">
+    <div className="flex items-center gap-2 mt-7 mb-2 ml-0.5">
       <div
         className="w-0.75 h-3 rounded-sm shrink-0"
         style={{ background: "linear-gradient(180deg, #17395c, #f4df17)" }}
       />
-      <span className="text-[10.5px] font-extrabold text-[#7a90a8] uppercase tracking-[1.1px]">
+
+      <span className="text-[11.5px] font-extrabold text-[#5a7089] uppercase tracking-[1.4px]">
         {label}
       </span>
+      {/* <span className="text-[10.5px] font-extrabold text-[#7a90a8] uppercase tracking-[1.1px]">
+        {label}
+      </span> */}
     </div>
   );
 }
@@ -240,17 +244,28 @@ export default function StudentDashboardLayout({
 
   const isActive = (path: string) => pathname === path;
 
+  // const linkClass = (path: string) =>
+  //   [
+  //     "group relative flex items-center gap-3 min-h-11.5 px-3.5 rounded-xl",
+  //     "text-[13.5px] font-semibold no-underline cursor-pointer",
+  //     "transition-all duration-220 ease-out overflow-hidden",
+  //     isActive(path)
+  //       ? "bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white border border-white/20 shadow-[0_8px_24px_rgba(23,57,92,0.30),inset_0_1px_0_rgba(255,255,255,0.18)]"
+  //       : "text-[#4a6278] border border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:border-[#d0dde9] hover:text-[#17395c] hover:shadow-[0_4px_12px_rgba(23,57,92,0.08)]",
+  //   ].join(" ");
+
+
   const linkClass = (path: string) =>
     [
-      "group relative flex items-center gap-3 min-h-11.5 px-3.5 rounded-xl",
+      "group relative flex items-center gap-3 min-h-12 px-4 py-3 rounded-2xl",
       "text-[13.5px] font-semibold no-underline cursor-pointer",
       "transition-all duration-220 ease-out overflow-hidden",
       isActive(path)
-        ? "bg-gradient-to-br from-[#17395c] to-[#1f4e7a] text-white border border-white/20 shadow-[0_8px_24px_rgba(23,57,92,0.30),inset_0_1px_0_rgba(255,255,255,0.18)]"
-        : "text-[#4a6278] border border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:border-[#d0dde9] hover:text-[#17395c] hover:shadow-[0_4px_12px_rgba(23,57,92,0.08)]",
+        ? "bg-[#17395c]/[0.06] text-[#17395c] border-l-[3px] border-[#17395c] shadow-[0_2px_8px_rgba(23,57,92,0.08)]"
+        : "text-[#4a6278] border-l-[3px] border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:text-[#17395c] hover:scale-[1.01]",
     ].join(" ");
 
-  const iconClass = (path: string) =>
+  const iconClass = (path: string) => 
     [
       "text-[17px] w-5 shrink-0 transition-all duration-220",
       isActive(path)
@@ -261,10 +276,11 @@ export default function StudentDashboardLayout({
   if (token === null || !token) return null;
 
   // Sidebar inner content — shared between mobile and desktop
-  const SidebarContent = () => (
+  // const SidebarContent = () => (
+  const SidebarContent = ({ idPrefix }: { idPrefix: string }) => (
     <div className="px-5 pb-6 pt-8">
       {/* USER HEADER */}
-      <div className="text-center pb-5 mb-3 border-b border-[#eef2f7]">
+      {/* <div className="text-center pb-5 mb-3 border-b border-[#eef2f7]">
         <div
           className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center text-white font-black text-[18px] shadow-md transition-transform duration-300 hover:scale-105"
           style={{
@@ -279,12 +295,36 @@ export default function StudentDashboardLayout({
         <h6 className="shine-name text-[17px] font-extrabold">
           {studentName.toLocaleUpperCase()}
         </h6>
-        {/* <h6 className="shine-name text-[17px] font-extrabold">
-          {username.toLocaleUpperCase()}
-        </h6> */}
+        
+      </div> */}
+
+      <div className="text-center pb-5 mb-3 border-b border-[#eef2f7]">
+        <div className="relative w-20 h-20 mx-auto mb-3">
+          <div
+            className="absolute inset-0 rounded-full blur-xl opacity-40"
+            style={{ background: "linear-gradient(135deg, #17395c, #f4df17)" }}
+          />
+          <div
+            className="relative w-20 h-20 rounded-full flex items-center justify-center text-white font-black text-2xl shadow-md transition-transform duration-300 hover:scale-105"
+            style={{
+              background: "linear-gradient(135deg, #17395c 0%, #1f4e7a 100%)",
+            }}
+          >
+            {studentName.charAt(0).toUpperCase()}
+          </div>
+        </div>
+        <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
+          Welcome back 👋
+        </p>
+        <h6 className="shine-name text-[17px] font-extrabold">
+          {studentName.toLocaleUpperCase()}
+        </h6>
+        <span className="inline-block text-[10px] font-bold text-[#8a6d00] bg-[#f4df17]/60 px-3 py-1 rounded-full mt-1.5">
+          Student
+        </span>
+        {/* <p className="text-[11px] text-[#a0b2c4] font-semibold mt-0.5">Student</p> */}
       </div>
 
-      {/* NAV */}
       <nav className="space-y-1">
         <Link
           href="/studentDashboard"
@@ -367,14 +407,17 @@ export default function StudentDashboardLayout({
           <FaKey className={iconClass("/studentDashboard/update-password")} />
           Update Password
         </Link>
-        {/* <button
-          onClick={handleLogout}
+        
+        {/* <NavDivider />
+        <button
+          onClick={() => setShowLogoutDialog(true)}
           className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-[#4a6278] text-[13.5px] font-semibold hover:bg-red-500 hover:text-white transition-all duration-200"
         >
-          
           <FaSignOutAlt />
           Logout
-        </button> */}
+        </button>
+      </nav> */}
+
         <NavDivider />
         <button
           onClick={() => setShowLogoutDialog(true)}
@@ -384,6 +427,63 @@ export default function StudentDashboardLayout({
           Logout
         </button>
       </nav>
+
+      {/* Bottom illustration */}
+      <div className="mt-10 flex justify-center opacity-95 pointer-events-none select-none illustration-float">
+        <svg
+          width="110"
+          height="110"
+          viewBox="0 0 140 140"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="Graduation cap on books"
+        >
+          <defs>
+            <filter id={`${idPrefix}-shadow`} x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="6" stdDeviation="5" floodColor="#17395c" floodOpacity="0.20" />
+            </filter>
+            <linearGradient id={`${idPrefix}-bookBlue`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2C5A96" />
+              <stop offset="100%" stopColor="#17395c" />
+            </linearGradient>
+            <linearGradient id={`${idPrefix}-bookGold`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FFE070" />
+              <stop offset="100%" stopColor="#F4C817" />
+            </linearGradient>
+            <linearGradient id={`${idPrefix}-capTop`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#2C5A96" />
+              <stop offset="100%" stopColor="#17395c" />
+            </linearGradient>
+          </defs>
+
+          <ellipse cx="70" cy="118" rx="34" ry="6" fill="#17395c" opacity=".10" />
+
+          <path d="M26 100 C16 92 15 79 28 73 C36 84 34 96 26 100Z" fill="#F4C817" opacity=".55" />
+          <path d="M33 111 C23 103 23 91 36 86 C43 96 41 107 33 111Z" fill="#17395c" opacity=".12" />
+          <path d="M114 101 C124 93 125 80 112 74 C104 85 106 97 114 101Z" fill="#F4C817" opacity=".55" />
+          <path d="M107 112 C117 104 117 92 104 87 C97 97 99 108 107 112Z" fill="#17395c" opacity=".12" />
+
+          <g filter={`url(#${idPrefix}-shadow)`}>
+            <rect x="40" y="92" width="60" height="12" rx="3" fill={`url(#${idPrefix}-bookGold)`} />
+            <rect x="36" y="82" width="68" height="12" rx="3" fill={`url(#${idPrefix}-bookBlue)`} />
+            <rect x="42" y="72" width="56" height="12" rx="3" fill="#ffffff" />
+          </g>
+
+          <g filter={`url(#${idPrefix}-shadow)`} transform="rotate(-8 70 55)">
+            <polygon points="70,32 108,50 70,66 32,50" fill={`url(#${idPrefix}-capTop)`} />
+            <path d="M46 54V68C46 74 57 79 70 79C83 79 94 74 94 68V54L70 66L46 54Z" fill="#28568F" />
+            <line x1="108" y1="50" x2="108" y2="70" stroke="#F4C817" strokeWidth="2.5" />
+            <circle cx="108" cy="50" r="3.5" fill="#F4C817" />
+            <circle cx="108" cy="72" r="3.5" fill="#F4C817" />
+          </g>
+
+          <circle cx="30" cy="26" r="1.8" fill="#F4C817" opacity=".7" />
+          <circle cx="112" cy="24" r="2" fill="#17395c" opacity=".18" />
+          <circle cx="118" cy="34" r="1.3" fill="#F4C817" />
+          <circle cx="22" cy="38" r="1.2" fill="#17395c" opacity=".18" />
+        </svg>
+      </div>
     </div>
   );
 
@@ -525,6 +625,8 @@ export default function StudentDashboardLayout({
             backgroundSize: "28px 28px",
           }}
         />
+        <div className="fixed top-10 right-20 w-96 h-96 rounded-full bg-[#17395c]/5 blur-[140px] pointer-events-none -z-10" />
+        <div className="fixed bottom-20 left-0 w-80 h-80 rounded-full bg-[#f4df17]/10 blur-[120px] pointer-events-none -z-10" />
 
         {/* ─────────────────────────────────────────────────
             MOBILE TOP HEADER — structured navbar
@@ -584,7 +686,8 @@ export default function StudentDashboardLayout({
           style={{
             top: navbarHeight + 56, // navbar + dashboard header
             height: `calc(100vh - ${navbarHeight + 56}px)`,
-            background: "#ffffff",
+            background: "linear-gradient(180deg, #ffffff, #fbfcfe)",
+            // background: "#ffffff",
             boxShadow:
               "4px 0 24px rgba(23,57,92,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
           }}
@@ -635,7 +738,8 @@ export default function StudentDashboardLayout({
                 maxHeight: `calc(100vh - ${navbarHeight + 32}px)`,
                 overflowY: "auto",
                 alignSelf: "flex-start",
-                background: "#ffffff",
+                background: "linear-gradient(180deg, #ffffff, #fbfcfe)",
+                // background: "#ffffff",
                 backdropFilter: "blur(18px)",
                 WebkitBackdropFilter: "blur(18px)",
                 border: "1px solid rgba(255,255,255,0.55)",
@@ -667,7 +771,9 @@ export default function StudentDashboardLayout({
                   "0 8px 32px rgba(23,57,92,0.10), 0 1px 4px rgba(23,57,92,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
               }}
             >
-              <div className="p-8">{children}</div>
+              <div className="p-6 md:p-8">{children}</div>
+              {/* <div className="p-8">{children}</div>
+               */}
             </main>
           </div>
         </div>
