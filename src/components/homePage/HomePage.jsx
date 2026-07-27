@@ -6,21 +6,21 @@ import Contact from "@/components/homePage/Contact";
 import VideoGallery from "@/components/homePage/video";
 import { useState, useEffect } from "react";
 
-    function shouldShowNotice() {
-        if (typeof window === "undefined") return false; // SSR safe
-        const lastShown = localStorage.getItem("sif_notice_time");
-        const THIRTY_MINUTES = 60 * 60 * 1000;
-        return !lastShown || Date.now() - Number(lastShown) > THIRTY_MINUTES;
-    }
+function shouldShowNotice() {
+    if (typeof window === "undefined") return false; // SSR safe
+    const lastShown = localStorage.getItem("sif_notice_time");
+    const THIRTY_MINUTES = 60 * 60 * 1000;
+    return !lastShown || Date.now() - Number(lastShown) > THIRTY_MINUTES;
+}
 
-    export default function HomePage() {
-        const [showNotice, setShowNotice] = useState(shouldShowNotice);
-        //                                            ^ lazy initializer, runs once on mount
+export default function HomePage() {
+    const [showNotice, setShowNotice] = useState(shouldShowNotice);
+    //                                            ^ lazy initializer, runs once on mount
 
-        const handleClose = () => {
-            localStorage.setItem("sif_notice_time", Date.now().toString());
-            setShowNotice(false);
-        };
+    const handleClose = () => {
+        localStorage.setItem("sif_notice_time", Date.now().toString());
+        setShowNotice(false);
+    };
     return (
         <>
             {showNotice && (
@@ -52,6 +52,7 @@ import { useState, useEffect } from "react";
             <VideoGallery />
             <VVMExamInfo />
             <Contact />
+
         </>
     );
 }

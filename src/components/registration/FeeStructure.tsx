@@ -190,15 +190,15 @@ export default function FeeStructure() {
             />
 
             <div className="p-8">
-              {/* <h2 className="flex items-center justify-center gap-3 text-[32px] font-extrabold text-[#17395c] mb-6">
-                <span className="bg-red-100 p-2 rounded-full flex items-center justify-center">
+               <h2 className="flex items-center justify-center gap-3 text-[32px] font-extrabold text-[#17395c] mb-6">
+                {/* <span className="bg-red-100 p-2 rounded-full flex items-center justify-center">
                   <AlertCircle size={28} className="text-red-500" />
-                </span>
+                </span> */}
 
                 <span className="tracking-wide uppercase">
                   {fee.title}
                 </span>
-              </h2> */}
+              </h2>
 
               <ul className="mt-2 pl-5 list-disc marker:text-[#17395c]">
                 {fee.items.map((item, index) => (

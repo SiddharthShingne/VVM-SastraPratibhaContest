@@ -17,6 +17,7 @@ import {
   FaTimes,
   FaClock,
   FaMoneyBillWave,
+  FaAward,
   FaInfoCircle, // ← ADD THIS LINE
   FaBook, // ← ADD THIS LINE
 } from "react-icons/fa";
@@ -385,7 +386,7 @@ export default function StudentDashboardLayout({
         href="/studentDashboard/student-awards"
         className={linkClass("/studentDashboard/student-awards")}
       >
-        <FaMoneyBillWave className={iconClass("/studentDashboard/student-awards")} />
+        <FaAward className={iconClass("/studentDashboard/student-awards")} />
         Awards Section
       </Link>
 
@@ -715,7 +716,7 @@ export default function StudentDashboardLayout({
             </button>
           </div>
 
-          <SidebarContent />
+          <SidebarContent idPrefix={""} />
         </aside>
 
         {/* ─────────────────────────────────────────────────
@@ -755,7 +756,7 @@ export default function StudentDashboardLayout({
                     "linear-gradient(90deg, #17395c 0%, #f4df17 50%, #17395c 100%)",
                 }}
               />
-              <SidebarContent />
+              <SidebarContent idPrefix={""} />
             </aside>
 
             {/* ── MAIN CONTENT — flex-1 fills space after sidebar ── */}
