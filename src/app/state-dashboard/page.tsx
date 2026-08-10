@@ -96,8 +96,15 @@ function ExportBtn({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 active:scale-95 text-white text-xs font-semibold rounded-lg transition-all duration-150 shadow-sm whitespace-nowrap"
+      aria-label="Export data"
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-white text-xs font-semibold shadow-sm transition transform active:scale-95"
+      style={{ background: "linear-gradient(135deg,#17395c,#1f4e7a)" }}
     >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-90">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+      </svg>
       Export
     </button>
   );
@@ -394,46 +401,21 @@ export default function StateDashboardPage() {
           </p>
         </div>
 
-        {/* ── Stat Cards — no left accent border ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mb-5">
-          {/* {stats.map((s, i) => (
-            <div
-              key={s.label}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-3
-                         flex items-center gap-3 sm:gap-4
-                         hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              
-              <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
-                {s.icon}
-              </div>
-              <div className="min-w-0">
-                <p className="text-slate-400 text-[11px] sm:text-sm font-bold mb-0.5 truncate">
-                  {s.label}
-                </p>
-                <div className="text-blue-600 font-extrabold text-sm sm:text-base leading-tight break-words">
-                  {s.value}
-                </div>
-              </div>
-            </div>
-          ))} */}
+        {/* ── Stat Cards — modernized visual style ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
           {stats.map((s, i) => {
             const card = (
               <div
                 key={s.label}
-                className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-3 sm:p-3
-                 flex items-center gap-3 sm:gap-4
-                 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 anim-up
-                 ${s.href ? "cursor-pointer" : ""}`}
+                className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 hover:shadow-md transform hover:-translate-y-1 transition-all duration-200`}
                 style={{ animationDelay: `${i * 80}ms` }}
               >
-                <div className={`w-8 h-8 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 ${s.iconBg}`}>
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center shrink-0 ${s.iconBg}`} aria-hidden>
                   {s.icon}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-slate-400 text-[10px] sm:text-xs font-bold mb-0.5 truncate">{s.label}</p>
-                  <div className="text-blue-600 font-extrabold text-xs sm:text-sm leading-tight">{s.value}</div>
+                  <p className="text-slate-400 text-xs font-semibold mb-1 truncate">{s.label}</p>
+                  <div className="text-[#17395c] font-extrabold text-lg sm:text-xl leading-tight">{s.value}</div>
                 </div>
               </div>
             );
@@ -443,7 +425,7 @@ export default function StateDashboardPage() {
                 {card}
               </Link>
             ) : (
-              <div key={s.label}>{card}</div>  // remove key from inner div since it's on outer
+              <div key={s.label}>{card}</div>
             );
           })}
         </div>
@@ -555,19 +537,9 @@ export default function StateDashboardPage() {
           )}
 
           {/* Export button — blue, top right, outside table card */}
-          <button
-            onClick={handleExport}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-500 hover:bg-blue-700
-                       text-white text-sm font-semibold rounded-xl shadow-sm hover:shadow-md
-                       transition-all duration-200 active:scale-95  w-full sm:w-auto whitespace-nowrap sm:ml-auto"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Export
-          </button>
+          <div className="w-full sm:w-auto sm:ml-auto">
+            <ExportBtn onClick={handleExport} />
+          </div>
         </div>
 
         {/* ── Table Card ── */}
@@ -584,7 +556,7 @@ export default function StateDashboardPage() {
           {/* Table */}
           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <table className="w-full min-w-[500px] text-sm resp-table">
-              <thead>
+              <thead className="sticky top-0 z-20 bg-white/70 backdrop-blur-sm">
                 <tr className="bg-slate-50 border-y border-slate-100">
                   {[
                     ["SR. NO.", "sr"],

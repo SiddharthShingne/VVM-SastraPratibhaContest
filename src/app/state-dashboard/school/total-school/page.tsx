@@ -409,7 +409,7 @@ export default function SchoolsPage() {
               padding: "9px 20px",
               borderRadius: 10,
               border: "none",
-              background: "#2563eb",
+              background: "linear-gradient(135deg,#17395c,#1f4e7a)",
               color: "#fff",
               fontSize: 13,
               fontWeight: 600,
@@ -417,7 +417,8 @@ export default function SchoolsPage() {
               whiteSpace: "nowrap" as const,
               display: "flex",
               alignItems: "center",
-              gap: 6,
+              gap: 8,
+              boxShadow: "0 8px 24px rgba(23,57,92,0.12)",
             }}
           >
             + Add School
@@ -442,7 +443,7 @@ export default function SchoolsPage() {
         {/* Table */}
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
-            <thead>
+            <thead style={{position: "sticky", top: 0, background: "#fff", zIndex: 10}}>
               <tr>
                 {["SR. NO.", "SCHOOL NAME", "REGION CODE", "SCHOOL CODE", "TOTAL STUDENTS", "ACTIONS"
                   // "PAID", "UNPAID"
