@@ -65,18 +65,18 @@ const feeStructureData: Record<
     ],
   },
 
-  SAU: {
-    title: "Saudi Arabia Fee Structure",
-    items: [
-      {
-        text: "Registration fee for students studying in Saudi Arabia: SAR XX.",
-        note: "Applicable only for Saudi Arabia students.",
-      },
-      {
-        text: "Payment should be made through the approved Saudi Arabia VVM payment process.",
-      },
-    ],
-  },
+  // SAU: {
+  //   title: "Saudi Arabia Fee Structure",
+  //   items: [
+  //     {
+  //       text: "Registration fee for students studying in Saudi Arabia: SAR XX.",
+  //       note: "Applicable only for Saudi Arabia students.",
+  //     },
+  //     {
+  //       text: "Payment should be made through the approved Saudi Arabia VVM payment process.",
+  //     },
+  //   ],
+  // },
 
   BHR: {
     title: "Bahrain Fee Structure",
@@ -91,28 +91,28 @@ const feeStructureData: Record<
     ],
   },
 
-  KWT: {
-    title: "Kuwait Fee Structure",
-    items: [
-      {
-        text: "Registration fee for students studying in Kuwait: KWD XX.",
-        note: "Applicable only for Kuwait students.",
-      },
-      {
-        text: "Payment should be made through the approved Kuwait VVM payment process.",
-      },
-    ],
-  },
+  // KWT: {
+  //   title: "Kuwait Fee Structure",
+  //   items: [
+  //     {
+  //       text: "Registration fee for students studying in Kuwait: KWD XX.",
+  //       note: "Applicable only for Kuwait students.",
+  //     },
+  //     {
+  //       text: "Payment should be made through the approved Kuwait VVM payment process.",
+  //     },
+  //   ],
+  // },
 };
 
 const countryCodeMap: Record<number, string> = {
-  1: "IND",
+  // 1: "IND",
   2: "ARE",
   3: "OMN",
-  4: "QAT",
-  5: "SAU",
+  // 4: "QAT",
+  // 5: "SAU",
   6: "BHR",
-  7: "KWT",
+  // 7: "KWT",
 };
 
 export default function FeeStructure() {

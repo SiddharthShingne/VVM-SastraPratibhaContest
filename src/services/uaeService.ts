@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 import api from "./axiosInstance";
@@ -314,7 +315,12 @@ export const getNewRegistrations = async (
   per_page: number = 10,
 ) => {
   try {
-    const res = await api.post("/admin/new-registrations", { page, per_page });
+    // const res = await api.post("/admin/new-registrations", { page, per_page });
+    const res = await api.post("/admin/new-registration-students", {
+      page,
+      per_page,
+    });
+
     return res.data;
   } catch (error: unknown) {
     if (error && typeof error === "object" && "response" in error) {
@@ -335,5 +341,37 @@ export const deleteStudent = async (userId: number) => {
       return err.response?.data || "Failed to delete student";
     }
     return "Failed to delete student";
+  }
+};
+
+// create payment link
+
+// export const createPaymentLink = async (payload: { student_id: number | string; [key: string]: any }) => {
+//   try {
+//     const res = await axiosInstance.get("/sif/create-payment-links", {
+//       params: payload,
+//     });
+
+//     return {
+//       paymentLink: res?.data?.data?.payment_link || res?.data?.data || null,
+//       success: res?.data?.success ?? false,
+//     };
+//   } catch (error) {
+//     console.error("Payment Link API Error:", error);
+//     throw error;
+//   }
+// };
+
+export const createPaymentLink = async () => {
+  try {
+    const res = await axiosInstance.get("/sif/create-payment-links");
+
+    return {
+      paymentLink: res?.data?.payment_link || null,
+      success: res?.data?.success ?? false,
+    };
+  } catch (error) {
+    console.error("Payment Link API Error:", error);
+    throw error;
   }
 };

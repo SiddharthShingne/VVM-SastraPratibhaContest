@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { getImportantDates } from "@/services/importantDatesService";
 import { getInstractionDocument } from "@/services/importantDatesService";
+
+import { createPaymentLink } from "@/services/uaeService";
 interface DateItem {
   id: number;
   name: string;
   detail: string;
 }
+
+const PAYMENT_ENABLED_COUNTRIES = [2, 3, 6]; // UAE, Oman, Bahrain
 
 export default function DashboardHome() {
   const [dates, setDates] = useState<DateItem[]>([]);
@@ -41,15 +45,149 @@ export default function DashboardHome() {
     }
   }
 
+
+  const [payLoading, setPayLoading] = useState(false);
+
+
+  async function handleDoPayments() {
+    try {
+      setPayLoading(true);
+      const result = await createPaymentLink();
+      console.log("Payment API result:", result);
+
+      if (result.success && result.paymentLink) {
+        window.location.href = result.paymentLink;
+      } else {
+        alert("Payment link generate nahi ho saka. Support se contact karein.");
+        console.error("Payment link not returned properly:", result);
+      }
+    } catch (err) {
+      console.error("handleDoPayments error:", err);
+    } finally {
+      setPayLoading(false);
+    }
+  }
+
+
+  // async function handleDoPayments() {
+  //   try {
+  //     setPayLoading(true);
+  //     const result = await createPaymentLink();
+  //     console.log("Payment API result:", result);
+
+  //     if (result.success && result.paymentLink) {
+  //       window.open(result.paymentLink, "_blank");
+  //     } else {
+  //       alert("Payment link generate nahi ho saka. Support se contact karein.");
+  //       console.error("Payment link not returned properly:", result);
+  //     }
+  //   } catch (err) {
+  //     console.error("handleDoPayments error:", err);
+  //   } finally {
+  //     setPayLoading(false);
+  //   }
+  // }
+
+
+  // async function handleDoPayments() {
+  //   try {
+  //     setPayLoading(true);
+  //     const raw = localStorage.getItem("user");
+  //     const parsed = raw ? JSON.parse(raw) : null;
+
+  //     const studentId =
+  //       parsed?.user?.user_detail?.id || parsed?.user_detail?.id;
+  //     const countryId =
+  //       parsed?.user?.country_id ?? parsed?.country_id;
+
+  //     if (!studentId) {
+  //       console.error("student_id not found in localStorage");
+  //       return;
+  //     }
+
+  //     const result = await createPaymentLink({
+  //       student_id: studentId,
+  //       country_id: countryId,
+  //     });
+  //     console.log("Payment API result:", result);
+
+  //     if (result.success && result.paymentLink) {
+  //       window.open(result.paymentLink, "_blank");
+  //     } else {
+  //       console.error("Payment link not returned properly:", result);
+  //     }
+  //   } catch (err) {
+  //     console.error("handleDoPayments error:", err);
+  //   } finally {
+  //     setPayLoading(false);
+  //   }
+  // }
+
+
+  // async function handleDoPayments() {
+  //   try {
+  //     setPayLoading(true);
+  //     const raw = localStorage.getItem("user");
+  //     const parsed = raw ? JSON.parse(raw) : null;
+  //     const studentId =
+  //       parsed?.user?.user_detail?.id || parsed?.user_detail?.id;
+
+  //     if (!studentId) {
+  //       console.error("student_id not found in localStorage");
+  //       return;
+  //     }
+
+  //     const result = await createPaymentLink({ student_id: studentId });
+  //     console.log("Payment API result:", result);
+
+  //     if (result.success && result.paymentLink) {
+  //       window.open(result.paymentLink, "_blank");
+  //     } else {
+  //       console.error("Payment link not returned properly:", result);
+  //     }
+  //   } catch (err) {
+  //     console.error("handleDoPayments error:", err);
+  //   } finally {
+  //     setPayLoading(false);
+  //   }
+  // }
+
     const [name, setName] = useState("Student");
     const [greeting, setGreeting] = useState("Good Afternoon");
 
-    useEffect(() => {
-      setName(extractNameFromStorage());
-      setGreeting(getGreeting());
-    }, []);
+    // useEffect(() => {
+    //   setName(extractNameFromStorage());
+    //   setGreeting(getGreeting());
+    // }, []);
 
 
+  const [countryId, setCountryId] = useState<number | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<number | null>(null);
+
+  useEffect(() => {
+    setName(extractNameFromStorage());
+    setGreeting(getGreeting());
+
+    try {
+      const raw = localStorage.getItem("user");
+      const parsed = raw ? JSON.parse(raw) : null;
+
+      const cid =
+        parsed?.user?.user_detail?.state?.country_id ??
+        parsed?.user?.country_id ??
+        null;
+      setCountryId(cid);
+
+      const pStatus = parsed?.user?.user_detail?.payment_status ?? null;
+      setPaymentStatus(pStatus);
+    } catch (err) {
+      console.error("countryId/paymentStatus extract error:", err);
+      setCountryId(null);
+      setPaymentStatus(null);
+    }
+  }, []);
+
+  
   useEffect(() => {
     const loadDates = async () => {
       try {
@@ -105,20 +243,37 @@ export default function DashboardHome() {
     <div className="space-y-6">
 
       {/* WELCOME CARD */}
-      <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl border border-white/60 shadow-[0_22px_50px_rgba(23,57,92,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] overflow-hidden p-6 md:p-8">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c] z-10" />
+    
 
-        <p className="text-sm font-semibold text-[#17395c] flex items-center gap-1.5">
-          {greeting}, <span className="text-base">👋</span>
-        </p>
-        <h1 className="text-2xl md:text-3xl font-black text-[#17395c] tracking-tight leading-tight mt-1">
-          {name}
-        </h1>
-        <p className="text-sm text-[#8a99ac] mt-1.5">
-          Keep learning and stay ahead!
-        </p>
-        <div className="w-16 h-[3px] rounded-full bg-gradient-to-r from-[#17395c] to-[#f4df17] mt-3" />
-      </div>
+        <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl border border-white/60 shadow-[0_22px_50px_rgba(23,57,92,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] overflow-hidden p-6 md:p-8">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#17395c] via-[#f4df17] to-[#17395c] z-10" />
+
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p className="text-sm font-semibold text-[#17395c] flex items-center gap-1.5">
+                {greeting}, <span className="text-base">👋</span>
+              </p>
+              <h1 className="text-2xl md:text-3xl font-black text-[#17395c] tracking-tight leading-tight mt-1">
+                {name}
+              </h1>
+              <p className="text-sm text-[#8a99ac] mt-1.5">
+                Keep learning and stay ahead!
+              </p>
+              <div className="w-16 h-[3px] rounded-full bg-gradient-to-r from-[#17395c] to-[#f4df17] mt-3" />
+            </div>
+            {countryId !== null &&
+              PAYMENT_ENABLED_COUNTRIES.includes(countryId) &&
+              paymentStatus === 0 && (
+                <button
+                  onClick={handleDoPayments}
+                  disabled={payLoading}
+                  className="shrink-0 flex items-center gap-2 text-sm font-semibold text-white bg-[#17395c] hover:bg-[#1f4e7a] disabled:opacity-50 px-4 py-2.5 rounded-xl transition-colors duration-200"
+                >
+                  {payLoading ? "Processing..." : "💳 Do Payments"}
+                </button>
+              )}
+          </div>
+        </div>
 
       {/* IMPORTANT DATES CARD */}
       <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-5 border border-white/60 shadow-[0_22px_50px_rgba(23,57,92,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] overflow-hidden transition-all duration-300 hover:shadow-[0_28px_60px_rgba(23,57,92,0.1),inset_0_1px_0_rgba(255,255,255,1)] hover:-translate-y-0.5">
