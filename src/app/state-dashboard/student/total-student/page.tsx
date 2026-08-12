@@ -36,7 +36,7 @@ type Student = {
   isFinal?: boolean;              // ✅ Add
   paymentStatus?: string;         // ✅ Add
   lastLogin?: string;             // ✅ Add
-  createdAt?: string;      
+  createdAt?: string;
   region?: string;        // ✅ ADD
   city?: string;
   userId?: number; // ✅ Add
@@ -283,7 +283,7 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
   //   parentEmail: "",
   // });
 
- 
+
   const [countryCode, setCountryCode] = useState(getCountryCode());
 
   useEffect(() => {
@@ -294,9 +294,9 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
   useEffect(() => {
     const loadRegions = async () => {
       try {
-               const data = await fetchRegionsWithCities(countryCode);
-console.log("COUNTRY:", countryCode);
-console.log("REGIONS API:", data);
+        const data = await fetchRegionsWithCities(countryCode);
+        console.log("COUNTRY:", countryCode);
+        console.log("REGIONS API:", data);
         setRegions(data?.data || []);
       } catch {
         setRegions([]);
@@ -323,7 +323,7 @@ console.log("REGIONS API:", data);
     parentSalutation: "",
     parentName: "",
     parentEmail: "",
-    parentMobile: "", 
+    parentMobile: "",
   });
   useEffect(() => {
     setForm((prev) => ({
@@ -452,7 +452,7 @@ console.log("REGIONS API:", data);
 
     console.log("ALL ASSIGNMENTS:", assignments);       // 👈 yahan
     console.log("STATE ASSIGNMENT:", stateAssignment);  // 👈 yahan  
-    console.log("STATE ID:", stateId);  
+    console.log("STATE ID:", stateId);
     let finalCountryCode = countryCode;
     console.log("countryCode state:", countryCode);           // check this
     console.log("getCountryCode() fresh:", getCountryCode()); // check this
@@ -466,7 +466,7 @@ console.log("REGIONS API:", data);
     const required = editData
       ? ["nationalId", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentMobile", "parentEmail"]
       : ["nationalId", "region", "city", "school", "fullName", "dob", "gender", "classGrade", "parentSalutation", "parentName", "parentMobile", "parentEmail"];
-    
+
     const missing = required.filter((k) => !(form as any)[k]);
     if (missing.length) {
       setError("Please fill all required fields.");
@@ -533,9 +533,9 @@ console.log("REGIONS API:", data);
           country_code: finalCountryCode,
           emirate_id: form.nationalId,       // ✅ was national_id
           nationality: form.nationality,
-          dist_id: form.region ? parseInt(form.region, 10) : undefined,  
+          dist_id: form.region ? parseInt(form.region, 10) : undefined,
           school_name: form.school,
-          division: form.division || "A",  
+          division: form.division || "A",
           fullName: form.fullName,           // ✅ was name
           dob: form.dob,                     // ✅ was date_of_birth
           gender: form.gender === "Male" ? 1 : 2,
@@ -550,13 +550,13 @@ console.log("REGIONS API:", data);
           parent_email: form.parentEmail,
           password: "vvm2026",
           password_confirmation: "vvm2026",
-          city_id: form.city ? parseInt(form.city, 10) : undefined,      
+          city_id: form.city ? parseInt(form.city, 10) : undefined,
         });
-        console.log("FINAL PAYLOAD:", payload);  
+        console.log("FINAL PAYLOAD:", payload);
         setSuccessMsg("Student added successfully!");
       }
-      
-     
+
+
     } catch (err: any) {
       const errData = err?.response?.data;
 
@@ -573,7 +573,7 @@ console.log("REGIONS API:", data);
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
@@ -633,7 +633,7 @@ console.log("REGIONS API:", data);
         }}
       >
         {/* Row 1 */}
-      {/*  Country field — read-only, driven purely by localStorage */}
+        {/*  Country field — read-only, driven purely by localStorage */}
         <Field label="Student Country" required>
           <input
             type="text"
@@ -667,7 +667,7 @@ console.log("REGIONS API:", data);
                     countryCode === "QA" ? "Max 11 digits" :
                       countryCode === "OM" ? "Max 8 digits" : ""}
           </span>
-            </Field>
+        </Field>
 
         <Field label="Student's Nationality">
           <input
@@ -806,7 +806,7 @@ console.log("REGIONS API:", data);
             <option value="X">X</option>
             <option value="Y">Y</option>
             <option value="Z">Z</option>
-          
+
           </select>
         </Field>
 
@@ -851,7 +851,7 @@ console.log("REGIONS API:", data);
             <option value="">Select Option</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-             <option value="Other">Other</option>
+            <option value="Other">Other</option>
           </select>
         </Field>
 
@@ -877,7 +877,7 @@ console.log("REGIONS API:", data);
             style={inputStyle}
           >
             <option value="English">English</option>
-                      </select>
+          </select>
         </Field>
 
         {/* Row 5 */}
@@ -897,23 +897,23 @@ console.log("REGIONS API:", data);
         </Field>
 
         <Field label="Parent Full Name" required>
-            <input
-              type="text"
-              placeholder="Parent full name"
-              value={form.parentName}
-              onChange={(e) => {
-                handleChange("parentName", e.target.value);
-                setFieldErrors((prev) => ({ ...prev, parentName: "" }));
-              }}
-              onBlur={() => {
-                if (form.parentName && !validateName(form.parentName))
-                  setFieldErrors((prev) => ({ ...prev, parentName: "Only alphabetical characters are allowed" }));
-              }}
-              style={{ ...inputStyle, borderColor: fieldErrors.parentName ? "#ef4444" : "#e5e7eb" }}
-            />
-            {fieldErrors.parentName && (
-              <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentName}</span>
-            )}
+          <input
+            type="text"
+            placeholder="Parent full name"
+            value={form.parentName}
+            onChange={(e) => {
+              handleChange("parentName", e.target.value);
+              setFieldErrors((prev) => ({ ...prev, parentName: "" }));
+            }}
+            onBlur={() => {
+              if (form.parentName && !validateName(form.parentName))
+                setFieldErrors((prev) => ({ ...prev, parentName: "Only alphabetical characters are allowed" }));
+            }}
+            style={{ ...inputStyle, borderColor: fieldErrors.parentName ? "#ef4444" : "#e5e7eb" }}
+          />
+          {fieldErrors.parentName && (
+            <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentName}</span>
+          )}
         </Field>
 
         <Field label="Parent Email-id" required>
@@ -937,30 +937,30 @@ console.log("REGIONS API:", data);
         </Field>
 
         <Field label="Parent Mobile" required>
-        <input
-    type="text"
-    placeholder={`Parent Mobile (${COUNTRY_MOBILE_LENGTH[countryCode] || 10} digits)`}
-    value={form.parentMobile}
-    maxLength={COUNTRY_MOBILE_LENGTH[countryCode] || 10}
-    onChange={(e) => {
-      const val = e.target.value.replace(/\D/g, "");
-      handleChange("parentMobile", val);
-      setFieldErrors((prev) => ({ ...prev, parentMobile: "" }));
-    }}
-    onBlur={() => {
-      if (form.parentMobile && !validateMobile(form.parentMobile).isValid)
-        setFieldErrors((prev) => ({ ...prev, parentMobile: validateMobile(form.parentMobile).message }));
-    }}
-    style={{ ...inputStyle, borderColor: fieldErrors.parentMobile ? "#ef4444" : "#e5e7eb" }}
-  />
-  {fieldErrors.parentMobile ? (
-    <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentMobile}</span>
-  ) : (
-    <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
-      {COUNTRY_MOBILE_LENGTH[countryCode] ? `Must be ${COUNTRY_MOBILE_LENGTH[countryCode]} digits` : ""}
-    </span>
-  )}
-                </Field>
+          <input
+            type="text"
+            placeholder={`Parent Mobile (${COUNTRY_MOBILE_LENGTH[countryCode] || 10} digits)`}
+            value={form.parentMobile}
+            maxLength={COUNTRY_MOBILE_LENGTH[countryCode] || 10}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              handleChange("parentMobile", val);
+              setFieldErrors((prev) => ({ ...prev, parentMobile: "" }));
+            }}
+            onBlur={() => {
+              if (form.parentMobile && !validateMobile(form.parentMobile).isValid)
+                setFieldErrors((prev) => ({ ...prev, parentMobile: validateMobile(form.parentMobile).message }));
+            }}
+            style={{ ...inputStyle, borderColor: fieldErrors.parentMobile ? "#ef4444" : "#e5e7eb" }}
+          />
+          {fieldErrors.parentMobile ? (
+            <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.parentMobile}</span>
+          ) : (
+            <span style={{ fontSize: 11, color: "#9ca3af", marginTop: 4 }}>
+              {COUNTRY_MOBILE_LENGTH[countryCode] ? `Must be ${COUNTRY_MOBILE_LENGTH[countryCode]} digits` : ""}
+            </span>
+          )}
+        </Field>
       </div>
 
       {/* {error && (
@@ -1077,7 +1077,7 @@ export default function TotalStudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
- 
+
   // Filters
   const [region, setRegion] = useState("");
   const [classFilter, setClassFilter] = useState("");
@@ -1098,7 +1098,7 @@ export default function TotalStudentsPage() {
   useEffect(() => {
     const t = setTimeout(() => setDebouncedNameSearch(nameSearch), 500);
     return () => clearTimeout(t);
-  }, [nameSearch]);  
+  }, [nameSearch]);
 
   // Date range (for filter bar)
   const [filterStartDate, setFilterStartDate] = useState("");
@@ -1146,7 +1146,7 @@ export default function TotalStudentsPage() {
   const fetchStudents = async () => {
     setLoading(true);
     setStudents([]);        // ← ADD THIS
-    setTotalRecords(0); 
+    setTotalRecords(0);
     try {
       const res = await axiosInstance.post("/admin/students", {
         page: currentPage,
@@ -1189,7 +1189,7 @@ export default function TotalStudentsPage() {
         createdAt: s.created_at ? formatDate(s.created_at) : "-",
       }));
 
-            // ... (formatted mapping same as before)
+      // ... (formatted mapping same as before)
 
       setStudents(formatted);
       setTotal(res?.data?.data?.total || 0);
@@ -1223,8 +1223,8 @@ export default function TotalStudentsPage() {
   // };
 
   // ── Delete handler ───────────────────────────────────────────────────────
-  
-  
+
+
   const handleExportSubmit = async () => {
     if (!exportStartDate || !exportEndDate) return;
     setExportLoading(true);
@@ -1236,7 +1236,7 @@ export default function TotalStudentsPage() {
       const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
       const stateId = stateAssignment?.coordinatable_id;
       console.log("STATE ID:", stateId);  // 👈 if this is "" that's the problem
-      const prantId = stateAssignment?.extras?.prant_id;  
+      const prantId = stateAssignment?.extras?.prant_id;
       const userEmail = parsed?.user?.user_detail?.email || "";
 
       await exportStudents({
@@ -1513,18 +1513,18 @@ export default function TotalStudentsPage() {
           }}
         >
           {/* Search */}
-            <div style={{ position: "relative", display: "inline-block", width: "50%" }}>
-              <Search
-                size={18}
-                style={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#999",
-                  pointerEvents: "none"
-                }}
-              />
+          <div style={{ position: "relative", display: "inline-block", width: "50%" }}>
+            <Search
+              size={18}
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#999",
+                pointerEvents: "none"
+              }}
+            />
             <input
               type="text"
               placeholder="Search Records"
@@ -1533,7 +1533,7 @@ export default function TotalStudentsPage() {
               style={s.searchInput}
             />
           </div>
-{/* // 5. Add input in the filter card, next to your existing search */}
+          {/* // 5. Add input in the filter card, next to your existing search */}
           {/* <div style={{ position: "relative", flex: "1 1 240px", maxWidth: 320 }}>
             <input
               type="text"
@@ -1746,7 +1746,7 @@ export default function TotalStudentsPage() {
               outline: "none",
             }}
           >
-            {[10,50,100,250].map((n) => (
+            {[10, 50, 100, 250].map((n) => (
               <option key={n} value={n}>{n}</option>
             ))}
           </select>
@@ -1799,14 +1799,14 @@ export default function TotalStudentsPage() {
       {/* ── Add Student Dialog ───────────────────────────────────────────────── */}
       {dialog?.type === "add" && (
         <ModalWrapper>
-        <AddStudentDialog
-          onClose={() => {
-            setDialog(null);
-            setEditStudent(null);  // Clear edit data
-            fetchStudents();
-          }}
-          editData={editStudent}
-        />
+          <AddStudentDialog
+            onClose={() => {
+              setDialog(null);
+              setEditStudent(null);  // Clear edit data
+              fetchStudents();
+            }}
+            editData={editStudent}
+          />
         </ModalWrapper>
       )}
       {/* ── Export Dialog ────────────────────────────────────────────────────── */}

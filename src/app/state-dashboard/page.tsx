@@ -60,7 +60,7 @@ interface StateSummaryRow {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
+const ITEMS_PER_PAGE_OPTIONS = [1];
 
 const isDataRow = (row: StateSummaryRow): boolean =>
   !row.totals && !!row.state_name;
@@ -72,7 +72,7 @@ function getStateIdFromStorage(): number | null {
     const parsed: StoredUser = JSON.parse(raw);
     const assignments = parsed?.user?.user_detail?.assignments ?? [];
     const stateAssignment = assignments.find(
-      (a) => a.coordinatable_type === "State"
+      (a) => a.coordinatable_type === "State",
     );
     if (stateAssignment?.coordinatable_id) {
       return stateAssignment.coordinatable_id;
@@ -130,7 +130,9 @@ export default function StateDashboardPage() {
   } | null>(null);
 
   const [summary, setSummary] = useState<CardSummary | null>(null);
-  const [stateSummaryRows, setStateSummaryRows] = useState<StateSummaryRow[]>([]);
+  const [stateSummaryRows, setStateSummaryRows] = useState<StateSummaryRow[]>(
+    [],
+  );
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -155,8 +157,8 @@ export default function StateDashboardPage() {
                 prant_ids: [p.id],
               }).then((data: District[]) => {
                 allDistricts.push(...(data ?? []));
-              })
-            )
+              }),
+            ),
           );
           setDistricts(allDistricts);
         }
@@ -223,17 +225,29 @@ export default function StateDashboardPage() {
       options.push({
         label: p.name,
         isPrantHeader: true,
-        value: { type: "prant", prantId: p.id, districtId: null, label: p.name },
+        value: {
+          type: "prant",
+          prantId: p.id,
+          districtId: null,
+          label: p.name,
+        },
       });
 
-      districts.filter((d) => d.prant_id === p.id).forEach((d) => {
-        options.push({
-          label: d.name,
-          subLabel: p.name,
-          isPrantHeader: false,
-          value: { type: "district", prantId: p.id, districtId: d.id, label: d.name },
+      districts
+        .filter((d) => d.prant_id === p.id)
+        .forEach((d) => {
+          options.push({
+            label: d.name,
+            subLabel: p.name,
+            isPrantHeader: false,
+            value: {
+              type: "district",
+              prantId: p.id,
+              districtId: d.id,
+              label: d.name,
+            },
+          });
         });
-      });
     });
 
     return options;
@@ -242,23 +256,44 @@ export default function StateDashboardPage() {
   const filteredOptions = useMemo(() => {
     if (!search.trim()) return dropdownOptions;
     return dropdownOptions.filter((o) =>
-      o.label.toLowerCase().includes(search.toLowerCase())
+      o.label.toLowerCase().includes(search.toLowerCase()),
     );
   }, [dropdownOptions, search]);
 
-  const totalPages = Math.max(1, Math.ceil(stateSummaryRows.length / itemsPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(stateSummaryRows.length / itemsPerPage),
+  );
   const paginated = stateSummaryRows.slice(
     (page - 1) * itemsPerPage,
-    page * itemsPerPage
+    page * itemsPerPage,
   );
 
   const totals = useMemo(() => {
-    const schools = stateSummaryRows.reduce((s, r) => s + (r.total_school ?? 0), 0);
-    const individual = stateSummaryRows.reduce((s, r) => s + (r.individual_student ?? 0), 0);
-    const total = stateSummaryRows.reduce((s, r) => s + (r.total_student ?? 0), 0);
-    const paid = stateSummaryRows.reduce((s, r) => s + (r.total_paid_student ?? 0), 0);
-    const lvl1Attempted = stateSummaryRows.reduce((s, r) => s + (r.total_attempted_level1_students ?? 0), 0);
-    const lvl1Submitted = stateSummaryRows.reduce((s, r) => s + (r.total_submitted_level1_students ?? 0), 0);
+    const schools = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_school ?? 0),
+      0,
+    );
+    const individual = stateSummaryRows.reduce(
+      (s, r) => s + (r.individual_student ?? 0),
+      0,
+    );
+    const total = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_student ?? 0),
+      0,
+    );
+    const paid = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_paid_student ?? 0),
+      0,
+    );
+    const lvl1Attempted = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_attempted_level1_students ?? 0),
+      0,
+    );
+    const lvl1Submitted = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_submitted_level1_students ?? 0),
+      0,
+    );
     return { schools, individual, total, paid, lvl1Attempted, lvl1Submitted };
   }, [stateSummaryRows]);
 
@@ -270,7 +305,9 @@ export default function StateDashboardPage() {
         filters: {
           state_id: [stateId],
           prant_id: selectedFilter?.prantId ? [selectedFilter.prantId] : [],
-          district_id: selectedFilter?.districtId ? [selectedFilter.districtId] : [],
+          district_id: selectedFilter?.districtId
+            ? [selectedFilter.districtId]
+            : [],
         },
       };
       const blob = await exportStateSummary(payload);
@@ -286,8 +323,12 @@ export default function StateDashboardPage() {
       alert("Export failed");
     }
   };
+
+
   const upgradedMatch = summary?.upgrade_summary?.match(/(\d+)\s*\(Upgraded\)/);
-  const nonUpgradedMatch = summary?.upgrade_summary?.match(/(\d+)\s*\(Non-?Upgraded\)/);
+  const nonUpgradedMatch = summary?.upgrade_summary?.match(
+    /(\d+)\s*\(Non-?Upgraded\)/,
+  );
 
   const upgraded = upgradedMatch ? upgradedMatch[1] : "0";
   const nonUpgraded = nonUpgradedMatch ? nonUpgradedMatch[1] : "0";
@@ -318,17 +359,20 @@ export default function StateDashboardPage() {
       value: (
         <div className="flex items-baseline flex-wrap gap-x-0.5 text-xs sm:text-sm">
           <span className="font-extrabold">{upgraded}</span>
-          <span className="text-[9px] sm:text-[11px] text-slate-400">(Upgraded)</span>
+          <span className="text-[9px] sm:text-[11px] text-slate-400">
+            (Upgraded)
+          </span>
           <span className="mx-0.5 text-slate-300">/</span>
           <span className="font-extrabold">{nonUpgraded}</span>
-          <span className="text-[9px] sm:text-[11px] text-slate-400">(Non-Upgraded)</span>
+          <span className="text-[9px] sm:text-[11px] text-slate-400">
+            (Non-Upgraded)
+          </span>
         </div>
       ),
       icon: <FaArrowUp size={20} />,
       iconBg: "bg-sky-50 text-sky-500",
       href: null,
     },
-    
   ];
 
   // ─── Render ─────────────────────────────────────────────────────────────────
@@ -390,7 +434,6 @@ export default function StateDashboardPage() {
       `}</style>
 
       <div className="min-h-screen p-3 sm:p-5 lg:p-8">
-
         {/* ── Page Title ── */}
         <div className="mb-3 sm:mb-5 anim-down">
           <h1 className="text-lg sm:text-2xl font-bold text-slate-800 tracking-tight">
@@ -431,9 +474,10 @@ export default function StateDashboardPage() {
         </div>
 
         {/* ── Search + Export row — OUTSIDE the table card, above it ── */}
-        <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3 relative z-50 anim-down"
-          style={{ animationDelay: "60ms" }}>
-
+        <div
+          className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3 relative z-50 anim-down"
+          style={{ animationDelay: "60ms" }}
+        >
           {/* Region / District dropdown */}
           <div
             id="region-dropdown-wrapper"
@@ -443,37 +487,72 @@ export default function StateDashboardPage() {
             <div
               className={`flex items-center gap-2 w-full px-4 py-2.5 rounded-xl border bg-white text-sm
                           cursor-pointer transition-all duration-150 shadow-sm
-                          ${dropdownOpen
-                  ? "border-blue-400 ring-2 ring-blue-100"
-                  : "border-slate-200 hover:border-blue-300"
-                }`}
+                          ${
+                            dropdownOpen
+                              ? "border-blue-400 ring-2 ring-blue-100"
+                              : "border-slate-200 hover:border-blue-300"
+                          }`}
               onClick={() => setDropdownOpen((o) => !o)}
             >
-              <svg className="text-slate-400 shrink-0" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+              <svg
+                className="text-slate-400 shrink-0"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
               <input
                 type="text"
-                placeholder={selectedFilter ? selectedFilter.label : "Select Region"}
+                placeholder={
+                  selectedFilter ? selectedFilter.label : "Select Region"
+                }
                 value={search}
-                onChange={(e) => { setSearch(e.target.value); setDropdownOpen(true); }}
-                onClick={(e) => { e.stopPropagation(); setDropdownOpen(true); }}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setDropdownOpen(true);
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDropdownOpen(true);
+                }}
                 className="flex-1 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 text-sm min-w-0"
               />
-              {(selectedFilter || search) ? (
+              {selectedFilter || search ? (
                 <button
-                  onClick={(e) => { e.stopPropagation(); setSelectedFilter(null); setSearch(""); setPage(1); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFilter(null);
+                    setSearch("");
+                    setPage(1);
+                  }}
                   className="text-slate-300 hover:text-slate-500 transition-colors shrink-0"
                   aria-label="Clear filter"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
                 </button>
               ) : (
                 <svg
                   className={`text-slate-400 shrink-0 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
-                  width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
                 >
                   <path d="m6 9 6 6 6-6" />
                 </svg>
@@ -485,21 +564,30 @@ export default function StateDashboardPage() {
               <div className="absolute z-[9999] mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden anim-fade">
                 <button
                   className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-50 transition-colors border-b border-slate-100 font-medium"
-                  onClick={(e) => { e.stopPropagation(); setSelectedFilter(null); setSearch(""); setDropdownOpen(false); setPage(1); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFilter(null);
+                    setSearch("");
+                    setDropdownOpen(false);
+                    setPage(1);
+                  }}
                 >
                   All Regions
                 </button>
                 <div className="max-h-60 overflow-y-auto">
                   {filteredOptions.length === 0 ? (
-                    <div className="px-4 py-4 text-sm text-slate-400 text-center">No results found</div>
+                    <div className="px-4 py-4 text-sm text-slate-400 text-center">
+                      No results found
+                    </div>
                   ) : (
                     filteredOptions.map((opt, i) => (
                       <button
                         key={i}
                         className={`w-full text-left px-4 py-2.5 text-sm transition-colors
-                          ${opt.isPrantHeader
-                            ? "font-semibold text-slate-700 hover:bg-blue-50 bg-slate-50/50"
-                            : "font-normal text-slate-600 hover:bg-blue-50 pl-8"
+                          ${
+                            opt.isPrantHeader
+                              ? "font-semibold text-slate-700 hover:bg-blue-50 bg-slate-50/50"
+                              : "font-normal text-slate-600 hover:bg-blue-50 pl-8"
                           }
                           ${selectedFilter?.label === opt.value.label ? "bg-blue-50 text-blue-600" : ""}
                         `}
@@ -511,7 +599,9 @@ export default function StateDashboardPage() {
                           setPage(1);
                         }}
                       >
-                        {!opt.isPrantHeader && <span className="text-slate-300 mr-1.5">└</span>}
+                        {!opt.isPrantHeader && (
+                          <span className="text-slate-300 mr-1.5">└</span>
+                        )}
                         {opt.label}
                       </button>
                     ))
@@ -526,9 +616,23 @@ export default function StateDashboardPage() {
             <div className="flex items-center gap-2 anim-fade w-full sm:w-auto flex-wrap">
               <span className="text-xs text-slate-400">Showing:</span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium">
-                {selectedFilter.type === "district" ? "District" : "Region"}: {selectedFilter.label}
-                <button onClick={() => { setSelectedFilter(null); setPage(1); }} className="hover:text-blue-800 transition-colors">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                {selectedFilter.type === "district" ? "District" : "Region"}:{" "}
+                {selectedFilter.label}
+                <button
+                  onClick={() => {
+                    setSelectedFilter(null);
+                    setPage(1);
+                  }}
+                  className="hover:text-blue-800 transition-colors"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
                 </button>
@@ -543,9 +647,10 @@ export default function StateDashboardPage() {
         </div>
 
         {/* ── Table Card ── */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden anim-up"
-          style={{ animationDelay: "200ms" }}>
-
+        <div
+          className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden anim-up"
+          style={{ animationDelay: "200ms" }}
+        >
           {/* Table card header — title only, no export button here */}
           <div className="px-4 sm:px-5 py-4 border-b border-slate-100">
             <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
@@ -595,10 +700,20 @@ export default function StateDashboardPage() {
                   <tr>
                     <td colSpan={10} className="px-4 py-12 text-center">
                       <div className="flex flex-col items-center gap-2 text-slate-300">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                        <svg
+                          width="36"
+                          height="36"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <path d="m21 21-4.35-4.35" />
                         </svg>
-                        <span className="text-sm font-medium">No records found</span>
+                        <span className="text-sm font-medium">
+                          No records found
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -608,27 +723,42 @@ export default function StateDashboardPage() {
                       key={row.stateid ?? idx}
                       className="border-b border-slate-50 hover:bg-blue-50/30 transition-colors duration-100"
                     >
-                      <td className="px-3 sm:px-4 py-3 text-slate-400 text-xs" data-label="SR. NO.">
+                      <td
+                        className="px-3 sm:px-4 py-3 text-slate-400 text-xs"
+                        data-label="SR. NO."
+                      >
                         {(page - 1) * itemsPerPage + idx + 1}
                       </td>
-                      <td className="px-3 sm:px-4 py-3 text-slate-700 font-semibold whitespace-nowrap" data-label="STATE NAME">
+                      <td
+                        className="px-3 sm:px-4 py-3 text-slate-700 font-semibold whitespace-nowrap"
+                        data-label="STATE NAME"
+                      >
                         {row.state_name}
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS REGISTERED">
+                      <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="SCHOOLS REGISTERED"
+                      >
                         <Link href="/state-dashboard/school/total-school">
                           <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
                             {row.total_school ?? 0}
                           </span>
                         </Link>
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="INDIVIDUAL STUDENTS">
+                      <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="INDIVIDUAL STUDENTS"
+                      >
                         <Link href="/state-dashboard/student/view-indivisual-student">
                           <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
                             {row.individual_student ?? 0}
                           </span>
                         </Link>
                       </td>
-                      <td className="px-3 sm:px-4 py-3" data-label="TOTAL STUDENTS">
+                      <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="TOTAL STUDENTS"
+                      >
                         <Link href="/state-dashboard/student/total-student">
                           <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
                             {row.total_student ?? 0}
@@ -661,10 +791,21 @@ export default function StateDashboardPage() {
               {!loading && paginated.length > 0 && (
                 <tfoot>
                   <tr className="bg-slate-50 font-bold text-slate-700 border-t-2 border-slate-200">
-                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs text-slate-500" colSpan={2}>Total</td>
-                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.schools}</td>
-                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.individual}</td>
-                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">{totals.total}</td>
+                    <td
+                      className="px-2 sm:px-4 py-2 sm:py-3 text-xs text-slate-500"
+                      colSpan={2}
+                    >
+                      Total
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                      {totals.schools}
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                      {totals.individual}
+                    </td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                      {totals.total}
+                    </td>
                     {/* <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Attempted}</td>
                     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td> */}
@@ -676,17 +817,24 @@ export default function StateDashboardPage() {
           </div>
 
           {/* ── Pagination ── */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 
-           px-3 sm:px-5 py-3 sm:py-4">
+          <div
+            className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 
+           px-3 sm:px-5 py-3 sm:py-4"
+          >
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <span>Items per page:</span>
               <select
                 value={itemsPerPage}
-                onChange={(e) => { setItemsPerPage(Number(e.target.value)); setPage(1); }}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setPage(1);
+                }}
                 className="border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
               >
                 {ITEMS_PER_PAGE_OPTIONS.map((n) => (
-                  <option key={n} value={n}>{n}</option>
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
                 ))}
               </select>
             </div>
@@ -703,7 +851,14 @@ export default function StateDashboardPage() {
                 aria-label="Previous page"
                 className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
                   <path d="m15 18-6-6 6-6" />
                 </svg>
               </button>
@@ -713,7 +868,14 @@ export default function StateDashboardPage() {
                 aria-label="Next page"
                 className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </button>

@@ -39,6 +39,24 @@ function extractNameFromStorage(): string {
   }
 }
 
+function extractCountryIdFromStorage(): number | null {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return (
+      parsed?.user?.user_detail?.state?.country_id ??
+      parsed?.user?.country_id ??
+      null
+    );
+  } catch (err) {
+    console.error("extractCountryIdFromStorage error:", err);
+    return null;
+  }
+}
+
+const PAYMENT_ENABLED_COUNTRIES = [2, 3, 6]; // UAE, Oman, Bahrain
+
 function SectionTitle({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2 mt-7 mb-2 ml-0.5">
@@ -83,6 +101,8 @@ export default function StudentDashboardLayout({
     return "Student";
   });
 
+
+  const [countryId, setCountryId] = useState<number | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -106,6 +126,10 @@ export default function StudentDashboardLayout({
     if (token === null) return;
     if (!token) router.replace("/Login");
   }, [token, router]);
+
+  useEffect(() => {
+    setCountryId(extractCountryIdFromStorage());
+  }, []);
 
   // Detect mobile breakpoint
   useEffect(() => {
@@ -374,13 +398,15 @@ export default function StudentDashboardLayout({
 
       <SectionTitle label="exam details" />
       
-      <Link
-        href="/studentDashboard/fee-structure"
-        className={linkClass("/studentDashboard/fee-structure")}
-      >
-        <FaMoneyBillWave className={iconClass("/studentDashboard/fee-structure")} />
-        Fee Structure
-      </Link>
+      {countryId !== null && PAYMENT_ENABLED_COUNTRIES.includes(countryId) && (
+        <Link
+          href="/studentDashboard/fee-structure"
+          className={linkClass("/studentDashboard/fee-structure")}
+        >
+          <FaMoneyBillWave className={iconClass("/studentDashboard/fee-structure")} />
+          Fee Structure
+        </Link>
+      )}
 
       <Link
         href="/studentDashboard/student-awards"
