@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import axiosInstance from "@/services/axiosInstance";
 import { fetchStates, sendEmailOtpDashboard, verifyEmailOtp, completeStudentProfile } from "@/services/authService";
-import { fetchRegionsWithCities } from "@/services/importantDatesService"; 
+import { fetchRegionsWithCities } from "@/services/importantDatesService";
 
 interface FormData {
   name: string;
@@ -348,8 +348,8 @@ const GRADE_MAP: Record<string, number> = {
 /* ─── main component ─── */
 
 export default function EditProfile() {
-  const { register, handleSubmit, watch, reset, setValue, control, formState: { errors } } = useForm<FormData>();  const [states, setStates] = useState<any[]>([]);
-   const [regions, setRegions] = useState<any[]>([]);
+  const { register, handleSubmit, watch, reset, setValue, control, formState: { errors } } = useForm<FormData>(); const [states, setStates] = useState<any[]>([]);
+  const [regions, setRegions] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [verifyParentMobileOtp, setVerifyParentMobileOtp] = useState("");
   const [verifyParentEmailOtp, setVerifyParentEmailOtp] = useState("");
@@ -359,7 +359,7 @@ export default function EditProfile() {
   const [verifyLoading, setVerifyLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [otpErrors, setOtpErrors] = useState<Partial<Record<OtpTarget, string>>>({});
   const [countryName, setCountryName] = useState("");
-  
+
   const [dialog, setDialog] = useState<DialogState>({ open: false, type: "success", message: "", });
   const genderOptions = useMemo(() => [
     { label: "Male", value: "1" },
@@ -392,18 +392,69 @@ export default function EditProfile() {
   ], []);
   const [countryId, setCountryId] = useState<string>("");
 
-  /* ✅ Optional upgrade: centralised helper — shows dialog and auto-closes after 2.5s */
+
   const showDialog = useCallback((type: "success" | "error", message: string) => {
     setDialog({ open: true, type, message });
-    const timer = setTimeout(
-      () => setDialog((prev) => ({ ...prev, open: false })),
-      2500
-    );
-    return () => clearTimeout(timer);
+
+    if (type === "success") {
+      const timer = setTimeout(
+        () => setDialog((prev) => ({ ...prev, open: false })),
+        2500
+      );
+      return () => clearTimeout(timer);
+    }
+    // error dialogs auto-close nahi honge — sirf OK button click pe band honge
   }, []);
+
+
+  /* ✅ Optional upgrade: centralised helper — shows dialog and auto-closes after 2.5s */
+  // const showDialog = useCallback((type: "success" | "error", message: string) => {
+  //   setDialog({ open: true, type, message });
+  //   const timer = setTimeout(
+  //     () => setDialog((prev) => ({ ...prev, open: false })),
+  //     2500
+  //   );
+  //   return () => clearTimeout(timer);
+  // }, []);
+
   useEffect(() => {
     fetchStates().then(setStates);
   }, []);
+
+  // useEffect(() => {
+  //   if (!countryId) return;
+
+  //   const alpha3Code = COUNTRY_ID_TO_ALPHA3[countryId];
+  //   if (!alpha3Code) return;
+
+  //   fetchRegionsWithCities(alpha3Code)
+  //     .then((res: any) => {
+  //       console.log("RAW regions response:", JSON.stringify(res?.data, null, 2));
+  //       const regionList = res?.data || [];
+  //       setRegions(regionList);
+
+  //       // Try to match the stored district/region name against the new list
+  //       // (old district_id won't match new region IDs, so match by name instead)
+  //       const raw = localStorage.getItem("user");
+  //       const user = raw ? JSON.parse(raw) : null;
+  //       const d = user?.user_detail || user?.user?.user_detail || user?.data?.user_detail;
+  //       const storedDistrictName = d?.district?.name;
+
+  //       const matchedRegion = storedDistrictName
+  //         ? regionList.find(
+  //           (r: any) => r.name?.toLowerCase() === storedDistrictName.toLowerCase()
+  //         )
+  //         : null;
+
+  //       if (matchedRegion) {
+  //         setValue("region", String(matchedRegion.district_id));
+  //         setCities(matchedRegion.cities || []);
+  //       }
+
+
+  //     })
+  //     .catch(() => setRegions([]));
+  // }, [countryId, setValue]);
 
   useEffect(() => {
     if (!countryId) return;
@@ -413,16 +464,14 @@ export default function EditProfile() {
 
     fetchRegionsWithCities(alpha3Code)
       .then((res: any) => {
-        console.log("RAW regions response:", JSON.stringify(res?.data, null, 2));
         const regionList = res?.data || [];
         setRegions(regionList);
 
-        // Try to match the stored district/region name against the new list
-        // (old district_id won't match new region IDs, so match by name instead)
         const raw = localStorage.getItem("user");
         const user = raw ? JSON.parse(raw) : null;
         const d = user?.user_detail || user?.user?.user_detail || user?.data?.user_detail;
         const storedDistrictName = d?.district?.name;
+        const storedSubDistrictName = d?.sub_district?.name; // NEW
 
         const matchedRegion = storedDistrictName
           ? regionList.find(
@@ -432,10 +481,19 @@ export default function EditProfile() {
 
         if (matchedRegion) {
           setValue("region", String(matchedRegion.district_id));
-          setCities(matchedRegion.cities || []);
+          const cityList = matchedRegion.cities || [];
+          setCities(cityList);
+
+          // NEW — sub_district ko city dropdown me match karo
+          if (storedSubDistrictName) {
+            const matchedCity = cityList.find(
+              (c: any) => c.name?.toLowerCase() === storedSubDistrictName.toLowerCase()
+            );
+            if (matchedCity) {
+              setValue("city", String(matchedCity.id));
+            }
+          }
         }
-
-
       })
       .catch(() => setRegions([]));
   }, [countryId, setValue]);
@@ -572,7 +630,7 @@ export default function EditProfile() {
     }
   }, [watch, showDialog]);
 
-  
+
   const handleVerifyOtp = useCallback(async (target: OtpTarget) => {
     setOtpErrors((prev) => ({ ...prev, [target]: "" }));
     setVerifyLoading((prev) => ({ ...prev, [target]: true }));
@@ -591,7 +649,7 @@ export default function EditProfile() {
       setVerifyLoading((prev) => ({ ...prev, [target]: false }));
     }
   }, [verifyParentEmailOtp, watch, showDialog]);
-  
+
   const onSubmit = useCallback(async (data: FormData) => {
     console.log("🟢 onSubmit FIRED with data:", data);
     try {
@@ -633,13 +691,13 @@ export default function EditProfile() {
         sch_name: data.schoolName || "",
         school_id: d.school_id || "",               // preserved, can be empty
 
-            // ── Address ─────────────────────────────────────────────
+        // ── Address ─────────────────────────────────────────────
         address: data.address || d.address || "",
         dist_id: data.region ? Number(data.region) : "",
         city_id: data.city ? Number(data.city) : "",
         pincode: data.pinCode || d.pincode || d.pin_code || "",
-        state_id: d.state_id ? Number(d.state_id) : (d.state?.id ? Number(d.state.id) : ""), 
-        
+        state_id: d.state_id ? Number(d.state_id) : (d.state?.id ? Number(d.state.id) : ""),
+
         // ── VVM ─────────────────────────────────────────────────
         exam_lang_id: data.examLanguage ? Number(data.examLanguage) : 14,
         know_about_vvm_id: data.howDidYouGetToKnowAboutVVM
@@ -669,7 +727,7 @@ export default function EditProfile() {
           parent_phone_number: data.parentMobile,
           parent_email: data.parentEmail,
 
-      
+
           parent_email_verified: parentEmailVerified ? 1 : 0,
 
           student_mobile_number: data.studentMobile,
@@ -695,6 +753,7 @@ export default function EditProfile() {
         }
 
         localStorage.setItem("user", JSON.stringify(user));
+        window.dispatchEvent(new Event("user-updated"));
       }
 
       showDialog("success", "Profile updated successfully.");
@@ -773,7 +832,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
+            {/* <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
               <VvmTextInput
                 placeholder="Student mobile number"
                 {...register("studentMobile", {
@@ -786,8 +845,23 @@ export default function EditProfile() {
                 })}
                 onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
               />
-            </VvmInput>
+            </VvmInput> */}
 
+            <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
+              <VvmTextInput
+                placeholder="Student mobile number"
+                maxLength={10}
+                {...register("studentMobile", {
+                  validate: (value) => {
+                    if (!value) return true;
+                    if (!/^\d+$/.test(value)) return "Only digits allowed";
+                    if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
+                    return true;
+                  }
+                })}
+                onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
+              />
+            </VvmInput>
             <VvmInput label="Student Email" error={errors.studentEmail?.message}>
               <VvmTextInput
                 type="email"
@@ -803,83 +877,34 @@ export default function EditProfile() {
             {/* ── Parent / Contact ── */}
             <div className="vvm-section-label">Parent / Contact Details</div>
 
-            {/* <VvmInput label="Parent Mobile No." required>
-              <div className="vvm-otp-row">
-                <VvmTextInput placeholder="Enter mobile number" {...register("parentMobile")} />
-                <button
-                  type="button"
-                  className="vvm-btn vvm-btn--success"
-                  onClick={() => handleSendOtp("parentMobile")}
-                  disabled={otpLoading.parentMobile || parentMobileVerified}
-                >
-                  {otpLoading.parentMobile ? "Sending…" : "Send OTP"}
-                </button>
-              </div>
-              {parentMobileVerified ? (
-                <p className="vvm-status vvm-status--ok">✓ Mobile Verified</p>
-              ) : (
-                <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
-              )}
-            </VvmInput> */}
-            <VvmInput label="Parent Mobile No." required error={errors.parentMobile?.message}>
-              <div className="vvm-otp-row">
-                <VvmTextInput
-                  {...register("parentMobile", {
-                    required: "Parent mobile number is required",
-                    validate: (value) => {
-                      if (!/^\d+$/.test(value)) return "Only digits allowed";
-                      if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
-                      return true;
-                    }
-                  })}
-                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
-                />
-                {/* <button
-                  type="button"
-                  className="vvm-btn vvm-btn--success"
-                  onClick={() => handleSendOtp("parentMobile")}
-                  disabled={otpLoading.parentMobile || parentMobileVerified}
-                >
-                  {otpLoading.parentMobile ? "Sending…" : "Send OTP"}
-                </button> */}
-              </div>
-              {/* {parentMobileVerified ? (
-                <p className="vvm-status vvm-status--ok">✓ Mobile Verified</p>
-              ) : (
-                <p className="vvm-status vvm-status--err">Mobile Number Not Verified</p>
-              )} */}
+
+            <VvmInput label="Parent Salutation" required>
+              <VvmSelect
+                value={watch("parentSalutation") || ""}
+                onChange={(e) => setValue("parentSalutation", e.target.value)}
+                options={[
+                  { label: "Mr.", value: "Mr" },
+                  { label: "Mrs.", value: "Mrs" },
+                  { label: "Dr.", value: "Dr" },
+                ]}
+              />
             </VvmInput>
-            {/* <VvmInput label=" " error={otpErrors.parentMobile}>
-              <></>
-            </VvmInput> */}
-            {/* <VvmInput label="Verify Mobile No." error={otpErrors.parentMobile}>
-              <div className="vvm-otp-row">
-                <VvmTextInput
-                  placeholder="Enter 6-digit OTP"
-                  maxLength={6}
-                  value={verifyParentMobileOtp}
-                  onChange={(e) => setVerifyParentMobileOtp(e.target.value)}
-                  onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
-                  disabled={!parentMobileOtpSent || parentMobileVerified}
-                />
-                <button
-                  type="button"
-                  className="vvm-btn vvm-btn--success"
-                  onClick={() => handleVerifyOtp("parentMobile")}
-                  disabled={
-                    !parentMobileOtpSent ||
-                    verifyLoading.parentMobile ||
-                    parentMobileVerified ||
-                    verifyParentMobileOtp.length < 6
-                  }
-                >
-                  {verifyLoading.parentMobile ? "Verifying…" : "Verify OTP"}
-                </button>
-              </div>
-              {!parentMobileOtpSent && !parentMobileVerified && (
-                <p className="vvm-status vvm-status--warn">OTP required or Not Verified</p>
-              )}
-            </VvmInput> */}
+
+            <VvmInput label="Parent / Guardian Full Name" error={errors.parentName?.message}>
+              <VvmTextInput placeholder="Enter parent name"
+                onKeyPress={(e) => { if (!/[a-zA-Z\s.'-]/.test(e.key)) e.preventDefault(); }}
+                {...register("parentName", {
+                  required: "Parent name is required",
+                  pattern: {
+                    value: /^[a-zA-Z\s.'-]+$/,
+                    message: "Name can only contain letters, spaces, dots, hyphens"
+                  },
+                  minLength: { value: 2, message: "Minimum 2 characters" }
+                })} />
+            </VvmInput>
+
+
+
 
             <VvmInput label="Parent Email" error={errors.parentEmail?.message}>
               <div className="vvm-otp-row">
@@ -942,29 +967,20 @@ export default function EditProfile() {
               )}
             </VvmInput>
 
-            <VvmInput label="Parent Salutation" required>
-              <VvmSelect
-                value={watch("parentSalutation") || ""}
-                onChange={(e) => setValue("parentSalutation", e.target.value)}
-                options={[
-                  { label: "Mr.", value: "Mr" },
-                  { label: "Mrs.", value: "Mrs" },
-                  { label: "Dr.", value: "Dr" },
-                ]}
-              />
-            </VvmInput>
 
-            <VvmInput label="Parent / Guardian Full Name" error={errors.parentName?.message}>
-              <VvmTextInput placeholder="Enter parent name"
-                onKeyPress={(e) => { if (!/[a-zA-Z\s.'-]/.test(e.key)) e.preventDefault(); }}
-                {...register("parentName", {
-                  required: "Parent name is required",
-                  pattern: {
-                    value: /^[a-zA-Z\s.'-]+$/,
-                    message: "Name can only contain letters, spaces, dots, hyphens"
-                  },
-                  minLength: { value: 2, message: "Minimum 2 characters" }
-                })} />
+            <VvmInput label="Parent Mobile No." required error={errors.parentMobile?.message}>
+              <VvmTextInput
+                maxLength={10}
+                {...register("parentMobile", {
+                  required: "Parent mobile number is required",
+                  validate: (value) => {
+                    if (!/^\d+$/.test(value)) return "Only digits allowed";
+                    if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
+                    return true;
+                  }
+                })}
+                onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
+              />
             </VvmInput>
 
 
@@ -979,15 +995,16 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="School Name" required error={errors.schoolName?.message}>              <VvmTextInput placeholder="Enter school name"{...register("schoolName", {
-              required: "School name is required",
-              minLength: { value: 3, message: "Minimum 3 characters" },
-              pattern: {
-                value: /^[a-zA-Z0-9\s.,'()&-]+$/,
-                message: "School name contains invalid characters"
-              }
-            })}
-            />
+            <VvmInput label="School Name" required error={errors.schoolName?.message}>
+              <VvmTextInput placeholder="Enter school name"{...register("schoolName", {
+                required: "School name is required",
+                minLength: { value: 3, message: "Minimum 3 characters" },
+                pattern: {
+                  value: /^[a-zA-Z0-9\s.,'()&-]+$/,
+                  message: "School name contains invalid characters"
+                }
+              })}
+              />
             </VvmInput>
 
             <VvmInput label="School Board" required error={errors.schoolBoard?.message}>
@@ -1102,7 +1119,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            
+
             {/* <VvmInput label="Pin Code" required error={errors.pinCode?.message}>
               <VvmTextInput
                 placeholder="Enter Pin Code"
