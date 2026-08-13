@@ -260,9 +260,15 @@ export default function QatarForm({ countries = [] }: Props) {
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+  // const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  // const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+  // const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
+
+  const [allSchools, setAllSchools] = useState<{ value: string; label: string; region_code: string }[]>([]);
   const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
-  const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+  const [regions, setRegions] = useState<{ value: string; label: string; code: string; cities?: any[] }[]>([]);
   const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
+
   // useEffect(() => {
   //   fetchDistricts("42").then((data) => {
   //     setDistricts(data.map((d: any) => ({ value: String(d.id), label: d.name })));
@@ -271,9 +277,16 @@ export default function QatarForm({ countries = [] }: Props) {
 
   useEffect(() => {
     fetchRegionsWithCities("QA").then((res: any) => {
+      // const formatted = res?.data?.map((region: any) => ({
+      //   value: String(region.id),
+      //   label: region.name,
+      //   cities: region.cities || [],
+      // })) || [];
+
       const formatted = res?.data?.map((region: any) => ({
         value: String(region.id),
         label: region.name,
+        code: region.code,
         cities: region.cities || [],
       })) || [];
       setRegions(formatted);
@@ -293,15 +306,24 @@ export default function QatarForm({ countries = [] }: Props) {
         const res = await getSchools(1, 500, undefined, "QA");
         console.log("Schools API:", res);
         // ✅ CORRECT — res.data.data (double nested)
+        // const formattedSchools =
+        //   res?.data?.data?.map((school: any) => ({
+        //     value: String(school.id),
+        //     label: school.school_name,
+        //   })) || [];
+
+        // console.log("Formatted Schools:", formattedSchools);
+
+        // setSchools(formattedSchools);
+
         const formattedSchools =
           res?.data?.data?.map((school: any) => ({
             value: String(school.id),
             label: school.school_name,
+            region_code: school.region_code,
           })) || [];
 
-        console.log("Formatted Schools:", formattedSchools);
-
-        setSchools(formattedSchools);
+        setAllSchools(formattedSchools);
 
       } catch (err) {
         console.error("School fetch failed", err);
@@ -467,6 +489,15 @@ export default function QatarForm({ countries = [] }: Props) {
       setLoading(false);
     }
   };
+  // const handleRegionChange = (regionId: string) => {
+  //   const selected = regions.find((r) => r.value === regionId);
+  //   const formattedCities = selected?.cities?.map((c: any) => ({
+  //     value: String(c.id),
+  //     label: c.name,
+  //   })) || [];
+  //   setCities(formattedCities);
+  // };
+
   const handleRegionChange = (regionId: string) => {
     const selected = regions.find((r) => r.value === regionId);
     const formattedCities = selected?.cities?.map((c: any) => ({
@@ -474,6 +505,11 @@ export default function QatarForm({ countries = [] }: Props) {
       label: c.name,
     })) || [];
     setCities(formattedCities);
+
+    const filteredSchools = selected
+      ? allSchools.filter((s) => s.region_code === selected.code)
+      : [];
+    setSchools(filteredSchools);
   };
 
   return (
@@ -549,23 +585,7 @@ export default function QatarForm({ countries = [] }: Props) {
 
           {/* School Details */}
           <Section title="School Details">
-            <SelectField
-              label="School Name"
-              required
-              options={schools}
-              registration={register("schoolName", {
-                required: "School Name is required",
-              })}
-              error={
-                touchedFields?.schoolName && errors?.schoolName
-                  ? errors.schoolName
-                  : undefined
-              }
-            />
-            <SelectField label="Board" required options={boards}
-              registration={register("board", { required: "Board is required" })}
-              error={touchedFields?.board && errors?.board ? errors.board : undefined}
-            />
+
             <InputField label="Country" disabled
               value={countries.find((c) => c.value === "qatar")?.label || "Qatar"}
 
@@ -589,6 +609,24 @@ export default function QatarForm({ countries = [] }: Props) {
               registration={register("city", { required: "City is required" })}
               error={touchedFields?.city && errors?.city ? errors.city : undefined}
             />
+            <SelectField
+              label="School Name"
+              required
+              options={schools}
+              registration={register("schoolName", {
+                required: "School Name is required",
+              })}
+              error={
+                touchedFields?.schoolName && errors?.schoolName
+                  ? errors.schoolName
+                  : undefined
+              }
+            />
+            <SelectField label="Board" required options={boards}
+              registration={register("board", { required: "Board is required" })}
+              error={touchedFields?.board && errors?.board ? errors.board : undefined}
+            />
+            
             <div className="md:col-span-2">
               <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
                 registration={register("schoolAddress", { required: "School Address is required" })}

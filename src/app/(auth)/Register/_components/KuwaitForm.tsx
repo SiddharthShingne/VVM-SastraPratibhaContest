@@ -278,22 +278,22 @@ export default function KuwaitForm({ countries }: Props) {
     }, []);
 
     // ✅ Add this block after the districts useEffect
-    useEffect(() => {
-        const loadSchools = async () => {
-            try {
-                const res = await getSchools(1, 500, undefined, "KW");
-                const formattedSchools =
-                    res?.data?.data?.map((school: any) => ({
-                        value: String(school.id),
-                        label: school.school_name,
-                    })) || [];
-                setSchools(formattedSchools);
-            } catch (err) {
-                console.error("School fetch failed", err);
-            }
-        };
-        loadSchools();
-    }, []);
+    // useEffect(() => {
+    //     const loadSchools = async () => {
+    //         try {
+    //             const res = await getSchools(1, 500, undefined, "KW");
+    //             const formattedSchools =
+    //                 res?.data?.data?.map((school: any) => ({
+    //                     value: String(school.id),
+    //                     label: school.school_name,
+    //                 })) || [];
+    //             setSchools(formattedSchools);
+    //         } catch (err) {
+    //             console.error("School fetch failed", err);
+    //         }
+    //     };
+    //     loadSchools();
+    // }, []);
 
     // Cooldown
     const [cooldown, setCooldown] = useState(0);
@@ -323,9 +323,15 @@ export default function KuwaitForm({ countries }: Props) {
 
     useEffect(() => {
         fetchRegionsWithCities("KW").then((res: any) => {  // ← change "QA" per form
+            // const formatted = res?.data?.map((region: any) => ({
+            //     value: String(region.id),
+            //     label: region.name,
+            //     cities: region.cities || [],
+            // })) || [];
             const formatted = res?.data?.map((region: any) => ({
                 value: String(region.id),
                 label: region.name,
+                code: region.code,
                 cities: region.cities || [],
             })) || [];
             setRegions(formatted);
@@ -604,20 +610,7 @@ export default function KuwaitForm({ countries }: Props) {
 
                     {/* School Details */}
                     <Section title="School Details">
-                        <SelectField
-                            label="School Name"
-                            required
-                            options={schools}
-                            registration={register("schoolName", { required: "School Name is required" })}
-                            error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
-                        />
-                        <SelectField label="Board" required options={boards}
-                            registration={register("board", { required: "Board is required" })}
-                            error={touchedFields?.board && errors?.board ? errors.board : undefined}
-                        />
-                        {/* <InputField label="Country" disabled
-                            value={countries.find((c) => c.value === "oman")?.label || ""}
-                        /> */}
+
 
                         <InputField
                             label="Country"
@@ -644,6 +637,22 @@ export default function KuwaitForm({ countries }: Props) {
                             registration={register("city", { required: "City is required" })}
                             error={touchedFields?.city && errors?.city ? errors.city : undefined}
                         />
+
+                        <SelectField
+                            label="School Name"
+                            required
+                            options={schools}
+                            registration={register("schoolName", { required: "School Name is required" })}
+                            error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
+                        />
+                        <SelectField label="Board" required options={boards}
+                            registration={register("board", { required: "Board is required" })}
+                            error={touchedFields?.board && errors?.board ? errors.board : undefined}
+                        />
+                        {/* <InputField label="Country" disabled
+                            value={countries.find((c) => c.value === "oman")?.label || ""}
+                        /> */}
+
                         <div className="md:col-span-2">
                             <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
                                 registration={register("schoolAddress", { required: "School Address is required" })}

@@ -40,18 +40,18 @@ const feeStructureData: Record<
     ],
   },
 
-  QAT: {
-    title: "Qatar Fee Structure",
-    items: [
-      {
-        text: "Registration fee for students studying in Qatar: QAR XX.",
-        note: "Applicable only for Qatar students.",
-      },
-      {
-        text: "Payment should be made through the approved Qatar VVM payment process.",
-      },
-    ],
-  },
+  // QAT: {
+  //   title: "Qatar Fee Structure",
+  //   items: [
+  //     {
+  //       text: "Registration fee for students studying in Qatar: QAR XX.",
+  //       note: "Applicable only for Qatar students.",
+  //     },
+  //     {
+  //       text: "Payment should be made through the approved Qatar VVM payment process.",
+  //     },
+  //   ],
+  // },
 
   // SAU: {
   //   title: "Saudi Arabia Fee Structure",
