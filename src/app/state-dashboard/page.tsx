@@ -21,12 +21,22 @@ interface Assignment {
   coordinatable_name: string;
 }
 
+// interface StoredUser {
+//   user?: {
+//     user_detail?: {
+//       assignments?: Assignment[];
+//     };
+//     country_id?: number;
+//   };
+// }
+
 interface StoredUser {
   user?: {
     user_detail?: {
       assignments?: Assignment[];
     };
     country_id?: number;
+    country_code?: string;
   };
 }
 
@@ -83,6 +93,18 @@ function getStateIdFromStorage(): number | null {
   }
 }
 
+
+function getCountryCodeFromStorage(): string {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return "";
+    const parsed: StoredUser = JSON.parse(raw);
+    return (parsed?.user as any)?.country_code ?? "";
+  } catch {
+    return "";
+  }
+}
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function Badge({ value }: { value: number }) {
   return (
@@ -112,11 +134,20 @@ function ExportBtn({ onClick }: { onClick: () => void }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function StateDashboardPage() {
+  // const [stateId, setStateId] = useState<number | null>(null);
+
+  // useEffect(() => {
+  //   const id = getStateIdFromStorage();
+  //   setStateId(id);
+  // }, []);
+
   const [stateId, setStateId] = useState<number | null>(null);
+  const [countryCode, setCountryCode] = useState<string>("");
 
   useEffect(() => {
     const id = getStateIdFromStorage();
     setStateId(id);
+    setCountryCode(getCountryCodeFromStorage());
   }, []);
 
   const [prants, setPrants] = useState<Prant[]>([]);
@@ -324,6 +355,10 @@ export default function StateDashboardPage() {
     }
   };
 
+  const studentDetailHref = countryCode === "AE"
+    ? "/state-dashboard/student/total-student"
+    : "/state-dashboard/student/new-student-registrations";
+
 
   const upgradedMatch = summary?.upgrade_summary?.match(/(\d+)\s*\(Upgraded\)/);
   const nonUpgradedMatch = summary?.upgrade_summary?.match(
@@ -339,7 +374,7 @@ export default function StateDashboardPage() {
       value: (summary?.total_student ?? 0).toLocaleString(),
       icon: <FaUserGraduate size={20} />,
       iconBg: "bg-emerald-50 text-emerald-500",
-      href: "/state-dashboard/student/total-student",
+      href: studentDetailHref,
     },
     {
       label: "School Count",
@@ -749,7 +784,13 @@ export default function StateDashboardPage() {
                         className="px-3 sm:px-4 py-3"
                         data-label="INDIVIDUAL STUDENTS"
                       >
-                        <Link href="/state-dashboard/student/view-indivisual-student">
+                        <Link
+                          href={
+                            countryCode === "AE"
+                              ? "/state-dashboard/student/view-indivisual-student"
+                              : "/state-dashboard/student/new-student-registrations"
+                          }
+                        >
                           <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
                             {row.individual_student ?? 0}
                           </span>
@@ -759,7 +800,7 @@ export default function StateDashboardPage() {
                         className="px-3 sm:px-4 py-3"
                         data-label="TOTAL STUDENTS"
                       >
-                        <Link href="/state-dashboard/student/total-student">
+                        <Link href={studentDetailHref}>
                           <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
                             {row.total_student ?? 0}
                           </span>

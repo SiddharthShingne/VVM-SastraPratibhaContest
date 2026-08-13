@@ -10,6 +10,8 @@ import { FaEdit } from "react-icons/fa";
 import { createPortal } from "react-dom";
 import axiosInstance from "@/services/axiosInstance";
 import { fetchSchoolsByRegion, fetchRegionsWithCities, addGccStudent } from "@/services/importantDatesService";
+import { AddStudentButton } from "@/components/shared/AddStudent";
+import { exportStudents } from "@/services/importantDatesService";
 // ─── Types ────────────────────────────────────────────────────────────────────
 const COUNTRY_NAME_MAP: Record<string, string> = {
     SA: "Saudi Arabia", AE: "UAE", OM: "Oman",
@@ -106,6 +108,7 @@ const CLASS_MAP: Record<number, string> = {
     5: "Grade 10",
     6: "Grade 11",
 };
+
 
 // ─── Date formatter ───────────────────────────────────────────────────────────
 const formatDate = (dateStr: string | null | undefined) => {
@@ -262,6 +265,66 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
     };
 
     const CLASS_MAP_LOCAL: Record<number, string> = { 1: " 6", 2: " 7", 3: " 8", 4: " 9", 5: " 10", 6: " 11" };
+
+
+    function DateRangePicker({
+        startDate,
+        endDate,
+        onStartChange,
+        onEndChange,
+    }: {
+        startDate: string;
+        endDate: string;
+        onStartChange: (v: string) => void;
+        onEndChange: (v: string) => void;
+    }) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    border: "1px solid #d1d5db",
+                    borderRadius: 10,
+                    padding: "10px 14px",
+                    background: "#f9fafb",
+                }}
+            >
+                <span style={{ fontSize: 13, color: "#9ca3af" }}>📅</span>
+                <input
+                    type="date"
+                    value={startDate}
+                    min={MIN_DATE}
+                    max={endDate || TODAY}
+                    onChange={(e) => onStartChange(e.target.value)}
+                    style={{
+                        border: "none",
+                        background: "transparent",
+                        outline: "none",
+                        fontSize: 13,
+                        color: startDate ? "#111827" : "#9ca3af",
+                        cursor: "pointer",
+                    }}
+                />
+                <span style={{ color: "#d1d5db" }}>—</span>
+                <input
+                    type="date"
+                    value={endDate}
+                    min={startDate || MIN_DATE}
+                    max={TODAY}
+                    onChange={(e) => onEndChange(e.target.value)}
+                    style={{
+                        border: "none",
+                        background: "transparent",
+                        outline: "none",
+                        fontSize: 13,
+                        color: endDate ? "#111827" : "#9ca3af",
+                        cursor: "pointer",
+                    }}
+                />
+            </div>
+        );
+    }
 
     const handleSubmit = async () => {
         let finalCountryCode = countryCode;
@@ -484,6 +547,51 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
     );
 }
 
+function ExportDateRangePicker({
+    startDate,
+    endDate,
+    onStartChange,
+    onEndChange,
+}: {
+    startDate: string;
+    endDate: string;
+    onStartChange: (v: string) => void;
+    onEndChange: (v: string) => void;
+}) {
+    return (
+        <div
+            style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                border: "1px solid #d1d5db",
+                borderRadius: 10,
+                padding: "10px 14px",
+                background: "#f9fafb",
+            }}
+        >
+            <span style={{ fontSize: 13, color: "#9ca3af" }}>📅</span>
+            <input
+                type="date"
+                value={startDate}
+                min={MIN_DATE}
+                max={endDate || TODAY}
+                onChange={(e) => onStartChange(e.target.value)}
+                style={{ border: "none", background: "transparent", outline: "none", fontSize: 13, color: startDate ? "#111827" : "#9ca3af", cursor: "pointer" }}
+            />
+            <span style={{ color: "#d1d5db" }}>—</span>
+            <input
+                type="date"
+                value={endDate}
+                min={startDate || MIN_DATE}
+                max={TODAY}
+                onChange={(e) => onEndChange(e.target.value)}
+                style={{ border: "none", background: "transparent", outline: "none", fontSize: 13, color: endDate ? "#111827" : "#9ca3af", cursor: "pointer" }}
+            />
+        </div>
+    );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function NewRegistrationsPage() {
     const [students, setStudents] = useState<Student[]>([]);
@@ -494,11 +602,57 @@ export default function NewRegistrationsPage() {
     const [perPage, setPerPage] = useState(10);
     const [totalRecords, setTotalRecords] = useState(0);
     const [editStudent, setEditStudent] = useState<Student | null>(null);
-    const [dialog, setDialog] = useState<"edit" | null>(null);
+    // const [dialog, setDialog] = useState<"edit" | null>(null);
+    const [exportStartDate, setExportStartDate] = useState("");
+    const [exportEndDate, setExportEndDate] = useState("");
+    const [exportLoading, setExportLoading] = useState(false);
+
+
+    type DialogState =
+        | "edit"
+        | { type: "export" }
+        | { type: "success"; message: string; title?: string }
+        | { type: "error"; message: string }
+        | null;
+
+    const [dialog, setDialog] = useState<DialogState>(null);
 
     const handleEdit = (student: Student) => {
         setEditStudent(student);
         setDialog("edit");
+    };
+
+    const handleExportSubmit = async () => {
+        if (!exportStartDate || !exportEndDate) return;
+        setExportLoading(true);
+        try {
+            const raw = localStorage.getItem("user");
+            const parsed = raw ? JSON.parse(raw) : null;
+            const assignments = parsed?.user?.user_detail?.assignments || [];
+            const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+            const stateId = stateAssignment?.coordinatable_id;
+            const prantId = stateAssignment?.extras?.prant_id;
+            const userEmail = parsed?.user?.user_detail?.email || "";
+
+            await exportStudents({
+                zone_id: [],
+                state_id: stateId ? [stateId] : [],
+                prant_id: prantId ? [prantId] : [],
+                district_id: [],
+                class_id: [],
+                school_id: [],
+                school_student: true,
+                email: userEmail,
+                created_at_from: exportStartDate,
+                created_at_to: exportEndDate,
+            });
+
+            setDialog({ type: "success", title: "Export Successful", message: "Export started! You will receive an email once completed." });
+        } catch (err: any) {
+            setDialog({ type: "error", message: err?.message || "Export failed. Please try again." });
+        } finally {
+            setExportLoading(false);
+        }
     };
 
     function ModalWrapper({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
@@ -693,10 +847,23 @@ export default function NewRegistrationsPage() {
                             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
                             style={s.searchInput}
                         />
+                        
                     </div>
 
                     {/* Legend */}
+                    {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <AddStudentButton onSuccess={fetchStudents} />
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}> */}
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <AddStudentButton onSuccess={fetchStudents} />
+                        <button
+                            onClick={() => setDialog({ type: "export" })}
+                            style={{ padding: "10px 22px", borderRadius: 10, border: "none", background: "#3B82F6", color: "#fff", fontWeight: 600, fontSize: 13, cursor: "pointer" }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "#2563EB")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "#3B82F6")}
+                        >
+                            Export
+                        </button>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             <div style={{ width: 14, height: 14, background: "#bbf7d0", borderRadius: 3 }} />
                             <span style={{ fontSize: 12, color: "#374151" }}>Paid</span>
@@ -838,12 +1005,99 @@ export default function NewRegistrationsPage() {
                     >›</button>
                 </div>
             </div>
+            
+       
+
+
             {dialog === "edit" && (
                 <ModalWrapper onClose={() => { setDialog(null); setEditStudent(null); fetchStudents(); }}>
                     <AddStudentDialog
                         onClose={() => { setDialog(null); setEditStudent(null); fetchStudents(); }}
                         editData={editStudent}
                     />
+                </ModalWrapper>
+            )}
+
+            {dialog !== null && typeof dialog === "object" && dialog.type === "export" && (
+                <ModalWrapper onClose={() => setDialog(null)}>
+                    <Modal onClose={() => setDialog(null)} width={500}>
+                        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#111827", marginBottom: 8 }}>
+                            Export Student
+                        </h2>
+                        <p style={{ fontSize: 13, color: "#6b7280", textAlign: "center", marginBottom: 20 }}>
+                            Please select start date and end date for export
+                        </p>
+
+                        <ExportDateRangePicker
+                            startDate={exportStartDate}
+                            endDate={exportEndDate}
+                            onStartChange={setExportStartDate}
+                            onEndChange={setExportEndDate}
+                        />
+
+                        <p style={{ fontSize: 12, color: "#6b7280", textAlign: "center", marginTop: 16, marginBottom: 28 }}>
+                            Exported File will be sent to this Email:{" "}
+                            <strong style={{ color: "#111827" }}>
+                                {(() => {
+                                    try {
+                                        const parsed = JSON.parse(localStorage.getItem("user") || "{}");
+                                        return parsed?.user?.user_detail?.email || " ";
+                                    } catch { return " "; }
+                                })()}
+                            </strong>
+                        </p>
+
+                        <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+                            <button onClick={() => setDialog(null)} style={{ padding: "10px 28px", border: "1px solid #d1d5db", borderRadius: 8, background: "#fff", color: "#374151", fontSize: 14, cursor: "pointer" }}>
+                                Discard
+                            </button>
+                            <button
+                                onClick={handleExportSubmit}
+                                disabled={exportLoading || !exportStartDate || !exportEndDate}
+                                style={{
+                                    padding: "10px 28px", border: "none", borderRadius: 8,
+                                    background: exportLoading || !exportStartDate || !exportEndDate ? "#93c5fd" : "#3b82f6",
+                                    color: "#fff", fontSize: 14,
+                                    cursor: exportLoading || !exportStartDate || !exportEndDate ? "not-allowed" : "pointer",
+                                    fontWeight: 600,
+                                }}
+                            >
+                                {exportLoading ? "Submitting..." : "Submit"}
+                            </button>
+                        </div>
+                    </Modal>
+                </ModalWrapper>
+            )}
+
+            {dialog !== null && typeof dialog === "object" && dialog.type === "success" && (
+                <ModalWrapper onClose={() => setDialog(null)}>
+                    <Modal onClose={() => setDialog(null)} width={380}>
+                        <div style={{ textAlign: "center", padding: "12px 0" }}>
+                            <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
+                            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#15803d", marginBottom: 8 }}>
+                                {dialog.title || "Export Successful"}
+                            </h3>
+                            <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 24 }}>{dialog.message}</p>
+                            <button onClick={() => setDialog(null)} style={{ padding: "10px 32px", border: "none", borderRadius: 8, background: "#15803d", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+                                OK
+                            </button>
+                        </div>
+                    </Modal>
+                </ModalWrapper>
+            )}
+
+            {dialog !== null && typeof dialog === "object" && dialog.type === "error" && (
+                <ModalWrapper onClose={() => setDialog(null)}>
+                    <Modal onClose={() => setDialog(null)} width={380}>
+                        <div style={{ textAlign: "center", padding: "12px 0" }}>
+                            <div style={{ fontSize: 48, marginBottom: 12 }}>❌</div>
+                            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#dc2626", marginBottom: 8 }}>Export Failed</h3>
+                            <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 24 }}>{dialog.message}</p>
+                            <button onClick={() => setDialog(null)} style={{ padding: "10px 32px", border: "none", borderRadius: 8, background: "#dc2626", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+                                Close
+                            </button>
+                        </div>
+                    </Modal>
                 </ModalWrapper>
             )}
         </div>
