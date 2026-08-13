@@ -200,8 +200,8 @@ export default function StateDashboardLayout({
 
     canViewSchools: ["AE", "SA", "OM", "QA", "KW", "BH"].includes(countryCode),
 
-    canViewStudents: true,
-  };
+    canViewStudents: countryCode === "AE",
+  }; 
 
   const isActive = (path: string) => pathname === path;
 
@@ -285,18 +285,25 @@ export default function StateDashboardLayout({
                 >
                   Students Bulk Import
                 </Link>)}
-              <Link
-                href="/state-dashboard/student/view-indivisual-student"
-                className={linkClass("/state-dashboard/student/view-indivisual-student")}
-              >
-                View Individual Students
-              </Link>
-              <Link
-                href="/state-dashboard/student/total-student"
-                className={linkClass("/state-dashboard/student/total-student")}
-              >
-                Total Students
-              </Link>
+
+              
+              {permissions.canViewStudents && (
+                <Link
+                  href="/state-dashboard/student/view-indivisual-student"
+                  className={linkClass("/state-dashboard/student/view-indivisual-student")}
+                >
+                  View Individual Students
+                </Link>
+              )}
+              {permissions.canViewStudents && (
+                <Link
+                  href="/state-dashboard/student/total-student"
+                  className={linkClass("/state-dashboard/student/total-student")}
+                >
+                  Total Students
+                </Link>
+              )}
+
               <Link
                 href="/state-dashboard/student/new-student-registrations"
                 className={linkClass("/state-dashboard/student/new-student-registrations")}
