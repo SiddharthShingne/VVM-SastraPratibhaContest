@@ -14,23 +14,11 @@ const feeStructureData: Record<
     }[];
   }
 > = {
-  IND: {
-    title: "India Fee Structure",
-    items: [
-      {
-        text: "Registration fee for students studying in India: INR XX.",
-        note: "Applicable only for India students.",
-      },
-      {
-        text: "Payment should be made through the approved India VVM payment process.",
-      },
-    ],
-  },
   ARE: {
     title: "UAE Fee Structure",
     items: [
       {
-        text: "Registration fee for students studying in UAE: AED XX.",
+        text: "Registration fee for students studying in UAE: 25 AED.",
         note: "Applicable only for UAE students.",
       },
       {
@@ -43,7 +31,7 @@ const feeStructureData: Record<
     title: "Oman Fee Structure",
     items: [
       {
-        text: "Registration fee for students studying in Oman: OMR XX.",
+        text: "Registration fee for students studying in Oman: 8.5 AED.",
         note: "Applicable only for Oman students.",
       },
       {
@@ -52,18 +40,18 @@ const feeStructureData: Record<
     ],
   },
 
-  QAT: {
-    title: "Qatar Fee Structure",
-    items: [
-      {
-        text: "Registration fee for students studying in Qatar: QAR XX.",
-        note: "Applicable only for Qatar students.",
-      },
-      {
-        text: "Payment should be made through the approved Qatar VVM payment process.",
-      },
-    ],
-  },
+  // QAT: {
+  //   title: "Qatar Fee Structure",
+  //   items: [
+  //     {
+  //       text: "Registration fee for students studying in Qatar: QAR XX.",
+  //       note: "Applicable only for Qatar students.",
+  //     },
+  //     {
+  //       text: "Payment should be made through the approved Qatar VVM payment process.",
+  //     },
+  //   ],
+  // },
 
   // SAU: {
   //   title: "Saudi Arabia Fee Structure",
@@ -82,7 +70,7 @@ const feeStructureData: Record<
     title: "Bahrain Fee Structure",
     items: [
       {
-        text: "Registration fee for students studying in Bahrain: BHD XX.",
+        text: "Registration fee for students studying in Bahrain: 20 AED.",
         note: "Applicable only for Bahrain students.",
       },
       {

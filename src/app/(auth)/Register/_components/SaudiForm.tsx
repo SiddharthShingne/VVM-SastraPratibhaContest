@@ -263,8 +263,13 @@ export default function SaudiForm({ countries }: Props) {
     const [showPopup, setShowPopup] = useState(false);
     const [userData, setUserData] = useState({ email: "", username: "" });
     const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+    // const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+    // const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+    // const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
+
+    const [allSchools, setAllSchools] = useState<{ value: string; label: string; region_code: string }[]>([]);
     const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
-    const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+    const [regions, setRegions] = useState<{ value: string; label: string; code: string; cities?: any[] }[]>([]);
     const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
 
 
@@ -301,9 +306,16 @@ export default function SaudiForm({ countries }: Props) {
 
     useEffect(() => {
         fetchRegionsWithCities("SA").then((res: any) => {  // ← change "QA" per form
+            // const formatted = res?.data?.map((region: any) => ({
+            //     value: String(region.district_id),   // ← correct
+            //     label: region.name,
+            //     cities: region.cities || [],
+            // })) || [];
+
             const formatted = res?.data?.map((region: any) => ({
-                value: String(region.district_id),   // ← correct
+                value: String(region.district_id),
                 label: region.name,
+                code: region.code,
                 cities: region.cities || [],
             })) || [];
             setRegions(formatted);
@@ -311,6 +323,23 @@ export default function SaudiForm({ countries }: Props) {
     }, []);
 
     // ✅ ADD schools useEffect (change country code per form):
+    // useEffect(() => {
+    //     const loadSchools = async () => {
+    //         try {
+    //             const res = await getSchools(1, 500, undefined, "SA"); // ← change "QA" per form
+    //             const formattedSchools = res?.data?.data?.map((school: any) => ({
+    //                 value: String(school.id),
+    //                 label: school.school_name,
+    //             })) || [];
+    //             setSchools(formattedSchools);
+    //         } catch (err) {
+    //             console.error("School fetch failed", err);
+    //         }
+    //     };
+    //     loadSchools();
+    // }, []);
+
+
     useEffect(() => {
         const loadSchools = async () => {
             try {
@@ -318,8 +347,9 @@ export default function SaudiForm({ countries }: Props) {
                 const formattedSchools = res?.data?.data?.map((school: any) => ({
                     value: String(school.id),
                     label: school.school_name,
+                    region_code: school.region_code,
                 })) || [];
-                setSchools(formattedSchools);
+                setAllSchools(formattedSchools);
             } catch (err) {
                 console.error("School fetch failed", err);
             }
@@ -339,7 +369,20 @@ export default function SaudiForm({ countries }: Props) {
         setCities(formattedCities);
     }, [watchRegion, regions]);
 
-
+    // ✅ Filter schools by selected region's code
+    useEffect(() => {
+        if (!watchRegion) {
+            setSchools([]);
+            return;
+        }
+        const selectedRegion = regions.find((r) => r.value === watchRegion);
+        if (!selectedRegion) {
+            setSchools([]);
+            return;
+        }
+        const filtered = allSchools.filter((s) => s.region_code === selectedRegion.code);
+        setSchools(filtered);
+    }, [watchRegion, regions, allSchools]);
     // ── Send OTP ──────────────────────────────────────────────────────────────
     const _sendOtp = async () => {
         const email = getValues("parentEmail");
@@ -592,17 +635,6 @@ export default function SaudiForm({ countries }: Props) {
 
                     {/* School Details */}
                     <Section title="School Details">
-                        <SelectField
-                            label="School Name"
-                            required
-                            options={schools}
-                            registration={register("schoolName", { required: "School Name is required" })}
-                            error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
-                        />
-                        <SelectField label="Board" required options={boards}
-                            registration={register("board", { required: "Board is required" })}
-                            error={touchedFields?.board && errors?.board ? errors.board : undefined}
-                        />
 
 
                         <InputField
@@ -632,6 +664,22 @@ export default function SaudiForm({ countries }: Props) {
                             registration={register("city", { required: "City is required" })}
                             error={touchedFields?.city && errors?.city ? errors.city : undefined}
                         />
+
+
+                        <SelectField
+                            label="School Name"
+                            required
+                            options={schools}
+                            registration={register("schoolName", { required: "School Name is required" })}
+                            error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
+                        />
+                        <SelectField label="Board" required options={boards}
+                            registration={register("board", { required: "Board is required" })}
+                            error={touchedFields?.board && errors?.board ? errors.board : undefined}
+                        />
+
+
+                       
                         <div className="md:col-span-2">
                             <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
                                 registration={register("schoolAddress", { required: "School Address is required" })}

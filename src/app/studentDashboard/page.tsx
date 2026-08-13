@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getImportantDates } from "@/services/importantDatesService";
 import { getInstractionDocument } from "@/services/importantDatesService";
-
+import Swal from "sweetalert2";
 import { createPaymentLink } from "@/services/uaeService";
 interface DateItem {
   id: number;
@@ -56,18 +56,28 @@ export default function DashboardHome() {
       console.log("Payment API result:", result);
 
       if (result.success && result.paymentLink) {
-        window.location.href = result.paymentLink;
+        window.open(result.paymentLink, "_blank");
       } else {
-        alert("Payment link generate nahi ho saka. Support se contact karein.");
+        Swal.fire({
+          icon: "error",
+          title: "Payment Link Failed",
+          text: "Payment link generate nahi ho saka. Support se contact karein.",
+          confirmButtonColor: "#17395c",
+        });
         console.error("Payment link not returned properly:", result);
       }
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        text: "Payment link generate nahi ho saka. Kripya dobara try karein.",
+        confirmButtonColor: "#17395c",
+      });
       console.error("handleDoPayments error:", err);
     } finally {
       setPayLoading(false);
     }
   }
-
 
   // async function handleDoPayments() {
   //   try {
@@ -76,7 +86,7 @@ export default function DashboardHome() {
   //     console.log("Payment API result:", result);
 
   //     if (result.success && result.paymentLink) {
-  //       window.open(result.paymentLink, "_blank");
+  //       window.location.href = result.paymentLink;
   //     } else {
   //       alert("Payment link generate nahi ho saka. Support se contact karein.");
   //       console.error("Payment link not returned properly:", result);
@@ -89,68 +99,7 @@ export default function DashboardHome() {
   // }
 
 
-  // async function handleDoPayments() {
-  //   try {
-  //     setPayLoading(true);
-  //     const raw = localStorage.getItem("user");
-  //     const parsed = raw ? JSON.parse(raw) : null;
-
-  //     const studentId =
-  //       parsed?.user?.user_detail?.id || parsed?.user_detail?.id;
-  //     const countryId =
-  //       parsed?.user?.country_id ?? parsed?.country_id;
-
-  //     if (!studentId) {
-  //       console.error("student_id not found in localStorage");
-  //       return;
-  //     }
-
-  //     const result = await createPaymentLink({
-  //       student_id: studentId,
-  //       country_id: countryId,
-  //     });
-  //     console.log("Payment API result:", result);
-
-  //     if (result.success && result.paymentLink) {
-  //       window.open(result.paymentLink, "_blank");
-  //     } else {
-  //       console.error("Payment link not returned properly:", result);
-  //     }
-  //   } catch (err) {
-  //     console.error("handleDoPayments error:", err);
-  //   } finally {
-  //     setPayLoading(false);
-  //   }
-  // }
-
-
-  // async function handleDoPayments() {
-  //   try {
-  //     setPayLoading(true);
-  //     const raw = localStorage.getItem("user");
-  //     const parsed = raw ? JSON.parse(raw) : null;
-  //     const studentId =
-  //       parsed?.user?.user_detail?.id || parsed?.user_detail?.id;
-
-  //     if (!studentId) {
-  //       console.error("student_id not found in localStorage");
-  //       return;
-  //     }
-
-  //     const result = await createPaymentLink({ student_id: studentId });
-  //     console.log("Payment API result:", result);
-
-  //     if (result.success && result.paymentLink) {
-  //       window.open(result.paymentLink, "_blank");
-  //     } else {
-  //       console.error("Payment link not returned properly:", result);
-  //     }
-  //   } catch (err) {
-  //     console.error("handleDoPayments error:", err);
-  //   } finally {
-  //     setPayLoading(false);
-  //   }
-  // }
+  
 
     const [name, setName] = useState("Student");
     const [greeting, setGreeting] = useState("Good Afternoon");
@@ -261,7 +210,7 @@ export default function DashboardHome() {
               </p>
               <div className="w-16 h-[3px] rounded-full bg-gradient-to-r from-[#17395c] to-[#f4df17] mt-3" />
             </div>
-            {countryId !== null &&
+            {/* {countryId !== null &&
               PAYMENT_ENABLED_COUNTRIES.includes(countryId) &&
               paymentStatus === 0 && (
                 <button
@@ -269,11 +218,37 @@ export default function DashboardHome() {
                   disabled={payLoading}
                   className="shrink-0 flex items-center gap-2 text-sm font-semibold text-white bg-[#17395c] hover:bg-[#1f4e7a] disabled:opacity-50 px-4 py-2.5 rounded-xl transition-colors duration-200"
                 >
-                  {payLoading ? "Processing..." : "💳 Do Payments"}
+                  {payLoading ? "Processing..." : "Pay Now"}
                 </button>
+              )} */}
+
+            {countryId !== null &&
+              PAYMENT_ENABLED_COUNTRIES.includes(countryId) &&
+              paymentStatus === 0 && (
+                <div className="shrink-0 flex flex-col items-end gap-2">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
+                    ⏳ Payment Pending
+                  </span>
+                  <button
+                    onClick={handleDoPayments}
+                    disabled={payLoading}
+                  className="flex items-center gap-2 text-sm font-bold text-[#17395c] hover:text-white bg-gradient-to-r from-[#f4df17] to-[#e8c800] hover:from-[#17395c] hover:to-[#17395c] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
+                  >
+                    {payLoading ? "Processing..." : "💳 Pay Now"}
+                  </button>
+                </div>
+              )}
+
+            {countryId !== null &&
+              PAYMENT_ENABLED_COUNTRIES.includes(countryId) &&
+              paymentStatus === 1 && (
+                <span className="shrink-0 flex items-center gap-2 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl">
+                  Paid
+                </span>
               )}
           </div>
         </div>
+        
 
       {/* IMPORTANT DATES CARD */}
       <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl p-5 border border-white/60 shadow-[0_22px_50px_rgba(23,57,92,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] overflow-hidden transition-all duration-300 hover:shadow-[0_28px_60px_rgba(23,57,92,0.1),inset_0_1px_0_rgba(255,255,255,1)] hover:-translate-y-0.5">

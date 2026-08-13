@@ -255,8 +255,13 @@ export default function UAEForm({ countries }: Props) {
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setUserData] = useState({ email: "", username: "" });
   const [districts, setDistricts] = useState<{ value: string; label: string }[]>([]);
+  // const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
+  // const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+  // const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
+
+  const [allSchools, setAllSchools] = useState<{ value: string; label: string; region_code: string }[]>([]);
   const [schools, setSchools] = useState<{ value: string; label: string }[]>([]);
-  const [regions, setRegions] = useState<{ value: string; label: string; cities?: any[] }[]>([]);
+  const [regions, setRegions] = useState<{ value: string; label: string; code: string; cities?: any[] }[]>([]);
   const [cities, setCities] = useState<{ value: string; label: string }[]>([]);
 
 
@@ -295,15 +300,26 @@ export default function UAEForm({ countries }: Props) {
   useEffect(() => {
     fetchRegionsWithCities("AE").then((res: any) => {  // ← change "QA" per form
       const formatted = res?.data?.map((region: any) => ({
-        value: String(region.district_id),   // ← correct
+        value: String(region.district_id),
         label: region.name,
+        code: region.code,
         cities: region.cities || [],
       })) || [];
       setRegions(formatted);
     }).catch(() => console.error("Failed to load regions"));
   }, []);
+  // useEffect(() => {
+  //   fetchRegionsWithCities("AE").then((res: any) => {  // ← change "QA" per form
+  //     const formatted = res?.data?.map((region: any) => ({
+  //       value: String(region.district_id),   // ← correct
+  //       label: region.name,
+  //       cities: region.cities || [],
+  //     })) || [];
+  //     setRegions(formatted);
+  //   }).catch(() => console.error("Failed to load regions"));
+  // }, []);
 
-  // ✅ ADD schools useEffect (change country code per form):
+
   useEffect(() => {
     const loadSchools = async () => {
       try {
@@ -311,14 +327,60 @@ export default function UAEForm({ countries }: Props) {
         const formattedSchools = res?.data?.data?.map((school: any) => ({
           value: String(school.id),
           label: school.school_name,
+          region_code: school.region_code,
         })) || [];
-        setSchools(formattedSchools);
+        setAllSchools(formattedSchools);
       } catch (err) {
         console.error("School fetch failed", err);
       }
     };
     loadSchools();
   }, []);
+
+  // ✅ Filter schools by selected region's code
+  // useEffect(() => {
+  //   if (!watchRegion) {
+  //     setSchools([]);
+  //     return;
+  //   }
+  //   const selectedRegion = regions.find((r) => r.value === watchRegion);
+  //   if (!selectedRegion) {
+  //     setSchools([]);
+  //     return;
+  //   }
+  //   const filtered = allSchools.filter((s) => s.region_code === selectedRegion.code);
+  //   setSchools(filtered);
+  // }, [watchRegion, regions, allSchools]);
+
+
+  // useEffect(() => {
+  //   const loadSchools = async () => {
+  //     try {
+  //       const res = await getSchools(1, 500, undefined, "AE"); // ← change "QA" per form
+  //       const formattedSchools = res?.data?.data?.map((school: any) => ({
+  //         value: String(school.id),
+  //         label: school.school_name,
+  //       })) || [];
+  //       setSchools(formattedSchools);
+  //     } catch (err) {
+  //       console.error("School fetch failed", err);
+  //     }
+  //   };
+  //   loadSchools();
+  // }, []);
+
+
+
+  // const watchRegion = watch("region");
+  // useEffect(() => {
+  //   if (!watchRegion) return;
+  //   const selected = regions.find((r) => r.value === watchRegion);
+  //   const formattedCities = selected?.cities?.map((c: any) => ({
+  //     value: String(c.id),
+  //     label: c.name,
+  //   })) || [];
+  //   setCities(formattedCities);
+  // }, [watchRegion, regions]);
 
   // ✅ ADD cities useEffect (same for all forms, no change needed):
   const watchRegion = watch("region");
@@ -331,6 +393,22 @@ export default function UAEForm({ countries }: Props) {
     })) || [];
     setCities(formattedCities);
   }, [watchRegion, regions]);
+
+  // ✅ Filter schools by selected region's code
+  useEffect(() => {
+    if (!watchRegion) {
+      setSchools([]);
+      return;
+    }
+    const selectedRegion = regions.find((r) => r.value === watchRegion);
+    if (!selectedRegion) {
+      setSchools([]);
+      return;
+    }
+    const filtered = allSchools.filter((s) => s.region_code === selectedRegion.code);
+    setSchools(filtered);
+  }, [watchRegion, regions, allSchools]);
+
 
   // ── Send OTP ──────────────────────────────────────────────────────────────
   // const _sendOtp = async () => {
@@ -567,6 +645,48 @@ export default function UAEForm({ countries }: Props) {
 
           {/* School Details */}
           <Section title="School Details">
+            <InputField label="Country" disabled
+              value={countries.find((c) => c.value === "uae")?.label || ""}
+            />
+
+            <SelectField
+              label="Region"
+              required
+              options={regions}
+              registration={register("region", { required: "Region is required" })}
+              error={touchedFields?.region && errors?.region ? errors.region : undefined}
+            />
+
+            <SelectField
+              label="City"
+              required
+              options={cities}
+              registration={register("city", { required: "City is required" })}
+              error={touchedFields?.city && errors?.city ? errors.city : undefined}
+            />
+
+            <SelectField
+              label="School Name"
+              required
+              options={schools}
+              registration={register("schoolName", { required: "School Name is required" })}
+              error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
+            />
+
+            <SelectField label="Board" required options={boards}
+              registration={register("board", { required: "Board is required" })}
+              error={touchedFields?.board && errors?.board ? errors.board : undefined}
+            />
+
+            <div className="md:col-span-2">
+              <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
+                registration={register("schoolAddress", { required: "School Address is required" })}
+                error={errors.schoolAddress}
+              />
+            </div>
+
+          </Section>
+          {/* <Section title="School Details">
             <SelectField
               label="School Name"
               required
@@ -581,11 +701,7 @@ export default function UAEForm({ countries }: Props) {
             <InputField label="Country" disabled
               value={countries.find((c) => c.value === "uae")?.label || ""}
             />
-            {/* <InputField label="Pincode" required placeholder="Enter pincode"
-              registration={register("pincode", { required: "Pincode is required", pattern: { value: /^[0-9]{5,6}$/, message: "Pincode must be 5 or 6 digits" } })}
-              error={touchedFields?.pincode && errors?.pincode ? errors.pincode : undefined}
-            /> */}
-            {/* ✅ ADD Region SelectField */}
+           
             <SelectField
               label="Region"
               required
@@ -594,7 +710,6 @@ export default function UAEForm({ countries }: Props) {
               error={touchedFields?.region && errors?.region ? errors.region : undefined}
             />
 
-            {/* ✅ ADD City SelectField */}
             <SelectField
               label="City"
               required
@@ -609,7 +724,7 @@ export default function UAEForm({ countries }: Props) {
               />
             </div>
 
-          </Section>
+          </Section> */}
 
           {/* Parent Details */}
           <Section title="Parent Details">
