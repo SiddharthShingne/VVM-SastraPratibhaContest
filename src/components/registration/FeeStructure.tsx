@@ -13,7 +13,32 @@ const feeStructureData: Record<
       note?: string;
     }[];
   }
-> = {
+  > = {
+  IND: {
+    title: "India Fee Structure",
+    items: [
+      {
+        text: "Registration fee for students studying in India: 200 INR.",
+        note: "Applicable only for Indian students.",
+      },
+      {
+        text: "Payment should be made through the approved India VVM payment process.",
+      },
+    ],
+  },
+  ARE: {
+    title: "UAE Fee Structure",
+    items: [
+      {
+        text: "Registration fee for students studying in UAE: 25 AED.",
+        note: "Applicable only for UAE students.",
+      },
+      {
+        text: "Payment should be made through the approved UAE VVM payment process.",
+      },
+    ],
+  },
+
   ARE: {
     title: "UAE Fee Structure",
     items: [
@@ -94,7 +119,7 @@ const feeStructureData: Record<
 };
 
 const countryCodeMap: Record<number, string> = {
-  // 1: "IND",
+  1: "IND",
   2: "ARE",
   3: "OMN",
   // 4: "QAT",
