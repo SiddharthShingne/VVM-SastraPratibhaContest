@@ -115,7 +115,7 @@ export default function StateDashboardLayout({
   }, []);
   useEffect(() => {
     if (token === null) return;
-    if (!token) router.replace("/Login");
+    if (!token) router.replace("/login");
   }, [token, router]);
 
   useEffect(() => {
@@ -189,7 +189,7 @@ export default function StateDashboardLayout({
       setToken(null); // ✅ layout ko turant update karega
 
       window.dispatchEvent(new Event("auth-change")); // ✅ header sync
-      router.replace("/Login");
+      router.replace("/login");
     }
   };
 

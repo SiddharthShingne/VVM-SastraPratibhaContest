@@ -70,7 +70,7 @@ const Header = () => {
 
       setTimeout(() => {
         window.dispatchEvent(new Event("auth-change"));
-        router.replace("/Login");
+        router.replace("/login");
         router.refresh();
       }, 100);
     }

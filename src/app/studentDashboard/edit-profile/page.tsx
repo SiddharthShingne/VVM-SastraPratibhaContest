@@ -534,8 +534,8 @@ export default function EditProfile() {
       const countryId = String(user?.user?.country_id || user?.country_id || "");
       setCountryId(countryId);
       setCountryName(COUNTRY_MAP[countryId] || "");
-
-      setParentEmailVerified(!!user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
+      setParentEmailVerified(!!user?.user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
+      // setParentEmailVerified(!!user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
 
       // if (d.state_id) {
       //   const districtData = await fetchDistricts({
@@ -648,8 +648,22 @@ export default function EditProfile() {
     } finally {
       setVerifyLoading((prev) => ({ ...prev, [target]: false }));
     }
+  // }, [verifyParentEmailOtp, watch, showDialog]);
+
+
   }, [verifyParentEmailOtp, watch, showDialog]);
 
+  const handleRequestProfileUpdate = useCallback(() => {
+    setParentEmailVerified(false);
+    setParentEmailOtpSent(false);
+    setVerifyParentEmailOtp("");
+    setOtpErrors((prev) => ({ ...prev, parentEmail: "" }));
+    showDialog("success", "You can now edit your email and request a new OTP.");
+  }, [showDialog]);
+
+  // const onSubmit = useCallback(async (data: FormData) => {
+
+    
   const onSubmit = useCallback(async (data: FormData) => {
     console.log("🟢 onSubmit FIRED with data:", data);
     try {
@@ -676,10 +690,17 @@ export default function EditProfile() {
         gender: data.gender ? Number(data.gender) : "",
         aadhar_number: data.aadharNumber || "",               // optional, can be empty
 
+
+
+
         parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
         parent_name: data.parentName || d.parent_name || "",
         parent_phone_number: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
-        CORRECT_KEY_NAME: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
+        parent_email: data.parentEmail || d.parent_email || "",
+        // parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
+        // parent_name: data.parentName || d.parent_name || "",
+        // parent_phone_number: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
+        // CORRECT_KEY_NAME: cleanMobile(data.parentMobile || d.parent_phone_number || ""),
         // ── Student contact (optional) ──────────────────────────
         student_mobile_number: cleanMobile(data.studentMobile || d.student_mobile_number || ""),
         student_email: data.studentEmail || d.student_email || "",
@@ -708,11 +729,63 @@ export default function EditProfile() {
       console.log("🔵 FINAL PAYLOAD:", JSON.stringify(payload, null, 2));
       await completeStudentProfile(payload);
 
+      // if (raw) {
+      //   const user = JSON.parse(raw);
+
+      //   // ✅ handle both structures
+      //   const existing = user?.user_detail || user?.data?.user_detail || {};
+
+      //   const updatedUserDetail = {
+      //     ...existing,
+
+      //     name: data.name,
+      //     date_of_birth: data.dob,
+      //     gender: data.gender,
+      //     aadhar_number: data.aadharNumber,
+
+      //     parent_salutation: data.parentSalutation || d.parent_salutation || "Mr",
+      //     parent_name: data.parentName,
+      //     parent_phone_number: data.parentMobile,
+      //     parent_email: data.parentEmail,
+
+
+      //     parent_email_verified: parentEmailVerified ? 1 : 0,
+
+      //     student_mobile_number: data.studentMobile,
+      //     student_email: data.studentEmail,
+
+      //     class_id: data.grade,
+      //     school_board_id: data.schoolBoard,
+      //     school_name: data.schoolName,
+
+      //     address: data.address,
+      //     region_id: data.region,
+      //     city_id: data.city,
+      //     pin_code: data.pinCode,
+      //     exam_language_id: data.examLanguage,
+      //     know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
+      //   };
+
+      //   // ✅ preserve original structure
+      //   if (user.user_detail) {
+      //     user.user_detail = updatedUserDetail;
+      //   } else if (user.data?.user_detail) {
+      //     user.data.user_detail = updatedUserDetail;
+      //   }
+
+      //   localStorage.setItem("user", JSON.stringify(user));
+      //   window.dispatchEvent(new Event("user-updated"));
+      // }
+
       if (raw) {
         const user = JSON.parse(raw);
 
-        // ✅ handle both structures
-        const existing = user?.user_detail || user?.data?.user_detail || {};
+        // ✅ real shape: user.user.user_detail (confirmed from console dump)
+        const existing =
+          user?.user?.user_detail ||
+          user?.user_detail ||
+          user?.data?.user_detail ||
+          {};
 
         const updatedUserDetail = {
           ...existing,
@@ -727,8 +800,7 @@ export default function EditProfile() {
           parent_phone_number: data.parentMobile,
           parent_email: data.parentEmail,
 
-
-          parent_email_verified: parentEmailVerified ? 1 : 0,
+          is_parent_email_verified: parentEmailVerified ? 1 : 0,
 
           student_mobile_number: data.studentMobile,
           student_email: data.studentEmail,
@@ -745,16 +817,25 @@ export default function EditProfile() {
           know_about_vvm_id: data.howDidYouGetToKnowAboutVVM,
         };
 
-        // ✅ preserve original structure
-        if (user.user_detail) {
+        // ✅ write back into whichever shape actually exists, real shape gets priority
+        if (user?.user?.user_detail !== undefined) {
+          user.user.user_detail = updatedUserDetail;
+          if (user.user.onboarding) {
+            user.user.onboarding.is_parent_email_verified = parentEmailVerified ? 1 : 0;
+          }
+        } else if (user.user_detail) {
           user.user_detail = updatedUserDetail;
         } else if (user.data?.user_detail) {
           user.data.user_detail = updatedUserDetail;
+        } else {
+          user.user = user.user || {};
+          user.user.user_detail = updatedUserDetail;
         }
 
         localStorage.setItem("user", JSON.stringify(user));
         window.dispatchEvent(new Event("user-updated"));
       }
+
 
       showDialog("success", "Profile updated successfully.");
     } catch (error: any) {
@@ -770,9 +851,44 @@ export default function EditProfile() {
       <style>{CSS}</style>
 
       {/* ✅ FIX 2: DialogBox is now RENDERED in the tree, props passed correctly */}
+      {/* <DialogBox dialog={dialog} setDialog={setDialog} />
+
+      <div className="vvm-edit-card"> */}
+
+      {/* ✅ FIX 2: DialogBox is now RENDERED in the tree, props passed correctly */}
       <DialogBox dialog={dialog} setDialog={setDialog} />
 
+      {parentEmailVerified && (
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: "0 auto 20px",
+            padding: "14px 22px",
+            borderRadius: 16,
+            background: "rgba(26,107,74,.08)",
+            border: "1px solid rgba(26,107,74,.25)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
+          <span className="vvm-status vvm-status--ok" style={{ fontSize: 14 }}>
+            ✓ Profile is updated
+          </span>
+          <button
+            type="button"
+            className="vvm-btn vvm-btn--success"
+            onClick={handleRequestProfileUpdate}
+          >
+            Update Profile Again
+          </button>
+        </div>
+      )}
+
       <div className="vvm-edit-card">
+
         <div className="vvm-edit-inner">
           <h1 className="vvm-edit-title">EDIT STUDENT PROFILE</h1>
 

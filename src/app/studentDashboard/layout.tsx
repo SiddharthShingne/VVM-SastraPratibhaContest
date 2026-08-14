@@ -124,7 +124,7 @@ export default function StudentDashboardLayout({
 
   useEffect(() => {
     if (token === null) return;
-    if (!token) router.replace("/Login");
+    if (!token) router.replace("/login");
   }, [token, router]);
 
   useEffect(() => {
@@ -261,7 +261,7 @@ export default function StudentDashboardLayout({
       // Use setTimeout to ensure state updates are processed
       setTimeout(() => {
         window.dispatchEvent(new Event("auth-change"));
-        router.replace("/Login");
+        router.replace("/login");
         router.refresh(); // Force refresh in Next.js 13+
       }, 100);
     }

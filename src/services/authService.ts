@@ -258,8 +258,23 @@ export const verifyMobileOtpWhileUpdating = async (
 };
 
 // ================ COMPLETE STUDENT PROFILE ========== //
+// export const completeStudentProfile = async (payload: Record<string, any>) => {
+//   const token = localStorage.getItem("token");
+//   const res = await api.post("/student/complete-profile-sif", payload, {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   return res.data;
+// };
+
 export const completeStudentProfile = async (payload: Record<string, any>) => {
-  const token = localStorage.getItem("token");
+  const raw = localStorage.getItem("user");
+  const parsed = raw ? JSON.parse(raw) : null;
+  const token = parsed?.token || parsed?.user?.token || "";
+
+  console.log("🔑 Token being sent:", token); // ← isko check karo
+
   const res = await api.post("/student/complete-profile-sif", payload, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -267,6 +282,11 @@ export const completeStudentProfile = async (payload: Record<string, any>) => {
   });
   return res.data;
 };
+
+// export const completeStudentProfile = async (payload: Record<string, any>) => {
+//   const res = await api.post("/student/complete-profile-sif", payload);
+//   return res.data;
+// };
 
 // ================= GET SCHOOL BOARD ========== //
 export const getSchoolBoard = async () => {

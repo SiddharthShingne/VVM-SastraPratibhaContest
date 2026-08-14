@@ -24,7 +24,7 @@ export function useSessionTimeout() {
     setShowDialog(false);
     localStorage.clear();
     sessionStorage.clear();
-    window.location.replace("/Login");
+    window.location.replace("/login");
   }, [router]);
 
   const resetTimer = useCallback(() => {

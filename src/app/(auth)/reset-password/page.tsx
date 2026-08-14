@@ -121,7 +121,7 @@ function ResetPasswordContent() {
 
             // Redirect to login after 2 seconds
             setTimeout(() => {
-                router.push("/Login");
+                router.push("/login");
             }, 2000);
 
         } catch (err: any) {
@@ -167,7 +167,7 @@ function ResetPasswordContent() {
                             onClick={() => {
                                 setDialog(null);
                                 if (dialog.type === "success") {
-                                    router.push("/Login");
+                                    router.push("/login");
                                 }
                             }}
                             className="px-6 py-2.5 bg-linear-to-r from-[#17395c] to-[#1f4e7a] 

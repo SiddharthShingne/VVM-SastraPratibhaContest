@@ -97,7 +97,7 @@ export default function SchoolDashboardLayout({
 
   useEffect(() => {
     if (token === null) return;
-    if (!token) router.replace("/Login");
+    if (!token) router.replace("/login");
   }, [token, router]);
 
   useEffect(() => {
@@ -172,7 +172,7 @@ export default function SchoolDashboardLayout({
 
     window.dispatchEvent(new Event("auth-change")); // ✅ header sync
 
-    router.replace("/Login");
+    router.replace("/login");
   }
 };
 
