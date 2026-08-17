@@ -292,7 +292,7 @@ export default function UpdateProfilePage() {
         </div>
 
         {/* Profile Photo Section */}
-        <div className="flex flex-col items-center mb-10">
+        {/* <div className="flex flex-col items-center mb-10">
           <div className="relative group">
             <div className={`w-28 h-28 sm:w-32 sm:h-32 rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-xl overflow-hidden border-4 border-white ring-2 ring-[#17395c]/20 transition-all duration-300 group-hover:ring-4 group-hover:ring-[#17395c]/40 ${!preview && "bg-linear-to-br from-[#17395c] to-[#1f4e7a]"
               }`}>
@@ -308,7 +308,7 @@ export default function UpdateProfilePage() {
             <input id="photo-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
           </div>
           <p className="text-xs text-gray-400 mt-3">Click camera to change photo (optional)</p>
-        </div>
+        </div> */}
 
         {/* Form Fields - 2 columns on medium screens and above */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

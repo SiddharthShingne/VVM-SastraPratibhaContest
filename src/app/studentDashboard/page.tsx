@@ -61,7 +61,7 @@ export default function DashboardHome() {
         Swal.fire({
           icon: "error",
           title: "Payment Link Failed",
-          text: "Payment link generate nahi ho saka. Support se contact karein.",
+          text: "Please Try Again Later or Contact Support.",
           confirmButtonColor: "#17395c",
         });
         console.error("Payment link not returned properly:", result);
@@ -70,7 +70,7 @@ export default function DashboardHome() {
       Swal.fire({
         icon: "error",
         title: "Something went wrong",
-        text: "Payment link generate nahi ho saka. Kripya dobara try karein.",
+        text: "Please Try Again Later or Contact Support.",
         confirmButtonColor: "#17395c",
       });
       console.error("handleDoPayments error:", err);

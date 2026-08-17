@@ -460,7 +460,7 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
                     {fieldErrors.fullName && <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.fullName}</span>}
                 </Field>
                 <Field label="DOB" required>
-                    <input type="date" value={form.dob} min="2008-01-01" max="2016-12-31"
+                    <input type="date" value={form.dob} min="2008-01-01" max="2017-12-31"
                         onChange={(e) => handleChange("dob", e.target.value)} style={inputStyle} />
                 </Field>
                 <Field label="Student's Gender" required>
@@ -598,6 +598,7 @@ export default function NewRegistrationsPage() {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [classFilter, setClassFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -696,8 +697,9 @@ export default function NewRegistrationsPage() {
         setStudents([]);
         setTotalRecords(0);
         try {
-            const res = await getNewRegistrations(currentPage, perPage);
-
+            // const res = await getNewRegistrations(currentPage, perPage);
+            const res = await getNewRegistrations(currentPage,perPage,classFilter ? Number(classFilter) : undefined
+            );
             // API shape: res.data.students.data[]
             const raw: any[] = res?.data?.students?.data || [];
             const total: number = res?.data?.students?.total || 0;
@@ -748,9 +750,13 @@ export default function NewRegistrationsPage() {
         }
     };
 
+    // useEffect(() => {
+    //     fetchStudents();
+    // }, [debouncedSearch, currentPage, perPage]);
+
     useEffect(() => {
         fetchStudents();
-    }, [debouncedSearch, currentPage, perPage]);
+    }, [debouncedSearch, classFilter, currentPage, perPage]);
     
     // ─── Styles ─────────────────────────────────────────────────────────────────
     const s = {
@@ -840,7 +846,7 @@ export default function NewRegistrationsPage() {
                                 transform: "translateY(-50%)", color: "#999", pointerEvents: "none",
                             }}
                         />
-                        <input
+                        {/* <input
                             type="text"
                             placeholder="Search by name, username, national ID, school..."
                             value={search}
@@ -848,11 +854,44 @@ export default function NewRegistrationsPage() {
                             style={s.searchInput}
                         />
                         
+                        
+                    </div> */}
+
+                        <input
+                            type="text"
+                            placeholder="Search by name, username, national ID, school..."
+                            value={search}
+                            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                            style={s.searchInput}
+                        />
+
                     </div>
 
-                    {/* Legend */}
+                    {/* Class Filter */}
+                    <select
+                        value={classFilter}
+                        onChange={(e) => { setClassFilter(e.target.value); setCurrentPage(1); }}
+                        style={{
+                            border: "1px solid #e5e7eb",
+                            borderRadius: 10,
+                            padding: "10px 14px",
+                            fontSize: 13,
+                            color: "#374151",
+                            background: "#f9fafb",
+                            outline: "none",
+                            cursor: "pointer",
+                            width: 160,
+                        }}
+                    >
+                        <option value="">All Classes</option>
+                        {Object.entries(CLASS_MAP).map(([key, label]) => (
+                            <option key={key} value={key}>{label}</option>
+                        ))}
+                    </select>
+
+                  {/* Legend */}
                     {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                        <AddStudentButton onSuccess={fetchStudents} />
+                        <AddStudentButton onSuccesyyys={fetchStudents} />
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}> */}
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         <AddStudentButton onSuccess={fetchStudents} />

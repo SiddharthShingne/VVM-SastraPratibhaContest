@@ -92,7 +92,7 @@ const Header = () => {
         <div className="flex gap-2 w-full lg:w-auto justify-end mt-1 lg:mt-0 pr-5">
           <button
             onClick={() =>
-              isLoggedIn ? setShowLogoutDialog(true) : router.push("/Login")
+              isLoggedIn ? setShowLogoutDialog(true) : router.push("/login")
             }
             className="bg-linear-to-r from-[#f5f0d0] to-[#efe4b0] text-[#17395c] text-xs font-semibold px-4 py-2 rounded-full border border-[#e6d98c] shadow-sm hover:from-[#efe4b0] hover:to-[#f5e6a0] hover:shadow-md hover:-translate-y-px active:scale-95 transition-all duration-300"
           >

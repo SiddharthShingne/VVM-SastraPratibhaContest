@@ -47,25 +47,33 @@ const DialogBox = ({
   if (!dialog.open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-2xl p-9 w-112.5 h-50 text-center shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+      <div className="bg-white rounded-2xl p-7 w-full max-w-lg min-h-[220px] text-center shadow-xl flex flex-col items-center justify-center">
+
         <h3
-          className={`text-xl font-bold mb-3 ${dialog.type === "success" ? "text-green-600" : "text-red-600"
+          className={`text-xl font-bold mb-4 ${dialog.type === "success"
+              ? "text-green-600"
+              : "text-red-600"
             }`}
         >
           {dialog.type === "success" ? "✓ Success" : "✗ Error"}
         </h3>
-        <p className="text-md text-gray-600 mb-6">{dialog.message}</p>
+
+        <p className="text-md text-gray-600 mb-6 leading-7 break-words whitespace-normal max-w-md">
+          {dialog.message}
+        </p>
+
         <button
-          onClick={() => setDialog((prev) => ({ ...prev, open: false }))}
-          className="px-5 py-3 rounded-lg bg-[#17395c] text-white font-semibold hover:bg-[#0f2742] transition-colors"
+          onClick={() =>
+            setDialog((prev) => ({ ...prev, open: false }))
+          }
+          className="px-6 py-3 rounded-lg bg-[#17395c] text-white font-semibold hover:bg-[#0f2742] transition-colors"
         >
           OK
         </button>
+
       </div>
     </div>
-
-
   );
 };
 

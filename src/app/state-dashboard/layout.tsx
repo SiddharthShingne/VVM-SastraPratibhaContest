@@ -287,14 +287,14 @@ export default function StateDashboardLayout({
                 </Link>)}
 
               
-              {permissions.canViewStudents && (
+              {/* {permissions.canViewStudents && (
                 <Link
                   href="/state-dashboard/student/view-indivisual-student"
                   className={linkClass("/state-dashboard/student/view-indivisual-student")}
                 >
                   View Individual Students
                 </Link>
-              )}
+              )} */}
               {permissions.canViewStudents && (
                 <Link
                   href="/state-dashboard/student/total-student"

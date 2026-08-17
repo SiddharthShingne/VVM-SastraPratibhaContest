@@ -835,7 +835,7 @@ function AddStudentDialog({ onClose, editData }: { onClose: () => void; editData
             type="date"
             value={form.dob}
             min="2008-01-01"
-            max="2016-12-31"
+            max="2017-12-31"
             onChange={(e) => handleChange("dob", e.target.value)}
             style={inputStyle}
           />
@@ -1153,12 +1153,25 @@ export default function TotalStudentsPage() {
         per_page: perPage,
         status: 1,
         district_id: region ? Number(region) : undefined,
-        class: classFilter || undefined,
+        class_id: classFilter ? [Number(classFilter)] : undefined,
+        // class_id: classFilter ? Number(classFilter) : undefined,
+        // class: classFilter ? CLASS_MAP[Number(classFilter)]?.trim() : undefined,
         search: debouncedSearch,
         name: debouncedNameSearch || undefined,   // 
         created_at_from: filterStartDate || undefined,
         created_at_to: filterEndDate || undefined,
       });
+      // const res = await axiosInstance.post("/admin/students", {
+      //   page: currentPage,
+      //   per_page: perPage,
+      //   status: 1,
+      //   district_id: region ? Number(region) : undefined,
+      //   class: classFilter || undefined,
+      //   search: debouncedSearch,
+      //   name: debouncedNameSearch || undefined,   // 
+      //   created_at_from: filterStartDate || undefined,
+      //   created_at_to: filterEndDate || undefined,
+      // });
 
       const raw = res.data?.data?.data || [];
 
@@ -1513,6 +1526,8 @@ export default function TotalStudentsPage() {
           }}
         >
           {/* Search */}
+
+          {/* Search */}
           <div style={{ position: "relative", display: "inline-block", width: "50%" }}>
             <Search
               size={18}
@@ -1533,20 +1548,45 @@ export default function TotalStudentsPage() {
               style={s.searchInput}
             />
           </div>
-          {/* // 5. Add input in the filter card, next to your existing search */}
-          {/* <div style={{ position: "relative", flex: "1 1 240px", maxWidth: 320 }}>
+
+          {/* Class Filter */}
+          {/* Class Filter */}
+          <select
+            value={classFilter}
+            onChange={(e) => {
+              setClassFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            style={{ ...s.select, width: 160 }}
+          >
+            <option value="">All Classes</option>
+            {Object.entries(CLASS_MAP).map(([key, label]) => (
+              <option key={key} value={key}>
+                Class {label.trim()}
+              </option>
+            ))}
+          </select>
+          {/* <div style={{ position: "relative", display: "inline-block", width: "50%" }}>
+            <Search
+              size={18}
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#999",
+                pointerEvents: "none"
+              }}
+            />
             <input
               type="text"
-              placeholder="Search by Name"
-              value={nameSearch}
-              onChange={(e) => {
-                setNameSearch(e.target.value);
-                setCurrentPage(1);
-              }}
+              placeholder="Search Records"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               style={s.searchInput}
             />
           </div> */}
-          {/* Legend + Buttons */}
+          
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ width: 14, height: 14, background: "#bbf7d0", borderRadius: 3 }} />
