@@ -36,9 +36,8 @@ export default function StudentRegistrationInstructions() {
       <div className="max-w-7xl mx-auto px-4 py-12">
 
         {/* Notice Card */}
-        <div className="bg-yellow-50 border border-yellow-200 shadow-lg rounded-2xl p-6 flex gap-4 mb-10">
+        {/* <div className="bg-yellow-50 border border-yellow-200 shadow-lg rounded-2xl p-6 flex gap-4 mb-10">
 
-          {/* ICON */}
           <div className="text-yellow-500">
             <AlertCircle size={40} />
           </div>
@@ -75,7 +74,7 @@ export default function StudentRegistrationInstructions() {
               Use your same Username & Password.
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Button */}
         <div className="flex justify-center mb-10">
@@ -172,11 +171,11 @@ const steps = [
     desc: "Click on Login and Enter credentials received on your email and click on login.",
     img: "/student-registration-images/email_otp.svg",
   },
-  {
-    title: "Update Profile",
-    desc: "After successful login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
-    img: "/student-registration-images/confirmation.svg",
-  },
+  // {
+  //   title: "Update Profile",
+  //   desc: "After successful login, click on “Update Profile” button to Verify your mobile number (OTP verification) and update all required details.",
+  //   img: "/student-registration-images/confirmation.svg",
+  // },
   // {
   //   title: "Payment",
   //   desc: "Click on the Payment button and choose your preferred payment option (QR Code or Credit Card) and complete the payment process.After successful payment: You will get full access to your profile.",
