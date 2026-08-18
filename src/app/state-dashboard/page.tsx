@@ -767,7 +767,7 @@ export default function StateDashboardPage() {
 
             {/* Dropdown panel */}
             {dropdownOpen && (
-              <div className="absolute z-[9999] mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden anim-fade">
+              <div className="absolute z-9999 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden anim-fade">
                 <button
                   className="w-full text-left px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-50 transition-colors border-b border-slate-100 font-medium"
                   onClick={(e) => {
@@ -865,7 +865,7 @@ export default function StateDashboardPage() {
 
           {/* Table */}
           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-            <table className="w-full min-w-[500px] text-sm resp-table">
+            <table className="w-full min-w-125 text-sm resp-table">
               <thead className="sticky top-0 z-20 bg-white/70 backdrop-blur-sm">
                 {/* <tr className="bg-slate-50 border-y border-slate-100">
                   {[
@@ -971,7 +971,7 @@ export default function StateDashboardPage() {
                       >
                         <Link href="/state-dashboard/school/total-school">
                           <span
-                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                            className={`inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
                               ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
                               : "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               }`}
@@ -1008,7 +1008,7 @@ export default function StateDashboardPage() {
                           }
                         >
                           <span
-                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                            className={`inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
                               ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
                               : "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               }`}
@@ -1040,7 +1040,7 @@ export default function StateDashboardPage() {
                       >
                         <Link href={studentDetailHref}>
                           <span
-                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                            className={`inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
                               ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
                               : "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               }`}
