@@ -1597,7 +1597,7 @@ export default function TotalStudentsPage() {
               <span style={{ fontSize: 12, color: "#374151" }}>Unpaid Students</span>
             </div>
 
-            <button
+            {/* <button 
               style={{
                 ...s.btnPrimary,
                 background: "#3B82F6",
@@ -1606,7 +1606,7 @@ export default function TotalStudentsPage() {
               onMouseLeave={(e) => (e.currentTarget.style.background = "#3B82F6")}
               onClick={() => setDialog({ type: "add" })} >
               Add Student
-            </button>
+            </button> */}
 
             <button
               style={{

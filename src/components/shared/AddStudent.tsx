@@ -337,8 +337,8 @@ export function AddStudentDialog({
         parentName: "",
         parentMobile: "",
         parentEmail: "",
+        dob: "",
     });
-
     useEffect(() => {
         if (!form.region) {
             setCities([]);
@@ -414,6 +414,54 @@ export function AddStudentDialog({
             : { isValid: false, message: `National ID must be exactly ${required} digits` };
     };
 
+    const validateDOB = (dob: string) => {
+        if (!dob) return { isValid: false, message: "Date of birth is required" };
+        const year = Number(dob.slice(0, 4));
+        if (year < 2008 || year > 2017) {
+            return { isValid: false, message: "Date of birth must be between 2008 and 2017" };
+        }
+        return { isValid: true, message: "" };
+    };
+
+    // DOB dropdown range: 2008–2017 only
+    const DOB_YEARS = Array.from({ length: 2017 - 2008 + 1 }, (_, i) => 2008 + i);
+    const DOB_MONTHS = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+    const [dobDay, setDobDay] = useState("");
+    const [dobMonth, setDobMonth] = useState("");
+    const [dobYear, setDobYear] = useState("");
+
+    useEffect(() => {
+        if (form.dob) {
+            const [y, m, d] = form.dob.split("-");
+            if (y) setDobYear(y);
+            if (m) setDobMonth(m);
+            if (d) setDobDay(d);
+        }
+    }, [form.dob]);
+
+    const daysInMonth = (year: string, month: string) => {
+        if (!year || !month) return 31;
+        return new Date(Number(year), Number(month), 0).getDate();
+    };
+
+    const handleDobPartChange = (part: "day" | "month" | "year", value: string) => {
+        let day = dobDay, month = dobMonth, year = dobYear;
+        if (part === "day") { day = value; setDobDay(value); }
+        if (part === "month") { month = value; setDobMonth(value); }
+        if (part === "year") { year = value; setDobYear(value); }
+
+        if (day && month && year) {
+            const maxDay = daysInMonth(year, month);
+            const safeDay = Number(day) > maxDay ? String(maxDay).padStart(2, "0") : day;
+            if (safeDay !== day) setDobDay(safeDay);
+            handleChange("dob", `${year}-${month}-${safeDay}`);
+            setFieldErrors((prev) => ({ ...prev, dob: "" }));
+        }
+    };
+
     const handleSubmit = async () => {
         let finalCountryCode = countryCode;
         if (!finalCountryCode) {
@@ -434,6 +482,11 @@ export function AddStudentDialog({
         }
         if (!validateName(form.fullName)) {
             setError("Student name: letters, spaces, hyphens or dots only (2–50 chars).");
+            return;
+        }
+        const dobCheck = validateDOB(form.dob);
+        if (!dobCheck.isValid) {
+            setError(dobCheck.message);
             return;
         }
         if (!validateName(form.parentName)) {
@@ -457,7 +510,7 @@ export function AddStudentDialog({
                 return;
             }
         }
-        setFieldErrors({ fullName: "", parentName: "", parentMobile: "", parentEmail: "" });
+        setFieldErrors({ fullName: "", parentName: "", parentMobile: "", parentEmail: "", dob: "" });
         setLoading(true);
         setError("");
         try {
@@ -628,7 +681,39 @@ export function AddStudentDialog({
                 </Field>
 
                 <Field label="DOB" required>
-                    <input type="date" value={form.dob} min="2008-01-01" max="2016-12-31" onChange={(e) => handleChange("dob", e.target.value)} style={inputStyle} />
+                    <div style={{ display: "flex", gap: 6 }}>
+                        <select
+                            value={dobDay}
+                            onChange={(e) => handleDobPartChange("day", e.target.value)}
+                            style={{ ...inputStyle, borderColor: fieldErrors.dob ? "#ef4444" : "#e5e7eb" }}
+                        >
+                            <option value="">DD</option>
+                            {Array.from({ length: daysInMonth(dobYear, dobMonth) }, (_, i) => i + 1).map((d) => (
+                                <option key={d} value={String(d).padStart(2, "0")}>{String(d).padStart(2, "0")}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={dobMonth}
+                            onChange={(e) => handleDobPartChange("month", e.target.value)}
+                            style={{ ...inputStyle, borderColor: fieldErrors.dob ? "#ef4444" : "#e5e7eb" }}
+                        >
+                            <option value="">MM</option>
+                            {DOB_MONTHS.map((m, i) => (
+                                <option key={m} value={String(i + 1).padStart(2, "0")}>{m}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={dobYear}
+                            onChange={(e) => handleDobPartChange("year", e.target.value)}
+                            style={{ ...inputStyle, borderColor: fieldErrors.dob ? "#ef4444" : "#e5e7eb" }}
+                        >
+                            <option value="">YYYY</option>
+                            {DOB_YEARS.map((y) => (
+                                <option key={y} value={y}>{y}</option>
+                            ))}
+                        </select>
+                    </div>
+                    {fieldErrors.dob && <span style={{ fontSize: 11, color: "#ef4444", marginTop: 4 }}>{fieldErrors.dob}</span>}
                 </Field>
 
                 <Field label="Student's Gender" required>

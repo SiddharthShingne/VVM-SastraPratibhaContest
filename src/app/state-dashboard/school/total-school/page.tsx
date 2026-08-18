@@ -582,7 +582,7 @@ export default function SchoolsPage() {
             </button>
 
             {/* Page numbers */}
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            {/* {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
               let pageNum: number;
               if (totalPages <= 5) {
                 pageNum = i + 1;
@@ -613,7 +613,7 @@ export default function SchoolsPage() {
                   {pageNum}
                 </button>
               );
-            })}
+            })} */}
 
             {/* Next */}
             <button

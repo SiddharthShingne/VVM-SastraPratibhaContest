@@ -55,6 +55,8 @@ interface CardSummary {
   total_school: number;
   total_student: number;
   upgrade_summary: string;
+  new_school_registration_count: number;
+  new_registration_count: number;
 }
 
 interface StateSummaryRow {
@@ -67,7 +69,32 @@ interface StateSummaryRow {
   total_attempted_level1_students?: number;
   total_submitted_level1_students?: number;
   totals?: Record<string, number>;
+  total_student_new?: number;
+  individual_student_new?: number;
+  total_school_new?: number;
+  // UAE-only fields
+  total_school_old?: number;
+  total_school_upgraded?: number;
+  total_school_student_old?: number;
+  total_school_student_upgraded?: number;
+  individual_student_old?: number;
+  individual_student_upgraded?: number;
 }
+
+// interface StateSummaryRow {
+//   stateid?: number;
+//   state_name?: string;
+//   total_school?: number;
+//   total_student?: number;
+//   total_paid_student?: number;
+//   individual_student?: number;
+//   total_attempted_level1_students?: number;
+//   total_submitted_level1_students?: number;
+//   totals?: Record<string, number>;
+//   total_student_new?: number;
+//   individual_student_new?: number;
+//   total_school_new?: number;
+// }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const ITEMS_PER_PAGE_OPTIONS = [1];
@@ -106,9 +133,33 @@ function getCountryCodeFromStorage(): string {
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
-function Badge({ value }: { value: number }) {
+// function Badge({ value }: { value: number }) {
+//   return (
+//     <span className="inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs">
+//       {value}
+//     </span>
+//   );
+// }
+
+
+const BADGE_VARIANTS = {
+  new: "bg-emerald-50 text-emerald-600",
+  old: "bg-amber-50 text-amber-600",
+  upgraded: "bg-violet-50 text-violet-600",
+  default: "bg-blue-50 text-blue-600",
+} as const;
+
+function Badge({
+  value,
+  variant = "default",
+}: {
+  value: number;
+  variant?: keyof typeof BADGE_VARIANTS;
+}) {
   return (
-    <span className="inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs">
+    <span
+      className={`inline-flex items-center justify-center min-w-8 px-2 py-0.5 rounded-full font-semibold text-xs ${BADGE_VARIANTS[variant]}`}
+    >
       {value}
     </span>
   );
@@ -300,17 +351,46 @@ export default function StateDashboardPage() {
     page * itemsPerPage,
   );
 
+  // const totals = useMemo(() => {
+  //   const schools = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.total_school ?? 0),
+  //     0,
+  //   );
+  //   const individual = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.individual_student ?? 0),
+  //     0,
+  //   );
+  //   const total = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.total_student ?? 0),
+  //     0,
+  //   );
+  //   const paid = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.total_paid_student ?? 0),
+  //     0,
+  //   );
+  //   const lvl1Attempted = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.total_attempted_level1_students ?? 0),
+  //     0,
+  //   );
+  //   const lvl1Submitted = stateSummaryRows.reduce(
+  //     (s, r) => s + (r.total_submitted_level1_students ?? 0),
+  //     0,
+  //   );
+  //   return { schools, individual, total, paid, lvl1Attempted, lvl1Submitted };
+  // }, [stateSummaryRows]);
+
+
   const totals = useMemo(() => {
     const schools = stateSummaryRows.reduce(
-      (s, r) => s + (r.total_school ?? 0),
+      (s, r) => s + (r.total_school_new ?? 0),
       0,
     );
     const individual = stateSummaryRows.reduce(
-      (s, r) => s + (r.individual_student ?? 0),
+      (s, r) => s + (r.individual_student_new ?? 0),
       0,
     );
     const total = stateSummaryRows.reduce(
-      (s, r) => s + (r.total_student ?? 0),
+      (s, r) => s + (r.total_student_new ?? 0),
       0,
     );
     const paid = stateSummaryRows.reduce(
@@ -325,8 +405,47 @@ export default function StateDashboardPage() {
       (s, r) => s + (r.total_submitted_level1_students ?? 0),
       0,
     );
-    return { schools, individual, total, paid, lvl1Attempted, lvl1Submitted };
+    // UAE-only totals
+    const schoolsOld = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_school_old ?? 0),
+      0,
+    );
+    const schoolsUpgraded = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_school_upgraded ?? 0),
+      0,
+    );
+    const indOld = stateSummaryRows.reduce(
+      (s, r) => s + (r.individual_student_old ?? 0),
+      0,
+    );
+    const indUpgraded = stateSummaryRows.reduce(
+      (s, r) => s + (r.individual_student_upgraded ?? 0),
+      0,
+    );
+    const schoolStudentsOld = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_school_student_old ?? 0),
+      0,
+    );
+    const schoolStudentsUpgraded = stateSummaryRows.reduce(
+      (s, r) => s + (r.total_school_student_upgraded ?? 0),
+      0,
+    );
+    return {
+      schools,
+      individual,
+      total,
+      paid,
+      lvl1Attempted,
+      lvl1Submitted,
+      schoolsOld,
+      schoolsUpgraded,
+      indOld,
+      indUpgraded,
+      schoolStudentsOld,
+      schoolStudentsUpgraded,
+    };
   }, [stateSummaryRows]);
+
 
   const handleExport = async () => {
     if (!stateId) return;
@@ -371,7 +490,7 @@ export default function StateDashboardPage() {
   const stats = [
     {
       label: "Student Count",
-      value: (summary?.total_student ?? 0).toLocaleString(),
+      value: (summary?.new_registration_count ?? 0).toLocaleString(),
       icon: <FaUserGraduate size={20} />,
       iconBg: "bg-emerald-50 text-emerald-500",
       href: studentDetailHref,
@@ -410,6 +529,59 @@ export default function StateDashboardPage() {
     },
   ];
 
+  const isUAE = countryCode === "AE";
+
+  // color classes applied to <th> text (header highlight)
+  const HEADER_COLOR = {
+    new: "text-emerald-600",
+    old: "text-amber-600",
+    upgraded: "text-violet-600",
+    neutral: "text-slate-400",
+  } as const;
+
+  type HeaderCol = {
+    label: string;
+    key: string;
+    color: keyof typeof HEADER_COLOR;
+  };
+
+  const tableHeaders: HeaderCol[] = [
+    { label: "SR. NO.", key: "sr", color: "neutral" },
+    { label: "STATE NAME", key: "state", color: "neutral" },
+    {
+      label: isUAE ? "SCHOOLS (NEW)" : "SCHOOLS REGISTERED",
+      key: "schools",
+      color: isUAE ? "new" : "neutral",
+    },
+    ...(isUAE
+      ? ([
+        { label: "SCHOOLS (OLD)", key: "schoolsOld", color: "old" },
+        { label: "SCHOOLS (UPGRADED)", key: "schoolsUpgraded", color: "upgraded" },
+      ] as HeaderCol[])
+      : []),
+    {
+      label: isUAE ? "INDIVIDUAL STUDENTS (NEW)" : "INDIVIDUAL STUDENTS",
+      key: "ind",
+      color: isUAE ? "new" : "neutral",
+    },
+    ...(isUAE
+      ? ([
+        { label: "INDIVIDUAL STUDENTS (OLD)", key: "indOld", color: "old" },
+        { label: "INDIVIDUAL STUDENTS (UPGRADED)", key: "indUpgraded", color: "upgraded" },
+      ] as HeaderCol[])
+      : []),
+    {
+      label: isUAE ? "TOTAL STUDENTS (NEW)" : "TOTAL STUDENTS",
+      key: "total",
+      color: isUAE ? "new" : "neutral",
+    },
+    ...(isUAE
+      ? ([
+        { label: "SCHOOL STUDENTS (OLD)", key: "schoolStudentsOld", color: "old" },
+        { label: "SCHOOL STUDENTS (UPGRADED)", key: "schoolStudentsUpgraded", color: "upgraded" },
+      ] as HeaderCol[])
+      : []),
+  ];
   // ─── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
@@ -522,11 +694,10 @@ export default function StateDashboardPage() {
             <div
               className={`flex items-center gap-2 w-full px-4 py-2.5 rounded-xl border bg-white text-sm
                           cursor-pointer transition-all duration-150 shadow-sm
-                          ${
-                            dropdownOpen
-                              ? "border-blue-400 ring-2 ring-blue-100"
-                              : "border-slate-200 hover:border-blue-300"
-                          }`}
+                          ${dropdownOpen
+                  ? "border-blue-400 ring-2 ring-blue-100"
+                  : "border-slate-200 hover:border-blue-300"
+                }`}
               onClick={() => setDropdownOpen((o) => !o)}
             >
               <svg
@@ -619,10 +790,9 @@ export default function StateDashboardPage() {
                       <button
                         key={i}
                         className={`w-full text-left px-4 py-2.5 text-sm transition-colors
-                          ${
-                            opt.isPrantHeader
-                              ? "font-semibold text-slate-700 hover:bg-blue-50 bg-slate-50/50"
-                              : "font-normal text-slate-600 hover:bg-blue-50 pl-8"
+                          ${opt.isPrantHeader
+                            ? "font-semibold text-slate-700 hover:bg-blue-50 bg-slate-50/50"
+                            : "font-normal text-slate-600 hover:bg-blue-50 pl-8"
                           }
                           ${selectedFilter?.label === opt.value.label ? "bg-blue-50 text-blue-600" : ""}
                         `}
@@ -697,7 +867,7 @@ export default function StateDashboardPage() {
           <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <table className="w-full min-w-[500px] text-sm resp-table">
               <thead className="sticky top-0 z-20 bg-white/70 backdrop-blur-sm">
-                <tr className="bg-slate-50 border-y border-slate-100">
+                {/* <tr className="bg-slate-50 border-y border-slate-100">
                   {[
                     ["SR. NO.", "sr"],
                     ["STATE NAME", "state"],
@@ -709,12 +879,26 @@ export default function StateDashboardPage() {
                     // ["LEVEL-1 SUBMITTED STUDENTS", "sub"],
                     // ["EXPORT SUBMITTED STUDENTS", "exp1"],
                     // ["EXPORT LEVEL 2 SUBMITTED STUDENTS", "exp2"],
-                  ].map(([h]) => (
+                  ].map(([h]) => ( */}
+
+                {/* <tr className="bg-slate-50 border-y border-slate-100">
+                  {tableHeaders.map(([h]) => (
                     <th
                       key={h}
                       className="px-3 sm:px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap"
                     >
                       {h}
+                    </th>
+                  ))}
+                </tr> */}
+
+                <tr className="bg-slate-50 border-y border-slate-100">
+                  {tableHeaders.map((col) => (
+                    <th
+                      key={col.key}
+                      className={`px-3 sm:px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider whitespace-nowrap ${HEADER_COLOR[col.color]}`}
+                    >
+                      {col.label}
                     </th>
                   ))}
                 </tr>
@@ -723,8 +907,10 @@ export default function StateDashboardPage() {
               <tbody>
                 {loading ? (
                   Array.from({ length: 3 }).map((_, i) => (
+                    // <tr key={i} className="border-b border-slate-50">
+                    //   {Array.from({ length: 10 }).map((__, j) => (
                     <tr key={i} className="border-b border-slate-50">
-                      {Array.from({ length: 10 }).map((__, j) => (
+                      {Array.from({ length: tableHeaders.length }).map((__, j) => (
                         <td key={j} className="px-3 sm:px-4 py-3">
                           <div className="h-4 bg-slate-100 rounded animate-pulse w-12 sm:w-16" />
                         </td>
@@ -733,7 +919,8 @@ export default function StateDashboardPage() {
                   ))
                 ) : paginated.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-4 py-12 text-center">
+                    {/* <td colSpan={10} className="px-4 py-12 text-center"> */}
+                    <td colSpan={tableHeaders.length} className="px-4 py-12 text-center">
                       <div className="flex flex-col items-center gap-2 text-slate-300">
                         <svg
                           width="36"
@@ -770,16 +957,45 @@ export default function StateDashboardPage() {
                       >
                         {row.state_name}
                       </td>
+                      {/* <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="SCHOOLS REGISTEREDaa"
+                      >
+                        <Link href="/state-dashboard/school/total-school">
+                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
+                            {row.total_school ?? 0}
+                          </span> */}
                       <td
                         className="px-3 sm:px-4 py-3"
                         data-label="SCHOOLS REGISTERED"
                       >
                         <Link href="/state-dashboard/school/total-school">
-                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
-                            {row.total_school ?? 0}
+                          <span
+                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                              ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                              : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                              }`}
+                          >
+                            {row.total_school_new ?? 0}
                           </span>
+                          {/* </Link>
+                      </td>
+                      <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="INDIVIDUAL STUDENTS"
+                      > */}
                         </Link>
                       </td>
+                      {isUAE && (
+                        <>
+                          <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS (OLD)">
+                            <Badge value={row.total_school_old ?? 0} />
+                          </td>
+                          <td className="px-3 sm:px-4 py-3" data-label="SCHOOLS (UPGRADED)">
+                            <Badge value={row.total_school_upgraded ?? 0} />
+                          </td>
+                        </>
+                      )}
                       <td
                         className="px-3 sm:px-4 py-3"
                         data-label="INDIVIDUAL STUDENTS"
@@ -791,21 +1007,59 @@ export default function StateDashboardPage() {
                               : "/state-dashboard/student/new-student-registrations"
                           }
                         >
-                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
-                            {row.individual_student ?? 0}
+                          <span
+                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                              ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                              : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                              }`}
+                          >
+                            {row.individual_student_new ?? 0}
                           </span>
+                          {/* </Link>
+                      </td>
+                      <td
+                        className="px-3 sm:px-4 py-3"
+                        data-label="TOTAL STUDENTS"
+                      > */}
+
                         </Link>
                       </td>
+                      {isUAE && (
+                        <>
+                          <td className="px-3 sm:px-4 py-3" data-label="INDIVIDUAL STUDENTS (OLD)">
+                            <Badge value={row.individual_student_old ?? 0} />
+                          </td>
+                          <td className="px-3 sm:px-4 py-3" data-label="INDIVIDUAL STUDENTS (UPGRADED)">
+                            <Badge value={row.individual_student_upgraded ?? 0} />
+                          </td>
+                        </>
+                      )}
                       <td
                         className="px-3 sm:px-4 py-3"
                         data-label="TOTAL STUDENTS"
                       >
                         <Link href={studentDetailHref}>
-                          <span className="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs cursor-pointer hover:bg-blue-100 transition-colors">
-                            {row.total_student ?? 0}
+                          <span
+                            className={`inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-full font-semibold text-xs cursor-pointer transition-colors ${isUAE
+                              ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+                              : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                              }`}
+                          >
+                            {row.total_student_new ?? 0}
                           </span>
                         </Link>
                       </td>
+                      {isUAE && (
+                        <>
+                          <td className="px-3 sm:px-4 py-3" data-label="SCHOOL STUDENTS (OLD)">
+                            <Badge value={row.total_school_student_old ?? 0} />
+                          </td>
+                          <td className="px-3 sm:px-4 py-3" data-label="SCHOOL STUDENTS (UPGRADED)">
+                            <Badge value={row.total_school_student_upgraded ?? 0} />
+                          </td>
+                        </>
+                      )}
+                      {/* <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID STUDENTS">
                       {/* <td className="px-3 sm:px-4 py-3" data-label="TOTAL PAID STUDENTS">
                         <Badge value={row.total_paid_student ?? 0} />
                       </td> */}
@@ -830,6 +1084,7 @@ export default function StateDashboardPage() {
 
               {/* Totals footer */}
               {!loading && paginated.length > 0 && (
+
                 <tfoot>
                   <tr className="bg-slate-50 font-bold text-slate-700 border-t-2 border-slate-200">
                     <td
@@ -841,18 +1096,68 @@ export default function StateDashboardPage() {
                     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
                       {totals.schools}
                     </td>
+                    {isUAE && (
+                      <>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.schoolsOld}
+                        </td>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.schoolsUpgraded}
+                        </td>
+                      </>
+                    )}
                     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
                       {totals.individual}
                     </td>
+                    {isUAE && (
+                      <>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.indOld}
+                        </td>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.indUpgraded}
+                        </td>
+                      </>
+                    )}
                     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
                       {totals.total}
                     </td>
-                    {/* <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Attempted}</td>
-                    <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td> */}
-                    <td colSpan={2} />
+                    {isUAE && (
+                      <>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.schoolStudentsOld}
+                        </td>
+                        <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                          {totals.schoolStudentsUpgraded}
+                        </td>
+                      </>
+                    )}
                   </tr>
                 </tfoot>
+
+                // <tfoot>
+                //   <tr className="bg-slate-50 font-bold text-slate-700 border-t-2 border-slate-200">
+                //     <td
+                //       className="px-2 sm:px-4 py-2 sm:py-3 text-xs text-slate-500"
+                //       colSpan={2}
+                //     >
+                //       Total
+                //     </td>
+                //     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                //       {totals.schools}
+                //     </td>
+                //     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                //       {totals.individual}
+                //     </td>
+                //     <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">
+                //       {totals.total}
+                //     </td>
+                //     {/* <td className="px-3 sm:px-4 py-3 text-sm">{totals.paid}</td>
+                //     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Attempted}</td>
+                //     <td className="px-3 sm:px-4 py-3 text-sm">{totals.lvl1Submitted}</td> */}
+                //     <td colSpan={2} />
+                //   </tr>
+                // </tfoot>
               )}
             </table>
           </div>
