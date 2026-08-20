@@ -461,7 +461,7 @@ export default function OmanForm({ countries }: Props) {
         }
         try {
             setVerifyLoading(true);
-            const res = await verifyEmailOtp(email, emailOtpValue);
+            const res = await verifyEmailOtp(email, emailOtpValue, 'OM' );
             if (res && res.status === true) {
                 setEmailVerified(true);
                 setOtpModalOpen(false);

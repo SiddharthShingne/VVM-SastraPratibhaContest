@@ -17,7 +17,7 @@ interface RawLoginApiResponse {
       username: string;
       role_id?: string;
       [key: string]: unknown;
-      
+
     };
   };
 }
@@ -199,10 +199,10 @@ https://core.vvmstage.cloud/api/verify-email-otp-new?email=shingnesid@gmail.com&
 */
 
 // ========= VERIFY EMAIL OTP ==========//
-export const verifyEmailOtp = async (email: string, otp: string) => {
+export const verifyEmailOtp = async (email: string, otp: string, country_code: string) => {
   try {
     const res = await api.post(
-      `/verify-email-otp-new?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`,
+      `/verify-email-otp-new?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}&country=${encodeURIComponent(country_code)}`,
     );
 
     return res.data;
@@ -333,7 +333,7 @@ export const registerStudentV2 = async (formData: Record<string, unknown>) => {
 // In your authService.ts file
 export const forgotPassword = async (username: string, frontendUrl?: string) => {
   const resetUrl = frontendUrl || `${window.location.origin}/reset-password`;
-  
+
   const res = await api.post(
     "/forgot-password",
     {

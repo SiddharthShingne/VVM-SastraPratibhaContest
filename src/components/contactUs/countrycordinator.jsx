@@ -329,7 +329,7 @@ const CountryDropdown = ({ selected, onChange }) => {
                 className="w-full flex items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl px-5 py-4 shadow-sm hover:border-[#17395c]/30 transition"
             >
                 <div className="flex items-center gap-3">
-                    {selectedCountry && (
+                    {/* {selectedCountry && (
                         <Image
                             src={selectedCountry.flag}
                             alt={selectedCountry.name}
@@ -337,7 +337,7 @@ const CountryDropdown = ({ selected, onChange }) => {
                             height={28}
                             className="w-7 h-7 rounded-full object-cover border border-[#17395c]/20"
                         />
-                    )}
+                    )} */}
                     <span className="font-semibold text-[#17395c]">
                         {selectedCountry ? selectedCountry.name : "Select a country"}
                     </span>
@@ -376,7 +376,8 @@ const CountryDropdown = ({ selected, onChange }) => {
                                     }`}
                             >
                                 <Image
-                                    src={country.flag}
+                                    // src={country.flag}
+                                    src="/sif-logo.png"
                                     alt={country.name}
                                     width={24}
                                     height={24}
@@ -398,13 +399,13 @@ const CountrySection = ({ country }) => (
     <div>
         <div className="flex items-center justify-between mb-5 pb-3 border-b border-gray-100">
             <div className="flex items-center gap-4">
-                <Image
+                {/* <Image
                     src={country.flag}
                     alt={country.name}
                     width={36}
                     height={36}
                     className="w-9 h-9 rounded-full object-cover border-2 border-[#17395c]/20"
-                />
+                /> */}
                 <div>
                     <h3 className="text-xl font-bold text-[#17395c] tracking-tight">
                         {country.name}

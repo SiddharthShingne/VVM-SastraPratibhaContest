@@ -13,7 +13,7 @@ export default function RegisterPage() {
   const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   const countries = [
-    // { value: "bahrain", label: "Bahrain", code: "1" },
+    { value: "bahrain", label: "Bahrain", code: "1" },
     { value: "kuwait", label: "Kuwait", code: "2" },
     { value: "uae", label: "UAE", code: "3" },
     { value: "saudi", label: "Saudi Arabia", code: "4" },
@@ -46,7 +46,7 @@ export default function RegisterPage() {
   );
 
   const countryComponentMap: Record<string, React.ReactNode> = {
-    // bahrain: <BahrainForm country={selectedCountryData} />,
+    bahrain: <BahrainForm country={selectedCountryData} />,
     kuwait: <KuwaitForm country={selectedCountryData} />,
     uae: <UAEForm countries={countries} />,
     saudi: <SaudiForm country={selectedCountryData} />,
@@ -202,7 +202,7 @@ export default function RegisterPage() {
                 />
               </div>
 
-         
+
               {/* <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                 {flagCards.map((country) => (
                   <button
@@ -246,7 +246,7 @@ export default function RegisterPage() {
                 ))}
               </div> */}
 
-            
+
               {/* <div className="flex justify-center gap-2 mt-8">
                 <div
                   className="h-1.5 w-6 rounded-full"
@@ -265,19 +265,19 @@ export default function RegisterPage() {
               </div> */}
 
 
-               <div
-                      className="relative rounded-full flex justify-center"
-                     
-                    >
-                      <Image
-                        src="/sif-logo.png"
-                        alt="SIF India"
-                        width={100}
-                       height={100}
-                        className="rounded-full"
-                        style={{ objectFit: "contain", padding: "4px" }}
-                      />
-                    </div>
+              <div
+                className="relative rounded-full flex justify-center"
+
+              >
+                <Image
+                  src="/sif-logo.png"
+                  alt="SIF India"
+                  width={100}
+                  height={100}
+                  className="rounded-full"
+                  style={{ objectFit: "contain", padding: "4px" }}
+                />
+              </div>
             </div>
           </div>
         )}

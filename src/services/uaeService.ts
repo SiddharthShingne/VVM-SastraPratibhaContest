@@ -386,7 +386,7 @@ export const deleteStudent = async (userId: number) => {
 
 export const createPaymentLink = async () => {
   try {
-    const res = await axiosInstance.get("/sif/create-payment-links");
+    const res = await axiosInstance.get("/sif/get-payment-links");
 
     return {
       paymentLink: res?.data?.payment_link || null,

@@ -74,7 +74,7 @@ const PromotionalVideo: React.FC = () => {
 
                 {/* Play Button */}
                 <a
-                  href="https://www.youtube.com/watch?v=KzoUkuODAP0"
+                  href="https://youtu.be/xhdCaJCjr2k?si=nESHu9PxEbfPc3lH"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="
