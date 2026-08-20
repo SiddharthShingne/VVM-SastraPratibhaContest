@@ -10,12 +10,12 @@ const Disputes = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col justify-center min-h-[65px]">
             
-            <h6 className="text-white text-[27px] font-medium mb-1  pl-40 ">
+            <h6 className="text-white text-[27px] font-medium mb-1  md:pl-40 ">
               Disputes
             </h6>
 
             <nav>
-              <ol className="flex items-center text-white text-[12px] whitespace-nowrap pl-40">
+              <ol className="flex items-center text-white text-[12px] whitespace-nowrap md:pl-40">
                 <li>
                   <Link href="/" className="hover:underline">
                     Home
@@ -37,7 +37,7 @@ const Disputes = () => {
       </div>
 
       {/* Disputes Section */}
-      <div className="bg-white py-16 w-500px p-40 p-6">
+      <div className="bg-white py-16 w-500px md:px-40 p-6">
         <div className="container mx-auto px-4 py-5">
 
           <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11),inset_0_1px_0_rgba(255,255,255,0.72)] mb-20">

@@ -202,33 +202,27 @@ export default function RegisterPage() {
                 />
               </div>
 
-              {/* Flag Cards */}
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+         
+              {/* <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                 {flagCards.map((country) => (
                   <button
                     key={country.name}
                     onClick={() => setSelectedCountry(country.value)}
                     className="group flex flex-col items-center gap-2 py-3 px-2 rounded-2xl transition-all duration-250 cursor-pointer"
-                    // style={{
-                    //   background: "white",
-                    //   border: "1.5px solid rgba(23,57,92,0.1)",
-                    //   boxShadow: "0 2px 8px rgba(23,57,92,0.07)",
-                    // }}
+                 
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLButtonElement).style.border =
                         "0.5px  rgba(23,57,92,0.35)";
-                      // (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 20px rgba(23,57,92,0.14)";
+                
                       (e.currentTarget as HTMLButtonElement).style.transform =
                         "scale(1.3)";
                     }}
                     onMouseLeave={(e) => {
-                      // (e.currentTarget as HTMLButtonElement).style.border = "1.5px solid rgba(23,57,92,0.1)";
-                      // (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(23,57,92,0.07)";
                       (e.currentTarget as HTMLButtonElement).style.transform =
                         "translateY(0)";
                     }}
                   >
-                    {/* Flag image on pure white */}
+
                     <div
                       className="w-12 h-12 relative rounded-xl bg-white p-1"
                       style={{
@@ -243,12 +237,6 @@ export default function RegisterPage() {
                         style={{ objectFit: "contain", padding: "4px" }}
                       />
                     </div>
-                    {/* <span
-                      className="text-[0.6rem] font-bold tracking-wide text-center leading-tight"
-                      style={{ color: "#2a4a6b" }}
-                    >
-                      {country.name}
-                    </span> */}
                     <span
                       className="text-[0.6rem] font-bold tracking-wide text-center leading-tight text-[#2a4a6b] hover:text-[#1769E0] transition-colors duration-200"
                     >
@@ -256,10 +244,10 @@ export default function RegisterPage() {
                     </span>
                   </button>
                 ))}
-              </div>
+              </div> */}
 
-              {/* Step dots */}
-              <div className="flex justify-center gap-2 mt-8">
+            
+              {/* <div className="flex justify-center gap-2 mt-8">
                 <div
                   className="h-1.5 w-6 rounded-full"
                   style={{
@@ -274,7 +262,22 @@ export default function RegisterPage() {
                   className="h-1.5 w-1.5 rounded-full"
                   style={{ background: "rgba(23,57,92,0.15)" }}
                 />
-              </div>
+              </div> */}
+
+
+               <div
+                      className="relative rounded-full flex justify-center"
+                     
+                    >
+                      <Image
+                        src="/sif-logo.png"
+                        alt="SIF India"
+                        width={100}
+                       height={100}
+                        className="rounded-full"
+                        style={{ objectFit: "contain", padding: "4px" }}
+                      />
+                    </div>
             </div>
           </div>
         )}

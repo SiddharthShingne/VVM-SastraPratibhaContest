@@ -7,17 +7,17 @@ import { ChevronRight } from "lucide-react";
 const NationalCamp = () => {
   return (
     <div>
-  {/* Breadcrumb Section */}
+      {/* Breadcrumb Section */}
       <div className="bg-[#162a4a] py-[50px]">
         <div className="container mx-auto px-4">
           <div className="flex flex-col justify-center min-h-[65px]">
-            
-            <h6 className="text-white text-[27px] font-medium mb-1  pl-40 ">
+
+            <h6 className="text-white text-[27px] font-medium mb-1  md:pl-40 ">
               National Camp (NC)
             </h6>
 
             <nav>
-              <ol className="flex items-center text-white text-[12px] whitespace-nowrap pl-40">
+              <ol className="flex items-center text-white text-[12px] whitespace-nowrap md:pl-40">
                 <li>
                   <Link href="/" className="hover:underline">
                     Home
@@ -37,8 +37,10 @@ const NationalCamp = () => {
           </div>
         </div>
       </div>
+
+
       {/* Content Section */}
-      <div className="max-w-5xl mx-auto px-4 py-12">
+      <div className="bg-white w-500px md:px-40 p-6">
 
         {/* Glass Card */}
         <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11),inset_0_1px_0_rgba(255,255,255,0.72)] mb-20">
@@ -55,9 +57,9 @@ const NationalCamp = () => {
 
             {/* Content */}
             <p className="text-[17px] text-[#4f6480] leading-[1.8]">
-              
+
               Top two students from each class (a total of 12 students) will be invited to participate in a two-day National Camp.
-            <br /> <br />
+              <br /> <br />
               The <strong>National Camp (NC)</strong> will comprise of presentations
               and activities to test{" "}
               <strong>
@@ -80,7 +82,7 @@ const NationalCamp = () => {
 
               {/* <strong>Marks Display</strong> – Students can check their marks on the dashboard
               after one week of result declaration. */}
-                          <strong>Tiebreaker</strong> – In case of a tie, students will appear for{" "}
+              <strong>Tiebreaker</strong> – In case of a tie, students will appear for{" "}
               <strong>Viva-Voce</strong>.  The student scoring the highest marks will be declared the winner.
             </p>
 

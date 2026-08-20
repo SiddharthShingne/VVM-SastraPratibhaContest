@@ -32,7 +32,7 @@
 //                                 <strong className="font-semibold">
 //                                     Vidyarthi Vigyan Manthan (International Edition of VVM){" "}
 //                                 </strong>
-//                                 is conducted in the Middle Eastern Countries namely Bahrain,
+//                                 is conducted in the GCC Countries namely Bahrain,
 //                                 Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
 //                                 with the name of Śāstra Pratibhā Contest by Science India Forum,
 //                                 an overseas unit of Vijnana Bharati. This year onwards, top 2
@@ -40,7 +40,7 @@
 //                                 participate in the National Level Camp Examination. These
 //                                 students will be considered eligible for National Level Winners
 //                                 (Himalayan) selection. A separate zone (Zone 5) will be created
-//                                 for Middle Eastern Countries to declare Zonal Level Winners.
+//                                 for tern Countries to declare Zonal Level Winners.
 //                                 Zone 5 winners will be announced only if at least 6 students (in
 //                                 a class) attend the National Level Camp.
 //                             </p>
@@ -96,7 +96,7 @@ const ŚāstraPratibhāContest = () => {
                 </span>
 
                 <span className="px-4 py-1.5 rounded-full bg-linear-to-r from-[#f4df17] to-[#b88d00] border border-[#b88d00] text-[#17395c] text-[10px] font-extrabold uppercase">
-                  Middle East Zone
+                  GCC
                 </span>
               </div> */}
 
@@ -116,7 +116,7 @@ const ŚāstraPratibhāContest = () => {
                 <strong className="text-[#17395c]">
                 Vidyarthi Vigyan Manthan (International Edition of VVM-SPC)
                 </strong>{" "}
-                is conducted in the Middle Eastern Countries namely Bahrain,
+                is conducted in the GCC Countries namely Bahrain,
                 Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
                 with the name of Śāstra Pratibhā Contest (SPC) by Science India Forum,
                 an overseas unit of Vijnana Bharati. The top 2
@@ -124,7 +124,7 @@ const ŚāstraPratibhāContest = () => {
                 participate in the National Level Camp Examination. These
                 students will be considered eligible for National Level Winners
                 (Himalayan) selection. A separate zone (Zone 5) will be created
-                for Middle Eastern Countries to declare Zonal Level Winners.
+                for GCC Countries to declare Zonal Level Winners.
                 Zone 5 winners will be announced only if at least 6 students (in
                 a class) attend the National Level Camp.
               </p>

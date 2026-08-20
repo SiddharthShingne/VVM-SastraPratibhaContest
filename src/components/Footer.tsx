@@ -8,12 +8,13 @@ const Footer = () => {
     const router = useRouter();
 
     const gccFlags = [
-        { src: "/gcc/uae.png", label: "UAE" },
-        { src: "/gcc/oman.png", label: "Oman" },
-        { src: "/gcc/kuwait.png", label: "Kuwait" },
-        { src: "/gcc/qatar.png", label: "Qatar" },
-        { src: "/gcc/saudi-arab.png", label: "Saudi Arabia" },
-        { src: "/gcc/bahrain.png", label: "Bahrain" },
+        // { src: "/gcc/uae.png", label: "UAE" },
+        // { src: "/gcc/oman.png", label: "Oman" },
+        // { src: "/gcc/kuwait.png", label: "Kuwait" },
+        // { src: "/gcc/qatar.png", label: "Qatar" },
+        // { src: "/gcc/saudi-arab.png", label: "Saudi Arabia" },
+        // { src: "/gcc/bahrain.png", label: "Bahrain" },
+        { src: "/sif-logo.png", label: "SCIENCE INDIA FORUM (SIF)" },
     ];
 
     const leftLinks = [
@@ -72,46 +73,7 @@ const Footer = () => {
                         </button>
                     </div>
 
-                    {/* ── CENTER: GCC Countries ── */}
-                    {/* On small screens: full width, centered. On sm: spans both columns centered. On lg: single col */}
-                    <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center w-full">
 
-                        <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-none mx-auto">
-                            <h3 className="text-base font-bold text-white mb-2 tracking-wide text-center lg:text-left">
-                                {/* GCC-SIF */}
-                                Countries
-                            </h3>
-                            <div className="h-[1.5px] bg-gradient-to-r from-[#7f00ff] via-[#7f00ff]/40 to-transparent mb-6 rounded-full" />
-
-                            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-3 gap-4 sm:gap-5 place-items-center">
-                                {gccFlags.map((flag, index) => (
-                                    <div key={index} className="flex flex-col items-center gap-2">
-                                        <div
-                                            className="w-[72px] h-[72px] sm:w-[68px] sm:h-[68px] lg:w-[76px] lg:h-[76px]
-                        rounded-full bg-white
-                        border-2 border-white/25
-                        shadow-[0_4px_14px_rgba(0,0,0,0.28)]
-                        flex items-center justify-center overflow-hidden
-                        hover:-translate-y-1 hover:shadow-[0_8px_22px_rgba(0,0,0,0.35)] hover:border-[#7f00ff]/50
-                        transition-all duration-300"
-                                        >
-                                            <Image
-                                                src={flag.src}
-                                                alt={flag.label}
-                                                width={72}
-                                                height={72}
-                                                // BEFORE // AFTER
-                                                className="w-full h-full object-contain p-1.5 rounded-full"
-                                            />
-                                        </div>
-                                        <span className="text-[10px] sm:text-[11px] text-gray-400 text-center leading-tight">
-                                            {flag.label}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
 
                     {/* ── RIGHT: Useful Links ── */}
                     <div className="flex flex-col items-center sm:items-start w-full sm:col-span-2 lg:col-span-1 lg:ml-auto">
@@ -140,6 +102,47 @@ const Footer = () => {
                                     >
                                         {link.label}
                                     </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ── CENTER: GCC Countries ── */}
+                    {/* On small screens: full width, centered. On sm: spans both columns centered. On lg: single col */}
+                    <div className="sm:col-span-2 lg:col-span-1 flex flex-col items-center w-full">
+
+                        <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-none mx-auto">
+                            {/* <h3 className="text-base font-bold text-white mb-2 tracking-wide text-center lg:text-left">
+                            
+                                Countries
+                            </h3>
+                            <div className="h-[1.5px] bg-gradient-to-r from-[#7f00ff] via-[#7f00ff]/40 to-transparent mb-6 rounded-full" /> */}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 sm:gap-5 place-items-center">
+                                {gccFlags.map((flag, index) => (
+                                    <div key={index} className="flex flex-col items-center gap-2">
+                                        <div
+                                            className="w-full h-full m-auto
+                        rounded-full 
+                        
+                        shadow-[0_4px_14px_rgba(0,0,0,0.28)]
+                        flex items-center justify-center overflow-hidden
+                        hover:-translate-y-1 hover:shadow-[0_8px_22px_rgba(0,0,0,0.35)]
+                        transition-all duration-300"
+                                        >
+                                            <Image
+                                                src={flag.src}
+                                                alt={flag.label}
+                                                width={72}
+                                                height={72}
+                                                // BEFORE // AFTER
+                                                className="w-full h-full object-contain p-1.5 rounded-full"
+                                            />
+                                        </div>
+                                        <span className="text-[10px] sm:text-[11px] text-gray-400 text-center leading-tight">
+                                            {flag.label}
+                                        </span>
+                                    </div>
                                 ))}
                             </div>
                         </div>

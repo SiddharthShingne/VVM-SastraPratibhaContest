@@ -12,12 +12,12 @@ const UnfairMeans = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col justify-center min-h-[65px]">
 
-            <h6 className="text-white text-[27px] font-medium mb-1">
+            <h6 className="text-white text-[27px] font-medium mb-1 md:pl-40">
               Unfair Means
             </h6>
 
             <nav>
-              <ol className="flex items-center text-white text-[12px] whitespace-nowrap">
+              <ol className="flex items-center text-white text-[12px] whitespace-nowrap md:pl-40">
                 <li>
                   <Link href="/" className="hover:underline">
                     Home
@@ -40,7 +40,7 @@ const UnfairMeans = () => {
 
       {/* Content Section */}
       <div className="bg-white py-16">
-        <div className="max-w-5xl mx-auto px-4 py-5">
+        <div className="bg-white w-500px md:px-40 p-6">
 
           {/* Glass Card */}
           <div className="relative rounded-[28px] overflow-hidden bg-white/70 border border-white/60 backdrop-blur-xl shadow-[0_22px_50px_rgba(23,57,92,0.11),inset_0_1px_0_rgba(255,255,255,0.72)] mb-20">

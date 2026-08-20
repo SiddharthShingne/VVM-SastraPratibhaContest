@@ -25,7 +25,7 @@ const VVMHeroAbout = () => {
               <span className="bg-yellow-200 px-3 py-1 rounded-full text-xs font-extrabold">
                 Registration
               </span>
-              VVM SIF 2026-27
+              VVM-SPC 2026-27
               <UserPlus size={18} />
             </Link>
 
@@ -36,7 +36,7 @@ const VVMHeroAbout = () => {
               <span className="bg-yellow-400 px-3 py-1 rounded-full text-xs font-extrabold text-[#17395c]">
                 Archive
               </span>
-              Visit VVM SIF Archive 2025-26
+              Visit VVM-SPC Archive 2025-26
               <Folder size={18} />
             </a>
 
@@ -50,9 +50,9 @@ const VVMHeroAbout = () => {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             {/* LEFT */}
             <div className="space-y-6 text-center md:text-left">
-              <div className="inline-block bg-white px-4 py-2 rounded-full shadow font-bold">
-                🏆 VVM SIF 2026-27
-              </div>
+              {/* <div className="inline-block bg-white px-4 py-2 rounded-full shadow font-bold">
+                🏆 VVM-SPC 2026-27
+              </div> */}
 
               <span className="block text-yellow-700 uppercase text-xs font-extrabold tracking-widest">
                 Science Talent Journey

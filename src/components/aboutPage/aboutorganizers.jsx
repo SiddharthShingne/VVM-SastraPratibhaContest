@@ -27,11 +27,10 @@ const OrganizerSection = ({ logo, name, title, description, qr }) => (
                 {/* Inner Content */}
                 <div className="p-7">
 
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div className="flex flex-col lg:flex-row items-center gap-6">
 
                         {/* Logo + Text */}
-                        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 max-w-3xl text-center sm:text-left">
-
+                        <div className="flex flex-1 w-full flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                             <Image
                                 src={logo}
                                 alt={`${title} Logo`}
@@ -52,15 +51,16 @@ const OrganizerSection = ({ logo, name, title, description, qr }) => (
                         </div>
 
                         {/* QR Code */}
-                        <div className="shrink-0">
-                            <Image
-                                src={qr}
-                                alt={`${title} QR Code`}
-                                width={100}
-                                height={100}
-                                className="object-contain transition-transform duration-300 hover:scale-105"
-                            />
-                        </div>
+                        {qr && (
+                            <div className="shrink-0">
+                                <Image
+                                    src={qr}
+                                    alt={`${title} QR Code`}
+                                    width={100}
+                                    height={100}
+                                />
+                            </div>
+                        )}
 
                     </div>
                 </div>
@@ -78,7 +78,7 @@ const AboutOrganizers = () => {
             <div className="bg-[#162a4a] py-12.5">
                 <div className="max-w-6xl mx-auto px-4 text-white">
                     <h1 className="text-[27px] font-medium mb-1">
-                       About Organizers
+                        About Organizers
                     </h1>
 
                     <p className="text-[12px] opacity-90">
@@ -91,6 +91,15 @@ const AboutOrganizers = () => {
             </div>
 
             {/* Sections */}
+            <OrganizerSection
+                logo="/scan/sif-logo.png"
+                // qr="/scan/vibha-qr.png"
+                title="SCIENCE INDIA FORUM"
+                name="VVM–Sastra Pratibha Contest (VVM-SPC)"
+                description="is organised across the GCC by the respective Science India/International Forum (SIF) units, with the shared mission of nurturing scientific curiosity and identifying young talent. Over the years, VVM-SPC has evolved into one of the largest science talent contests in the GCC, engaging students across the region. Beyond the competition, it provides students with unparalleled opportunities and enriching experiences in science, opening doors to learning, exploration, and lifelong inspiration."
+            />
+
+
             <OrganizerSection
                 logo="/scan/vibha.png"
                 qr="/scan/vibha-qr.png"

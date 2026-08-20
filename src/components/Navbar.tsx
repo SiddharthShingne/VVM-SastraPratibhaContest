@@ -44,6 +44,8 @@ const navItems: NavItem[] = [
         label: "Exam Details",
         href: "/exam-details",
         subLinks: [
+            { label: "Level 1", href: "/exam-details/level1" },
+            { label: "Level 2", href: "/exam-details/level2" },
             { label: "National Camp", href: "/exam-details/national-camp" },
             // { label: "Student Awards", href: "/exam-details/student-awards" },
             { label: "Exam Requirements", href: "/exam-details/exam-requirements" },
@@ -78,12 +80,12 @@ const navItems: NavItem[] = [
     },
 ];
 const gccFlags = [
-    { src: "/gcc/oman.png", alt: "Oman", fit: "cover" },
-    { src: "/gcc/qatar.png", alt: "Qatar", fit: "contain" },
-    { src: "/gcc/kuwait.png", alt: "Kuwait", fit: "cover" },
-    { src: "/gcc/saudi-arab.png", alt: "Saudi Arabia", fit: "cover" },
-    { src: "/gcc/uae.png", alt: "UAE", fit: "cover" },
-    { src: "/gcc/bahrain.png", alt: "Bahrain", fit: "cover" },
+    { src: "/scan/sif-logo.png", alt: "Oman", fit: "cover" },
+    // { src: "/gcc/qatar.png", alt: "Qatar", fit: "contain" },
+    // { src: "/gcc/kuwait.png", alt: "Kuwait", fit: "cover" },
+    // { src: "/gcc/saudi-arab.png", alt: "Saudi Arabia", fit: "cover" },
+    // { src: "/gcc/uae.png", alt: "UAE", fit: "cover" },
+    // { src: "/gcc/bahrain.png", alt: "Bahrain", fit: "cover" },
 ];
 
 const Navbar = () => {
@@ -175,20 +177,22 @@ const Navbar = () => {
                                     priority
                                 />
                             </Link>
-                            {/* Flags — visible sm and above */}
-                            <div className="hidden sm:flex items-center gap-1.5 flex-wrap">
-                                {gccFlags.map(({ src, alt, fit }) => (
-                                    <Image
-                                        key={alt}
-                                        src={src}
-                                        alt={alt}
-                                        width={36}
-                                        height={36}
-                                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full border border-gray-100 shadow-sm bg-white"
-                                        style={{ objectFit: fit as "cover" | "contain" }}
-                                    />
-                                ))}
-                            </div>
+
+                        </div>
+
+                        {/* Flags — visible sm and above */}
+                        <div className="hidden sm:flex items-center gap-1.5 flex-wrap">
+                            {gccFlags.map(({ src, alt, fit }) => (
+                                <Image
+                                    key={alt}
+                                    src={src}
+                                    alt={alt}
+                                    width={48}
+                                    height={48}
+                                    // className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full border border-gray-100 shadow-sm bg-white"
+                                    style={{ objectFit: fit as "cover" | "contain" }}
+                                />
+                            ))}
                         </div>
 
                         {/* ── DESKTOP NAV ── */}
@@ -211,8 +215,8 @@ const Navbar = () => {
                                                 aria-haspopup="true"
                                                 aria-expanded={dropdownOpen === label}
                                                 className={`flex items-center gap-1 px-3 py-2 text-[13.5px] xl:text-[14px] font-semibold rounded-md transition-colors whitespace-nowrap ${isActive
-                                                        ? "text-blue-700 bg-blue-50"
-                                                        : "text-[#111d35] hover:text-blue-600 hover:bg-blue-50"
+                                                    ? "text-blue-700 bg-blue-50"
+                                                    : "text-[#111d35] hover:text-blue-600 hover:bg-blue-50"
                                                     }`}
                                             >
                                                 {label}
@@ -225,8 +229,8 @@ const Navbar = () => {
                                             <Link
                                                 href={href}
                                                 className={`flex items-center px-3 py-2 text-[13.5px] xl:text-[14px] font-semibold rounded-md transition-colors whitespace-nowrap ${isActive
-                                                        ? "text-blue-700 bg-blue-50"
-                                                        : "text-[#111d35] hover:text-blue-600 hover:bg-blue-50"
+                                                    ? "text-blue-700 bg-blue-50"
+                                                    : "text-[#111d35] hover:text-blue-600 hover:bg-blue-50"
                                                     }`}
                                             >
                                                 {label}
@@ -237,8 +241,8 @@ const Navbar = () => {
                                         {hasDropdown && (
                                             <ul
                                                 className={`absolute left-0 top-full z-50 mt-1.5 w-60 bg-white border border-gray-100 rounded-xl shadow-xl ring-1 ring-black/5 transition-all duration-200 origin-top-left ${dropdownOpen === label
-                                                        ? "opacity-100 scale-100 pointer-events-auto"
-                                                        : "opacity-0 scale-95 pointer-events-none"
+                                                    ? "opacity-100 scale-100 pointer-events-auto"
+                                                    : "opacity-0 scale-95 pointer-events-none"
                                                     }`}
                                                 style={{ transitionProperty: "opacity, transform" }}
                                             >
@@ -248,8 +252,8 @@ const Navbar = () => {
                                                             <Link
                                                                 href={sublink.href}
                                                                 className={`block px-4 py-2.5 text-[13px] transition-colors hover:bg-gray-50 ${pathname === sublink.href
-                                                                        ? "text-blue-700 font-semibold bg-blue-50/60"
-                                                                        : "text-gray-700 hover:text-gray-900"
+                                                                    ? "text-blue-700 font-semibold bg-blue-50/60"
+                                                                    : "text-gray-700 hover:text-gray-900"
                                                                     }`}
                                                                 {...(sublink.download
                                                                     ? { download: true, target: "_blank" }
@@ -343,9 +347,9 @@ const Navbar = () => {
                             key={alt}
                             src={src}
                             alt={alt}
-                            width={36}
-                            height={36}
-                            className="w-8 h-8 rounded-full border border-gray-100 shadow-sm bg-white"
+                            width={45}
+                            height={45}
+                            // className="w-8 h-8 rounded-full border border-gray-100 shadow-sm bg-white"
                             style={{ objectFit: fit as "cover" | "contain" }}
                         />
                     ))}
@@ -369,8 +373,8 @@ const Navbar = () => {
                                                 onClick={() => toggleMobileDropdown(label)}
                                                 aria-expanded={isExpanded}
                                                 className={`w-full flex items-center justify-between px-5 py-3.5 text-[15px] font-semibold transition-colors ${isActive
-                                                        ? "text-blue-700 bg-blue-50/50"
-                                                        : "text-[#111d35] hover:bg-gray-50"
+                                                    ? "text-blue-700 bg-blue-50/50"
+                                                    : "text-[#111d35] hover:bg-gray-50"
                                                     }`}
                                             >
                                                 {label}
@@ -392,8 +396,8 @@ const Navbar = () => {
                                                                 href={sublink.href}
                                                                 onClick={closeMenu}
                                                                 className={`flex items-center px-5 py-3 text-[14px] border-l-2 transition-colors ${pathname === sublink.href
-                                                                        ? "border-blue-600 text-blue-700 font-semibold bg-blue-50/40"
-                                                                        : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+                                                                    ? "border-blue-600 text-blue-700 font-semibold bg-blue-50/40"
+                                                                    : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
                                                                     }`}
                                                                 {...(sublink.download
                                                                     ? { download: true, target: "_blank" }
@@ -411,8 +415,8 @@ const Navbar = () => {
                                             href={href}
                                             onClick={closeMenu}
                                             className={`flex items-center px-5 py-3.5 text-[15px] font-semibold transition-colors ${isActive
-                                                    ? "text-blue-700 bg-blue-50/50 border-l-2 border-blue-600"
-                                                    : "text-[#111d35] hover:bg-gray-50"
+                                                ? "text-blue-700 bg-blue-50/50 border-l-2 border-blue-600"
+                                                : "text-[#111d35] hover:bg-gray-50"
                                                 }`}
                                         >
                                             {label}

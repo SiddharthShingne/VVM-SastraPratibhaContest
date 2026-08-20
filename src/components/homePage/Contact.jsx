@@ -20,7 +20,7 @@ export default function VVMContactSection() {
         <div className="grid lg:grid-cols-2 items-center mb-12 gap-6">
           <div>
             <span className="inline-block px-4 py-2 rounded-full bg-linear-to-r from-[#17395c] to-[#244d79] text-[#f4df17] text-[13px] font-extrabold tracking-[3px] uppercase shadow-lg mb-4">
-              VVM SIF 2026-27
+              VVM-SPC 2026-27
             </span>
             <h2 className="text-[clamp(2rem,4vw,3.3rem)] font-extrabold text-[#17395c] mb-3 leading-tight">
               Contact & Outreach Desk

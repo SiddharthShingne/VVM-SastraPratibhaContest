@@ -55,91 +55,91 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const trimmedUsername = username.trim();
-  const trimmedPassword = password.trim();
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
 
-  const userErr = validateUsername(trimmedUsername);
-  const passErr = validatePassword(trimmedPassword);
+    const userErr = validateUsername(trimmedUsername);
+    const passErr = validatePassword(trimmedPassword);
 
-  setUsernameError(userErr);
-  setPasswordError(passErr);
+    setUsernameError(userErr);
+    setPasswordError(passErr);
 
-  if (userErr || passErr) return;
+    if (userErr || passErr) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const data = await loginUser(trimmedUsername, trimmedPassword);
+    try {
+      const data = await loginUser(trimmedUsername, trimmedPassword);
 
-    console.log("LOGIN RESPONSE:", data);
+      console.log("LOGIN RESPONSE:", data);
 
-    // ✅ ROLE CONSTANTS (easy for any developer)
-    const ROLE = {
-      STUDENT: 1,
-      SCHOOL: 2,
-      STATE: 9,
-    };
+      // ✅ ROLE CONSTANTS (easy for any developer)
+      const ROLE = {
+        STUDENT: 1,
+        SCHOOL: 2,
+        STATE: 9,
+      };
 
-    // ✅ Store full user
-    localStorage.setItem("user", JSON.stringify(data));
+      // ✅ Store full user
+      localStorage.setItem("user", JSON.stringify(data));
 
-    // ✅ Store token
-    if (data?.token) {
-      localStorage.setItem("token", data.token);
-    }
-
-    // ✅ Safe role extraction (handles backend changes)
-    const roleId = data?.user?.role_id ?? data?.role_id;
-
-    if (roleId !== undefined && roleId !== null) {
-      localStorage.setItem("role", String(roleId));
-    }
-
-    // optional
-    localStorage.setItem("username", data?.username || trimmedUsername);
-
-    window.dispatchEvent(new Event("auth-change"));
-
-    setDialog({
-      type: "success",
-      message: "Login successful. Redirecting to dashboard...",
-    });
-
-    // ✅ CLEAN ROLE-BASED REDIRECT
-    setTimeout(() => {
-      switch (roleId) {
-        case ROLE.SCHOOL:
-          router.replace("/school-dashboard");
-          break;
-
-        case ROLE.STATE:
-          router.replace("/state-dashboard");
-          break;
-
-        case ROLE.STUDENT:
-          router.replace("/studentDashboard");
-          break;
-
-        default:
-          console.warn("Unknown role_id:", roleId);
-          router.replace("/login");
+      // ✅ Store token
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
       }
-    }, 1500);
 
-  } catch (err) {
-    setDialog({
-      type: "error",
-      message:
-        err instanceof Error
-          ? err.message
-          : "Invalid username or password. Please try again.",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+      // ✅ Safe role extraction (handles backend changes)
+      const roleId = data?.user?.role_id ?? data?.role_id;
+
+      if (roleId !== undefined && roleId !== null) {
+        localStorage.setItem("role", String(roleId));
+      }
+
+      // optional
+      localStorage.setItem("username", data?.username || trimmedUsername);
+
+      window.dispatchEvent(new Event("auth-change"));
+
+      setDialog({
+        type: "success",
+        message: "Login successful. Redirecting to dashboard...",
+      });
+
+      // ✅ CLEAN ROLE-BASED REDIRECT
+      setTimeout(() => {
+        switch (roleId) {
+          case ROLE.SCHOOL:
+            router.replace("/school-dashboard");
+            break;
+
+          case ROLE.STATE:
+            router.replace("/state-dashboard");
+            break;
+
+          case ROLE.STUDENT:
+            router.replace("/studentDashboard");
+            break;
+
+          default:
+            console.warn("Unknown role_id:", roleId);
+            router.replace("/login");
+        }
+      }, 1500);
+
+    } catch (err) {
+      setDialog({
+        type: "error",
+        message:
+          err instanceof Error
+            ? err.message
+            : "Invalid username or password. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-linear-to-br from-[#e8eef5] to-[#f5f0d0] relative">
       {/* ---------------- MODAL ---------------- */}
@@ -192,8 +192,8 @@ export default function LoginPage() {
           </div>
         </div>
       )} */}
-      
-      
+
+
       {showNotice && (
         <div className="w-full bg-[#dede4e] border-b border-[#f4df17]/20 shadow-sm">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
@@ -367,7 +367,7 @@ export default function LoginPage() {
       animate-[float_4s_ease-in-out_infinite]"
               >
                 <Image
-                  src="/gcc/logo.png"
+                  src="/sif-logo.png"
                   alt="VVM Logo"
                   width={130}
                   height={130}
@@ -376,14 +376,14 @@ export default function LoginPage() {
               </div>
 
               {/* COUNTRY LOGOS */}
-              <div className="mt-8  grid grid-cols-3 gap-4">
+              <div className="mt-8  grid grid-cols-1 gap-4">
                 {[
-                  "/gcc/uae.png",
-                  "/gcc/oman.png",
-                  "/gcc/kuwait.png",
-                  "/gcc/qatar.png",
-                  "/gcc/saudi-arab.png",
-                  "/gcc/bahrain.png",
+                  // "/sif-logo.png",
+                  // "/gcc/oman.png",
+                  // "/gcc/kuwait.png",
+                  // "/gcc/qatar.png",
+                  // "/gcc/saudi-arab.png",
+                  // "/gcc/bahrain.png",
                 ].map((flag, index) => (
                   <div
                     key={index}

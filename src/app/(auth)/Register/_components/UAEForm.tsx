@@ -581,7 +581,7 @@ export default function UAEForm({ countries }: Props) {
           <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
             Student Registration – UAE
           </h1>
-          <Image src="/gcc/uae.png" alt="UAE" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+          <Image src="/sif-logo.png" alt="sif" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -808,18 +808,22 @@ export default function UAEForm({ countries }: Props) {
           <Section title="Terms & Conditions">
             <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
               <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
-                <h3 className="font-semibold text-gray-800">Definitions</h3>
-                <p>License – shall mean the terms and conditions for use, reproduction, and distribution...</p>
-                <h3 className="font-semibold text-gray-800">Grant of Copyright License</h3>
-                <p>Subject to the terms and conditions of this License, each Contributor hereby grants...</p>
-                <h3 className="font-semibold text-gray-800">Disclaimer of Warranty</h3>
-                <p>Unless required by applicable law, Licensor provides the Work on an &#34;AS IS&#34; BASIS...</p>
-                <h3 className="font-semibold text-gray-800">Limitation of Liability</h3>
-                <p>In no event shall any Contributor be liable for damages including loss of goodwill...</p>
-                <h3 className="font-semibold text-gray-800">Dispute Resolution</h3>
-                <p>The decision made by the VVM Core Committee shall be final and binding.</p>
+                <ol className="list-decimal pl-5">
+                  <li className="py-2">The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
+                  <li className="py-2">Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
+                  <li className="py-2">After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
+                  <li className="py-2">Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
+                  <li className="py-2">The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student's responsibility.</li>
+                  <li className="py-2">VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
+                  <li className="py-2">All study materials and content available on the portal are downloadable.</li>
+                  <li className="py-2">By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
+                </ol>
                 <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
               </div>
+
+              <p className="text-red-500 text-sm mt-2">
+                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
+              </p>
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"
                   {...register("termsAccepted", { required: "You must accept the terms" })}
@@ -830,9 +834,7 @@ export default function UAEForm({ countries }: Props) {
                 </label>
               </div>
               {errors.termsAccepted && <p className="text-red-500 text-sm mt-1">{errors.termsAccepted.message}</p>}
-              <p className="text-red-500 text-sm mt-2">
-                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
-              </p>
+
             </div>
           </Section>
 
