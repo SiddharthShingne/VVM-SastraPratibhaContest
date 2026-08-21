@@ -59,7 +59,7 @@ const DialogBox = ({
           {dialog.type === "success" ? "✓ Success" : "✗ Error"}
         </h3>
 
-        <p className="text-md text-gray-600 mb-6 leading-7 break-words whitespace-normal max-w-md">
+        <p className="text-md text-gray-600 mb-6 leading-7 wrap-break-word whitespace-normal max-w-md">
           {dialog.message}
         </p>
 
