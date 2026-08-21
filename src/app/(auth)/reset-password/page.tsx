@@ -317,7 +317,7 @@ function ResetPasswordContent() {
                             <Image
                                 width={176}
                                 height={176}
-                                src="/gcc/logo.png"
+                                src="/sif-logo.png"
                                 alt="Logo"
                                 className="w-full h-full object-cover rounded-full"
                             />

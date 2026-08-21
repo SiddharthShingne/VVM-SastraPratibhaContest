@@ -36,7 +36,7 @@ export default function RegisterPage() {
       value: "kuwait",
       fit: "contain",
     },
-    // { name: "Bahrain", logo: "/gcc/bahrain.png", value: "bahrain", fit: "contain" },
+    { name: "Bahrain", logo: "/gcc/bahrain.png", value: "bahrain", fit: "contain" },
     { name: "Qatar", logo: "/gcc/qatar.png", value: "qatar", fit: "contain" },
     { name: "Oman", logo: "/gcc/oman.png", value: "oman", fit: "contain" },
   ];

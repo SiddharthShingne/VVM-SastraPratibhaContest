@@ -433,15 +433,15 @@ export default function QatarForm({ countries = [] }: Props) {
         dob: data.dob,
         gender: Number(data.gender),
         grade: Number(data.grade),
-        student_mobile: data.studentMobile,
-        student_email: data.studentEmail,
+        // student_mobile: data.studentMobile,
+        // student_email: data.studentEmail,
         emirate_id: data.emiratesId || null,
 
         sch_name: data.schoolName,
-        school_board_id: data.board,
+        // school_board_id: data.board,
 
         // pincode: data.pincode,
-        address: data.schoolAddress,
+        // address: data.schoolAddress,
         region_id: data.region,
         dist_id: data.city,
 
@@ -545,22 +545,22 @@ export default function QatarForm({ countries = [] }: Props) {
               })}
               error={errors.dob}
             />
-            <InputField label="Residential ID" required maxLength={11} placeholder="Residential ID"
-              registration={register("emiratesId", { required: "Residential ID is required", minLength: { value: 11, message: "Residential ID must be 11 characters" }, maxLength: { value: 11, message: "Residential ID must be 11 characters" } })}
+            <InputField label="Qatar ID" required maxLength={11} placeholder="Qatar ID"
+              registration={register("emiratesId", { required: "Qatar ID is required", minLength: { value: 11, message: "Qatar ID must be 11 characters" }, maxLength: { value: 11, message: "Qatar ID must be 11 characters" } })}
               error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
             />
             <SelectField label="Gender" required options={genders}
               registration={register("gender", { required: "Gender is required" })}
               error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
             />
-            <InputField label="Student Mobile" required maxLength={8} placeholder="Enter mobile"
+            {/* <InputField label="Student Mobile" required maxLength={8} placeholder="Enter mobile"
               registration={register("studentMobile", { required: "Student Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
               error={touchedFields?.studentMobile && errors?.studentMobile ? errors.studentMobile : undefined}
-            />
-            <InputField label="Student Email" type="email" placeholder="Enter email"
+            /> */}
+            {/* <InputField label="Student Email" type="email" placeholder="Enter email"
               registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
               error={errors.studentEmail}
-            />
+            /> */}
             <SelectField label="Class / Grade" required options={grades}
               registration={register("grade", { required: "Grade is required" })}
               error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
@@ -622,7 +622,7 @@ export default function QatarForm({ countries = [] }: Props) {
                   : undefined
               }
             />
-            <SelectField label="Board" required options={boards}
+            {/* <SelectField label="Board" required options={boards}
               registration={register("board", { required: "Board is required" })}
               error={touchedFields?.board && errors?.board ? errors.board : undefined}
             />
@@ -632,7 +632,7 @@ export default function QatarForm({ countries = [] }: Props) {
                 registration={register("schoolAddress", { required: "School Address is required" })}
                 error={errors.schoolAddress}
               />
-            </div>
+            </div> */}
 
           </Section>
 
@@ -717,23 +717,23 @@ export default function QatarForm({ countries = [] }: Props) {
           {/* Terms */}
           <Section title="Terms & Conditions">
             <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
-              <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
-                <ol className="list-decimal pl-5">
-                  <li className="py-2">The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
-                  <li className="py-2">Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
-                  <li className="py-2">After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
+              <div className="h-40 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
+                <ol className="list-decimal pl-7">
+                  <li className="py-2"> I/We Agree to submit the above details. The above details are accurate. </li>
+                  <li className="py-2"> I/We agree SIF Qatar do not hold responsible for any discrepancy. </li>
+                  {/* <li className="py-2">After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
                   <li className="py-2">Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
-                  <li className="py-2">The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student's responsibility.</li>
+                  <li className="py-2">The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&lsquo;s responsibility.</li>
                   <li className="py-2">VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
                   <li className="py-2">All study materials and content available on the portal are downloadable.</li>
-                  <li className="py-2">By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
+                  <li className="py-2">By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li> */}
                 </ol>
                 <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
               </div>
 
-              <p className="text-red-500 text-sm mt-2">
+              {/* <p className="text-red-500 text-sm mt-2">
                 After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
-              </p>
+              </p> */}
 
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"
