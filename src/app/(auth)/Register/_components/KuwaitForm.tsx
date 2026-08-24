@@ -766,9 +766,8 @@ export default function KuwaitForm({ countries }: Props) {
                                 <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
                             </div>
 
-                            {/* <p className="text-red-500 text-sm mt-2">
-                                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
-                            </p> */}
+                            <p className="text-red-500 text-sm mt-2">
+                                After completing the online registration, please ensure that the physical registration form provided by the school is duly completed and returned to the school along with the applicable registration fee.                            </p>
                             <div className="mt-4 flex items-start gap-2">
                                 <input type="checkbox"
                                     {...register("termsAccepted", { required: "You must accept the terms" })}

@@ -370,32 +370,32 @@ export default function BahraiinForm({ countries = [] }: Props) {
   const sendOtp = useDebounce(_sendOtp, 300);
 
   // ── Verify OTP ────────────────────────────────────────────────────────────
-  // const verifyOtp = async () => {
-  //   const email = getValues("parentEmail");
-  //   if (!emailOtpValue || emailOtpValue.length < 6) {
-  //     setDialog({ type: "error", message: "Please enter the 6-digit OTP." });
-  //     return;
-  //   }
-  //   try {
-  //     setVerifyLoading(true);
-  //     const res = await verifyEmailOtp(email, emailOtpValue);
-  //     if (res && res.status === true) {
-  //       setEmailVerified(true);
-  //       setOtpModalOpen(false);
-  //       setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
-  //     } else {
-  //       throw new Error(res?.message || "Invalid OTP");
-  //     }
-  //   } catch (err: any) {
-  //     setDialog({
-  //       type: "error",
-  //       title: "Invalid OTP",
-  //       message: err.message || "The OTP you entered is incorrect or has expired. Please try again.",
-  //     });
-  //   } finally {
-  //     setVerifyLoading(false);
-  //   }
-  // };
+  const verifyOtp = async () => {
+    const email = getValues("parentEmail");
+    if (!emailOtpValue || emailOtpValue.length < 6) {
+      setDialog({ type: "error", message: "Please enter the 6-digit OTP." });
+      return;
+    }
+    try {
+      setVerifyLoading(true);
+      const res = await verifyEmailOtp(email, emailOtpValue);
+      if (res && res.status === true) {
+        setEmailVerified(true);
+        setOtpModalOpen(false);
+        setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
+      } else {
+        throw new Error(res?.message || "Invalid OTP");
+      }
+    } catch (err: any) {
+      setDialog({
+        type: "error",
+        title: "Invalid OTP",
+        message: err.message || "The OTP you entered is incorrect or has expired. Please try again.",
+      });
+    } finally {
+      setVerifyLoading(false);
+    }
+  };
 
   // ── Submit ────────────────────────────────────────────────────────────────
   const onSubmit = async (data: RegistrationForm) => {
@@ -479,327 +479,253 @@ export default function BahraiinForm({ countries = [] }: Props) {
     }
   };
 
-  return (<>
- 
-    <div className="rounded-md border-l-4 border-blue-500 bg-blue-50 text-yellow-600 p-4 text-xl">
-      For Bahrain registration please contact <strong>SIF - Bahrain</strong>.
-      Coordinator: <strong>Mukesh</strong> | <a href="Emailto:info@sifbahrain.com" className="underline">info@sifbahrain.com</a> | <a href="tel:+973-33370133" className="underline">+973-33370133</a>
-    </div>  </>)
-  // return (
-  //   <div className="min-h-screen py-8 md:py-10">
-  //     {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
 
-  //     <div className="mx-auto max-w-7xl px-4 sm:px-5">
-  //       <div className="mb-6 flex items-center justify-between md:mb-8">
-  //         <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
-  //           Student Registration – Bahrain
-  //         </h1>
-  //         <Image src="/sif-logo.png" alt="sif" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
-  //       </div>
+  return (
+    <div className="min-h-screen py-8 md:py-10">
+      {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
 
-  //       {/* <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-     
-  //         <Section title="Primary Details">
-  //           <InputField label="Student Full Name" required placeholder="Enter full name"
-  //             registration={register("fullName", { required: "Student Full Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
-  //             error={errors.fullName}
-  //           />
-  //           <InputField label="Date of Birth" type="date" required
-  //             min="2008-01-01"
-  //             max="2017-12-31"
-  //             registration={register("dob", {
-  //               required: "Date of Birth is required",
-  //               validate: (value) => {
-  //                 const year = new Date(value).getFullYear();
-  //                 if (year < 2008) return "Date of Birth must be after 2008";
-  //                 if (year > 2017) return "Date of Birth must be before 2017";
-  //                 return true;
-  //               }
-  //             })}
-  //             error={errors.dob}
-  //           />
-  //           <InputField label="CPR (Emirates ID / National ID)" required maxLength={9} placeholder="Enter CPR"
-  //             registration={register("emiratesId", { required: "CPR is required", minLength: { value: 9, message: "CPR must be 9 characters" }, maxLength: { value: 9, message: "CPR must be 9 characters" } })}
-  //             error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
-  //           />
-  //           <SelectField label="Gender" required options={genders}
-  //             registration={register("gender", { required: "Gender is required" })}
-  //             error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
-  //           />
-  //           <InputField label="Student Mobile" placeholder="Enter mobile"
-  //             registration={register("studentMobile", { required: "Student Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
-  //             error={touchedFields?.studentMobile && errors?.studentMobile ? errors.studentMobile : undefined}
-  //           />
-  //           <InputField label="Student Email" type="email" placeholder="Enter email"
-  //             registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
-  //             error={errors.studentEmail}
-  //           />
-  //           <SelectField label="Class / Grade" required options={grades}
-  //             registration={register("grade", { required: "Grade is required" })}
-  //             error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
-  //           />
-  //           <SelectField
-  //             label="How did you hear about VVM?" required options={hearOptions}
-  //             registration={register("hear", { required: "This field is required" })} error={touchedFields?.hear && errors?.hear ? errors.hear : undefined}
-  //           />
-  //         </Section>
+      <div className="mx-auto max-w-7xl px-4 sm:px-5">
+        <div className="mb-6 flex items-center justify-between md:mb-8">
+          <h1 className="text-3xl font-bold tracking-tight text-[#2f5f8f] sm:text-2xl md:text-4xl">
+            Student Registration – Bahrain
+          </h1>
+          <Image src="/sif-logo.png" alt="sif" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
+        </div>
 
-       
-  //         <Section title="Login Details">
-  //           <InputField label="Password" type="password" required placeholder="Enter password"
-  //             registration={register("password", { required: "Password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, message: "Password must be at least 6 characters, include uppercase, lowercase, number and special character" } })}
-  //             error={errors.password}
-  //           />
-  //           <InputField label="Confirm Password" type="password" required placeholder="Confirm password"
-  //             registration={register("confirmPassword", { required: "Confirm Password is required", validate: (value) => value === getValues("password") || "Passwords do not match" })}
-  //             error={errors.confirmPassword}
-  //           />
-  //         </Section>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 
-  //         <Section title="School Details">
-  //           <SelectField
-  //             label="School Name"
-  //             required
-  //             options={schools}
-  //             registration={register("schoolName", { required: "School Name is required" })}
-  //             error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
-  //           />
-  //           <SelectField label="Board" required options={boards}
-  //             registration={register("board", { required: "Board is required" })}
-  //             error={touchedFields?.board && errors?.board ? errors.board : undefined}
-  //           />
-  //           <InputField label="Country" disabled
-  //             value={countries.find((c) => c.value === "bahrain")?.label || "Bahrain"}
+          <Section title="Primary Details">
+            <InputField label="Student Full Name" required placeholder="Enter full name"
+              registration={register("fullName", { required: "Student Full Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
+              error={errors.fullName}
+            />
+            <InputField label="Date of Birth" type="date" required
+              min="2008-01-01"
+              max="2017-12-31"
+              registration={register("dob", {
+                required: "Date of Birth is required",
+                validate: (value) => {
+                  const year = new Date(value).getFullYear();
+                  if (year < 2008) return "Date of Birth must be after 2008";
+                  if (year > 2017) return "Date of Birth must be before 2017";
+                  return true;
+                }
+              })}
+              error={errors.dob}
+            />
+            <InputField label="CPR (Emirates ID / National ID)" required maxLength={9} placeholder="Enter CPR"
+              registration={register("emiratesId", { required: "CPR is required", minLength: { value: 9, message: "CPR must be 9 characters" }, maxLength: { value: 9, message: "CPR must be 9 characters" } })}
+              error={touchedFields?.emiratesId && errors?.emiratesId ? errors.emiratesId : undefined}
+            />
+            <SelectField label="Gender" required options={genders}
+              registration={register("gender", { required: "Gender is required" })}
+              error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
+            />
+            <InputField label="Student Mobile" placeholder="Enter mobile"
+              registration={register("studentMobile", { required: "Student Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
+              error={touchedFields?.studentMobile && errors?.studentMobile ? errors.studentMobile : undefined}
+            />
+            <InputField label="Student Email" type="email" placeholder="Enter email"
+              registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
+              error={errors.studentEmail}
+            />
+            <SelectField label="Class / Grade" required options={grades}
+              registration={register("grade", { required: "Grade is required" })}
+              error={touchedFields?.grade && errors?.grade ? errors.grade : undefined}
+            />
+            <SelectField
+              label="How did you hear about VVM?" required options={hearOptions}
+              registration={register("hear", { required: "This field is required" })} error={touchedFields?.hear && errors?.hear ? errors.hear : undefined}
+            />
+          </Section>
 
-  //           />
-           
-     
-  //           <SelectField
-  //             label="Region"
-  //             required
-  //             options={regions}
-  //             registration={register("region", { required: "Region is required" })}
-  //             error={touchedFields?.region && errors?.region ? errors.region : undefined}
-  //           />
 
-          
-  //           <SelectField
-  //             label="City"
-  //             required
-  //             options={cities}
-  //             registration={register("city", { required: "City is required" })}
-  //             error={touchedFields?.city && errors?.city ? errors.city : undefined}
-  //           />
-  //           <div className="md:col-span-2">
-  //             <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
-  //               registration={register("schoolAddress", { required: "School Address is required" })}
-  //               error={errors.schoolAddress}
-  //             />
-  //           </div>
+          <Section title="Login Details">
+            <InputField label="Password" type="password" required placeholder="Enter password"
+              registration={register("password", { required: "Password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, message: "Password must be at least 6 characters, include uppercase, lowercase, number and special character" } })}
+              error={errors.password}
+            />
+            <InputField label="Confirm Password" type="password" required placeholder="Confirm password"
+              registration={register("confirmPassword", { required: "Confirm Password is required", validate: (value) => value === getValues("password") || "Passwords do not match" })}
+              error={errors.confirmPassword}
+            />
+          </Section>
 
-  //         </Section>
+          <Section title="School Details">
+            <SelectField
+              label="School Name"
+              required
+              options={schools}
+              registration={register("schoolName", { required: "School Name is required" })}
+              error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
+            />
+            <SelectField label="Board" required options={boards}
+              registration={register("board", { required: "Board is required" })}
+              error={touchedFields?.board && errors?.board ? errors.board : undefined}
+            />
+            <InputField label="Country" disabled
+              value={countries.find((c) => c.value === "bahrain")?.label || "Bahrain"}
+
+            />
+
+
+            <SelectField
+              label="Region"
+              required
+              options={regions}
+              registration={register("region", { required: "Region is required" })}
+              error={touchedFields?.region && errors?.region ? errors.region : undefined}
+            />
+
+
+            <SelectField
+              label="City"
+              required
+              options={cities}
+              registration={register("city", { required: "City is required" })}
+              error={touchedFields?.city && errors?.city ? errors.city : undefined}
+            />
+            <div className="md:col-span-2">
+              <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
+                registration={register("schoolAddress", { required: "School Address is required" })}
+                error={errors.schoolAddress}
+              />
+            </div>
+
+          </Section>
+
+          <Section title="Parent Details">
+            <InputField label="Parent Name" required placeholder="Enter parent name"
+              registration={register("parentName", { required: "Parent Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
+              error={errors.parentName}
+            />
+            <InputField label="Parent Mobile" required placeholder="Enter parent mobile"
+              registration={register("parentMobile", { required: "Parent Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
+              error={errors.parentMobile}
+            />
+
+
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+
+              <div className="flex gap-2 items-end">
+                <div className="flex-1">
+                  <InputField
+                    label="Parent Primary Email"
+                    type="email"
+                    required
+                    placeholder="Parent email"
+                    registration={register("parentEmail", { required: "Parent email is required" })}
+                    error={errors.parentEmail}
+                    className={`transition-all ${emailVerified ? "border-green-400 bg-green-50 ring-2 ring-green-200" : ""}`}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={sendOtp}
+                  disabled={otpLoading || cooldown > 0}
+                  className={`h-10.5 px-5 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm border
+                    ${cooldown > 0
+                      ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                      : "bg-linear-to-r from-blue-600 to-indigo-600 text-white border-transparent hover:from-blue-700 hover:to-indigo-700 hover:shadow-md active:scale-95"
+                    }`}
+                >
+                  {otpLoading ? "Sending..." : cooldown > 0 ? `${cooldown}s` : "Send OTP"}
+                </button>
+              </div>
+
+
+              <div className="flex gap-2 items-end">
+                <div className="flex-1">
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">OTP Verification Code</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={emailOtpValue}
+                    onChange={(e) => setEmailOtpValue(e.target.value.replace(/\D/g, ""))}
+                    placeholder="Enter 6-digit OTP"
+                    disabled={emailVerified}
+                    className={`w-full h-10.5 border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
+                       ${emailVerified ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300"}`}
+                  />
+                </div>
+
+                {emailVerified ? (
+                  <span className="h-10.5 flex items-center gap-1.5 px-4 bg-green-50 border border-green-300 text-green-700 font-semibold text-sm rounded-lg">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Verified
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={verifyOtp}
+                    disabled={verifyLoading || !otpModalOpen}
+                    className="h-10.5 px-5 rounded-lg bg-linear-to-r from-green-500 to-emerald-600 text-white font-semibold text-sm shadow-sm border-transparent hover:from-green-600 hover:to-emerald-700 hover:shadow-md transition-all active:scale-95 disabled:opacity-40"
+                  >
+                    {verifyLoading ? "Verifying..." : "Verify OTP"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </Section>
+
+
+          <Section title="Terms & Conditions">
+            <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
+              <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
+                <ol>
+                  <li>The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
+                  <li>Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
+                  <li>After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
+                  <li>Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
+                  <li>The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&#39;s responsibility.</li>
+                  <li>VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
+                  <li>All study materials and content available on the portal are downloadable.</li>
+                  <li>By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
+                </ol>
+                <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
+              </div>
+
+              <p className="text-red-500 text-sm mt-2">
+                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
+              </p>
+              <div className="mt-4 flex items-start gap-2">
+                <input type="checkbox"
+                  {...register("termsAccepted", { required: "You must accept the terms" })}
+                  className="mt-1"
+                />
+                <label className="text-sm text-gray-700">
+                  I have read the terms and conditions mentioned above and accept them.
+                </label>
+              </div>
+              {errors.termsAccepted && <p className="text-red-500 text-sm mt-1">{errors.termsAccepted.message}</p>}
+
+            </div>
+          </Section>
+
+          <div className="pt-4 text-center">
+            <Button type="submit" loading={loading} loadingText="Submitting..."
+              className="px-10 py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-extrabold text-xl shadow-md hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 active:scale-95"
+            >
+              Submit Registration
+            </Button>
+          </div>
+        </form>
+
 
         
-  //         <Section title="Parent Details">
-  //           <InputField label="Parent Name" required placeholder="Enter parent name"
-  //             registration={register("parentName", { required: "Parent Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
-  //             error={errors.parentName}
-  //           />
-  //           <InputField label="Parent Mobile" required placeholder="Enter parent mobile"
-  //             registration={register("parentMobile", { required: "Parent Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
-  //             error={errors.parentMobile}
-  //           />
+      </div>
 
-          
-  //           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-              
-  //             <div className="flex gap-2 items-end">
-  //               <div className="flex-1">
-  //                 <InputField
-  //                   label="Parent Primary Email"
-  //                   type="email"
-  //                   required
-  //                   placeholder="Parent email"
-  //                   registration={register("parentEmail", { required: "Parent email is required" })}
-  //                   error={errors.parentEmail}
-  //                   className={`transition-all ${emailVerified ? "border-green-400 bg-green-50 ring-2 ring-green-200" : ""}`}
-  //                 />
-  //               </div>
-  //               <button
-  //                 type="button"
-  //                 onClick={sendOtp}
-  //                 disabled={otpLoading || cooldown > 0}
-  //                 className={`h-10.5 px-5 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm border
-  //                   ${cooldown > 0
-  //                     ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-  //                     : "bg-linear-to-r from-blue-600 to-indigo-600 text-white border-transparent hover:from-blue-700 hover:to-indigo-700 hover:shadow-md active:scale-95"
-  //                   }`}
-  //               >
-  //                 {otpLoading ? "Sending..." : cooldown > 0 ? `${cooldown}s` : "Send OTP"}
-  //               </button>
-  //             </div>
-
-         
-  //             <div className="flex gap-2 items-end">
-  //               <div className="flex-1">
-  //                 <label className="text-sm font-medium text-gray-600 mb-1 block">OTP Verification Code</label>
-  //                 <input
-  //                   type="text"
-  //                   inputMode="numeric"
-  //                   maxLength={6}
-  //                   value={emailOtpValue}
-  //                   onChange={(e) => setEmailOtpValue(e.target.value.replace(/\D/g, ""))}
-  //                   placeholder="Enter 6-digit OTP"
-  //                   disabled={emailVerified}
-  //                   className={`w-full h-10.5 border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
-  //                     ${emailVerified ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300"}`}
-  //                 />
-  //               </div>
-
-  //               {emailVerified ? (
-  //                 <span className="h-10.5 flex items-center gap-1.5 px-4 bg-green-50 border border-green-300 text-green-700 font-semibold text-sm rounded-lg">
-  //                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-  //                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  //                   </svg>
-  //                   Verified
-  //                 </span>
-  //               ) : (
-  //                 <button
-  //                   type="button"
-  //                   onClick={verifyOtp}
-  //                   disabled={verifyLoading || !otpModalOpen}
-  //                   className="h-10.5 px-5 rounded-lg bg-linear-to-r from-green-500 to-emerald-600 text-white font-semibold text-sm shadow-sm border-transparent hover:from-green-600 hover:to-emerald-700 hover:shadow-md transition-all active:scale-95 disabled:opacity-40"
-  //                 >
-  //                   {verifyLoading ? "Verifying..." : "Verify OTP"}
-  //                 </button>
-  //               )}
-  //             </div>
-  //           </div>
-  //         </Section>
-
-       
-  //         <Section title="Terms & Conditions">
-  //           <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
-  //             <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
-  //               <ol>
-  //                 <li>The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
-  //                 <li>Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
-  //                 <li>After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
-  //                 <li>Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
-  //                 <li>The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student's responsibility.</li>
-  //                 <li>VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
-  //                 <li>All study materials and content available on the portal are downloadable.</li>
-  //                 <li>By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
-  //               </ol>
-  //               <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
-  //             </div>
-
-  //             <p className="text-red-500 text-sm mt-2">
-  //               After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
-  //             </p>
-  //             <div className="mt-4 flex items-start gap-2">
-  //               <input type="checkbox"
-  //                 {...register("termsAccepted", { required: "You must accept the terms" })}
-  //                 className="mt-1"
-  //               />
-  //               <label className="text-sm text-gray-700">
-  //                 I have read the terms and conditions mentioned above and accept them.
-  //               </label>
-  //             </div>
-  //             {errors.termsAccepted && <p className="text-red-500 text-sm mt-1">{errors.termsAccepted.message}</p>}
-
-  //           </div>
-  //         </Section>
-
-  //         <div className="pt-4 text-center">
-  //           <Button type="submit" loading={loading} loadingText="Submitting..."
-  //             className="px-10 py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-extrabold text-xl shadow-md hover:shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 active:scale-95"
-  //           >
-  //             Submit Registration
-  //           </Button>
-  //         </div>
-  //       </form> */}
-
-  //       <p className="text-xl my-4 text-gray-500">To Register Please Contact with Co-Ordinator</p>
-
-  //       <div className="relative w-full max-w-[450px] overflow-hidden rounded-2xl border border-[#c8d2df] bg-white px-5 py-5 shadow-[0_12px_30px_rgba(23,57,92,0.08)]">
-  //         {/* Left gradient line */}
-  //         <div className="absolute left-0 top-6 h-[120px] w-[4px] rounded-r-full bg-gradient-to-b from-[#17395c] via-[#2f75d6] to-[#f4df17]" />
-
-  //         <div className="flex items-center gap-5">
-  //           {/* Profile */}
-  //           <div className="flex h-[78px] w-[78px] shrink-0 items-center justify-center rounded-full border-[3px] border-[#345678] bg-[#f1f5f9]">
-  //             <svg
-  //               className="h-10 w-10 text-[#60758f]"
-  //               viewBox="0 0 64 64"
-  //               fill="none"
-  //             >
-  //               <circle
-  //                 cx="32"
-  //                 cy="21"
-  //                 r="9"
-  //                 stroke="currentColor"
-  //                 strokeWidth="3.5"
-  //               />
-  //               <path
-  //                 d="M14 52C14 43.2 21.2 36 30 36H34C42.8 36 50 43.2 50 52"
-  //                 stroke="currentColor"
-  //                 strokeWidth="3.5"
-  //                 strokeLinecap="round"
-  //               />
-  //             </svg>
-  //           </div>
-
-  //           {/* Details */}
-  //           <div className="min-w-0 flex-1">
-  //             <h2 className="text-xl font-extrabold leading-none text-[#17395c]">
-  //               Mukesh
-  //             </h2>
-
-  //             <div className="mt-2 inline-flex rounded-full border border-[#f4df17] bg-[#fffdf0] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#9a7200]">
-  //               Coordinator
-  //               <span className="mx-1.5">•</span>
-  //               SPC
-  //             </div>
-
-  //             <div className="my-3 h-px bg-[#e2e7ed]" />
-
-  //             <div className="my-4">
-  //               {/* Phone */}
-  //               <div className="rounded-xl bg-[#f7f9fb] px-3 py-2">
-  //                 <p className="text-[9px] font-bold uppercase tracking-wide text-[#9aa6b6]">
-  //                   Phone
-  //                 </p>
-  //                 <p className="mt-0.5 truncate text-xs font-extrabold text-[#17395c]">
-  //                   +973-33370133
-  //                 </p>
-  //               </div>
-
-
-  //             </div>
-
-  //             {/* Email */}
-  //             <div className="rounded-xl bg-[#f7f9fb] px-3 py-2">
-  //               <p className="text-[9px] font-bold uppercase tracking-wide text-[#9aa6b6]">
-  //                 Email
-  //               </p>
-  //               <p className="mt-0.5 truncate text-xs font-extrabold text-[#17395c]">
-  //                 info@sifbahrain.com
-  //               </p>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-
-  //     {/* ✅ Registration Success Popup */}
-  //     {showPopup && (
-  //       <RegistrationSuccessPopup
-  //         email={userData.email}
-  //         username={userData.username}
-  //         onClose={() => setShowPopup(false)}
-  //       />
-  //     )}
-  //   </div>
-  // );
+      {/* ✅ Registration Success Popup */}
+      {showPopup && (
+        <RegistrationSuccessPopup
+          email={userData.email}
+          username={userData.username}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
+    </div>
+  );
 }
