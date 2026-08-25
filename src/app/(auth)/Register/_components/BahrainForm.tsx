@@ -370,32 +370,32 @@ export default function BahraiinForm({ countries = [] }: Props) {
   const sendOtp = useDebounce(_sendOtp, 300);
 
   // ── Verify OTP ────────────────────────────────────────────────────────────
-  // const verifyOtp = async () => {
-  //   const email = getValues("parentEmail");
-  //   if (!emailOtpValue || emailOtpValue.length < 6) {
-  //     setDialog({ type: "error", message: "Please enter the 6-digit OTP." });
-  //     return;
-  //   }
-  //   try {
-  //     setVerifyLoading(true);
-  //     const res = await verifyEmailOtp(email, emailOtpValue);
-  //     if (res && res.status === true) {
-  //       setEmailVerified(true);
-  //       setOtpModalOpen(false);
-  //       setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
-  //     } else {
-  //       throw new Error(res?.message || "Invalid OTP");
-  //     }
-  //   } catch (err: any) {
-  //     setDialog({
-  //       type: "error",
-  //       title: "Invalid OTP",
-  //       message: err.message || "The OTP you entered is incorrect or has expired. Please try again.",
-  //     });
-  //   } finally {
-  //     setVerifyLoading(false);
-  //   }
-  // };
+  const verifyOtp = async () => {
+    const email = getValues("parentEmail");
+    if (!emailOtpValue || emailOtpValue.length < 6) {
+      setDialog({ type: "error", message: "Please enter the 6-digit OTP." });
+      return;
+    }
+    try {
+      setVerifyLoading(true);
+      const res = await verifyEmailOtp(email, emailOtpValue);
+      if (res && res.status === true) {
+        setEmailVerified(true);
+        setOtpModalOpen(false);
+        setDialog({ type: "success", message: "Email verified successfully! You can now submit the form." });
+      } else {
+        throw new Error(res?.message || "Invalid OTP");
+      }
+    } catch (err: any) {
+      setDialog({
+        type: "error",
+        title: "Invalid OTP",
+        message: err.message || "The OTP you entered is incorrect or has expired. Please try again.",
+      });
+    } finally {
+      setVerifyLoading(false);
+    }
+  };
 
   // ── Submit ────────────────────────────────────────────────────────────────
   const onSubmit = async (data: RegistrationForm) => {
@@ -478,6 +478,8 @@ export default function BahraiinForm({ countries = [] }: Props) {
       setLoading(false);
     }
   };
+
+
   return (
     <div className="min-h-screen py-8 md:py-10">
       {dialog && <StyledDialog dialog={dialog} onClose={() => setDialog(null)} />}
@@ -490,8 +492,8 @@ export default function BahraiinForm({ countries = [] }: Props) {
           <Image src="/sif-logo.png" alt="sif" width={120} height={90} className="h-auto w-12 object-contain sm:w-14 md:w-16" />
         </div>
 
-        {/* <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-     
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+
           <Section title="Primary Details">
             <InputField label="Student Full Name" required placeholder="Enter full name"
               registration={register("fullName", { required: "Student Full Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
@@ -537,7 +539,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
             />
           </Section>
 
-       
+
           <Section title="Login Details">
             <InputField label="Password" type="password" required placeholder="Enter password"
               registration={register("password", { required: "Password is required", pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/, message: "Password must be at least 6 characters, include uppercase, lowercase, number and special character" } })}
@@ -565,8 +567,8 @@ export default function BahraiinForm({ countries = [] }: Props) {
               value={countries.find((c) => c.value === "bahrain")?.label || "Bahrain"}
 
             />
-           
-     
+
+
             <SelectField
               label="Region"
               required
@@ -575,7 +577,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
               error={touchedFields?.region && errors?.region ? errors.region : undefined}
             />
 
-          
+
             <SelectField
               label="City"
               required
@@ -592,7 +594,6 @@ export default function BahraiinForm({ countries = [] }: Props) {
 
           </Section>
 
-        
           <Section title="Parent Details">
             <InputField label="Parent Name" required placeholder="Enter parent name"
               registration={register("parentName", { required: "Parent Name is required", pattern: { value: /^[A-Za-z\s]+$/, message: "Only alphabetical characters are allowed" } })}
@@ -603,9 +604,9 @@ export default function BahraiinForm({ countries = [] }: Props) {
               error={errors.parentMobile}
             />
 
-          
+
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
-              
+
               <div className="flex gap-2 items-end">
                 <div className="flex-1">
                   <InputField
@@ -632,7 +633,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
                 </button>
               </div>
 
-         
+
               <div className="flex gap-2 items-end">
                 <div className="flex-1">
                   <label className="text-sm font-medium text-gray-600 mb-1 block">OTP Verification Code</label>
@@ -645,7 +646,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
                     placeholder="Enter 6-digit OTP"
                     disabled={emailVerified}
                     className={`w-full h-10.5 border px-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all
-                      ${emailVerified ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300"}`}
+                       ${emailVerified ? "border-green-400 bg-green-50 text-green-700" : "border-gray-300"}`}
                   />
                 </div>
 
@@ -670,7 +671,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
             </div>
           </Section>
 
-       
+
           <Section title="Terms & Conditions">
             <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
               <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
@@ -679,7 +680,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
                   <li>Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
                   <li>After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
                   <li>Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
-                  <li>The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student's responsibility.</li>
+                  <li>The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&#39;s responsibility.</li>
                   <li>VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
                   <li>All study materials and content available on the portal are downloadable.</li>
                   <li>By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
@@ -711,78 +712,10 @@ export default function BahraiinForm({ countries = [] }: Props) {
               Submit Registration
             </Button>
           </div>
-        </form> */}
-
-        <p className="text-xl my-4 text-gray-500">To Register Please Contact with Co-Ordinator</p>
-
-        <div className="relative w-full max-w-[450px] overflow-hidden rounded-2xl border border-[#c8d2df] bg-white px-5 py-5 shadow-[0_12px_30px_rgba(23,57,92,0.08)]">
-          {/* Left gradient line */}
-          <div className="absolute left-0 top-6 h-[120px] w-[4px] rounded-r-full bg-gradient-to-b from-[#17395c] via-[#2f75d6] to-[#f4df17]" />
-
-          <div className="flex items-center gap-5">
-            {/* Profile */}
-            <div className="flex h-[78px] w-[78px] shrink-0 items-center justify-center rounded-full border-[3px] border-[#345678] bg-[#f1f5f9]">
-              <svg
-                className="h-10 w-10 text-[#60758f]"
-                viewBox="0 0 64 64"
-                fill="none"
-              >
-                <circle
-                  cx="32"
-                  cy="21"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="3.5"
-                />
-                <path
-                  d="M14 52C14 43.2 21.2 36 30 36H34C42.8 36 50 43.2 50 52"
-                  stroke="currentColor"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-
-            {/* Details */}
-            <div className="min-w-0 flex-1">
-              <h2 className="text-xl font-extrabold leading-none text-[#17395c]">
-                Mukesh
-              </h2>
-
-              <div className="mt-2 inline-flex rounded-full border border-[#f4df17] bg-[#fffdf0] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#9a7200]">
-                Coordinator
-                <span className="mx-1.5">•</span>
-                SPC
-              </div>
-
-              <div className="my-3 h-px bg-[#e2e7ed]" />
-
-              <div className="my-4">
-                {/* Phone */}
-                <div className="rounded-xl bg-[#f7f9fb] px-3 py-2">
-                  <p className="text-[9px] font-bold uppercase tracking-wide text-[#9aa6b6]">
-                    Phone
-                  </p>
-                  <p className="mt-0.5 truncate text-xs font-extrabold text-[#17395c]">
-                    +973-33370133
-                  </p>
-                </div>
+        </form>
 
 
-              </div>
-
-              {/* Email */}
-              <div className="rounded-xl bg-[#f7f9fb] px-3 py-2">
-                <p className="text-[9px] font-bold uppercase tracking-wide text-[#9aa6b6]">
-                  Email
-                </p>
-                <p className="mt-0.5 truncate text-xs font-extrabold text-[#17395c]">
-                  info@sifbahrain.com
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
 
       {/* ✅ Registration Success Popup */}

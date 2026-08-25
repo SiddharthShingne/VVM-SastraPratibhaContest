@@ -131,7 +131,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students will be eligible for the Online Examination.",
+        criteria: "All registered students are eligible for online examinations.",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -140,14 +140,14 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
         ],
       },
       {
-        level: "LEVEL II",
-        name: "REGIONAL LEVEL CAMP",
-        criteria: "Top rankers per class will qualify for the Regional Level Camp.",
+        level: "Level II and Finals ",
+        name: "Physical Exam followed by face-to-face interview",
+        criteria: "Top rankers from Level 1 will be eligible.",
         rewardTitle: "Regional Rewards",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "All participants will get participation certificate.",
-          "Top winners would get Certificate & Memento.",
+          "Winners will be announced as Qatar VVM-SPC winners and will be felicitated at annual gala.",
+          "They will qualify for National Camp held in India.",
         ],
       },
     ],
@@ -160,7 +160,7 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
       {
         level: "LEVEL I",
         name: "ONLINE EXAMINATION",
-        criteria: "All paid students will be eligible for the Online Examination.",
+        criteria: "All registered students are eligible for online examinations. ",
         rewardTitle: "Participation Certificate",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
@@ -334,11 +334,11 @@ export default function StudentAwards() {
                           <td className="p-4 font-bold text-[#17395c]">{row.name}</td>
                           <td className="p-4">{row.criteria}</td>
                           <td className="p-4">
-                            <span
+                            {/* <span
                               className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-1 ${row.rewardBadgeClass}`}
                             >
                               {row.rewardTitle}
-                            </span>
+                            </span> */}
                             <br />
                             {row.rewardDetails.map((detail, j) => (
                               <span key={j}>

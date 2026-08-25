@@ -174,7 +174,7 @@ export default function ForgotPassword() {
                         {/* Logo */}
                         <div className="relative w-44 h-44 rounded-full  border-4 border-white/40 bg-white/10 backdrop-blur-md    flex items-center justify-center shadow-2xl animate-[float_4s_ease-in-out_infinite]">
 
-                            <Image width={176} height={176} src="/gcc/logo.png" alt="Logo"
+                            <Image width={176} height={176} src="/sif-logo.png" alt="Logo"
                                 className="w-full h-full object-cover rounded-full"
                             />
                         </div>
