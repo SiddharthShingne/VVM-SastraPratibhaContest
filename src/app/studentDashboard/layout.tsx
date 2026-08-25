@@ -290,7 +290,7 @@ export default function StudentDashboardLayout({
         : "text-[#4a6278] border-l-[3px] border-transparent hover:bg-[rgba(23,57,92,0.06)] hover:text-[#17395c] hover:scale-[1.01]",
     ].join(" ");
 
-  const iconClass = (path: string) => 
+  const iconClass = (path: string) =>
     [
       "text-[17px] w-5 shrink-0 transition-all duration-220",
       isActive(path)
@@ -397,7 +397,7 @@ export default function StudentDashboardLayout({
       </Link> */}
 
       <SectionTitle label="exam details" />
-      
+
       {countryId !== null && PAYMENT_ENABLED_COUNTRIES.includes(countryId) && (
         <Link
           href="/studentDashboard/fee-structure"
@@ -434,7 +434,7 @@ export default function StudentDashboardLayout({
           <FaKey className={iconClass("/studentDashboard/update-password")} />
           Update Password
         </Link>
-        
+
         {/* <NavDivider />
         <button
           onClick={() => setShowLogoutDialog(true)}

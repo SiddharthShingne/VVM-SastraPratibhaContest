@@ -17,7 +17,7 @@ interface RawLoginApiResponse {
       username: string;
       role_id?: string;
       [key: string]: unknown;
-      
+
     };
   };
 }
@@ -333,7 +333,7 @@ export const registerStudentV2 = async (formData: Record<string, unknown>) => {
 // In your authService.ts file
 export const forgotPassword = async (username: string, frontendUrl?: string) => {
   const resetUrl = frontendUrl || `${window.location.origin}/reset-password`;
-  
+
   const res = await api.post(
     "/forgot-password",
     {
