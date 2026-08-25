@@ -12,6 +12,7 @@ import axiosInstance from "@/services/axiosInstance";
 import { fetchSchoolsByRegion, fetchRegionsWithCities, addGccStudent } from "@/services/importantDatesService";
 import { AddStudentButton } from "@/components/shared/AddStudent";
 import { exportStudents } from "@/services/importantDatesService";
+import { markKuwaitStudentsPaid } from "@/services/authService";
 // ─── Types ────────────────────────────────────────────────────────────────────
 const COUNTRY_NAME_MAP: Record<string, string> = {
     SA: "Saudi Arabia", AE: "UAE", OM: "Oman",
@@ -32,6 +33,18 @@ const getCountryCode = (): string => {
         return parsed?.user?.country_code || parsed?.country_code || "";
     } catch { return ""; }
 };
+const getStateId = (): number | null => {
+    try {
+        if (typeof window === "undefined") return null;
+        const raw = localStorage.getItem("user");
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        const assignments = parsed?.user?.user_detail?.assignments || [];
+        const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+        return stateAssignment?.coordinatable_id ?? null;
+    } catch { return null; }
+};
+
 const TODAY = new Date().toISOString().split("T")[0];
 const MIN_DATE = "2016-01-01";
 
@@ -705,10 +718,49 @@ export default function NewRegistrationsPage() {
         | null;
 
     const [dialog, setDialog] = useState<DialogState>(null);
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [markingPaid, setMarkingPaid] = useState(false);
+    const [countryCode] = useState(getCountryCode());
 
     const handleEdit = (student: Student) => {
         setEditStudent(student);
         setDialog("edit");
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === students.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(students.map((s) => s.id));
+        }
+    };
+
+    const toggleSelectOne = (id: number) => {
+        setSelectedIds((prev) =>
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+        );
+    };
+
+    const handleMarkAsPaid = async () => {
+        if (!selectedIds.length) return;
+        const stateId = getStateId();
+        if (!stateId) {
+            setDialog({ type: "error", message: "State ID not found. Please refresh the page or log in again." });
+            return;
+        }
+        setMarkingPaid(true);
+        try {
+            if (countryCode === "KW") {
+                await markKuwaitStudentsPaid(selectedIds, stateId);
+            }
+            // future countries: else if (countryCode === "XX") { await markXxStudentsPaid(selectedIds, stateId); }
+            setSelectedIds([]);
+            fetchStudents();
+        } catch (err: any) {
+            setDialog({ type: "error", message: err?.message || "Failed to mark students as paid." });
+        } finally {
+            setMarkingPaid(false);
+        }
     };
 
     const handleExportSubmit = async () => {
@@ -883,6 +935,17 @@ export default function NewRegistrationsPage() {
             alignItems: "center",
         } as React.CSSProperties,
 
+        // th: {
+        //     padding: "10px 12px",
+        //     textAlign: "left" as const,
+        //     fontSize: 11,
+        //     fontWeight: 700,
+        //     color: "#6b7280",
+        //     textTransform: "uppercase" as const,
+        //     whiteSpace: "nowrap" as const,
+        //     background: "#f9fafb",
+        // },
+
         th: {
             padding: "10px 12px",
             textAlign: "left" as const,
@@ -892,6 +955,10 @@ export default function NewRegistrationsPage() {
             textTransform: "uppercase" as const,
             whiteSpace: "nowrap" as const,
             background: "#f9fafb",
+            position: "sticky" as const,
+            top: 0,
+            zIndex: 2,
+            boxShadow: "inset 0 -1px 0 #e5e7eb",
         },
 
         td: {
@@ -904,6 +971,7 @@ export default function NewRegistrationsPage() {
     };
 
     const columns = [
+        ...(countryCode === "KW" ? ["SELECT"] : []),
         "SR. NO.", "NAME", "USERNAME", "PASSWORD",
         "NATIONAL ID", "SCHOOL NAME", "CLASS", "DIVISION",
         "DOB", "GENDER", "NATIONALITY", "ADDRESS",
@@ -981,8 +1049,21 @@ export default function NewRegistrationsPage() {
                     {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         <AddStudentButton onSuccesyyys={fetchStudents} />
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}> */}
+                    {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <AddStudentButton onSuccess={fetchStudents} />
+                        <button
+                            onClick={() => setDialog({ type: "export" })} */}
                     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         <AddStudentButton onSuccess={fetchStudents} />
+                        {countryCode === "KW" && selectedIds.length > 0 && (
+                            <button
+                                onClick={handleMarkAsPaid}
+                                disabled={markingPaid}
+                                style={{ padding: "10px 22px", borderRadius: 10, border: "none", background: markingPaid ? "#86efac" : "#22c55e", color: "#fff", fontWeight: 600, fontSize: 13, cursor: markingPaid ? "not-allowed" : "pointer" }}
+                            >
+                                {markingPaid ? "Marking..." : `Mark as Paid (${selectedIds.length})`}
+                            </button>
+                        )}
                         <button
                             onClick={() => setDialog({ type: "export" })}
                             style={{ padding: "10px 22px", borderRadius: 10, border: "none", background: "#3B82F6", color: "#fff", fontWeight: 600, fontSize: 13, cursor: "pointer" }}
@@ -1014,11 +1095,30 @@ export default function NewRegistrationsPage() {
                     </span>
                 </div>
 
-                <div style={{ overflowX: "auto" }}>
+                {/* <div style={{ overflowX: "auto" }}> */}
+                    {/* <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1400 }}> */}
+                        {/* <thead>
+                            <tr>
+                                {columns.map((h) => <th key={h} style={s.th}>{h}</th>)}
+                            </tr>
+                        </thead> */}
+                <div style={{ overflowX: "auto", overflowY: "auto", maxHeight: "70vh" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 1400 }}>
                         <thead>
                             <tr>
-                                {columns.map((h) => <th key={h} style={s.th}>{h}</th>)}
+                                {columns.map((h) =>
+                                    h === "SELECT" ? (
+                                        <th key={h} style={s.th}>
+                                            <input
+                                                type="checkbox"
+                                                checked={students.length > 0 && selectedIds.length === students.length}
+                                                onChange={toggleSelectAll}
+                                            />
+                                        </th>
+                                    ) : (
+                                        <th key={h} style={s.th}>{h}</th>
+                                    )
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -1037,6 +1137,15 @@ export default function NewRegistrationsPage() {
                             ) : (
                                 students.map((row, i) => (
                                     <tr key={row.id} style={{ background: row.isPaid ? "#f0fdf4" : "#fff1f2" }}>
+                                        {countryCode === "KW" && (
+                                            <td style={s.td}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedIds.includes(row.id)}
+                                                    onChange={() => toggleSelectOne(row.id)}
+                                                />
+                                            </td>
+                                        )}
                                         <td style={{ ...s.td, color: "#94a3b8", fontSize: 12 }}>
                                             {(currentPage - 1) * perPage + i + 1}
                                         </td>

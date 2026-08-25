@@ -80,6 +80,7 @@ export default function LoginPage() {
         STUDENT: 1,
         SCHOOL: 2,
         STATE: 9,
+        ZONAL_COORDINATOR: 8,
       };
 
       // ✅ Store full user
@@ -99,7 +100,18 @@ export default function LoginPage() {
 
       // optional
       localStorage.setItem("username", data?.username || trimmedUsername);
+      // // optional
+      // localStorage.setItem("username", data?.username || trimmedUsername);
 
+      // ✅ SPECIAL CASE: ZOC000029 -> gets state-dashboard with limited sidebar
+      const isSpecialStateUser = trimmedUsername === "ZOC000029";
+      if (isSpecialStateUser) {
+        localStorage.setItem("isLimitedStateUser", "true");
+      } else {
+        localStorage.removeItem("isLimitedStateUser");
+      }
+
+      window.dispatchEvent(new Event("auth-change"));
       window.dispatchEvent(new Event("auth-change"));
 
       setDialog({
@@ -108,13 +120,57 @@ export default function LoginPage() {
       });
 
       // ✅ CLEAN ROLE-BASED REDIRECT
+      // setTimeout(() => {
+      //   switch (roleId) {
+      //     case ROLE.SCHOOL:
+      //       router.replace("/school-dashboard");
+      //       break;
+
+      //     case ROLE.STATE:
+      //       router.replace("/state-dashboard");
+      //       break;
+
+      //     case ROLE.STUDENT:
+      //       router.replace("/studentDashboard");
+      //       break;
+
+      //     default:
+      //       console.warn("Unknown role_id:", roleId);
+      //       router.replace("/login");
+      //   }
+      // }, 1500);
+
       setTimeout(() => {
+        if (isSpecialStateUser) {
+          router.replace("/state-dashboard");
+          return;
+        }
+
+        // switch (roleId) {
+        //   case ROLE.SCHOOL:
+        //     router.replace("/school-dashboard");
+        //     break;
+
+        //   case ROLE.STATE:
+        //     router.replace("/state-dashboard");
+        //     break;
+
+        //   case ROLE.STUDENT:
+        //     router.replace("/studentDashboard");
+        //     break;
+
+        //   default:
+        //     console.warn("Unknown role_id:", roleId);
+        //     router.replace("/login");
+        // }
+
         switch (roleId) {
           case ROLE.SCHOOL:
             router.replace("/school-dashboard");
             break;
 
           case ROLE.STATE:
+          case ROLE.ZONAL_COORDINATOR:
             router.replace("/state-dashboard");
             break;
 
@@ -127,6 +183,7 @@ export default function LoginPage() {
             router.replace("/login");
         }
       }, 1500);
+
 
     } catch (err) {
       setDialog({

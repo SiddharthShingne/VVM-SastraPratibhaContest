@@ -80,6 +80,7 @@ export default function StateDashboardLayout({
     return "State Coordinator";
   });
   const [countryCode, setCountryCode] = useState("");
+  const [isZonalCoordinator, setIsZonalCoordinator] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -113,6 +114,29 @@ export default function StateDashboardLayout({
       console.log("Coordinator Country:", code);
     }
   }, []);
+
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+
+    const raw = localStorage.getItem("user");
+
+    if (raw) {
+      const parsed = JSON.parse(raw);
+
+      // YOUR COUNTRY CODE
+      const code = parsed?.user?.country_code || "";
+
+      setCountryCode(code);
+
+      // ROLE CHECK FOR ZONAL COORDINATOR
+      const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+      setIsZonalCoordinator(roleId === 8);
+
+      console.log("Coordinator Country:", code);
+    }
+  }, []);
+
   useEffect(() => {
     if (token === null) return;
     if (!token) router.replace("/login");

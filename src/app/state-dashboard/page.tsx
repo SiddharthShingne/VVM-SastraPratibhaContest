@@ -30,8 +30,20 @@ interface Assignment {
 //   };
 // }
 
+// interface StoredUser {
+//   user?: {
+//     user_detail?: {
+//       assignments?: Assignment[];
+//     };
+//     country_id?: number;
+//     country_code?: string;
+//   };
+// }
+
 interface StoredUser {
+  role_id?: number;
   user?: {
+    role_id?: number;
     user_detail?: {
       assignments?: Assignment[];
     };
@@ -102,21 +114,47 @@ const ITEMS_PER_PAGE_OPTIONS = [1];
 const isDataRow = (row: StateSummaryRow): boolean =>
   !row.totals && !!row.state_name;
 
-function getStateIdFromStorage(): number | null {
+// function getStateIdFromStorage(): number | null {
+//   try {
+//     const raw = localStorage.getItem("user");
+//     if (!raw) return null;
+//     const parsed: StoredUser = JSON.parse(raw);
+//     const assignments = parsed?.user?.user_detail?.assignments ?? [];
+//     const stateAssignment = assignments.find(
+//       (a) => a.coordinatable_type === "State",
+//     );
+//     if (stateAssignment?.coordinatable_id) {
+//       return stateAssignment.coordinatable_id;
+//     }
+//     return null;
+//   } catch {
+//     return null;
+//   }
+// }
+
+
+const ZONAL_COORDINATOR_ROLE_ID = 8;
+const GCC_STATE_IDS = [38, 39, 40, 41, 42, 43];
+
+function getStateIdsFromStorage(): number[] {
   try {
     const raw = localStorage.getItem("user");
-    if (!raw) return null;
+    if (!raw) return [];
     const parsed: StoredUser = JSON.parse(raw);
+    const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+    if (roleId === ZONAL_COORDINATOR_ROLE_ID) {
+      return GCC_STATE_IDS;
+    }
     const assignments = parsed?.user?.user_detail?.assignments ?? [];
     const stateAssignment = assignments.find(
       (a) => a.coordinatable_type === "State",
     );
     if (stateAssignment?.coordinatable_id) {
-      return stateAssignment.coordinatable_id;
+      return [stateAssignment.coordinatable_id];
     }
-    return null;
+    return [];
   } catch {
-    return null;
+    return [];
   }
 }
 
@@ -192,12 +230,21 @@ export default function StateDashboardPage() {
   //   setStateId(id);
   // }, []);
 
-  const [stateId, setStateId] = useState<number | null>(null);
+  // const [stateId, setStateId] = useState<number | null>(null);
+  // const [countryCode, setCountryCode] = useState<string>("");
+
+  // useEffect(() => {
+  //   const id = getStateIdFromStorage();
+  //   setStateId(id);
+  //   setCountryCode(getCountryCodeFromStorage());
+  // }, []);
+
+
+  const [stateIds, setStateIds] = useState<number[]>([]);
   const [countryCode, setCountryCode] = useState<string>("");
 
   useEffect(() => {
-    const id = getStateIdFromStorage();
-    setStateId(id);
+    setStateIds(getStateIdsFromStorage());
     setCountryCode(getCountryCodeFromStorage());
   }, []);
 
@@ -223,9 +270,35 @@ export default function StateDashboardPage() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // ── Fetch Prants once we have stateId ────────────────────────────────────
+  // useEffect(() => {
+  //   if (!stateId) return;
+  //   fetchPrants({ state_ids: [stateId] })
+  //     .then(async (res: any) => {
+  //       const prantList: Prant[] = res.data ?? [];
+  //       setPrants(prantList);
+
+  //       if (prantList.length > 0) {
+  //         const allDistricts: District[] = [];
+  //         await Promise.all(
+  //           prantList.map((p) =>
+  //             fetchDistricts({
+  //               state_ids: [stateId],
+  //               prant_ids: [p.id],
+  //             }).then((data: District[]) => {
+  //               allDistricts.push(...(data ?? []));
+  //             }),
+  //           ),
+  //         );
+  //         setDistricts(allDistricts);
+  //       }
+  //     })
+  //     .catch(console.error);
+  // }, [stateId]);
+
+
   useEffect(() => {
-    if (!stateId) return;
-    fetchPrants({ state_ids: [stateId] })
+    if (!stateIds.length) return;
+    fetchPrants({ state_ids: stateIds })
       .then(async (res: any) => {
         const prantList: Prant[] = res.data ?? [];
         setPrants(prantList);
@@ -235,7 +308,7 @@ export default function StateDashboardPage() {
           await Promise.all(
             prantList.map((p) =>
               fetchDistricts({
-                state_ids: [stateId],
+                state_ids: stateIds,
                 prant_ids: [p.id],
               }).then((data: District[]) => {
                 allDistricts.push(...(data ?? []));
@@ -246,18 +319,46 @@ export default function StateDashboardPage() {
         }
       })
       .catch(console.error);
-  }, [stateId]);
+  }, [stateIds]);
+
 
   // ── Fetch dashboard data whenever filter or stateId changes ──────────────
+  // useEffect(() => {
+  //   if (!stateId) return;
+
+  //   const prantId = selectedFilter?.prantId ?? null;
+  //   const districtId = selectedFilter?.districtId ?? null;
+
+  //   const payload = {
+  //     zone_id: [] as number[],
+  //     state_id: [stateId],
+  //     prant_id: prantId ? [prantId] : [],
+  //     district_id: districtId ? [districtId] : [],
+  //   };
+
+  //   fetchDashboardCardSummary(payload)
+  //     .then((res: any) => setSummary(res.data?.[0] ?? null))
+  //     .catch(console.error);
+
+  //   setLoading(true);
+  //   fetchStateSummary(payload)
+  //     .then((res: any) => {
+  //       const rows: StateSummaryRow[] = (res.data ?? []).filter(isDataRow);
+  //       setStateSummaryRows(rows);
+  //     })
+  //     .catch(console.error)
+  //     .finally(() => setLoading(false));
+  // }, [stateId, selectedFilter]);
+
   useEffect(() => {
-    if (!stateId) return;
+    if (!stateIds.length) return;
 
     const prantId = selectedFilter?.prantId ?? null;
     const districtId = selectedFilter?.districtId ?? null;
 
     const payload = {
       zone_id: [] as number[],
-      state_id: [stateId],
+      state_id: stateIds,
       prant_id: prantId ? [prantId] : [],
       district_id: districtId ? [districtId] : [],
     };
@@ -274,7 +375,7 @@ export default function StateDashboardPage() {
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [stateId, selectedFilter]);
+  }, [stateIds, selectedFilter]);
 
   // ── Close dropdown on outside click ──────────────────────────────────────
   useEffect(() => {
@@ -446,20 +547,33 @@ export default function StateDashboardPage() {
     };
   }, [stateSummaryRows]);
 
-
-  const handleExport = async () => {
-    if (!stateId) return;
+    const handleExport = async () => {
+    if (!stateIds.length) return;
     try {
       const payload = {
         search: "",
         filters: {
-          state_id: [stateId],
+          state_id: stateIds,
           prant_id: selectedFilter?.prantId ? [selectedFilter.prantId] : [],
           district_id: selectedFilter?.districtId
             ? [selectedFilter.districtId]
             : [],
         },
       };
+
+  // const handleExport = async () => {
+  //   if (!stateId) return;
+  //   try {
+  //     const payload = {
+  //       search: "",
+  //       filters: {
+  //         state_id: [stateId],
+  //         prant_id: selectedFilter?.prantId ? [selectedFilter.prantId] : [],
+  //         district_id: selectedFilter?.districtId
+  //           ? [selectedFilter.districtId]
+  //           : [],
+  //       },
+  //     };
       const blob = await exportStateSummary(payload);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");

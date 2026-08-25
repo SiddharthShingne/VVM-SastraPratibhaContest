@@ -655,6 +655,25 @@ export const deleteSchool = async (id: number): Promise<any> => {
   }
 };
 
+
+export const markKuwaitStudentsPaid = async (userIds: number[], stateId: number): Promise<any> => {
+  try {
+    const response = await api.post(`/update-kuwait-students`, {
+      user_ids: userIds,
+      state_id: stateId,
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to mark students as paid");
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw new Error(error.message || "Unexpected error");
+    }
+  }
+};
+
 // Create school for institute (role 17 specific)
 export const createSchoolForInstitute = async (schoolData: any): Promise<any> => {
   try {
