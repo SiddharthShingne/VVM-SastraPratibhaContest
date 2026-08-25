@@ -678,7 +678,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
                 <ol>
                   <li>The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
                   <li>Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
-                  <li>After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
+                  <li>After registration, students are required to log in to their account and complete the payment process to avoid any future disruptions in website services.</li>
                   <li>Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
                   <li>The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&#39;s responsibility.</li>
                   <li>VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
@@ -689,7 +689,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
               </div>
 
               <p className="text-red-500 text-sm mt-2">
-                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
+                After registration, please login  and proceed with payment to avoid any future disruptions.
               </p>
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"

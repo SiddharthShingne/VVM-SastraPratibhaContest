@@ -811,9 +811,9 @@ export default function UAEForm({ countries }: Props) {
                 <ol className="list-decimal pl-5">
                   <li className="py-2">The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
                   <li className="py-2">Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
-                  <li className="py-2">After registration, students are required to log in to their account, update their profile details, and complete the payment process to avoid any future disruptions in website services.</li>
+                  <li className="py-2">After registration, students are required to log in to their account and complete the payment process to avoid any future disruptions in website services.</li>
                   <li className="py-2">Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
-                  <li className="py-2">The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student's responsibility.</li>
+                  <li className="py-2">The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&#39;s responsibility.</li>
                   <li className="py-2">VVM reserves the right to modify the schedule, rules, or features of the portal at any time without prior notice.</li>
                   <li className="py-2">All study materials and content available on the portal are downloadable.</li>
                   <li className="py-2">By registering, the student (and parent/guardian, where applicable) agrees to abide by all the rules and guidelines of the VVM program.</li>
@@ -822,7 +822,7 @@ export default function UAEForm({ countries }: Props) {
               </div>
 
               <p className="text-red-500 text-sm mt-2">
-                After registration, please login and update your profile and proceed with payment to avoid any future disruptions.
+                After registration, please login and proceed with payment to avoid any future disruptions.
               </p>
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"

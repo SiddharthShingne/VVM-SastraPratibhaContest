@@ -310,16 +310,19 @@ export const getSchoolList = async (
 };
 
 // New students registration count API for state cordintor
+
 export const getNewRegistrations = async (
   page: number = 1,
   per_page: number = 10,
   class_id?: number,
+  state_id?: number[],
 ) => {
   try {
     const res = await api.post("/admin/new-registration-students", {
       page,
       per_page,
       class_id: class_id ? [class_id] : undefined,
+      state_id: state_id && state_id.length ? state_id : undefined,
     });
 
     return res.data;
@@ -331,6 +334,29 @@ export const getNewRegistrations = async (
     return "Failed to fetch new registrations";
   }
 };
+
+
+// export const getNewRegistrations = async (
+//   page: number = 1,
+//   per_page: number = 10,
+//   class_id?: number,
+// ) => {
+//   try {
+//     const res = await api.post("/admin/new-registration-students", {
+//       page,
+//       per_page,
+//       class_id: class_id ? [class_id] : undefined,
+//     });
+
+//     return res.data;
+//   } catch (error: unknown) {
+//     if (error && typeof error === "object" && "response" in error) {
+//       const err = error as { response?: { data?: unknown } };
+//       return err.response?.data || "Failed to fetch new registrations";
+//     }
+//     return "Failed to fetch new registrations";
+//   }
+// };
 
 // export const getNewRegistrations = async (
 //   page: number = 1,

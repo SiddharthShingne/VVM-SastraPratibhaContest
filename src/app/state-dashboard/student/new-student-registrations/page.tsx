@@ -33,6 +33,18 @@ const getCountryCode = (): string => {
         return parsed?.user?.country_code || parsed?.country_code || "";
     } catch { return ""; }
 };
+// const getStateId = (): number | null => {
+//     try {
+//         if (typeof window === "undefined") return null;
+//         const raw = localStorage.getItem("user");
+//         if (!raw) return null;
+//         const parsed = JSON.parse(raw);
+//         const assignments = parsed?.user?.user_detail?.assignments || [];
+//         const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+//         return stateAssignment?.coordinatable_id ?? null;
+//     } catch { return null; }
+// };
+
 const getStateId = (): number | null => {
     try {
         if (typeof window === "undefined") return null;
@@ -44,6 +56,39 @@ const getStateId = (): number | null => {
         return stateAssignment?.coordinatable_id ?? null;
     } catch { return null; }
 };
+
+const ZONAL_COORDINATOR_ROLE_ID = 8;
+// TODO: confirm exact state_id for each country — KW confirmed, baaki placeholder hai
+const STATE_COUNTRY_MAP: Record<string, number> = {
+    SA: 38, AE: 39, KW: 40, BH: 41, QA: 42, OM: 43,
+};
+const GCC_STATE_IDS = Object.values(STATE_COUNTRY_MAP);
+
+const getStateIds = (): number[] => {
+    try {
+        if (typeof window === "undefined") return [];
+        const raw = localStorage.getItem("user");
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+        if (roleId === ZONAL_COORDINATOR_ROLE_ID) return GCC_STATE_IDS;
+        const assignments = parsed?.user?.user_detail?.assignments || [];
+        const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+        return stateAssignment?.coordinatable_id ? [stateAssignment.coordinatable_id] : [];
+    } catch { return []; }
+};
+
+const isZonalCoordinator = (): boolean => {
+    try {
+        if (typeof window === "undefined") return false;
+        const raw = localStorage.getItem("user");
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+        return roleId === ZONAL_COORDINATOR_ROLE_ID;
+    } catch { return false; }
+};
+
 
 const TODAY = new Date().toISOString().split("T")[0];
 const MIN_DATE = "2016-01-01";
@@ -700,6 +745,8 @@ export default function NewRegistrationsPage() {
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [classFilter, setClassFilter] = useState("");
+    const [countryFilter, setCountryFilter] = useState("");
+    const [isZonal] = useState(isZonalCoordinator());
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -838,7 +885,17 @@ export default function NewRegistrationsPage() {
         setTotalRecords(0);
         try {
             // const res = await getNewRegistrations(currentPage, perPage);
-            const res = await getNewRegistrations(currentPage,perPage,classFilter ? Number(classFilter) : undefined
+            // const res = await getNewRegistrations(currentPage,perPage,classFilter ? Number(classFilter) : undefined
+            // );
+
+            const stateIdsToSend = countryFilter
+                ? [STATE_COUNTRY_MAP[countryFilter]]
+                : getStateIds();
+            const res = await getNewRegistrations(
+                currentPage,
+                perPage,
+                classFilter ? Number(classFilter) : undefined,
+                stateIdsToSend,
             );
             // API shape: res.data.students.data[]
             const raw: any[] = res?.data?.students?.data || [];
@@ -896,7 +953,7 @@ export default function NewRegistrationsPage() {
 
     useEffect(() => {
         fetchStudents();
-    }, [debouncedSearch, classFilter, currentPage, perPage]);
+    }, [debouncedSearch, classFilter, countryFilter, currentPage, perPage]);
     
     // ─── Styles ─────────────────────────────────────────────────────────────────
     const s = {
@@ -1045,6 +1102,29 @@ export default function NewRegistrationsPage() {
                         ))}
                     </select>
 
+                    {isZonal && (
+                        <select
+                            value={countryFilter}
+                            onChange={(e) => { setCountryFilter(e.target.value); setCurrentPage(1); }}
+                            style={{
+                                border: "1px solid #e5e7eb",
+                                borderRadius: 10,
+                                padding: "10px 14px",
+                                fontSize: 13,
+                                color: "#374151",
+                                background: "#f9fafb",
+                                outline: "none",
+                                cursor: "pointer",
+                                width: 160,
+                            }}
+                        >
+                            <option value="">All Countries</option>
+                            {Object.entries(COUNTRY_NAME_MAP).map(([code, label]) => (
+                                <option key={code} value={code}>{label}</option>
+                            ))}
+                        </select>
+                    )}
+                    
                   {/* Legend */}
                     {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         <AddStudentButton onSuccesyyys={fetchStudents} />
