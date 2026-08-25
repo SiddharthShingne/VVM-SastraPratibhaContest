@@ -376,7 +376,7 @@ export default function StudentDashboardLayout({
         <FaPhone className={iconClass("/studentDashboard/contact")} />
         Contact Information
       </Link> */}
-      <SectionTitle label="Syllabus & Study Material" />
+      <SectionTitle label="Syllabus " />
 
       <Link
         href="/studentDashboard/syllabus"
