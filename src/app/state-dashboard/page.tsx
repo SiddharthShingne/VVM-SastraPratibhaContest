@@ -158,6 +158,18 @@ function getStateIdsFromStorage(): number[] {
   }
 }
 
+function isZonalCoordinatorFromStorage(): boolean {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return false;
+    const parsed: StoredUser = JSON.parse(raw);
+    const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+    return roleId === ZONAL_COORDINATOR_ROLE_ID;
+  } catch {
+    return false;
+  }
+}
+
 
 function getCountryCodeFromStorage(): string {
   try {
@@ -242,10 +254,12 @@ export default function StateDashboardPage() {
 
   const [stateIds, setStateIds] = useState<number[]>([]);
   const [countryCode, setCountryCode] = useState<string>("");
+  const [isZonal, setIsZonal] = useState(false);
 
   useEffect(() => {
     setStateIds(getStateIdsFromStorage());
     setCountryCode(getCountryCodeFromStorage());
+    setIsZonal(isZonalCoordinatorFromStorage());
   }, []);
 
   const [prants, setPrants] = useState<Prant[]>([]);
@@ -758,10 +772,12 @@ export default function StateDashboardPage() {
         {/* ── Page Title ── */}
         <div className="mb-3 sm:mb-5 anim-down">
           <h1 className="text-lg sm:text-2xl font-bold text-slate-800 tracking-tight">
-            State Coordinator Dashboard
+            {isZonal ? "Zonal Dashboard" : "State Coordinator Dashboard"}
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
-            Monitor student and school data by region
+            {isZonal
+              ? "Monitor student and school data across all GCC states"
+              : "Monitor student and school data by region"}
           </p>
         </div>
 
