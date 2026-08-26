@@ -136,6 +136,7 @@ function Modal({ children, onClose, width = 500 }: {
 type Student = {
     id: number;
     name: string;
+    userId?: number;
     username?: string;
     password?: string;
     nationalId?: string;
@@ -798,19 +799,35 @@ export default function NewRegistrationsPage() {
         }
     };
 
+
     const toggleSelectAll = () => {
-        if (selectedIds.length === students.length) {
+        const selectableIds = students.map((s) => s.userId).filter((id): id is number => !!id);
+        if (selectedIds.length === selectableIds.length) {
             setSelectedIds([]);
         } else {
-            setSelectedIds(students.map((s) => s.id));
+            setSelectedIds(selectableIds);
         }
     };
 
-    const toggleSelectOne = (id: number) => {
+    const toggleSelectOne = (userId: number) => {
         setSelectedIds((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+            prev.includes(userId) ? prev.filter((x) => x !== userId) : [...prev, userId]
         );
     };
+
+    // const toggleSelectAll = () => {
+    //     if (selectedIds.length === students.length) {
+    //         setSelectedIds([]);
+    //     } else {
+    //         setSelectedIds(students.map((s) => s.id));
+    //     }
+    // };
+
+    // const toggleSelectOne = (id: number) => {
+    //     setSelectedIds((prev) =>
+    //         prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    //     );
+    // };
 
     // const handleMarkAsPaid = async () => {
     //     if (!selectedIds.length) return;
@@ -959,6 +976,7 @@ export default function NewRegistrationsPage() {
 
             const formatted: Student[] = raw.map((s: any) => ({
                 id: s.id,
+                userId: s.user_id ?? s.user?.id,
                 name: s.name || "-",
                 username: s.user?.username || "-",
                 password: s.user?.temp_password || "-",
@@ -1248,14 +1266,23 @@ export default function NewRegistrationsPage() {
                         <thead>
                             <tr>
                                 {columns.map((h) =>
-                                    h === "SELECT" ? (
-                                        <th key={h} style={s.th}>
-                                            <input
-                                                type="checkbox"
-                                                checked={students.length > 0 && selectedIds.length === students.length}
-                                                onChange={toggleSelectAll}
-                                            />
-                                        </th>
+                                    // h === "SELECT" ? (
+                                        // <th key={h} style={s.th}>
+                                        //     <input
+                                        //         type="checkbox"
+                                        //         checked={students.length > 0 && selectedIds.length === students.length}
+                                        //         onChange={toggleSelectAll}
+                                        //     />
+                                        // </th>
+                                    
+                                        h === "SELECT" ? (
+                                            <th key={h} style={s.th}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={students.some((s) => s.userId) && selectedIds.length === students.filter((s) => s.userId).length}
+                                                    onChange={toggleSelectAll}
+                                                />
+                                            </th>
                                     ) : (
                                         <th key={h} style={s.th}>{h}</th>
                                     )
@@ -1278,7 +1305,7 @@ export default function NewRegistrationsPage() {
                             ) : (
                                 students.map((row, i) => (
                                     <tr key={row.id} style={{ background: row.isPaid ? "#f0fdf4" : "#fff1f2" }}>
-                                        {countryCode === "KW" && (
+                                        {/* {countryCode === "KW" && (
                                             <td style={s.td}>
                                                 <input
                                                     type="checkbox"
@@ -1286,7 +1313,17 @@ export default function NewRegistrationsPage() {
                                                     onChange={() => toggleSelectOne(row.id)}
                                                 />
                                             </td>
+                                        )} */}
+                                        {countryCode === "KW" && row.userId && (
+                                            <td style={s.td}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedIds.includes(row.userId)}
+                                                    onChange={() => toggleSelectOne(row.userId!)}
+                                                />
+                                            </td>
                                         )}
+                                        {countryCode === "KW" && !row.userId && <td style={s.td}></td>}
                                         <td style={{ ...s.td, color: "#94a3b8", fontSize: 12 }}>
                                             {(currentPage - 1) * perPage + i + 1}
                                         </td>
