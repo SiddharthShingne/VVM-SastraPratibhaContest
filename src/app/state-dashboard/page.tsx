@@ -1090,7 +1090,8 @@ export default function StateDashboardPage() {
                               : "bg-blue-50 text-blue-600 hover:bg-blue-100"
                               }`}
                           >
-                            {row.total_school_new ?? 0}
+                            {/* {row.total_school_new ?? 0} */}
+                            {row.total_school ?? 0}
                           </span>
                           {/* </Link>
                       </td>
