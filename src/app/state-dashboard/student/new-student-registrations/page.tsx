@@ -6,13 +6,14 @@
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getNewRegistrations } from "@/services/uaeService"; // adjust if needed
-import { FaEdit } from "react-icons/fa";
+import { FaEdit , FaTrash} from "react-icons/fa";
 import { createPortal } from "react-dom";
 import axiosInstance from "@/services/axiosInstance";
 import { fetchSchoolsByRegion, fetchRegionsWithCities, addGccStudent } from "@/services/importantDatesService";
 import { AddStudentButton } from "@/components/shared/AddStudent";
 import { exportStudents } from "@/services/importantDatesService";
 import { markKuwaitStudentsPaid } from "@/services/authService";
+import { deleteStudent } from "@/services/uaeService";
 // ─── Types ────────────────────────────────────────────────────────────────────
 const COUNTRY_NAME_MAP: Record<string, string> = {
     SA: "Saudi Arabia", AE: "UAE", OM: "Oman",
@@ -761,17 +762,40 @@ export default function NewRegistrationsPage() {
         | "edit"
         | { type: "export" }
         | { type: "success"; message: string; title?: string }
+        | { type: "delete-confirm"; student: Student }
         | { type: "error"; message: string }
         | null;
 
     const [dialog, setDialog] = useState<DialogState>(null);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
     const [markingPaid, setMarkingPaid] = useState(false);
     const [countryCode] = useState(getCountryCode());
 
     const handleEdit = (student: Student) => {
         setEditStudent(student);
         setDialog("edit");
+    };
+
+      const handleDeleteClick = (student: Student) => {
+        setDialog({ type: "delete-confirm", student });
+    };
+
+    const handleDeleteConfirm = async (student: Student) => {
+        setDeletingId(student.id);
+        try {
+            const res: any = await deleteStudent(student.id);
+            fetchStudents();
+            setDialog({
+                type: "success",
+                title: "Student Deleted",
+                message: res?.message || `"${student.name}" was deleted successfully.`,
+            });
+        } catch (err: any) {
+            setDialog({ type: "error", message: err?.message || "Failed to delete student." });
+        } finally {
+            setDeletingId(null);
+        }
     };
 
     const toggleSelectAll = () => {
@@ -1066,7 +1090,7 @@ export default function NewRegistrationsPage() {
         "DOB", "GENDER", "NATIONALITY", "ADDRESS",
         "PARENT NAME", "PARENT MOBILE", "PARENT EMAIL",
         "STUDENT MOBILE", "STUDENT EMAIL",
-        "LAST LOGIN", "CREATED AT", "PAYMENT STATUS", "ACTION",
+        "LAST LOGIN", "CREATED AT", "PAYMENT STATUS", "EDIT","DELETE"
     ];
 
     return (
@@ -1294,6 +1318,19 @@ export default function NewRegistrationsPage() {
                                                 style={{ cursor: "pointer", color: "#2563eb", fontSize: 14 }}
                                                 onClick={() => handleEdit(row)}
                                                 title="Edit"
+                                            /> 
+                                            <br />
+                                            {/* <FaTrash
+                                                style={{ cursor: deletingId === row.id ? "not-allowed" : "pointer", color: "#dc2626", fontSize: 14, opacity: deletingId === row.id ? 0.5 : 1 }}
+                                                onClick={() => deletingId !== row.id && handleDeleteClick(row)}
+                                                title="Delete"
+                                            /> */}
+                                        </td>
+                                        <td style={s.td}>
+                                                                                    <FaTrash
+                                                style={{ cursor: deletingId === row.id ? "not-allowed" : "pointer", color: "#dc2626", fontSize: 14, opacity: deletingId === row.id ? 0.5 : 1 }}
+                                                onClick={() => deletingId !== row.id && handleDeleteClick(row)}
+                                                title="Delete"
                                             />
                                         </td>
                                     </tr>
@@ -1412,6 +1449,42 @@ export default function NewRegistrationsPage() {
                             >
                                 {exportLoading ? "Submitting..." : "Submit"}
                             </button>
+                        </div>
+                    </Modal>
+                </ModalWrapper>
+            )}
+
+            {dialog !== null && typeof dialog === "object" && dialog.type === "delete-confirm" && (
+                <ModalWrapper onClose={() => setDialog(null)}>
+                    <Modal onClose={() => setDialog(null)} width={380}>
+                        <div style={{ textAlign: "center", padding: "12px 0" }}>
+                            <div style={{ fontSize: 48, marginBottom: 12 }}>⚠️</div>
+                            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#111827", marginBottom: 8 }}>
+                                Delete Student?
+                            </h3>
+                            <p style={{ fontSize: 13, color: "#6b7280", marginBottom: 24 }}>
+                                Are you sure you want to delete <strong>{dialog.student.name}</strong>? This action cannot be undone.
+                            </p>
+                            <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+                                <button
+                                    onClick={() => setDialog(null)}
+                                    style={{ padding: "10px 28px", border: "1px solid #d1d5db", borderRadius: 8, background: "#fff", color: "#374151", fontSize: 14, cursor: "pointer" }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteConfirm(dialog.student)}
+                                    disabled={deletingId === dialog.student.id}
+                                    style={{
+                                        padding: "10px 28px", border: "none", borderRadius: 8,
+                                        background: "#dc2626", color: "#fff", fontSize: 14, fontWeight: 600,
+                                        cursor: deletingId === dialog.student.id ? "not-allowed" : "pointer",
+                                        opacity: deletingId === dialog.student.id ? 0.6 : 1,
+                                    }}
+                                >
+                                    {deletingId === dialog.student.id ? "Deleting..." : "Yes, Delete"}
+                                </button>
+                            </div>
                         </div>
                     </Modal>
                 </ModalWrapper>
