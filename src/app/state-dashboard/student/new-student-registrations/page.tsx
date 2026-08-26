@@ -788,6 +788,29 @@ export default function NewRegistrationsPage() {
         );
     };
 
+    // const handleMarkAsPaid = async () => {
+    //     if (!selectedIds.length) return;
+    //     const stateId = getStateId();
+    //     if (!stateId) {
+    //         setDialog({ type: "error", message: "State ID not found. Please refresh the page or log in again." });
+    //         return;
+    //     }
+    //     setMarkingPaid(true);
+    //     try {
+    //         if (countryCode === "KW") {
+    //             await markKuwaitStudentsPaid(selectedIds, stateId);
+    //         }
+    //         // future countries: else if (countryCode === "XX") { await markXxStudentsPaid(selectedIds, stateId); }
+    //         setSelectedIds([]);
+    //         fetchStudents();
+    //     } catch (err: any) {
+    //         setDialog({ type: "error", message: err?.message || "Failed to mark students as paid." });
+    //     } finally {
+    //         setMarkingPaid(false);
+    //     }
+    // };
+
+
     const handleMarkAsPaid = async () => {
         if (!selectedIds.length) return;
         const stateId = getStateId();
@@ -797,12 +820,21 @@ export default function NewRegistrationsPage() {
         }
         setMarkingPaid(true);
         try {
+            let res: any = null;
             if (countryCode === "KW") {
-                await markKuwaitStudentsPaid(selectedIds, stateId);
+                res = await markKuwaitStudentsPaid(selectedIds, stateId);
             }
-            // future countries: else if (countryCode === "XX") { await markXxStudentsPaid(selectedIds, stateId); }
+            // future countries: else if (countryCode === "XX") { res = await markXxStudentsPaid(selectedIds, stateId); }
+            const updatedCount = res?.updated_count ?? selectedIds.length;
             setSelectedIds([]);
             fetchStudents();
+            setDialog({
+                type: "success",
+                title: "Payment Status Updated",
+                message: res?.message
+                    ? `${res.message} (${updatedCount} student${updatedCount === 1 ? "" : "s"} updated)`
+                    : `${updatedCount} student${updatedCount === 1 ? "" : "s"} marked as paid successfully.`,
+            });
         } catch (err: any) {
             setDialog({ type: "error", message: err?.message || "Failed to mark students as paid." });
         } finally {

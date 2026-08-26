@@ -50,6 +50,16 @@ const COUNTRY_NAME_MAP: Record<string, string> = {
   QA: "Qatar",
 };
 
+
+const ZONAL_COORDINATOR_ROLE_ID = 8;
+const GCC_COUNTRY_CODES = Object.keys(COUNTRY_NAME_MAP);
+
+const isZonalCoordinator = (): boolean => {
+  const parsed = getUserData();
+  const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+  return roleId === ZONAL_COORDINATOR_ROLE_ID;
+};
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function SchoolsPage() {
   const [schools, setSchools] = useState<School[]>([]);
@@ -80,8 +90,13 @@ export default function SchoolsPage() {
   const [perPage, setPerPage] = useState(10);
 
   // Country from localStorage
+  const [isZonal] = useState(isZonalCoordinator);
   const [countryCode] = useState(getCountryCode);
-  const countryName = COUNTRY_NAME_MAP[countryCode] || countryCode;
+  const [countryFilter, setCountryFilter] = useState<string>(""); // "" = All Countries (zonal only)
+  const activeCountryCode = isZonal ? countryFilter : countryCode;
+  const countryName = isZonal
+    ? (countryFilter ? (COUNTRY_NAME_MAP[countryFilter] || countryFilter) : "All Countries (GCC)")
+    : (COUNTRY_NAME_MAP[countryCode] || countryCode);
 
   // ── Debounce search ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -93,11 +108,28 @@ export default function SchoolsPage() {
   }, [search]);
 
   // ── Load regions ─────────────────────────────────────────────────────────
+  // useEffect(() => {
+  //   const loadRegions = async () => {
+  //     setRegionsLoading(true);
+  //     try {
+  //       const data = await fetchRegionsWithCities(countryCode);
+  //       setRegions(data?.data || []);
+  //     } catch {
+  //       setRegions([]);
+  //     } finally {
+  //       setRegionsLoading(false);
+  //     }
+  //   };
+  //   if (countryCode) loadRegions();
+  // }, [countryCode]);
+
+
   useEffect(() => {
     const loadRegions = async () => {
+      if (!activeCountryCode) { setRegions([]); return; }
       setRegionsLoading(true);
       try {
-        const data = await fetchRegionsWithCities(countryCode);
+        const data = await fetchRegionsWithCities(activeCountryCode);
         setRegions(data?.data || []);
       } catch {
         setRegions([]);
@@ -105,20 +137,34 @@ export default function SchoolsPage() {
         setRegionsLoading(false);
       }
     };
-    if (countryCode) loadRegions();
-  }, [countryCode]);
+    loadRegions();
+  }, [activeCountryCode]);
 
   // ── Fetch schools ─────────────────────────────────────────────────────────
+ 
   // const fetchSchools = async () => {
   //   setLoading(true);
   //   try {
-  //     const countryCode = getCountryCode(); // already have this
-  //     // derive state_code from country e.g. "SA" → "KSA" or just use countryCode
-  //     const res = await getSchoolList(countryCode, regionFilter || undefined);
-  //     const rawData = res?.data;
-  //     const schoolList = Array.isArray(rawData) ? rawData : (rawData?.data ?? []);
+  //     console.log("▶️ countryCode:", countryCode);
+  //     console.log("▶️ regionFilter:", regionFilter);
+  //     const res = await getSchoolList(
+  //       countryCode,
+  //       regionFilter || undefined,
+  //       page,     // ← sends ?page=1, ?page=2 etc.
+  //       perPage
+  //     );
+  //     // const res = await getSchoolList(countryCode, regionFilter || undefined);
+  //     console.log("▶️ Full res:", JSON.stringify(res));
+
+  //     const paginated = res?.data;
+  //     const schoolList = Array.isArray(paginated?.data) ? paginated.data : [];
+
+  //     console.log("▶️ schoolList:", schoolList);
+  //     console.log("▶️ total:", paginated?.total);
+
   //     setSchools(schoolList);
-  //     setTotalRecords(schoolList.length);
+  //     setTotalRecords(paginated?.total ?? schoolList.length);
+  //     setTotalPages(paginated?.last_page ?? 1);
   //   } catch (err) {
   //     console.error("Schools fetch error:", err);
   //     setSchools([]);
@@ -126,29 +172,40 @@ export default function SchoolsPage() {
   //     setLoading(false);
   //   }
   // };
+
   const fetchSchools = async () => {
     setLoading(true);
     try {
-      console.log("▶️ countryCode:", countryCode);
-      console.log("▶️ regionFilter:", regionFilter);
-      const res = await getSchoolList(
-        countryCode,
-        regionFilter || undefined,
-        page,     // ← sends ?page=1, ?page=2 etc.
-        perPage
-      );
-      // const res = await getSchoolList(countryCode, regionFilter || undefined);
-      console.log("▶️ Full res:", JSON.stringify(res));
-
-      const paginated = res?.data;
-      const schoolList = Array.isArray(paginated?.data) ? paginated.data : [];
-
-      console.log("▶️ schoolList:", schoolList);
-      console.log("▶️ total:", paginated?.total);
-
-      setSchools(schoolList);
-      setTotalRecords(paginated?.total ?? schoolList.length);
-      setTotalPages(paginated?.last_page ?? 1);
+      if (isZonal && !countryFilter) {
+        // All Countries — fetch all 6 GCC countries in parallel, merge, paginate client-side
+        const results = await Promise.all(
+          GCC_COUNTRY_CODES.map((code) =>
+            getSchoolList(code, undefined, 1, 1000).catch(() => null)
+          )
+        );
+        const merged: School[] = [];
+        results.forEach((res) => {
+          const paginated = res?.data;
+          const list = Array.isArray(paginated?.data) ? paginated.data : [];
+          merged.push(...list);
+        });
+        const start = (page - 1) * perPage;
+        setSchools(merged.slice(start, start + perPage));
+        setTotalRecords(merged.length);
+        setTotalPages(Math.max(1, Math.ceil(merged.length / perPage)));
+      } else {
+        const res = await getSchoolList(
+          activeCountryCode || undefined,
+          regionFilter || undefined,
+          page,
+          perPage
+        );
+        const paginated = res?.data;
+        const schoolList = Array.isArray(paginated?.data) ? paginated.data : [];
+        setSchools(schoolList);
+        setTotalRecords(paginated?.total ?? schoolList.length);
+        setTotalPages(paginated?.last_page ?? 1);
+      }
     } catch (err) {
       console.error("Schools fetch error:", err);
       setSchools([]);
@@ -156,6 +213,10 @@ export default function SchoolsPage() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    fetchSchools();
+  }, [page, perPage, debouncedSearch, regionFilter, countryFilter]);
+
   useEffect(() => {
     fetchSchools();
   }, [page, perPage, debouncedSearch, regionFilter]);
@@ -352,12 +413,49 @@ export default function SchoolsPage() {
       <div style={s.card}>
         <div style={s.filterRow}>
 
-          {/* Country — read only from localStorage */}
-          <div style={s.countryBadge}>
+
+          {/* Country — dropdown filter for zonal coordinator, read-only badge otherwise */}
+          {isZonal ? (
+            <select
+              value={countryFilter}
+              onChange={(e) => { setCountryFilter(e.target.value); setRegionFilter(""); setPage(1); }}
+              style={s.select}
+            >
+              <option value="">All Countries (GCC)</option>
+              {GCC_COUNTRY_CODES.map((code) => (
+                <option key={code} value={code}>{COUNTRY_NAME_MAP[code]}</option>
+              ))}
+            </select>
+          ) : (
+            <div style={s.countryBadge}>
+              {countryName}
+            </div>
+          )}
+
+          {/* Region filter — hidden for zonal when "All Countries" selected, regions belong to one country */}
+          {(!isZonal || countryFilter) && (
+            <select
+              value={regionFilter}
+              onChange={(e) => { setRegionFilter(e.target.value); setPage(1); }}
+              style={s.select}
+              disabled={regionsLoading}
+            >
+              <option value="">
+                {regionsLoading ? "Loading regions..." : "All Regions"}
+              </option>
+              {regions.map((r) => (
+                <option key={r.district_id} value={r.code}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          )}
+         
+          {/* <div style={s.countryBadge}>
             {countryName}
           </div>
 
-          {/* Region filter */}
+         
           <select
             value={regionFilter}
             onChange={(e) => { setRegionFilter(e.target.value); setPage(1); }}
@@ -372,7 +470,7 @@ export default function SchoolsPage() {
                 {r.name}
               </option>
             ))}
-          </select>
+          </select> */}
 
           {/* Search */}
           {/* <input
@@ -563,14 +661,14 @@ export default function SchoolsPage() {
             </span>
 
             {/* First */}
-            <button
+            {/* <button
               onClick={() => setPage(1)}
               disabled={page === 1}
               style={s.pageBtn(page === 1)}
               title="First page"
             >
               «
-            </button>
+            </button> */}
 
             {/* Prev */}
             <button
@@ -625,14 +723,14 @@ export default function SchoolsPage() {
             </button>
 
             {/* Last */}
-            <button
+            {/* <button
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
               style={s.pageBtn(page === totalPages)}
               title="Last page"
             >
               »
-            </button>
+            </button> */}
           </div>
         </div>
 

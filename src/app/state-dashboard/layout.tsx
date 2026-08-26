@@ -334,6 +334,13 @@ export default function StateDashboardLayout({
               >
                 New Student Registrations 2026-27
               </Link>
+
+              {isZonalCoordinator && (
+              <Link href="/state-dashboard/student/gcc-bulk-students"
+                className={linkClass("/state-dashboard/student/gcc-bulk-students")}
+              >
+                Bulk Students
+                </Link> )}
               {/* {permissions.canViewPayments && (
                 <Link
                   href="/state-dashboard/student/student-payment"

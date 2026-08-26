@@ -193,7 +193,7 @@ const countries = [
         name: "Kuwait",
         flag: "/gcc/kuwait.png",
         coords: [
-            { name: "Prabhat Palayil", phone: "+965 66657038 / 65571490", email: "vvmspc.sifkwt@gmail.com" },
+            { name: "Prabhat Palayil", phone: "+965 66657038 / 65571490", email: "sifkwt@gmail.com" },
         ],
     },
     {

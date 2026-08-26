@@ -70,9 +70,7 @@ const Level2 = () => {
               </p>
               <br />
               <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">
-                Selected students will have to bear their travel expenses
-                to attend the State Level Camp. No travel support for this
-                purpose will be provided. The venue and other details
+                The venue and other details
                 will be updated on the website as well as communicated
                 to all selected students by the respective state
                 coordinator(s).

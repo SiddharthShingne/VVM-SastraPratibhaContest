@@ -210,20 +210,20 @@ function RegistrationSuccessPopup({
 
                 {/* Email info */}
                 <p className="text-sm text-gray-600 mb-2">
-                    Login credentials are emailed to
+                    Your  online registration has been successfully acknowledged. Kindly fill and return the physical registration forms provided from school( or download the same from www.sifkuwait.com) along with registrstion fee to the school. Your User ID and password will be provided  after the verification of the physical registration forms and confirmation of the registration fee.
                 </p>
-                <p className="text-base font-bold text-gray-800 mb-4">{email}</p>
+                {/* <p className="text-base font-bold text-gray-800 mb-4">{email}</p> */}
 
                 {/* Username */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl px-6 py-3 inline-block mb-4">
+                {/* <div className="bg-gray-50 border border-gray-200 rounded-xl px-6 py-3 inline-block mb-4">
                     <span className="text-sm text-gray-500 mr-2">Username:</span>
                     <span className="text-base font-bold text-gray-800 tracking-wide">{username}</span>
-                </div>
+                </div> */}
 
                 {/* Spam note */}
-                <p className="text-xs text-gray-400 mb-7">
+                {/* <p className="text-xs text-gray-400 mb-7">
                     If the credentials email is not in your INBOX,<br />please check your Spam folder.
-                </p>
+                </p> */}
 
                 {/* Go to Login button */}
                 <Link href="/login">
