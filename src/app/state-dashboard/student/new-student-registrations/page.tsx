@@ -1090,7 +1090,8 @@ export default function NewRegistrationsPage() {
         "DOB", "GENDER", "NATIONALITY", "ADDRESS",
         "PARENT NAME", "PARENT MOBILE", "PARENT EMAIL",
         "STUDENT MOBILE", "STUDENT EMAIL",
-        "LAST LOGIN", "CREATED AT", "PAYMENT STATUS", "EDIT","DELETE"
+        "LAST LOGIN", "CREATED AT", "PAYMENT STATUS", "EDIT",
+        // "DELETE"
     ];
 
     return (
@@ -1326,13 +1327,13 @@ export default function NewRegistrationsPage() {
                                                 title="Delete"
                                             /> */}
                                         </td>
-                                        <td style={s.td}>
+                                        {/* <td style={s.td}>
                                                                                     <FaTrash
                                                 style={{ cursor: deletingId === row.id ? "not-allowed" : "pointer", color: "#dc2626", fontSize: 14, opacity: deletingId === row.id ? 0.5 : 1 }}
                                                 onClick={() => deletingId !== row.id && handleDeleteClick(row)}
                                                 title="Delete"
                                             />
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))
                             )}
