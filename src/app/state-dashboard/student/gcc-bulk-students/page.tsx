@@ -102,18 +102,58 @@ export default function GccBulkStudentsPage() {
         "COUNTRY", "PAYMENT STATUS", "CREATED AT",
     ];
 
+    // const fetchBulkStudents = async () => {
+    //     setLoading(true);
+    //     setError("");
+    //     setStudents([]);
+    //     try {
+    //         const zoneId = getZoneId();
+    //         if (!zoneId) {
+    //             setError("Zone ID not found. Please refresh the page or log in again.");
+    //             return;
+    //         }
+
+    //         const res = await getGccBulkStudents(zoneId);
+
+    //         // TODO: confirm exact response shape from backend once tested
+    //         const raw: any[] = res?.data?.students?.data || res?.data || [];
+
+    //         const formatted: BulkStudent[] = raw.map((st: any) => ({
+    //             id: st.id,
+    //             name: st.name || "-",
+    //             username: st.user?.username || "-",
+    //             password: st.user?.temp_password || "-",
+    //             nationalId: st.national_id || "-",
+    //             school: st.school_name || "-",
+    //             classId: st.class_id,
+    //             dob: st.date_of_birth,
+    //             gender: st.gender === 1 ? "Male" : st.gender === 2 ? "Female" : "-",
+    //             parentName: st.parent_name || "-",
+    //             parentMobile: st.parent_phone_number || "-",
+    //             parentEmail: st.parent_email || "-",
+    //             nationality: st.nationality || "-",
+    //             division: st.division || "-",
+    //             isPaid: st.payment_status === 1,
+    //             createdAt: st.created_at,
+    //             countryCode: st.country_code || "-",
+    //         }));
+
+    //         setStudents(formatted);
+    //     } catch (err: any) {
+    //         setError(err?.message || "Failed to fetch GCC bulk students.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
+
     const fetchBulkStudents = async () => {
         setLoading(true);
         setError("");
         setStudents([]);
         try {
-            const zoneId = getZoneId();
-            if (!zoneId) {
-                setError("Zone ID not found. Please refresh the page or log in again.");
-                return;
-            }
-
-            const res = await getGccBulkStudents(zoneId);
+            const res = await getGccBulkStudents();
 
             // TODO: confirm exact response shape from backend once tested
             const raw: any[] = res?.data?.students?.data || res?.data || [];
@@ -145,7 +185,6 @@ export default function GccBulkStudentsPage() {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchBulkStudents();
     }, []);

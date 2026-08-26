@@ -1190,10 +1190,14 @@ export default function NewRegistrationsPage() {
                         <AddStudentButton onSuccess={fetchStudents} />
                         <button
                             onClick={() => setDialog({ type: "export" })} */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    {/* <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                         <AddStudentButton onSuccess={fetchStudents} />
+                        {countryCode === "KW" && selectedIds.length > 0 && ( */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        {!isZonal && <AddStudentButton onSuccess={fetchStudents} />}
                         {countryCode === "KW" && selectedIds.length > 0 && (
-                            <button
+                            
+                    <button
                                 onClick={handleMarkAsPaid}
                                 disabled={markingPaid}
                                 style={{ padding: "10px 22px", borderRadius: 10, border: "none", background: markingPaid ? "#86efac" : "#22c55e", color: "#fff", fontWeight: 600, fontSize: 13, cursor: markingPaid ? "not-allowed" : "pointer" }}

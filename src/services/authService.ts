@@ -674,11 +674,28 @@ export const markKuwaitStudentsPaid = async (userIds: number[], stateId: number)
   }
 };
 
-export const getGccBulkStudents = async (zoneId: number): Promise<any> => {
+// export const getGccBulkStudents = async (zoneId: number): Promise<any> => {
+//   try {
+//     const response = await api.post(`/get-gcc-bulk-students`, {
+//       zone_id: zoneId,
+//     });
+//     return response.data;
+//   } catch (error: any) {
+//     if (error.response) {
+//       throw new Error(
+//         error.response.data?.message || "Failed to fetch GCC bulk students",
+//       );
+//     } else if (error.request) {
+//       throw new Error("No response from server");
+//     } else {
+//       throw new Error(error.message || "Unexpected error");
+//     }
+//   }
+// };
+
+export const getGccBulkStudents = async (): Promise<any> => {
   try {
-    const response = await api.post(`/get-gcc-bulk-students`, {
-      zone_id: zoneId,
-    });
+    const response = await api.post(`/admin/get-gcc-bulk-students`);
     return response.data;
   } catch (error: any) {
     if (error.response) {
