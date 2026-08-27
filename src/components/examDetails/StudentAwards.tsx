@@ -84,8 +84,9 @@ const awardsData: Record<string, { title: string; rows: AwardRow[]; scholarshipN
         rewardTitle: "Regional Rewards",
         rewardBadgeClass: "bg-green-100 text-green-600",
         rewardDetails: [
-          "COUNTRY LEVEL RECOGNITION DURING ANNUAL SCIENCE GALA.",
-          "TOP PERFORMERS GET EXCLUSIVE INTERACTION OPPORTUNITIES WITH CHIEF GUESTS AT ANNUAL SCIENCE GALA.",
+          "Country level recognition during annual science gala.",
+          "Top performers get exclusive interaction opportunities with chief guests at annual science gala."
+
         ],
       },
     ],

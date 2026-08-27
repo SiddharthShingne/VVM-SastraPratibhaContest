@@ -224,7 +224,8 @@ export default function StateDashboardLayout({
 
     canViewSchools: ["AE", "SA", "OM", "QA", "KW", "BH"].includes(countryCode),
 
-    canViewStudents: countryCode === "AE",
+    // canViewStudents: countryCode === "AE" || isZonalCoordinator,
+    canViewStudents: countryCode === "AE" ,
   }; 
 
   const isActive = (path: string) => pathname === path;

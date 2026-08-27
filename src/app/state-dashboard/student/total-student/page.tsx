@@ -197,6 +197,20 @@ const getCountryCode = (): string => {
   }
 };
 
+
+const GCC_COUNTRIES = ["AE", "SA", "OM", "KW", "BH", "QA"];
+
+const isZonalCoordinator = (): boolean => {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return parsed?.role_id === 8 || parsed?.user?.role_id === 8;
+  } catch {
+    return false;
+  }
+};
+
 const COUNTRY_NAME_MAP: Record<string, string> = {
   SA: "Saudi Arabia",
   AE: "UAE",
@@ -1149,18 +1163,30 @@ export default function TotalStudentsPage() {
     setTotalRecords(0);
     try {
       const res = await axiosInstance.post("/admin/students", {
-        page: currentPage,
-        per_page: perPage,
-        status: 1,
-        district_id: region ? Number(region) : undefined,
-        class_id: classFilter ? [Number(classFilter)] : undefined,
-        // class_id: classFilter ? Number(classFilter) : undefined,
-        // class: classFilter ? CLASS_MAP[Number(classFilter)]?.trim() : undefined,
-        search: debouncedSearch,
-        name: debouncedNameSearch || undefined,   // 
-        created_at_from: filterStartDate || undefined,
-        created_at_to: filterEndDate || undefined,
-      });
+  page: currentPage,
+  per_page: perPage,
+  status: 1,
+  district_id: region ? Number(region) : undefined,
+  class_id: classFilter ? [Number(classFilter)] : undefined,
+  country_code: isZonalCoordinator() ? GCC_COUNTRIES : (getCountryCode() ? [getCountryCode()] : undefined),
+  search: debouncedSearch,
+  name: debouncedNameSearch || undefined,
+  created_at_from: filterStartDate || undefined,
+  created_at_to: filterEndDate || undefined,
+});
+      // const res = await axiosInstance.post("/admin/students", {
+      //   page: currentPage,
+      //   per_page: perPage,
+      //   status: 1,
+      //   district_id: region ? Number(region) : undefined,
+      //   class_id: classFilter ? [Number(classFilter)] : undefined,
+      //   // class_id: classFilter ? Number(classFilter) : undefined,
+      //   // class: classFilter ? CLASS_MAP[Number(classFilter)]?.trim() : undefined,
+      //   search: debouncedSearch,
+      //   name: debouncedNameSearch || undefined,   // 
+      //   created_at_from: filterStartDate || undefined,
+      //   created_at_to: filterEndDate || undefined,
+      // });
       // const res = await axiosInstance.post("/admin/students", {
       //   page: currentPage,
       //   per_page: perPage,
@@ -1238,6 +1264,41 @@ export default function TotalStudentsPage() {
   // ── Delete handler ───────────────────────────────────────────────────────
 
 
+  // const handleExportSubmit = async () => {
+  //   if (!exportStartDate || !exportEndDate) return;
+  //   setExportLoading(true);
+  //   try {
+  //     const raw = localStorage.getItem("user");
+  //     const parsed = raw ? JSON.parse(raw) : null;
+  //     const assignments = parsed?.user?.user_detail?.assignments || [];
+  //     console.log("ALL ASSIGNMENTS:", assignments);  // 👈 see what's actually there
+  //     const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+  //     const stateId = stateAssignment?.coordinatable_id;
+  //     console.log("STATE ID:", stateId);  // 👈 if this is "" that's the problem
+  //     const prantId = stateAssignment?.extras?.prant_id;
+  //     const userEmail = parsed?.user?.user_detail?.email || "";
+
+  //     await exportStudents({
+  //       zone_id: [],
+  //       state_id: stateId ? [stateId] : [],
+  //       prant_id: prantId ? [prantId] : [],
+  //       district_id: [],
+  //       class_id: [],
+  //       school_id: [],
+  //       school_student: true,
+  //       email: userEmail, // 🔴 HARDCODED — change later
+  //       created_at_from: exportStartDate,
+  //       created_at_to: exportEndDate,
+  //     });
+
+  //     setDialog({ type: "success", title: "Export Successful", message: "Export started! You will receive an email once completed." });
+  //   } catch (err: any) {
+  //     setDialog({ type: "error", message: err?.message || "Export failed. Please try again." });
+  //   } finally {
+  //     setExportLoading(false);
+  //   }
+  // };
+
   const handleExportSubmit = async () => {
     if (!exportStartDate || !exportEndDate) return;
     setExportLoading(true);
@@ -1245,22 +1306,24 @@ export default function TotalStudentsPage() {
       const raw = localStorage.getItem("user");
       const parsed = raw ? JSON.parse(raw) : null;
       const assignments = parsed?.user?.user_detail?.assignments || [];
-      console.log("ALL ASSIGNMENTS:", assignments);  // 👈 see what's actually there
+
       const stateAssignment = assignments.find((a: any) => a.coordinatable_type === "State");
+      const zoneAssignment = assignments.find((a: any) => a.coordinatable_type === "Zone");
+
       const stateId = stateAssignment?.coordinatable_id;
-      console.log("STATE ID:", stateId);  // 👈 if this is "" that's the problem
+      const zoneId = zoneAssignment?.coordinatable_id;
       const prantId = stateAssignment?.extras?.prant_id;
       const userEmail = parsed?.user?.user_detail?.email || "";
 
       await exportStudents({
-        zone_id: [],
+        zone_id: zoneId ? [zoneId] : [],
         state_id: stateId ? [stateId] : [],
         prant_id: prantId ? [prantId] : [],
         district_id: [],
         class_id: [],
         school_id: [],
         school_student: true,
-        email: userEmail, // 🔴 HARDCODED — change later
+        email: userEmail,
         created_at_from: exportStartDate,
         created_at_to: exportEndDate,
       });

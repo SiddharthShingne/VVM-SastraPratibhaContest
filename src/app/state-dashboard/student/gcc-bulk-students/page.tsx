@@ -34,21 +34,21 @@ const CLASS_MAP: Record<number, string> = {
     6: "Grade 11",
 };
 
-const getZoneId = (): number | null => {
-    try {
-        if (typeof window === "undefined") return null;
-        const raw = localStorage.getItem("user");
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        const assignments = parsed?.user?.user_detail?.assignments || [];
-        const zoneAssignment = assignments.find(
-            (a: any) => a.coordinatable_type === "Zone"
-        );
-        return zoneAssignment?.coordinatable_id ?? zoneAssignment?.zone_id ?? null;
-    } catch {
-        return null;
-    }
-};
+// const getZoneId = (): number | null => {
+//     try {
+//         if (typeof window === "undefined") return null;
+//         const raw = localStorage.getItem("user");
+//         if (!raw) return null;
+//         const parsed = JSON.parse(raw);
+//         const assignments = parsed?.user?.user_detail?.assignments || [];
+//         const zoneAssignment = assignments.find(
+//             (a: any) => a.coordinatable_type === "Zone"
+//         );
+//         return zoneAssignment?.coordinatable_id ?? zoneAssignment?.zone_id ?? null;
+//     } catch {
+//         return null;
+//     }
+// };
 
 const formatDate = (dateStr: string | null | undefined) => {
     if (!dateStr) return "-";
