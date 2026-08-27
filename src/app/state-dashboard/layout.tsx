@@ -19,6 +19,17 @@ import { useSessionTimeout } from "@/components/shared/useSessionTimeout";
 import { logoutUser } from "@/services/authService";
 import axiosInstance from "@/services/axiosInstance";
 
+
+interface StoredUser {
+  role_id?: number;
+  user?: {
+    role_id?: number;
+    role_name?: string;
+    role?: { name?: string };
+    country_id?: number;
+    country_code?: string;
+  };
+}
 /* ---------------- GET NAME ---------------- */
 function extractNameFromStorage(): string {
   try {
@@ -31,6 +42,34 @@ function extractNameFromStorage(): string {
       "State Coordinator"
     );
   } catch (err) {
+    return "State Coordinator";
+  }
+}
+const ZONAL_COORDINATOR_ROLE_ID = 8
+function isZonalCoordinatorFromStorage(): boolean {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return false;
+    const parsed: StoredUser = JSON.parse(raw);
+    const roleId = parsed?.user?.role_id ?? parsed?.role_id;
+    return roleId === ZONAL_COORDINATOR_ROLE_ID;
+  } catch {
+    return false;
+  }
+}
+function getRoleNameFromStorage(): string {
+  try {
+    const raw = localStorage.getItem("user");
+    if (!raw) return "State Coordinator";
+    const parsed: StoredUser = JSON.parse(raw);
+    const roleName = parsed?.user?.role_name || parsed?.user?.role?.name || "";
+    if (!roleName) return "State Coordinator";
+    // "zonal-coordinator" → "Zonal Coordinator"
+    return roleName
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  } catch {
     return "State Coordinator";
   }
 }
@@ -93,7 +132,15 @@ export default function StateDashboardLayout({
   const [showNotice, setShowNotice] = useState(true);
   const isSchoolActive = pathname.startsWith("/state-dashboard/school");
   const isStudentActive = pathname.startsWith("/state-dashboard/student");
+const [isZonal, setIsZonal] = useState(false);
 
+
+  const [roleTitle, setRoleTitle] = useState("State Coordinator");
+
+  useEffect(() => {
+    setIsZonal(isZonalCoordinatorFromStorage());
+    setRoleTitle(getRoleNameFromStorage());
+  }, []);
   const handleDismissNotice = () => {
     setShowNotice(false);  // Only hides until next refresh
     // No localStorage - so it will show again after refresh
@@ -260,9 +307,9 @@ export default function StateDashboardLayout({
         >
           {name.charAt(0).toUpperCase()}
         </div>
-        <p className="text-[10px] text-[#8fa2b8] uppercase font-bold mb-1 tracking-wide">
-          State Coordinator
-        </p>
+        <h1 className="text-lg sm:text-2xl font-bold text-slate-800 tracking-tight">
+          {roleTitle} Dashboard
+        </h1>
         <h6 className="shine-name text-[17px] font-extrabold">
           {name}
         </h6>
