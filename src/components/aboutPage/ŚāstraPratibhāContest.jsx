@@ -114,19 +114,17 @@ const ŚāstraPratibhāContest = () => {
               {/* BODY TEXT */}
               <p className="text-[#4f6480] text-justify mt-6 text-base leading-relaxed font-medium">
                 <strong className="text-[#17395c]">
-                Vidyarthi Vigyan Manthan (International Edition of VVM-SPC)
+                  The Śāstra Pratibhā Contest (SPC)
                 </strong>{" "}
-                is conducted in the GCC Countries namely Bahrain,
-                Kuwait, Oman, Qatar, Saudi Arabia and the United Arab Emirates
-                with the name of Śāstra Pratibhā Contest (SPC) by Science India Forum,
-                an overseas unit of Vijnana Bharati. The top 2
-                rankers (Class VI - XI) of the Śāstra Pratibhā Contest will also
-                participate in the National Level Camp Examination. These
-                students will be considered eligible for National Level Winners
-                (Himalayan) selection. A separate zone (Zone 5) will be created
-                for GCC Countries to declare Zonal Level Winners.
-                Zone 5 winners will be announced only if at least 6 students (in
-                a class) attend the National Level Camp.
+                is the international edition of ,<b> Vidyarthi Vigyan Manthan (VVM) </b> conducted across the GCC countries—Bahrain, Kuwait, Oman, Qatar, Saudi Arabia, and the United Arab Emirates—by the respective Science India / International Forum units.
+
+                <br />  <br />  SPC provides students from Classes VI to XI in the GCC with an opportunity to participate in the wider VVM platform and showcase their scientific knowledge, analytical ability, and understanding of India&#39;s contributions to science and technology.
+
+                <br />   <br />   The top two rankers from each class (Classes VI–XI) in the Śāstra Pratibhā Contest will be eligible to participate in the VVM National Level Camp Examination in India. These students will also be considered for selection as National Level contest (Himalayan), subject to the applicable VVM rules and evaluation criteria.
+
+            <br />   <br />   For the GCC countries, a separate Zone 5 has been constituted for the declaration of  GCC Zonal Level Winners. Zonal winners will be declared for a class only when a minimum of six students from that class participate in the National Level Camp.
+
+                <br />  <br />   Through SPC, students in the GCC become part of a broader national and international initiative that promotes scientific curiosity, innovation, critical thinking.
               </p>
 
               {/* QUOTE BLOCK */}
