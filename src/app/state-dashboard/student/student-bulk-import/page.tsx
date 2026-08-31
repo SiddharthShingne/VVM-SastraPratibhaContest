@@ -26,7 +26,7 @@ export default function BulkUploadPage() {
   };
 
   /* ── download sample ── */
-  const handleDownload = () => window.open("/gcc/sif_student_sample_file.xlsx");
+  const handleDownload = () => window.open("/pdf/sample_bulk_file.xlsx");
 
   /* ── submit ── */
   const handleSubmit = async () => {

@@ -689,7 +689,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
               </div>
 
               <p className="text-red-500 text-sm mt-2">
-                After registration, please login  and proceed with payment to avoid any future disruptions.
+                After registration, please login and proceed with payment to avoid any future disruptions.
               </p>
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"

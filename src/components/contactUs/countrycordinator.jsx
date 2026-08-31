@@ -175,18 +175,10 @@ import Image from "next/image";
 // Data
 const countries = [
     {
-        name: "United Arab Emirates (UAE)",
-        flag: "/gcc/uae.png",
+        name: "Bahrain",
+        flag: "/gcc/bahrain.png",
         coords: [
-            { name: "PRAVEEN NAIR", phone: "+971 508545100", email: "spc@sifuae.com" },
-            { name: "ASMITA BHAGDIKAR", phone: "+971 559859434", email: "sifuae@yahoo.com" },
-        ],
-    },
-    {
-        name: "Oman",
-        flag: "/gcc/oman.png",
-        coords: [
-            { name: "Shri Vinod Kumar T.M", phone: "+968 97479922", email: "tm.vinod1968@gmail.com" },
+            { name: "Mukesh", phone: "+973-33370133", email: "info@sifbahrain.com" }
         ],
     },
     {
@@ -194,6 +186,13 @@ const countries = [
         flag: "/gcc/kuwait.png",
         coords: [
             { name: "Prabhat Palayil", phone: "+965 66657038 / 65571490", email: "sifkwt@gmail.com" },
+        ],
+    },
+    {
+        name: "Oman",
+        flag: "/gcc/oman.png",
+        coords: [
+            { name: "Shri Vinod Kumar T.M", phone: "+968 97479922", email: "tm.vinod1968@gmail.com" },
         ],
     },
     {
@@ -213,12 +212,18 @@ const countries = [
         ],
     },
     {
-        name: "Bahrain",
-        flag: "/gcc/bahrain.png",
+        name: "United Arab Emirates (UAE)",
+        flag: "/gcc/uae.png",
         coords: [
-            { name: "Mukesh", phone: "+973-33370133", email: "info@sifbahrain.com" }
+            { name: "PRAVEEN NAIR", phone: "+971 508545100", email: "spc@sifuae.com" },
+            { name: "ASMITA BHAGDIKAR", phone: "+971 559859434", email: "sifuae@yahoo.com" },
         ],
     },
+  
+  
+   
+  
+
 ];
 
 const Header = () => (
