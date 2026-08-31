@@ -1064,7 +1064,7 @@ export default function EditProfile() {
               />
             </VvmInput> */}
 
-            <VvmInput label="Parent / Guardian Full Name" error={errors.parentName?.message}>
+            <VvmInput label={countryId === "4" ? "Parent Name" : "Parent/Guardian Name"} error={errors.parentName?.message}>
               <VvmTextInput placeholder="Enter parent name"
                 onKeyPress={(e) => { if (!/[a-zA-Z\s.'-]/.test(e.key)) e.preventDefault(); }}
                 {...register("parentName", {
