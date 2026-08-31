@@ -950,7 +950,7 @@ export default function EditProfile() {
               />
             </VvmInput> */}
 
-            <VvmInput label="National ID">
+            <VvmInput label={countryId === "4" ? "Qatar National ID" : "National ID"}>
               <VvmTextInput value={nationalId} readOnly disabled />
             </VvmInput>
             
