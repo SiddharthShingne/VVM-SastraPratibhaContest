@@ -48,38 +48,43 @@ const Level2 = () => {
             <div className="p-8">
 
               {/* Title */}
-              <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
+              {/* <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
                 State Level Camp (SLC): Level-II
-              </h2>
+              </h2> */}
 
+              <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
+                Level II and Finals
+              </h2>
               {/* Content */}
               <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">
-                The top 25 rankers from each class for every state will
+                {/* The top 25 rankers from each class for every state will
                 be identified to participate in the one or two-day State
                 Level Camp (SLC). The camp will be organized at any
-                location within the state.
+                location within the state. */}
+
+                Top rankers from Level 1 will be eligible.
               </p>
-              <br />
-              <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">
-                The State Level Camp will focus on ApplicationOrientated Multiple Choice Questions, Hands-On
+              <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-1">
+                {/* The State Level Camp will focus on ApplicationOrientated Multiple Choice Questions, Hands-On
                 Activities, Observation and Analysis, Situational ProblemSolving Ability, and a series of other activities. States will
                 be clubbed according to the number of students who
                 appeared for the examination, as per consideration of
                 their geographical and cultural resemblance, and the
-                convenience of the students.
+                convenience of the students. */}
+                
+                This will be an online exam followed by Science camp. <br />
+                Please visit SIF website for details. 
               </p>
-              <br />
-              <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">
-                The venue and other details
-                will be updated on the website as well as communicated
-                to all selected students by the respective state
-                coordinator(s).
+              <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-1">
+                The venue and other details will be updated on SIF website. <br />
+                The winners will be communicated. 
+
               </p>
 
             </div>
           </div>
 
-          <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] bg-amber-100 px-8 py-4 rounded-2xl">
+          {/* <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] bg-amber-100 px-8 py-4 rounded-2xl">
             <strong>Displaying the Marks Obtained/
               Secured</strong>- Marks secured/obtained by
             the students will be available on their
@@ -93,7 +98,7 @@ const Level2 = () => {
             Viva-Voce comprising three questions, and
             the one scoring the highest mark(s) will be
             declared as the winner.
-          </p>
+          </p> */}
 
         </div>
       </div>

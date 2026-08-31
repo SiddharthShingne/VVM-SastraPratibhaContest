@@ -95,7 +95,7 @@ const WhatIsVVM = () => {
                     <p className="text-center text-[black] text-base font-semibold max-w-2xl mx-auto mb-10">
                         Students participating in the Śāstra Pratibhā Contest will undergo the following multi-level assessments.
                     </p>
-
+                    <p className="text-center text-[black] text-base font-semibold max-w-2xl mx-auto mb-10">The assessment pattern for each country will be decided by the Science India/International forum</p>
                     {/* Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 

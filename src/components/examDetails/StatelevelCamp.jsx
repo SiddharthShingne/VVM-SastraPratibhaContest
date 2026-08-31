@@ -56,6 +56,10 @@ const StateLevelCamp = () => {
             <div className="p-8 space-y-5">
 
               {/* Title */}
+              {/* <h2 className="text-[32px] font-black text-[#17395c] text-center mb-4">
+                State Level Camp (SLC): Level-III
+              </h2> */}
+
               <h2 className="text-[32px] font-black text-[#17395c] text-center mb-4">
                 State Level Camp (SLC): Level-III
               </h2>

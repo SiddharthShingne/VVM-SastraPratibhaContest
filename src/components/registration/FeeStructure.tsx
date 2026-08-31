@@ -83,7 +83,7 @@ const feeStructureData: Record<
     title: "Bahrain Fee Structure",
     items: [
       {
-        text: "Registration fee for students studying in Bahrain: 20 AED.",
+        text: "Registration fee for students studying in Bahrain: 2 Bahrain Dinar.",
         note: "Applicable only for Bahrain students.",
       },
       {

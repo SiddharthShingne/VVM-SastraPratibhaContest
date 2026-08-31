@@ -11,7 +11,7 @@ interface DateItem {
   detail: string;
 }
 
-const PAYMENT_ENABLED_COUNTRIES = [2, 3, 6]; // UAE, Oman, Bahrain
+const PAYMENT_ENABLED_COUNTRIES = [3, 6]; // UAE, Oman, Bahrain
 
 export default function DashboardHome() {
   const [dates, setDates] = useState<DateItem[]>([]);

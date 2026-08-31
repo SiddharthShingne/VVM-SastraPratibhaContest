@@ -367,6 +367,7 @@ export default function EditProfile() {
   const [verifyLoading, setVerifyLoading] = useState<Partial<Record<OtpTarget, boolean>>>({});
   const [otpErrors, setOtpErrors] = useState<Partial<Record<OtpTarget, string>>>({});
   const [countryName, setCountryName] = useState("");
+  const [nationalId, setNationalId] = useState("");
 
   const [dialog, setDialog] = useState<DialogState>({ open: false, type: "success", message: "", });
   const genderOptions = useMemo(() => [
@@ -543,6 +544,7 @@ export default function EditProfile() {
       setCountryId(countryId);
       setCountryName(COUNTRY_MAP[countryId] || "");
       setParentEmailVerified(!!user?.user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
+      setNationalId(d.national_id || "");
       // setParentEmailVerified(!!user?.onboarding?.is_parent_email_verified || !!d.is_parent_email_verified);
 
       // if (d.state_id) {
@@ -948,6 +950,10 @@ export default function EditProfile() {
               />
             </VvmInput> */}
 
+            <VvmInput label="National ID">
+              <VvmTextInput value={nationalId} readOnly disabled />
+            </VvmInput>
+            
             <VvmInput label="Select Gender">
               <VvmSelect
                 value={watch("gender") || ""}
@@ -971,7 +977,7 @@ export default function EditProfile() {
               />
             </VvmInput> */}
 
-            <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
+            {/* <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
               <VvmTextInput
                 placeholder="Student mobile number"
                 maxLength={10}
@@ -996,13 +1002,57 @@ export default function EditProfile() {
                     message: "Enter a valid email address"
                   }
                 })} />
-            </VvmInput>
+            </VvmInput> */}
+
+            {countryId !== "4" && (
+              <>
+                <VvmInput label="Student Mobile No." error={errors.studentMobile?.message}>
+                  <VvmTextInput
+                    placeholder="Student mobile number"
+                    maxLength={10}
+                    {...register("studentMobile", {
+                      validate: (value) => {
+                        if (!value) return true;
+                        if (!/^\d+$/.test(value)) return "Only digits allowed";
+                        if (value.length < 7 || value.length > 10) return "Enter 7-10 digit number";
+                        return true;
+                      }
+                    })}
+                    onKeyPress={(e) => { if (!/[0-9]/.test(e.key)) e.preventDefault(); }}
+                  />
+                </VvmInput>
+                <VvmInput label="Student Email" error={errors.studentEmail?.message}>
+                  <VvmTextInput
+                    type="email"
+                    placeholder="Student email address"
+                    {...register("studentEmail", {
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Enter a valid email address"
+                      }
+                    })} />
+                </VvmInput>
+              </>
+            )}
 
             {/* ── Parent / Contact ── */}
             <div className="vvm-section-label">Parent / Contact Details</div>
 
-
-            <VvmInput label="Parent Salutation" required>
+            {countryId !== "4" && (
+              <VvmInput label="Parent Salutation" required>
+                <VvmSelect
+                  value={watch("parentSalutation") || ""}
+                  onChange={(e) => setValue("parentSalutation", e.target.value)}
+                  options={[
+                    { label: "Mr.", value: "Mr" },
+                    { label: "Mrs.", value: "Mrs" },
+                    { label: "Dr.", value: "Dr" },
+                  ]}
+                />
+              </VvmInput>
+            )}
+            
+            {/* <VvmInput label="Parent Salutation" required>
               <VvmSelect
                 value={watch("parentSalutation") || ""}
                 onChange={(e) => setValue("parentSalutation", e.target.value)}
@@ -1012,7 +1062,7 @@ export default function EditProfile() {
                   { label: "Dr.", value: "Dr" },
                 ]}
               />
-            </VvmInput>
+            </VvmInput> */}
 
             <VvmInput label="Parent / Guardian Full Name" error={errors.parentName?.message}>
               <VvmTextInput placeholder="Enter parent name"
@@ -1131,7 +1181,7 @@ export default function EditProfile() {
               />
             </VvmInput>
 
-            <VvmInput label="School Board" required error={errors.schoolBoard?.message}>
+            {/* <VvmInput label="School Board" required error={errors.schoolBoard?.message}>
               <Controller
                 name="schoolBoard"
                 control={control}
@@ -1145,7 +1195,25 @@ export default function EditProfile() {
                   />
                 )}
               />
-            </VvmInput>
+            </VvmInput> */}
+
+            {countryId !== "4" && (
+              <VvmInput label="School Board" required error={errors.schoolBoard?.message}>
+                <Controller
+                  name="schoolBoard"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "School Board is required" }}
+                  render={({ field }) => (
+                    <VvmSelect
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      options={boardOptions}
+                    />
+                  )}
+                />
+              </VvmInput>
+            )}
 
             <VvmInput label="Exam Language">
               <VvmTextInput
@@ -1155,6 +1223,8 @@ export default function EditProfile() {
               />
             </VvmInput>
 
+            {countryId !== "4" && (
+              <>
             {/* ── Address ── */}
             <div className="vvm-section-label">Address</div>
 
@@ -1241,7 +1311,9 @@ export default function EditProfile() {
                   />
                 )}
               />
-            </VvmInput>
+                </VvmInput>
+              </>
+            )}
 
 
             {/* <VvmInput label="Pin Code" required error={errors.pinCode?.message}>

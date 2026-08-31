@@ -16,7 +16,7 @@ import {
 const ObjectivesOfVVM = () => {
   const methods = [
     {
-      title: "To create among students an interest in pure science",
+      title: "To foster an interest in pure science among students",
       icon: <Lightbulb />,
     },
     {

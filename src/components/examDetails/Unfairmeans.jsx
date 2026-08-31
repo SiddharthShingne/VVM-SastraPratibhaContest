@@ -63,11 +63,11 @@ const UnfairMeans = () => {
 
               {/* List */}
               <ul className="mt-4 pl-5 list-disc space-y-3 text-[#4f6480] text-[16px] leading-[1.8] marker:text-[#17395c]">
-                <li>
+                {/* <li>
                   <strong>Invigilator Visit:</strong> Invigilators will visit schools
                   during the selected time slot. Guidelines and visit details will
                   be shared one week before the exam.
-                </li>
+                </li> */}
 
                 <li>
                   <strong>Tab Switching and Unfair Activities :</strong>  If a user switches tabs more than 5 times,
@@ -81,8 +81,7 @@ const UnfairMeans = () => {
 
               {/* Note */}
               <p className="text-[#d13b2f] text-[14px] font-semibold">
-                Schools and Students are expected to cooperate with invigilators
-                and follow all guidelines to ensure a fair examination process.
+                Students are expected to follow all guidelines to ensure a fair examination process.
               </p>
 
             </div>

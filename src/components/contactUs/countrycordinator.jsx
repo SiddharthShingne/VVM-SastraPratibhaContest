@@ -208,8 +208,8 @@ const countries = [
         name: "Saudi Arabia",
         flag: "/gcc/saudi-arab.png",
         coords: [
-            { name: "Ms. Athulya Chandran", phone: "+0553041594", email: "athulyac3@gmail.com" },
-            { name: "Mr. Aji Chandran", phone: "0544824350", email: "ajicaji@gmail.com" },
+            { name: "Ms. Athulya Chandran", phone: "0553041594", email: "scienceindiaryd@gmail.com" },
+            { name: "Mr. Aji Chandran", phone: "0544824350", email: "scienceindiaryd@gmail.com" },
         ],
     },
     {

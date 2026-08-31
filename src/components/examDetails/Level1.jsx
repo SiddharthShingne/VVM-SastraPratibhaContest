@@ -57,14 +57,14 @@ const Level1 = () => {
               <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">
                 Level – I school level examination will be of one hour and thirty minutes duration
                 with 100 multiple choice questions - each weighted for 4 Marks. The question paper
-                will be in two sections, viz. <strong>Section-A</strong> and <strong>Section-B</strong>. There is no negative marking in
-                <strong>Section-A</strong>. Incorrect answers will incur a penalty of -1 Mark (0.25% Negative Marking)
-                in <strong>Section-B</strong>. The examination will consist <strong>Section-A</strong> (comprising 40 questions from
+                will be in two sections, viz. <strong>Section-A</strong> and <strong>Section-B</strong>. <br /> There is no negative marking in
+                <strong> Section-A</strong>.<br /> Incorrect answers will incur a penalty of -1 Mark (0.25% Negative Marking)
+                in <strong>Section-B</strong>. <br /> <br /> The examination will consist <strong>Section-A</strong> (comprising 40 questions from
                 the study material Indian Contributions to Science and Life Stories of Tri-Shakti : Anna
                 Mani, Asima Chatterjee and Rohini Godbole (to be provided by Vijnana Bharati) &
-                <strong>Section-B</strong> (comprising 60 questions based on the VVM Syllabus (Based on Text Books
+                <strong> Section-B</strong> (comprising 60 questions based on the VVM Syllabus (Based on Text Books
                 of NCERT & various State Boards Curriculum) & Logic and Reasoning (open source).
-                A detailed syllabus is provided on VVM’s website. The examination will be conducted
+                A detailed syllabus is provided on VVM’s website. <br /> The examination will be conducted
                 class-wise. Evaluation of students will be based on their performance at each level.
               </p>
 
@@ -72,6 +72,7 @@ const Level1 = () => {
                   STUDY MATERIAL
               ====================================================== */}
               <div className="mb-10">
+                <br />
                 <h2 className="text-[24px] sm:text-[28px] font-bold text-[#17395c] mb-3">
                   Study Material
                 </h2>
@@ -210,7 +211,7 @@ const Level1 = () => {
                 </li>
 
                 <li>
-                  Top 25 rankers (per class) based on total marks scored (merit) in both
+                  Top rankers (per class) based on total marks scored (merit) in both
                   sections, namely Section-A & Section-B thus will be selected for
                   participation in State Level Camp (Level-II).
                 </li>
