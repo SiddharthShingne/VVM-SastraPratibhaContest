@@ -57,7 +57,7 @@ import React from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-const ŚāstraPratibhāContest = () => {
+const SastraPratibhaContest = () => {
   return (
     <div>
 
@@ -185,4 +185,4 @@ const ŚāstraPratibhāContest = () => {
   );
 };
 
-export default ŚāstraPratibhāContest;
+export default SastraPratibhaContest;
