@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://core.vvmstage.cloud/api",
+  // baseURL: "https://core.vvmstage.cloud/api",
+  baseURL: "https://vvm.org.in/backend/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
