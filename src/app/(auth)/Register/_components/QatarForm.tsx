@@ -25,7 +25,7 @@ type RegistrationForm = {
   schoolName: string;
   board: string;
   // pincode: string;
-  schoolAddress: string;
+  // schoolAddress: string;
   parentName: string;
   parentMobile: string;
   parentEmail: string;
@@ -718,8 +718,8 @@ export default function QatarForm({ countries = [] }: Props) {
           <Section title="Terms & Conditions">
             <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
               <div className="h-40 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
-                <ol className="list-decimal pl-7">
-                  <li className="py-2"> The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification. </li>
+                <ol className="list-decimal pl-5">
+                  <li className="py-2">The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification. </li>
                   <li className="py-2"> After registration, students are required to log in to their account, update their profile details. </li>
                  <li className="py-2"> Students must follow all examination rules and instructions provided on the portal. Any form of malpractice or misuse of the platform may result in disqualification.</li>
                   <li className="py-2">	The student is responsible for keeping their login credentials confidential until the exam. The same credentials will be used for the exam, and any activity performed using the account will be considered the student&#39;s responsibility.</li>

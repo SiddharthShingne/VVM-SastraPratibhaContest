@@ -55,7 +55,7 @@ function extractCountryIdFromStorage(): number | null {
   }
 }
 
-const PAYMENT_ENABLED_COUNTRIES = [2, 3, 6]; // UAE, Oman, Bahrain
+const PAYMENT_ENABLED_COUNTRIES = [3, 6]; // UAE, Oman, Bahrain
 
 function SectionTitle({ label }: { label: string }) {
   return (

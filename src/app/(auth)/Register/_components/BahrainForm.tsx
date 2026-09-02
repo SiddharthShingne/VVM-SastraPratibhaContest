@@ -24,7 +24,7 @@ type RegistrationForm = {
   schoolName: string;
   board: string;
   // pincode: string;
-  schoolAddress: string;
+  // schoolAddress: string;
   parentName: string;
   parentMobile: string;
   parentEmail: string;
@@ -422,15 +422,17 @@ export default function BahraiinForm({ countries = [] }: Props) {
         dob: data.dob,
         gender: Number(data.gender),
         grade: Number(data.grade),
-        student_mobile: data.studentMobile,
-        student_email: data.studentEmail,
+        // student_mobile: data.studentMobile,
+        // student_email: data.studentEmail,
+        student_mobile: data.studentMobile || null,
+        student_email: data.studentEmail || null,
         emirate_id: data.emiratesId || null,
 
         sch_name: data.schoolName,
         school_board_id: data.board,
 
         // pincode: data.pincode,
-        address: data.schoolAddress,
+        // address: data.schoolAddress,
         region_id: data.region,
         dist_id: data.city,
 
@@ -522,11 +524,11 @@ export default function BahraiinForm({ countries = [] }: Props) {
               error={touchedFields?.gender && errors?.gender ? errors.gender : undefined}
             />
             <InputField label="Student Mobile" placeholder="Enter mobile"
-              registration={register("studentMobile", { required: "Student Mobile is required", pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
+              registration={register("studentMobile", {  pattern: { value: /^[0-9]{8}$/, message: "Mobile number must be 8 digits" } })}
               error={touchedFields?.studentMobile && errors?.studentMobile ? errors.studentMobile : undefined}
             />
             <InputField label="Student Email" type="email" placeholder="Enter email"
-              registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
+              registration={register("studentEmail", {  pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
               error={errors.studentEmail}
             />
             <SelectField label="Class / Grade" required options={grades}
@@ -552,17 +554,6 @@ export default function BahraiinForm({ countries = [] }: Props) {
           </Section>
 
           <Section title="School Details">
-            <SelectField
-              label="School Name"
-              required
-              options={schools}
-              registration={register("schoolName", { required: "School Name is required" })}
-              error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
-            />
-            <SelectField label="Board" required options={boards}
-              registration={register("board", { required: "Board is required" })}
-              error={touchedFields?.board && errors?.board ? errors.board : undefined}
-            />
             <InputField label="Country" disabled
               value={countries.find((c) => c.value === "bahrain")?.label || "Bahrain"}
 
@@ -585,12 +576,24 @@ export default function BahraiinForm({ countries = [] }: Props) {
               registration={register("city", { required: "City is required" })}
               error={touchedFields?.city && errors?.city ? errors.city : undefined}
             />
-            <div className="md:col-span-2">
+            <SelectField
+              label="School Name"
+              required
+              options={schools}
+              registration={register("schoolName", { required: "School Name is required" })}
+              error={touchedFields?.schoolName && errors?.schoolName ? errors.schoolName : undefined}
+            />
+            <SelectField label="Board" required options={boards}
+              registration={register("board", { required: "Board is required" })}
+              error={touchedFields?.board && errors?.board ? errors.board : undefined}
+            />
+          
+            {/* <div className="md:col-span-2">
               <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
                 registration={register("schoolAddress", { required: "School Address is required" })}
                 error={errors.schoolAddress}
               />
-            </div>
+            </div> */}
 
           </Section>
 
@@ -675,7 +678,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
           <Section title="Terms & Conditions">
             <div className="bg-white p-4 rounded-lg shadow-md md:col-span-2">
               <div className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-3">
-                <ol>
+                <ol className="list-decimal pl-5">
                   <li>The student must provide accurate and complete information during registration. Any incorrect details may lead to rejection or disqualification.</li>
                   <li>Registration will be considered complete only after successful payment. Students with unpaid status will not be eligible to participate in the examination.</li>
                   <li>After registration, students are required to log in to their account and complete the payment process to avoid any future disruptions in website services.</li>

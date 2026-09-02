@@ -26,7 +26,7 @@ type RegistrationForm = {
     schoolName: string;
     board: string;
     // pincode: string;
-    schoolAddress: string;
+    // schoolAddress: string;
     parentName: string;
     parentMobile: string;
     parentEmail: string;
@@ -461,8 +461,8 @@ export default function SaudiForm({ countries }: Props) {
                 gender: Number(data.gender),
                 grade: Number(data.grade),
 
-                student_mobile: data.studentMobile,
-                student_email: data.studentEmail,
+                student_mobile: data.studentMobile || null,
+                student_email: data.studentEmail || null,
 
                 emirate_id: data.emiratesId || null,
 
@@ -470,7 +470,7 @@ export default function SaudiForm({ countries }: Props) {
                 school_board_id: data.board,
 
                 // pincode: data.pincode,
-                address: data.schoolAddress,
+                // address: data.schoolAddress,
                 dist_id: data.region,      // district_id of the region
                 city_id: data.city,
 
@@ -595,7 +595,7 @@ export default function SaudiForm({ countries }: Props) {
                             label="Student Mobile"
                             placeholder="Enter mobile"
                             registration={register("studentMobile", {
-                                required: "Student Mobile is required",
+                                // required: "Student Mobile is required",
                                 pattern: {
                                     value: /^[0-9]{9}$/,
                                     message: "Mobile number must be 9 digits"
@@ -608,7 +608,7 @@ export default function SaudiForm({ countries }: Props) {
                             }
                         />
                         <InputField label="Student Email" type="email" placeholder="Enter email"
-                            registration={register("studentEmail", { required: "Email address is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
+                            registration={register("studentEmail", {  pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Enter a valid email address" } })}
                             error={errors.studentEmail}
                         />
                         <SelectField label="Class / Grade" required options={grades}
@@ -679,13 +679,13 @@ export default function SaudiForm({ countries }: Props) {
                         />
 
 
-
+{/* 
                         <div className="md:col-span-2">
                             <TextAreaField label="School Address" rows={3} required placeholder="Enter school address"
                                 registration={register("schoolAddress", { required: "School Address is required" })}
                                 error={errors.schoolAddress}
                             />
-                        </div>
+                        </div> */}
 
                     </Section>
 

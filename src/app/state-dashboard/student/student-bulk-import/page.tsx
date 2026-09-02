@@ -122,8 +122,20 @@ export default function BulkUploadPage() {
       </div>
 
       {/* FILE NAME */}
-      {/* ALLOWED FORMATS NOTE */}
-      <div className="flex flex-col items-end">
+        {/* ALLOWED FORMATS NOTE */}
+        <div className="flex flex-col items-end">
+          {!file && (
+            <p className="text-[12px] text-red-500 ">
+              * Only Excel (.xlsx) &amp; (.csv) files are allowed.
+            </p>
+          )}
+          {file && (
+            <p className="text-sm text-[#4a6278] mb-4">
+              Selected File: <b>{file.name}</b>
+            </p>
+          )}
+        </div>
+      {/* <div className="flex flex-col items-end">
         <p className="text-[12px] text-red-500 ">
           * Only Excel (.xlsx) &amp; (.csv) files are allowed.
         </p>
@@ -132,7 +144,7 @@ export default function BulkUploadPage() {
             Selected File: <b>{file.name}</b>
           </p>
         )}
-      </div>
+      </div> */}
 
       {/* SUBMIT */}
       <div className="flex justify-center">

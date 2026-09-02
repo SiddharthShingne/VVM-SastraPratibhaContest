@@ -15,10 +15,10 @@ export default function RegisterPage() {
   const countries = [
     { value: "bahrain", label: "Bahrain", code: "1" },
     { value: "kuwait", label: "Kuwait", code: "2" },
-    { value: "uae", label: "UAE", code: "3" },
-    { value: "saudi", label: "Saudi Arabia", code: "4" },
-    { value: "qatar", label: "Qatar", code: "5" },
     { value: "oman", label: "Oman", code: "6" },
+    { value: "qatar", label: "Qatar", code: "5" },
+    { value: "saudi", label: "Saudi Arabia", code: "4" },
+    { value: "uae", label: "UAE", code: "3" },
   ];
 
   // flagCards — sab contain

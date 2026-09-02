@@ -26,7 +26,7 @@ type RegistrationForm = {
     schoolName: string;
     board: string;
     // pincode: string;
-    schoolAddress: string;
+    // schoolAddress: string;
     parentName: string;
     parentMobile: string;
     parentEmail: string;
@@ -511,8 +511,8 @@ export default function OmanForm({ countries }: Props) {
                 gender: Number(data.gender),
                 grade: Number(data.grade),
 
-                student_mobile: data.studentMobile,
-                student_email: data.studentEmail,
+                student_mobile: data.studentMobile || null,
+                student_email: data.studentEmail || null,
 
                 emirate_id: data.emiratesId || null,
 
@@ -520,7 +520,7 @@ export default function OmanForm({ countries }: Props) {
                 school_board_id: data.board,
 
                 // pincode: data.pincode,
-                address: data.schoolAddress,
+                // address: data.schoolAddress,
                 region_id: data.region,
                 dist_id: data.city,
 
@@ -661,7 +661,7 @@ export default function OmanForm({ countries }: Props) {
                             label="Student Mobile"
                             placeholder="Enter mobile"
                             registration={register("studentMobile", {
-                                required: "Student Mobile is required",
+                                // required: "Student Mobile is required",
                                 pattern: {
                                     value: /^[0-9]{8}$/,
                                     message: "Mobile number must be 8 digits",
@@ -678,7 +678,7 @@ export default function OmanForm({ countries }: Props) {
                             type="email"
                             placeholder="Enter email"
                             registration={register("studentEmail", {
-                                required: "Email address is required",
+                                // required: "Email address is required",
                                 pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                     message: "Enter a valid email address",
@@ -806,7 +806,7 @@ export default function OmanForm({ countries }: Props) {
                             }
                         />
 
-                        <div className="md:col-span-2">
+                        {/* <div className="md:col-span-2">
                             <TextAreaField
                                 label="School Address"
                                 rows={3}
@@ -817,7 +817,7 @@ export default function OmanForm({ countries }: Props) {
                                 })}
                                 error={errors.schoolAddress}
                             />
-                        </div>
+                        </div> */}
                     </Section>
 
                     {/* Parent Details */}
