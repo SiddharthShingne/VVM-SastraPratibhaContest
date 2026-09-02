@@ -821,9 +821,9 @@ export default function UAEForm({ countries }: Props) {
                 <p className="text-center font-semibold text-gray-800">END OF TERMS AND CONDITIONS</p>
               </div>
 
-              <p className="text-red-500 text-sm mt-2">
+              {/* <p className="text-red-500 text-sm mt-2">
                 After registration, please login and proceed with payment to avoid any future disruptions.
-              </p>
+              </p> */}
               <div className="mt-4 flex items-start gap-2">
                 <input type="checkbox"
                   {...register("termsAccepted", { required: "You must accept the terms" })}
