@@ -531,6 +531,7 @@ export function AddStudentDialog({
                 };
                 await axiosInstance.post(`/students/update/${editData.id}`, editPayload);
             } else {
+                console.log("DEBUG school payload:", form.school, form);
                 await addGccStudent({
                     country_code: finalCountryCode,
                     emirate_id: form.nationalId,

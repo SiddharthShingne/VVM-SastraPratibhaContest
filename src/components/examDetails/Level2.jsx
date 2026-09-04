@@ -53,7 +53,7 @@ const Level2 = () => {
               </h2> */}
 
               <h2 className="text-[32px] font-black text-[#17395c] text-center mb-5">
-                Level II and Finals
+                Level II (State Level Camp)
               </h2>
               {/* Content */}
               <p className="text-[17px] leading-[1.8] text-left text-[#4f6480] mt-2">

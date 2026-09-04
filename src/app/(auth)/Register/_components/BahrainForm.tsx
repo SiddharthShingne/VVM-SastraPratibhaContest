@@ -416,6 +416,7 @@ export default function BahraiinForm({ countries = [] }: Props) {
     }
     try {
       setLoading(true);
+      const selectedSchool = schools.find((s) => s.value === data.schoolName);
 
       const payload = {
         fullName: data.fullName,
@@ -428,7 +429,10 @@ export default function BahraiinForm({ countries = [] }: Props) {
         student_email: data.studentEmail || null,
         emirate_id: data.emiratesId || null,
 
-        sch_name: data.schoolName,
+        // sch_name: data.schoolName,
+
+        sch_name: selectedSchool?.label || data.schoolName,
+        school_id: selectedSchool ? Number(selectedSchool.value) : undefined,
         school_board_id: data.board,
 
         // pincode: data.pincode,

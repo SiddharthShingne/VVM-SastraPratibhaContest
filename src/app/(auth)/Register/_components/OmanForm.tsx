@@ -504,7 +504,7 @@ export default function OmanForm({ countries }: Props) {
         }
         try {
             setLoading(true);
-
+            const selectedSchool = schools.find((s) => s.value === data.schoolName);
             const payload = {
                 fullName: data.fullName,
                 dob: data.dob,
@@ -516,7 +516,9 @@ export default function OmanForm({ countries }: Props) {
 
                 emirate_id: data.emiratesId || null,
 
-                sch_name: data.schoolName,
+                sch_name: selectedSchool?.label || data.schoolName,
+                school_id: selectedSchool ? Number(selectedSchool.value) : undefined,
+                // sch_name: data.schoolName,
                 school_board_id: data.board,
 
                 // pincode: data.pincode,
