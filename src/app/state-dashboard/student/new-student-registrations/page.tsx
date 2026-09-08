@@ -60,8 +60,13 @@ const getStateId = (): number | null => {
 
 const ZONAL_COORDINATOR_ROLE_ID = 8;
 // TODO: confirm exact state_id for each country — KW confirmed, baaki placeholder hai
+// const STATE_COUNTRY_MAP: Record<string, number> = {
+//     SA: 38, AE: 39, KW: 40, BH: 41, QA: 42, OM: 43,
+// };
+
+
 const STATE_COUNTRY_MAP: Record<string, number> = {
-    SA: 38, AE: 39, KW: 40, BH: 41, QA: 42, OM: 43,
+    AE: 38, BH: 39, KW: 40, OM: 41, QA: 42, SA: 43,
 };
 const GCC_STATE_IDS = Object.values(STATE_COUNTRY_MAP);
 
