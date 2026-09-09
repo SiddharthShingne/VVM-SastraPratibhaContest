@@ -385,7 +385,7 @@ export default function StudentDashboardLayout({
         <FaBook className={iconClass("/studentDashboard/syllabus")} />
         Syllabus
       </Link>
-      {/* <Link
+      <Link
         href="/studentDashboard/Study-Material"
         className={linkClass("/studentDashboard/Study-Material")}
       >
@@ -394,7 +394,7 @@ export default function StudentDashboardLayout({
           className={iconClass("/studentDashboard/Study-Material")}
         />
         Study Material
-      </Link> */}
+      </Link>
 
       <SectionTitle label="exam details" />
 

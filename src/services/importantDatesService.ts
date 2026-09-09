@@ -368,3 +368,9 @@ export const addGccStudent = async (data: any) => {
   const response = await api.post("/sif/register/student", data);
   return response.data; // always return, never throw
 };
+
+// Get Study Materials by country type
+export const getStudyMaterials = async (countryType: number | string = 1) => {
+  const response = await api.get(`/study-materials?country_type=${countryType}`);
+  return response.data; // always return, never throw
+};
